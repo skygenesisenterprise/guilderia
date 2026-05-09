@@ -1,7 +1,7 @@
 {
-  "name": "company-website",
+  "name": "guilderia",
   "version": "0.1.0",
-  "description": "Welcome to the official repository for the Sky Genesis Enterprise website.",
+  "description": "A self-hostable, open-source communication platform built as a sovereign alternative to Discord — giving communities full control over their data, infrastructure, and experience.",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -71,20 +71,13 @@
   "packageManager": "pnpm@8.15.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/skygenesisenterprise/company-website.git"
+    "url": "https://github.com/skygenesisenterprise/guilderia.git"
   },
   "keywords": [
-    "website",
-    "company",
-    "skygenesisenterprise",
-    "password-security",
-    "password-management",
-    "password-generator",
-    "password-manager",
-    "password-storage",
-    "password-security",
-    "password-management",
-    "password-generator"
+    "guilderia",
+    "bot",
+    "guild",
+    "community"
   ],
   "author": {
     "name": "Sky Genesis Enterprise",
@@ -93,9 +86,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/skygenesisenterprise/company-website/issues"
+    "url": "https://github.com/skygenesisenterprise/guilderia/issues"
   },
-  "homepage": "https://github.com/skygenesisenterprise/company-website#readme",
+  "homepage": "https://github.com/skygenesisenterprise/guilderia#readme",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix --quiet",
