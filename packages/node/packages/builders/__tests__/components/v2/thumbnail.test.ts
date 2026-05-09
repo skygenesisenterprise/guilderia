@@ -1,4 +1,4 @@
-import { ComponentType } from 'discord-api-types/v10';
+import { ComponentType } from 'guilderia-api-types/v10';
 import { describe, expect, test } from 'vitest';
 import { ThumbnailBuilder } from '../../../src/components/v2/Thumbnail';
 
@@ -19,7 +19,7 @@ describe('Thumbnail', () => {
 			expect(thumbnail.toJSON()).toEqual({ type: ComponentType.Thumbnail, media: { url: 'https://google.com' } });
 		});
 
-		test.each(['owo', 'discord://user'])('GIVEN an embed with an invalid URL (%s) THEN throws error', (input) => {
+		test.each(['owo', 'guilderia://user'])('GIVEN an embed with an invalid URL (%s) THEN throws error', (input) => {
 			const thumbnail = new ThumbnailBuilder();
 
 			thumbnail.setURL(input);

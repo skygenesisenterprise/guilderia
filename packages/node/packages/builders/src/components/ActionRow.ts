@@ -10,8 +10,8 @@ import type {
 	APIButtonComponentWithCustomId,
 	APIButtonComponentWithSKUId,
 	APIButtonComponentWithURL,
-} from 'discord-api-types/v10';
-import { ComponentType } from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
+import { ComponentType } from 'guilderia-api-types/v10';
 import { normalizeArray, type RestOrArray } from '../util/normalizeArray.js';
 import { resolveBuilder } from '../util/resolveBuilder.js';
 import { validate } from '../util/validation.js';

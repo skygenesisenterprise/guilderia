@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest';
 import { CDN } from '../src/index.js';
 
-const baseCDN = 'https://cdn-discord.com';
-const baseMedia = 'https://media-discord.com';
+const baseCDN = 'https://cdn-guilderia.com';
+const baseMedia = 'https://media-guilderia.com';
 const id = '123456';
 const hash = 'abcdef';
 const animatedHash = 'a_bcdef';

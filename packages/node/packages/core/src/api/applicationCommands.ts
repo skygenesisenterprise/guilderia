@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { makeURLSearchParams, type RequestData, type REST } from '@discordjs/rest';
+import { makeURLSearchParams, type RequestData, type REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPIApplicationCommandPermissionsResult,
@@ -26,7 +26,7 @@ import {
 	type RESTPutAPIApplicationGuildCommandsJSONBody,
 	type RESTPutAPIApplicationGuildCommandsResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class ApplicationCommandsAPI {
 	public constructor(private readonly rest: REST) {}
@@ -34,7 +34,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Fetches all global commands for a application
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#get-global-application-commands}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#get-global-application-commands}
 	 * @param applicationId - The application id to fetch commands for
 	 * @param query - The query options for fetching commands
 	 * @param options - The options for fetching commands
@@ -54,7 +54,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Creates a new global command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#create-global-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#create-global-application-command}
 	 * @param applicationId - The application id to create the command for
 	 * @param body - The data for creating the command
 	 * @param options - The options for creating the command
@@ -74,7 +74,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Fetches a global command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#get-global-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#get-global-application-command}
 	 * @param applicationId - The application id to fetch the command from
 	 * @param commandId - The command id to fetch
 	 * @param options - The options for fetching the command
@@ -93,7 +93,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Edits a global command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#edit-global-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#edit-global-application-command}
 	 * @param applicationId - The application id of the command
 	 * @param commandId - The id of the command to edit
 	 * @param body - The data for editing the command
@@ -115,7 +115,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Deletes a global command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#delete-global-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#delete-global-application-command}
 	 * @param applicationId - The application id of the command
 	 * @param commandId - The id of the command to delete
 	 * @param options - The options for deleting a command
@@ -131,7 +131,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Overwrites global commands
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#bulk-overwrite-global-application-commands}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#bulk-overwrite-global-application-commands}
 	 * @param applicationId - The application id to overwrite commands for
 	 * @param body - The data for overwriting commands
 	 * @param options - The options for overwriting commands
@@ -151,7 +151,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Fetches all commands for a guild
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#get-guild-application-commands}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#get-guild-application-commands}
 	 * @param applicationId - The application id to fetch commands for
 	 * @param guildId - The guild id to fetch commands for
 	 * @param query - The data for fetching commands
@@ -173,7 +173,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Creates a new command for a guild
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#create-guild-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#create-guild-application-command}
 	 * @param applicationId - The application id to create the command for
 	 * @param guildId - The guild id to create the command for
 	 * @param body - The data for creating the command
@@ -195,7 +195,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Fetches a guild command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#get-guild-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#get-guild-application-command}
 	 * @param applicationId - The application id to fetch the command from
 	 * @param guildId - The guild id to fetch the command from
 	 * @param commandId - The command id to fetch
@@ -216,7 +216,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Edits a guild command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#edit-guild-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#edit-guild-application-command}
 	 * @param applicationId - The application id of the command
 	 * @param guildId - The guild id of the command
 	 * @param commandId - The command id to edit
@@ -240,7 +240,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Deletes a guild command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#delete-guild-application-command}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#delete-guild-application-command}
 	 * @param applicationId - The application id of the command
 	 * @param guildId - The guild id of the command
 	 * @param commandId - The id of the command to delete
@@ -258,7 +258,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Bulk overwrites guild commands
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#bulk-overwrite-guild-application-commands}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#bulk-overwrite-guild-application-commands}
 	 * @param applicationId - The application id to overwrite commands for
 	 * @param guildId - The guild id to overwrite commands for
 	 * @param body - The data for overwriting commands
@@ -280,7 +280,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Fetches the permissions for a guild command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#get-guild-application-command-permissions}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#get-guild-application-command-permissions}
 	 * @param applicationId - The application id to get the permissions for
 	 * @param guildId - The guild id of the command
 	 * @param commandId - The command id to get the permissions for
@@ -301,7 +301,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Fetches all permissions for all commands in a guild
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#get-application-command-permissions}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#get-application-command-permissions}
 	 * @param applicationId - The application id to get the permissions for
 	 * @param guildId - The guild id to get the permissions for
 	 * @param options - The options for fetching permissions
@@ -320,7 +320,7 @@ export class ApplicationCommandsAPI {
 	/**
 	 * Edits the permissions for a guild command
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#edit-application-command-permissions}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#edit-application-command-permissions}
 	 * @param userToken - The token of the user to edit permissions on behalf of
 	 * @param applicationId - The application id to edit the permissions for
 	 * @param guildId - The guild id to edit the permissions for

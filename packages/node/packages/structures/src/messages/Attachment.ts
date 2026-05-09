@@ -1,4 +1,4 @@
-import type { APIAttachment, AttachmentFlags } from 'discord-api-types/v10';
+import type { APIAttachment, AttachmentFlags } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { AttachmentFlagsBitField } from '../bitfields/AttachmentFlagsBitField.js';
 import { kData } from '../utils/symbols.js';

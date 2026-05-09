@@ -35,96 +35,96 @@ import {
 
 describe('Message formatters', () => {
 	describe('codeBlock', () => {
-		test('GIVEN "discord.js" with no language THEN returns "```\\ndiscord.js```"', () => {
-			expect<'```\ndiscord.js\n```'>(codeBlock('discord.js')).toEqual('```\ndiscord.js\n```');
+		test('GIVEN "guilderia.js" with no language THEN returns "```\\nguilderia.js```"', () => {
+			expect<'```\nguilderia.js\n```'>(codeBlock('guilderia.js')).toEqual('```\nguilderia.js\n```');
 		});
 
-		test('GIVEN "discord.js" with "js" as language THEN returns "```js\\ndiscord.js```"', () => {
-			expect<'```js\ndiscord.js\n```'>(codeBlock('js', 'discord.js')).toEqual('```js\ndiscord.js\n```');
+		test('GIVEN "guilderia.js" with "js" as language THEN returns "```js\\nguilderia.js```"', () => {
+			expect<'```js\nguilderia.js\n```'>(codeBlock('js', 'guilderia.js')).toEqual('```js\nguilderia.js\n```');
 		});
 	});
 
 	describe('inlineCode', () => {
-		test('GIVEN "discord.js" THEN returns "`discord.js`"', () => {
-			expect<'`discord.js`'>(inlineCode('discord.js')).toEqual('`discord.js`');
+		test('GIVEN "guilderia.js" THEN returns "`guilderia.js`"', () => {
+			expect<'`guilderia.js`'>(inlineCode('guilderia.js')).toEqual('`guilderia.js`');
 		});
 	});
 
 	describe('italic', () => {
-		test('GIVEN "discord.js" THEN returns "_discord.js_"', () => {
-			expect<'_discord.js_'>(italic('discord.js')).toEqual('_discord.js_');
+		test('GIVEN "guilderia.js" THEN returns "_guilderia.js_"', () => {
+			expect<'_guilderia.js_'>(italic('guilderia.js')).toEqual('_guilderia.js_');
 		});
 	});
 
 	describe('bold', () => {
-		test('GIVEN "discord.js" THEN returns "**discord.js**"', () => {
-			expect<'**discord.js**'>(bold('discord.js')).toEqual('**discord.js**');
+		test('GIVEN "guilderia.js" THEN returns "**guilderia.js**"', () => {
+			expect<'**guilderia.js**'>(bold('guilderia.js')).toEqual('**guilderia.js**');
 		});
 	});
 
 	describe('underline', () => {
-		test('GIVEN "discord.js" THEN returns "__discord.js__"', () => {
-			expect<'__discord.js__'>(underline('discord.js')).toEqual('__discord.js__');
+		test('GIVEN "guilderia.js" THEN returns "__guilderia.js__"', () => {
+			expect<'__guilderia.js__'>(underline('guilderia.js')).toEqual('__guilderia.js__');
 		});
 	});
 
 	describe('strikethrough', () => {
-		test('GIVEN "discord.js" THEN returns "~~discord.js~~"', () => {
-			expect<'~~discord.js~~'>(strikethrough('discord.js')).toEqual('~~discord.js~~');
+		test('GIVEN "guilderia.js" THEN returns "~~guilderia.js~~"', () => {
+			expect<'~~guilderia.js~~'>(strikethrough('guilderia.js')).toEqual('~~guilderia.js~~');
 		});
 	});
 
 	describe('quote', () => {
-		test('GIVEN "discord.js" THEN returns "> discord.js"', () => {
-			expect<'> discord.js'>(quote('discord.js')).toEqual('> discord.js');
+		test('GIVEN "guilderia.js" THEN returns "> guilderia.js"', () => {
+			expect<'> guilderia.js'>(quote('guilderia.js')).toEqual('> guilderia.js');
 		});
 	});
 
 	describe('blockQuote', () => {
-		test('GIVEN "discord.js" THEN returns ">>> discord.js"', () => {
-			expect<'>>> discord.js'>(blockQuote('discord.js')).toEqual('>>> discord.js');
+		test('GIVEN "guilderia.js" THEN returns ">>> guilderia.js"', () => {
+			expect<'>>> guilderia.js'>(blockQuote('guilderia.js')).toEqual('>>> guilderia.js');
 		});
 	});
 
 	describe('hideLinkEmbed', () => {
-		test('GIVEN "https://discord.js.org" THEN returns "<https://discord.js.org>"', () => {
-			expect<'<https://discord.js.org>'>(hideLinkEmbed('https://discord.js.org')).toEqual('<https://discord.js.org>');
+		test('GIVEN "https://guilderia.js.org" THEN returns "<https://guilderia.js.org>"', () => {
+			expect<'<https://guilderia.js.org>'>(hideLinkEmbed('https://guilderia.js.org')).toEqual('<https://guilderia.js.org>');
 		});
 
-		test('GIVEN new URL("https://discord.js.org") THEN returns "<https://discord.js.org>"', () => {
-			expect<`<${string}>`>(hideLinkEmbed(new URL('https://discord.js.org/'))).toEqual('<https://discord.js.org/>');
+		test('GIVEN new URL("https://guilderia.js.org") THEN returns "<https://guilderia.js.org>"', () => {
+			expect<`<${string}>`>(hideLinkEmbed(new URL('https://guilderia.js.org/'))).toEqual('<https://guilderia.js.org/>');
 		});
 	});
 
 	describe('hyperlink', () => {
 		test('GIVEN content and string URL THEN returns "[content](url)"', () => {
-			expect<'[discord.js](https://discord.js.org)'>(hyperlink('discord.js', 'https://discord.js.org')).toEqual(
-				'[discord.js](https://discord.js.org)',
+			expect<'[guilderia.js](https://guilderia.js.org)'>(hyperlink('guilderia.js', 'https://guilderia.js.org')).toEqual(
+				'[guilderia.js](https://guilderia.js.org)',
 			);
 		});
 
 		test('GIVEN content and URL THEN returns "[content](url)"', () => {
-			expect<`[discord.js](${string})`>(hyperlink('discord.js', new URL('https://discord.js.org'))).toEqual(
-				'[discord.js](https://discord.js.org/)',
+			expect<`[guilderia.js](${string})`>(hyperlink('guilderia.js', new URL('https://guilderia.js.org'))).toEqual(
+				'[guilderia.js](https://guilderia.js.org/)',
 			);
 		});
 
 		test('GIVEN content, string URL, and title THEN returns "[content](url "title")"', () => {
-			expect<'[discord.js](https://discord.js.org "Official Documentation")'>(
-				hyperlink('discord.js', 'https://discord.js.org', 'Official Documentation'),
-			).toEqual('[discord.js](https://discord.js.org "Official Documentation")');
+			expect<'[guilderia.js](https://guilderia.js.org "Official Documentation")'>(
+				hyperlink('guilderia.js', 'https://guilderia.js.org', 'Official Documentation'),
+			).toEqual('[guilderia.js](https://guilderia.js.org "Official Documentation")');
 		});
 
 		test('GIVEN content, URL, and title THEN returns "[content](url "title")"', () => {
-			expect<`[discord.js](${string} "Official Documentation")`>(
-				hyperlink('discord.js', new URL('https://discord.js.org'), 'Official Documentation'),
-			).toEqual('[discord.js](https://discord.js.org/ "Official Documentation")');
+			expect<`[guilderia.js](${string} "Official Documentation")`>(
+				hyperlink('guilderia.js', new URL('https://guilderia.js.org'), 'Official Documentation'),
+			).toEqual('[guilderia.js](https://guilderia.js.org/ "Official Documentation")');
 		});
 	});
 
 	describe('spoiler', () => {
-		test('GIVEN "discord.js" THEN returns "||discord.js||"', () => {
-			expect<'||discord.js||'>(spoiler('discord.js')).toEqual('||discord.js||');
+		test('GIVEN "guilderia.js" THEN returns "||guilderia.js||"', () => {
+			expect<'||guilderia.js||'>(spoiler('guilderia.js')).toEqual('||guilderia.js||');
 		});
 	});
 
@@ -229,72 +229,72 @@ describe('Message formatters', () => {
 	});
 
 	describe('channelLink', () => {
-		test('GIVEN channelId THEN returns "https://discord.com/channels/@me/${channelId}"', () => {
-			expect<'https://discord.com/channels/@me/123456789012345678'>(channelLink('123456789012345678')).toEqual(
-				'https://discord.com/channels/@me/123456789012345678',
+		test('GIVEN channelId THEN returns "https://guilderia.com/channels/@me/${channelId}"', () => {
+			expect<'https://guilderia.com/channels/@me/123456789012345678'>(channelLink('123456789012345678')).toEqual(
+				'https://guilderia.com/channels/@me/123456789012345678',
 			);
 		});
 
-		test('GIVEN channelId WITH guildId THEN returns "https://discord.com/channels/${guildId}/${channelId}"', () => {
-			expect<'https://discord.com/channels/987654321987654/123456789012345678'>(
+		test('GIVEN channelId WITH guildId THEN returns "https://guilderia.com/channels/${guildId}/${channelId}"', () => {
+			expect<'https://guilderia.com/channels/987654321987654/123456789012345678'>(
 				channelLink('123456789012345678', '987654321987654'),
-			).toEqual('https://discord.com/channels/987654321987654/123456789012345678');
+			).toEqual('https://guilderia.com/channels/987654321987654/123456789012345678');
 		});
 	});
 
 	describe('messageLink', () => {
-		test('GIVEN channelId AND messageId THEN returns "https://discord.com/channels/@me/${channelId}/${messageId}"', () => {
-			expect<'https://discord.com/channels/@me/123456789012345678/102938475657483'>(
+		test('GIVEN channelId AND messageId THEN returns "https://guilderia.com/channels/@me/${channelId}/${messageId}"', () => {
+			expect<'https://guilderia.com/channels/@me/123456789012345678/102938475657483'>(
 				messageLink('123456789012345678', '102938475657483'),
-			).toEqual('https://discord.com/channels/@me/123456789012345678/102938475657483');
+			).toEqual('https://guilderia.com/channels/@me/123456789012345678/102938475657483');
 		});
 
-		test('GIVEN channelId AND messageId WITH guildId THEN returns "https://discord.com/channels/${guildId}/${channelId}/${messageId}"', () => {
-			expect<'https://discord.com/channels/987654321987654/123456789012345678/102938475657483'>(
+		test('GIVEN channelId AND messageId WITH guildId THEN returns "https://guilderia.com/channels/${guildId}/${channelId}/${messageId}"', () => {
+			expect<'https://guilderia.com/channels/987654321987654/123456789012345678/102938475657483'>(
 				messageLink('123456789012345678', '102938475657483', '987654321987654'),
-			).toEqual('https://discord.com/channels/987654321987654/123456789012345678/102938475657483');
+			).toEqual('https://guilderia.com/channels/987654321987654/123456789012345678/102938475657483');
 		});
 	});
 
 	describe('heading', () => {
-		test('GIVEN "discord.js" THEN returns "# discord.js"', () => {
-			expect<'# discord.js'>(heading('discord.js')).toEqual('# discord.js');
+		test('GIVEN "guilderia.js" THEN returns "# guilderia.js"', () => {
+			expect<'# guilderia.js'>(heading('guilderia.js')).toEqual('# guilderia.js');
 		});
 
-		test('GIVEN "discord.js" AND a heading level 2 from number THEN returns "## discord.js"', () => {
-			expect<'## discord.js'>(heading('discord.js', 2)).toEqual('## discord.js');
+		test('GIVEN "guilderia.js" AND a heading level 2 from number THEN returns "## guilderia.js"', () => {
+			expect<'## guilderia.js'>(heading('guilderia.js', 2)).toEqual('## guilderia.js');
 		});
 
-		test('GIVEN "discord.js" AND a heading level 3 from enum THEN returns "### discord.js"', () => {
-			expect<'### discord.js'>(heading('discord.js', HeadingLevel.Three)).toEqual('### discord.js');
+		test('GIVEN "guilderia.js" AND a heading level 3 from enum THEN returns "### guilderia.js"', () => {
+			expect<'### guilderia.js'>(heading('guilderia.js', HeadingLevel.Three)).toEqual('### guilderia.js');
 		});
 	});
 
 	describe('orderedList', () => {
-		test('GIVEN ["discord.js", "discord.js 2", ["discord.js 3"]] THEN returns "1. discord.js\n1. discord.js 2\n  1. discord.js"', () => {
-			expect(orderedList(['discord.js', 'discord.js 2', ['discord.js 3']])).toEqual(
-				'1. discord.js\n1. discord.js 2\n  1. discord.js 3',
+		test('GIVEN ["guilderia.js", "guilderia.js 2", ["guilderia.js 3"]] THEN returns "1. guilderia.js\n1. guilderia.js 2\n  1. guilderia.js"', () => {
+			expect(orderedList(['guilderia.js', 'guilderia.js 2', ['guilderia.js 3']])).toEqual(
+				'1. guilderia.js\n1. guilderia.js 2\n  1. guilderia.js 3',
 			);
 		});
 
-		test('GIVEN ["discord.js", "discord.js 2", ["discord.js 3"]] AND a startNumber THEN returns "${startNumber}. discord.js\n${startNumber}. discord.js 2\n  ${startNumber}. discord.js"', () => {
-			expect(orderedList(['discord.js', 'discord.js 2', ['discord.js 3']], 50)).toEqual(
-				'50. discord.js\n50. discord.js 2\n  50. discord.js 3',
+		test('GIVEN ["guilderia.js", "guilderia.js 2", ["guilderia.js 3"]] AND a startNumber THEN returns "${startNumber}. guilderia.js\n${startNumber}. guilderia.js 2\n  ${startNumber}. guilderia.js"', () => {
+			expect(orderedList(['guilderia.js', 'guilderia.js 2', ['guilderia.js 3']], 50)).toEqual(
+				'50. guilderia.js\n50. guilderia.js 2\n  50. guilderia.js 3',
 			);
 		});
 	});
 
 	describe('unorderedList', () => {
-		test('GIVEN ["discord.js", "discord.js 2", ["discord.js 3"]] THEN returns "- discord.js\n- discord.js 2\n  - discord.js"', () => {
-			expect(unorderedList(['discord.js', 'discord.js 2', ['discord.js 3']])).toEqual(
-				'- discord.js\n- discord.js 2\n  - discord.js 3',
+		test('GIVEN ["guilderia.js", "guilderia.js 2", ["guilderia.js 3"]] THEN returns "- guilderia.js\n- guilderia.js 2\n  - guilderia.js"', () => {
+			expect(unorderedList(['guilderia.js', 'guilderia.js 2', ['guilderia.js 3']])).toEqual(
+				'- guilderia.js\n- guilderia.js 2\n  - guilderia.js 3',
 			);
 		});
 	});
 
 	describe('subtext', () => {
-		test('GIVEN "discord.js" THEN returns "-# discord.js"', () => {
-			expect<'-# discord.js'>(subtext('discord.js')).toEqual('-# discord.js');
+		test('GIVEN "guilderia.js" THEN returns "-# guilderia.js"', () => {
+			expect<'-# guilderia.js'>(subtext('guilderia.js')).toEqual('-# guilderia.js');
 		});
 	});
 
@@ -348,13 +348,13 @@ describe('Message formatters', () => {
 	describe('applicationDirectory', () => {
 		test('GIVEN application id THEN returns application directory store', () => {
 			expect(applicationDirectory('123456789012345678')).toEqual(
-				'https://discord.com/application-directory/123456789012345678/store',
+				'https://guilderia.com/application-directory/123456789012345678/store',
 			);
 		});
 
 		test('GIVEN application id AND SKU id THEN returns SKU within the application directory store', () => {
 			expect(applicationDirectory('123456789012345678', '123456789012345678')).toEqual(
-				'https://discord.com/application-directory/123456789012345678/store/123456789012345678',
+				'https://guilderia.com/application-directory/123456789012345678/store/123456789012345678',
 			);
 		});
 	});

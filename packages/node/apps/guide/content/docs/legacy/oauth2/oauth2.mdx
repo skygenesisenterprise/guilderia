@@ -2,13 +2,13 @@
 title: OAuth2
 ---
 
-OAuth2 enables application developers to build applications that utilize authentication and data from the Discord API. Developers can use this to create things such as web dashboards to display user info, fetch linked third-party accounts like Twitch or Steam, access users' guild information without actually being in the guild, and much more. OAuth2 can significantly extend the functionality of your bot if used correctly.
+OAuth2 enables application developers to build applications that utilize authentication and data from the Guilderia API. Developers can use this to create things such as web dashboards to display user info, fetch linked third-party accounts like Twitch or Steam, access users' guild information without actually being in the guild, and much more. OAuth2 can significantly extend the functionality of your bot if used correctly.
 
 ## A quick example
 
 ### Setting up a basic web server
 
-Most of the time, websites use OAuth2 to get information about their users from an external service. In this example, we will use [`express`](https://expressjs.com/) to create a web server to use a user's Discord information to greet them. Start by creating three files: `config.json`, `index.js`, and `index.html`.
+Most of the time, websites use OAuth2 to get information about their users from an external service. In this example, we will use [`express`](https://expressjs.com/) to create a web server to use a user's Guilderia information to greet them. Start by creating three files: `config.json`, `index.js`, and `index.html`.
 
 `config.json` will be used to store the client ID, client secret, and server port.
 
@@ -41,7 +41,7 @@ app.listen(port, () => console.log(`App listening at http://localhost:${port}`))
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>My Discord OAuth2 App</title>
+		<title>My Guilderia OAuth2 App</title>
 	</head>
 	<body>
 		<div id="info">Hoi!</div>
@@ -59,7 +59,7 @@ After running `npm i express`, you can start your server with `node index.js`. O
 
 ### Getting an OAuth2 URL
 
-Now that you have a web server up and running, it's time to get some information from Discord. Open [your Discord applications](https://discord.com/developers/applications/), create or select an application, and head over to the "OAuth2" page.
+Now that you have a web server up and running, it's time to get some information from Guilderia. Open [your Guilderia applications](https://guilderia.com/developers/applications/), create or select an application, and head over to the "OAuth2" page.
 
 ![OAuth2 application page](./images/oauth2-app-page.png)
 
@@ -67,11 +67,11 @@ Take note of the `client id` and `client secret` fields. Copy these values into 
 
 ![Adding Redirects](./images/add-redirects.png)
 
-Once you've added your redirect URL, you will want to generate an OAuth2 URL. Lower down on the page, you can conveniently find an OAuth2 URL Generator provided by Discord. Use this to create a URL for yourself with the `identify` scope.
+Once you've added your redirect URL, you will want to generate an OAuth2 URL. Lower down on the page, you can conveniently find an OAuth2 URL Generator provided by Guilderia. Use this to create a URL for yourself with the `identify` scope.
 
 ![Generate an OAuth2 URL](./images/generate-url.png)
 
-The `identify` scope will allow your application to get basic user information from Discord. You can find a list of all scopes [here](https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes).
+The `identify` scope will allow your application to get basic user information from Guilderia. You can find a list of all scopes [here](https://guilderia.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes).
 
 ### Implicit grant flow
 
@@ -85,7 +85,7 @@ The `identify` scope will allow your application to get basic user information f
 
 ### The state parameter
 
-OAuth2's protocols provide a `state` parameter, which Discord supports. This parameter helps prevent [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) attacks and represents your application's state. The state should be generated per user and appended to the OAuth2 URL. For a basic example, you can use a randomly generated string encoded in Base64 as the state parameter.
+OAuth2's protocols provide a `state` parameter, which Guilderia supports. This parameter helps prevent [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) attacks and represents your application's state. The state should be generated per user and appended to the OAuth2 URL. For a basic example, you can use a randomly generated string encoded in Base64 as the state parameter.
 
 ```js
 function generateRandomString() {
@@ -148,7 +148,7 @@ app.get('/', (request, response) => {
 });
 ```
 
-Now you have to exchange this code with Discord for an access token. To do this, you need your `client_id` and `client_secret`. If you've forgotten these, head over to [your applications](https://discord.com/developers/applications) and get them. You can use [`undici`](https://www.npmjs.com/package/undici) to make requests to Discord.
+Now you have to exchange this code with Guilderia for an access token. To do this, you need your `client_id` and `client_secret`. If you've forgotten these, head over to [your applications](https://guilderia.com/developers/applications) and get them. You can use [`undici`](https://www.npmjs.com/package/undici) to make requests to Guilderia.
 
 To install undici, run the following command:
 
@@ -189,7 +189,7 @@ app.get('/', async ({ query }, response) => {
 
 	if (code) {
 		try {
-			const tokenResponseData = await request('https://discord.com/api/oauth2/token', {
+			const tokenResponseData = await request('https://guilderia.com/api/oauth2/token', {
 				method: 'POST',
 				body: new URLSearchParams({
 					client_id: clientId,
@@ -222,7 +222,7 @@ app.get('/', async ({ query }, response) => {
 	used.
 </Callout>
 
-Now try visiting your OAuth2 URL and authorizing your application. Once you're redirected, you should see an [access token response](https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-response) in your console.
+Now try visiting your OAuth2 URL and authorizing your application. Once you're redirected, you should see an [access token response](https://guilderia.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-response) in your console.
 
 ```json
 {
@@ -234,10 +234,10 @@ Now try visiting your OAuth2 URL and authorizing your application. Once you're r
 }
 ```
 
-With an access token and a refresh token, you can once again use the [`/api/users/@me` endpoint](https://discord.com/developers/docs/resources/user#get-current-user) to fetch the [user object](https://discord.com/developers/docs/resources/user#user-object).
+With an access token and a refresh token, you can once again use the [`/api/users/@me` endpoint](https://guilderia.com/developers/docs/resources/user#get-current-user) to fetch the [user object](https://guilderia.com/developers/docs/resources/user#user-object).
 
 ```js
-const userResult = await request('https://discord.com/api/users/@me', {
+const userResult = await request('https://guilderia.com/api/users/@me', {
 	headers: {
 		authorization: `${oauthData.token_type} ${oauthData.access_token}`,
 	},
@@ -254,4 +254,4 @@ console.log(await userResult.body.json());
 ## Additional reading
 
 [RFC 6759](https://tools.ietf.org/html/rfc6749)  
-[Discord Docs for OAuth2](https://discord.com/developers/docs/topics/oauth2)
+[Guilderia Docs for OAuth2](https://guilderia.com/developers/docs/topics/oauth2)

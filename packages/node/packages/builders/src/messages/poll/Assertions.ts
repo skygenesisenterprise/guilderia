@@ -1,4 +1,4 @@
-import { PollLayoutType } from 'discord-api-types/v10';
+import { PollLayoutType } from 'guilderia-api-types/v10';
 import { z } from 'zod';
 import { emojiPredicate } from '../../components/Assertions';
 

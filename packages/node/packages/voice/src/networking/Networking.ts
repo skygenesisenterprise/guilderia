@@ -4,8 +4,8 @@
 import { Buffer } from 'node:buffer';
 import crypto from 'node:crypto';
 import { EventEmitter } from 'node:events';
-import type { VoiceReceivePayload, VoiceSpeakingFlags } from 'discord-api-types/voice/v8';
-import { VoiceEncryptionMode, VoiceOpcodes } from 'discord-api-types/voice/v8';
+import type { VoiceReceivePayload, VoiceSpeakingFlags } from 'guilderia-api-types/voice/v8';
+import { VoiceEncryptionMode, VoiceOpcodes } from 'guilderia-api-types/voice/v8';
 import type { CloseEvent } from 'ws';
 import * as secretbox from '../util/Secretbox';
 import { RTP_OPUS_PAYLOAD_TYPE } from '../util/constants';
@@ -15,7 +15,7 @@ import { VoiceUDPSocket } from './VoiceUDPSocket';
 import type { BinaryWebSocketMessage } from './VoiceWebSocket';
 import { VoiceWebSocket } from './VoiceWebSocket';
 
-// The number of audio channels required by Discord
+// The number of audio channels required by Guilderia
 const CHANNELS = 2;
 const TIMESTAMP_INC = (48_000 / 100) * CHANNELS;
 const MAX_NONCE_SIZE = 2 ** 32 - 1;
@@ -43,7 +43,7 @@ export enum NetworkingStatusCode {
 }
 
 /**
- * The initial Networking state. Instances will be in this state when a WebSocket connection to a Discord
+ * The initial Networking state. Instances will be in this state when a WebSocket connection to a Guilderia
  * voice gateway is being opened.
  */
 export interface NetworkingOpeningWsState {
@@ -63,7 +63,7 @@ export interface NetworkingIdentifyingState {
 
 /**
  * The state that a Networking instance will be in when opening a UDP connection to the IP and port provided
- * by Discord, as well as performing IP discovery.
+ * by Guilderia, as well as performing IP discovery.
  */
 export interface NetworkingUdpHandshakingState {
 	code: NetworkingStatusCode.UdpHandshaking;
@@ -85,7 +85,7 @@ export interface NetworkingSelectingProtocolState {
 }
 
 /**
- * The state that a Networking instance will be in when it has a fully established connection to a Discord
+ * The state that a Networking instance will be in when it has a fully established connection to a Guilderia
  * voice server.
  */
 export interface NetworkingReadyState {
@@ -133,7 +133,7 @@ export type NetworkingState =
 	| NetworkingUdpHandshakingState;
 
 /**
- * Details required to connect to the Discord voice gateway. These details
+ * Details required to connect to the Guilderia voice gateway. These details
  * are first received on the main bot gateway, in the form of VOICE_SERVER_UPDATE
  * and VOICE_STATE_UPDATE packets.
  */
@@ -335,7 +335,7 @@ export class Networking extends EventEmitter {
 	}
 
 	/**
-	 * Creates a new WebSocket to a Discord Voice gateway.
+	 * Creates a new WebSocket to a Guilderia Voice gateway.
 	 *
 	 * @param endpoint - The endpoint to connect to
 	 * @param lastSequence - The last sequence to set for this WebSocket
@@ -455,7 +455,7 @@ export class Networking extends EventEmitter {
 	}
 
 	/**
-	 * Called when the UDP socket has closed itself if it has stopped receiving replies from Discord.
+	 * Called when the UDP socket has closed itself if it has stopped receiving replies from Guilderia.
 	 */
 	private onUdpClose() {
 		if (this.state.code === NetworkingStatusCode.Ready) {
@@ -759,7 +759,7 @@ export class Networking extends EventEmitter {
 	}
 
 	/**
-	 * Encrypts an Opus packet using the format agreed upon by the instance and Discord.
+	 * Encrypts an Opus packet using the format agreed upon by the instance and Guilderia.
 	 *
 	 * @param opusPacket - The Opus packet to encrypt
 	 * @param connectionData - The current connection data of the instance

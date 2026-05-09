@@ -5,7 +5,7 @@ import {
 	ButtonStyle,
 	ComponentType,
 	SeparatorSpacingSize,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { describe, test, expect } from 'vitest';
 import { createComponentBuilder } from '../../../src/components/Components.js';
 import { ContainerBuilder } from '../../../src/components/v2/Container.js';
@@ -179,7 +179,7 @@ describe('Container Components', () => {
 				new ContainerBuilder()
 					.addMediaGalleryComponents(
 						new MediaGalleryBuilder()
-							.addItems({ media: { url: 'https://discord.com' } })
+							.addItems({ media: { url: 'https://guilderia.com' } })
 							.setId(3)
 							.clearId(),
 					)
@@ -190,7 +190,7 @@ describe('Container Components', () => {
 				components: [
 					{
 						type: ComponentType.MediaGallery,
-						items: [{ media: { url: 'https://discord.com' } }],
+						items: [{ media: { url: 'https://guilderia.com' } }],
 					},
 				],
 				spoiler: true,
@@ -202,7 +202,7 @@ describe('Container Components', () => {
 							.addTextDisplayComponents({ type: ComponentType.TextDisplay, content: 'test' })
 							.setPrimaryButtonAccessory(button),
 					)
-					.addFileComponents({ type: ComponentType.File, file: { url: 'attachment://discord.png' } })
+					.addFileComponents({ type: ComponentType.File, file: { url: 'attachment://guilderia.png' } })
 					.setSpoiler(false)
 					.setId(5)
 					.toJSON(),
@@ -221,7 +221,7 @@ describe('Container Components', () => {
 					},
 					{
 						type: ComponentType.File,
-						file: { url: 'attachment://discord.png' },
+						file: { url: 'attachment://guilderia.png' },
 					},
 				],
 				spoiler: false,

@@ -35,7 +35,7 @@ export default async function Image() {
 							<div tw="flex flex-row">
 								The <span tw="bg-[#5865f2] rounded-md px-3 py-2 ml-4 bottom-2">most popular</span>
 							</div>
-							<span>way to build Discord</span>
+							<span>way to build Guilderia</span>
 							<span>bots.</span>
 						</div>
 					</div>
@@ -47,7 +47,7 @@ export default async function Image() {
 			fonts: [
 				{
 					name: 'Geist',
-					data: await loadGoogleFont('Geist:wght@900', 'The most popular way to build Discord bots.'),
+					data: await loadGoogleFont('Geist:wght@900', 'The most popular way to build Guilderia bots.'),
 					weight: 900,
 					style: 'normal',
 				},

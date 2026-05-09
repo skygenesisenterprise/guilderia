@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/brokers",
+	"name": "@guilderiajs/brokers",
 	"version": "1.0.0",
 	"description": "Powerful set of message brokers",
 	"scripts": {
@@ -43,39 +43,39 @@
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Roman <kyradiscord@gmail.com>",
+		"Aura Roman <kyraguilderia@gmail.com>",
 		"DD <didinele.dev@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"discord",
+		"guilderia",
 		"api",
 		"message",
 		"brokers",
 		"redis",
-		"discordapp",
-		"discordjs"
+		"guilderiaapp",
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/brokers"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
-		"@discordjs/core": "workspace:^",
-		"@discordjs/ws": "workspace:^",
+		"@guilderiajs/core": "workspace:^",
+		"@guilderiajs/ws": "workspace:^",
 		"@msgpack/msgpack": "^3.1.3",
 		"@vladfrangu/async_event_emitter": "^2.4.7",
 		"ioredis": "^5.10.1"
 	},
 	"devDependencies": {
-		"@discordjs/api-extractor": "workspace:^",
-		"@discordjs/scripts": "workspace:^",
+		"@guilderiajs/api-extractor": "workspace:^",
+		"@guilderiajs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
 		"@types/node": "^22.19.15",
 		"@vitest/coverage-v8": "^4.1.2",

@@ -2,14 +2,14 @@
 title: Formatters
 ---
 
-discord.js provides the `formatters` package which contains a variety of utilities you can use when writing your Discord bot.
+guilderia.js provides the `formatters` package which contains a variety of utilities you can use when writing your Guilderia bot.
 
 ## Basic Markdown
 
-These functions format strings into all the different Markdown styles supported by Discord.
+These functions format strings into all the different Markdown styles supported by Guilderia.
 
 ```js
-const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext } = require('discord.js');
+const { blockQuote, bold, italic, quote, spoiler, strikethrough, underline, subtext } = require('guilderia.js');
 const string = 'Hello!';
 
 const boldString = bold(string);
@@ -27,10 +27,10 @@ const subtextString = subtext(string);
 There are also two functions to format hyperlinks. `hyperlink()` will format the URL into a masked markdown link, and `hideLinkEmbed()` will wrap the URL in `<>`, preventing it from embedding.
 
 ```js
-const { hyperlink, hideLinkEmbed } = require('discord.js');
-const url = 'https://discord.js.org/';
+const { hyperlink, hideLinkEmbed } = require('guilderia.js');
+const url = 'https://guilderia.js.org/';
 
-const link = hyperlink('discord.js', url);
+const link = hyperlink('guilderia.js', url);
 const hiddenEmbed = hideLinkEmbed(url);
 ```
 
@@ -39,7 +39,7 @@ const hiddenEmbed = hideLinkEmbed(url);
 You can use `inlineCode()` and `codeBlock()` to turn a string into an inline code block or a regular code block with or without syntax highlighting.
 
 ```js
-const { inlineCode, codeBlock } = require('discord.js');
+const { inlineCode, codeBlock } = require('guilderia.js');
 const jsString = 'const value = true;';
 
 const inline = inlineCode(jsString);
@@ -49,10 +49,10 @@ const highlighted = codeBlock('js', jsString);
 
 ## Timestamps
 
-With `time()`, you can format Unix timestamps and dates into a Discord time string.
+With `time()`, you can format Unix timestamps and dates into a Guilderia time string.
 
 ```js
-const { time, TimestampStyles } = require('discord.js');
+const { time, TimestampStyles } = require('guilderia.js');
 const date = new Date();
 
 const timeString = time(date);
@@ -64,7 +64,7 @@ const relative = time(date, TimestampStyles.RelativeTime);
 `userMention()`, `channelMention()`, and `roleMention()` all exist to format Snowflakes into mentions.
 
 ```js
-const { channelMention, roleMention, userMention } = require('discord.js');
+const { channelMention, roleMention, userMention } = require('guilderia.js');
 const id = '123456789012345678';
 
 const channel = channelMention(id);

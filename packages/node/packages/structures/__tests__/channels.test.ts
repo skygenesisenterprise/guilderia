@@ -11,7 +11,7 @@ import type {
 	APIPrivateThreadChannel,
 	APIPublicThreadChannel,
 	APITextChannel,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import {
 	ForumLayoutType,
 	SortOrderType,
@@ -20,7 +20,7 @@ import {
 	ThreadAutoArchiveDuration,
 	VideoQualityMode,
 	ChannelFlags,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { describe, expect, test } from 'vitest';
 import {
 	AnnouncementChannel,
@@ -84,7 +84,7 @@ describe('text channel', () => {
 		expect(instance.rateLimitPerUser).toBe(data.rate_limit_per_user);
 		expect(instance.topic).toBe(data.topic);
 		expect(instance.type).toBe(ChannelType.GuildText);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -145,7 +145,7 @@ describe('announcement channel', () => {
 		expect(instance.rateLimitPerUser).toBe(data.rate_limit_per_user);
 		expect(instance.topic).toBe(data.topic);
 		expect(instance.type).toBe(ChannelType.GuildAnnouncement);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -188,7 +188,7 @@ describe('category channel', () => {
 		expect(instance.guildId).toBe(data.guild_id);
 		expect(instance[kData].permission_overwrites).toEqual(data.permission_overwrites);
 		expect(instance.type).toBe(ChannelType.GuildCategory);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -237,7 +237,7 @@ describe('DM channel', () => {
 		expect(instance.lastPinAt?.toISOString()).toBe(data.last_pin_timestamp);
 		expect(instance[kData].recipients).toEqual(data.recipients);
 		expect(instance.type).toBe(ChannelType.DM);
-		expect(instance.url).toBe('https://discord.com/channels/@me/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/@me/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -294,7 +294,7 @@ describe('GroupDM channel', () => {
 		expect(instance.ownerId).toBe(data.owner_id);
 		expect(instance.type).toBe(ChannelType.GroupDM);
 		expect(instance.icon).toBe(data.icon);
-		expect(instance.url).toBe('https://discord.com/channels/@me/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/@me/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -369,7 +369,7 @@ describe('forum channel', () => {
 		expect(instance[kData].available_tags).toEqual(data.available_tags);
 		expect(instance.topic).toBe(data.topic);
 		expect(instance.type).toBe(ChannelType.GuildForum);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -453,7 +453,7 @@ describe('media channel', () => {
 		expect(instance[kData].available_tags).toEqual(data.available_tags);
 		expect(instance.topic).toBe(data.topic);
 		expect(instance.type).toBe(ChannelType.GuildMedia);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -518,7 +518,7 @@ describe('voice channel', () => {
 		expect(instance[kData].permission_overwrites).toEqual(data.permission_overwrites);
 		expect(instance.rateLimitPerUser).toBe(data.rate_limit_per_user);
 		expect(instance.type).toBe(ChannelType.GuildVoice);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -576,7 +576,7 @@ describe('stage channel', () => {
 		expect(instance[kData].permission_overwrites).toEqual(data.permission_overwrites);
 		expect(instance.rateLimitPerUser).toBe(data.rate_limit_per_user);
 		expect(instance.type).toBe(ChannelType.GuildStageVoice);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(data);
 	});
 
@@ -648,7 +648,7 @@ describe('thread channels', () => {
 		expect(instance.memberCount).toBe(dataPublic.member_count);
 		expect(instance.messageCount).toBe(dataPublic.message_count);
 		expect(instance.totalMessageSent).toBe(dataPublic.total_message_sent);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(dataPublic);
 	});
 
@@ -676,7 +676,7 @@ describe('thread channels', () => {
 		expect(instance.rateLimitPerUser).toBe(dataPrivate.rate_limit_per_user);
 		expect(instance[kData].thread_metadata).toEqual(dataPrivate.thread_metadata);
 		expect(instance.type).toBe(ChannelType.PrivateThread);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(dataPrivate);
 	});
 
@@ -704,7 +704,7 @@ describe('thread channels', () => {
 		expect(instance.rateLimitPerUser).toBe(dataAnnounce.rate_limit_per_user);
 		expect(instance[kData].thread_metadata).toEqual(dataAnnounce.thread_metadata);
 		expect(instance.type).toBe(ChannelType.AnnouncementThread);
-		expect(instance.url).toBe('https://discord.com/channels/2/1');
+		expect(instance.url).toBe('https://guilderia.com/channels/2/1');
 		expect(instance.toJSON()).toEqual(dataAnnounce);
 	});
 

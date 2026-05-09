@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import type { RequestData, REST } from '@discordjs/rest';
+import type { RequestData, REST } from '@guilderiajs/rest';
 import {
 	type Snowflake,
 	type RESTGetAPIStageInstanceResult,
@@ -9,7 +9,7 @@ import {
 	type RESTPostAPIStageInstanceJSONBody,
 	type RESTPostAPIStageInstanceResult,
 	Routes,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class StageInstancesAPI {
 	public constructor(private readonly rest: REST) {}
@@ -17,7 +17,7 @@ export class StageInstancesAPI {
 	/**
 	 * Creates a new stage instance
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/stage-instance#create-stage-instance}
+	 * @see {@link https://guilderia.com/developers/docs/resources/stage-instance#create-stage-instance}
 	 * @param body - The data for creating the new stage instance
 	 * @param options - The options for creating the new stage instance
 	 */
@@ -36,7 +36,7 @@ export class StageInstancesAPI {
 	/**
 	 * Fetches a stage instance
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/stage-instance#get-stage-instance}
+	 * @see {@link https://guilderia.com/developers/docs/resources/stage-instance#get-stage-instance}
 	 * @param channelId - The id of the channel
 	 * @param options - The options for fetching the stage instance
 	 */
@@ -47,7 +47,7 @@ export class StageInstancesAPI {
 	/**
 	 * Edits a stage instance
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/stage-instance#modify-stage-instance}
+	 * @see {@link https://guilderia.com/developers/docs/resources/stage-instance#modify-stage-instance}
 	 * @param channelId - The id of the channel
 	 * @param body - The new stage instance data
 	 * @param options - The options for editing the stage instance
@@ -68,7 +68,7 @@ export class StageInstancesAPI {
 	/**
 	 * Deletes a stage instance
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/stage-instance#delete-stage-instance}
+	 * @see {@link https://guilderia.com/developers/docs/resources/stage-instance#delete-stage-instance}
 	 * @param channelId - The id of the channel
 	 * @param options - The options for deleting the stage instance
 	 */

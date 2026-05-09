@@ -15,7 +15,7 @@ export async function generateMetadata({
 
 	return {
 		title: {
-			template: '%s | discord.js',
+			template: '%s | guilderia.js',
 			default: `${packageName} (${version})`,
 		},
 	};

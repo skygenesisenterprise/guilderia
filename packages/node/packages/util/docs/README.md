@@ -1,1 +1,1 @@
-## [View the documentation here.](https://discord.js.org/docs/packages/util/main)
+## [View the documentation here.](https://guilderia.js.org/docs/packages/util/main)

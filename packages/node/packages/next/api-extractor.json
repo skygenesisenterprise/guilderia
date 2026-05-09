@@ -1,11 +1,11 @@
 {
 	"extends": "../../api-extractor.json",
 	"docModel": {
-		"projectFolderUrl": "https://github.com/discordjs/discord.js/tree/main/packages/next"
+		"projectFolderUrl": "https://github.com/guilderiajs/guilderia.js/tree/main/packages/next"
 	}
 	// We probably don't want to generate docs here for these and instead link to the other modules
 	// "additionalEntryPoints": [
-	// 	{ "modulePath": "discord-api-types", "filePath": "<projectFolder>/dist-docs/exports/discord-api-types.d.ts" },
+	// 	{ "modulePath": "guilderia-api-types", "filePath": "<projectFolder>/dist-docs/exports/guilderia-api-types.d.ts" },
 	// 	{ "modulePath": "builders", "filePath": "<projectFolder>/dist-docs/exports/builders.d.ts" },
 	// 	{ "modulePath": "collection", "filePath": "<projectFolder>/dist-docs/exports/collection.d.ts" },
 	// 	{ "modulePath": "core", "filePath": "<projectFolder>/dist-docs/exports/core.d.ts" },
@@ -15,13 +15,13 @@
 	// 	{ "modulePath": "ws", "filePath": "<projectFolder>/dist-docs/exports/ws.d.ts" }
 	// ],
 	// "bundledPackages": [
-	// 	"discord-api-types",
-	// 	"@discordjs/builders",
-	// 	"@discordjs/collection",
-	// 	"@discordjs/core",
-	// 	"@discordjs/formatters",
-	// 	"@discordjs/rest",
-	// 	"@discordjs/util",
-	// 	"@discordjs/ws"
+	// 	"guilderia-api-types",
+	// 	"@guilderiajs/builders",
+	// 	"@guilderiajs/collection",
+	// 	"@guilderiajs/core",
+	// 	"@guilderiajs/formatters",
+	// 	"@guilderiajs/rest",
+	// 	"@guilderiajs/util",
+	// 	"@guilderiajs/ws"
 	// ]
 }

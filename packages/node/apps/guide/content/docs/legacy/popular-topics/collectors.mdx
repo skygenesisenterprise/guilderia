@@ -12,7 +12,7 @@ For now, let's take the example that they have provided us:
 
 ```js
 // `m` is a message object that will be passed through the filter function
-const collectorFilter = (m) => m.content.includes('discord');
+const collectorFilter = (m) => m.content.includes('guilderia');
 const collector = interaction.channel.createMessageCollector({ filter: collectorFilter, time: 15_000 });
 
 collector.on('collect', (m) => {
@@ -135,10 +135,10 @@ The third type of collector allows you to collect interactions; such as when use
 
 Collecting interactions from message components works similarly to reaction collectors. In the following example, you will check that the interaction came from a button, and that the user clicking the button is the same user that initiated the command.
 
-One important difference to note with interaction collectors is that Discord expects a response to _all_ interactions within 3 seconds - even ones that you don't want to collect. For this reason, you may wish to `.deferUpdate()` all interactions in your filter, or not use a filter at all and handle this behavior in the `collect` event.
+One important difference to note with interaction collectors is that Guilderia expects a response to _all_ interactions within 3 seconds - even ones that you don't want to collect. For this reason, you may wish to `.deferUpdate()` all interactions in your filter, or not use a filter at all and handle this behavior in the `collect` event.
 
 ```js
-const { ComponentType } = require('discord.js');
+const { ComponentType } = require('guilderia.js');
 
 const collector = message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 15_000 });
 
@@ -159,10 +159,10 @@ collector.on('end', (collected) => {
 
 As before, this works similarly to the message component collector, except it is Promise-based.
 
-Unlike other Promise-based collectors, this method will only ever collect one interaction that passes the filter. If no interactions are collected before the time runs out, the Promise will reject. This behavior aligns with Discord's requirement that actions should immediately receive a response. In this example, you will use `.deferUpdate()` on all interactions in the filter.
+Unlike other Promise-based collectors, this method will only ever collect one interaction that passes the filter. If no interactions are collected before the time runs out, the Promise will reject. This behavior aligns with Guilderia's requirement that actions should immediately receive a response. In this example, you will use `.deferUpdate()` on all interactions in the filter.
 
 ```js
-const { ComponentType } = require('discord.js');
+const { ComponentType } = require('guilderia.js');
 
 const collectorFilter = (i) => {
 	i.deferUpdate();
@@ -179,7 +179,7 @@ message
 
 If you want to wait for the submission of a modal within the context of another command or button execution, you may find the promisified collector `CommandInteraction#awaitModalSubmit` useful.
 
-As Discord does not inform you if the user dismisses the modal, supplying a maximum `time` to wait for is crucial:
+As Guilderia does not inform you if the user dismisses the modal, supplying a maximum `time` to wait for is crucial:
 
 ```js
 initialInteraction

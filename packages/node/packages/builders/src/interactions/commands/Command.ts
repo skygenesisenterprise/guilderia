@@ -1,10 +1,10 @@
-import type { JSONEncodable } from '@discordjs/util';
+import type { JSONEncodable } from '@guilderiajs/util';
 import type {
 	ApplicationIntegrationType,
 	InteractionContextType,
 	Permissions,
 	RESTPostAPIApplicationCommandsJSONBody,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import type { RestOrArray } from '../../util/normalizeArray.js';
 import { normalizeArray } from '../../util/normalizeArray.js';
 
@@ -51,7 +51,7 @@ export abstract class CommandBuilder<
 	 * @remarks
 	 * You can set this to `'0'` to disable the command by default.
 	 * @param permissions - The permissions bit field to set
-	 * @see {@link https://discord.com/developers/docs/interactions/application-commands#permissions}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#permissions}
 	 */
 	public setDefaultMemberPermissions(permissions: Permissions | bigint | number) {
 		this.data.default_member_permissions = typeof permissions === 'string' ? permissions : permissions.toString();

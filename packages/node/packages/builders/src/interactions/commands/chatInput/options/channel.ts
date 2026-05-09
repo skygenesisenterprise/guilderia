@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType } from 'guilderia-api-types/v10';
 import { Mixin } from 'ts-mixer';
 import { channelOptionPredicate } from '../Assertions.js';
 import { ApplicationCommandOptionChannelTypesMixin } from '../mixins/ApplicationCommandOptionChannelTypesMixin.js';

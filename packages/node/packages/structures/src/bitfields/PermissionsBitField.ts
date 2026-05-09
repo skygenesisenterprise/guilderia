@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { PermissionFlagsBits } from 'guilderia-api-types/v10';
 import type { BitFieldResolvable } from './BitField.js';
 import { BitField } from './BitField.js';
 
@@ -12,7 +12,7 @@ export class PermissionsBitField extends BitField<keyof typeof PermissionFlagsBi
 	/**
 	 * Numeric permission flags.
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags}
+	 * @see {@link https://guilderia.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags}
 	 */
 	public static override Flags = PermissionFlagsBits;
 

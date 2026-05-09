@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/docgen",
+	"name": "@guilderiajs/docgen",
 	"version": "0.12.1",
-	"description": "The docs.json generator for discord.js and its related projects",
+	"description": "The docs.json generator for guilderia.js and its related projects",
 	"private": true,
 	"scripts": {
 		"build": "tsup",
@@ -48,18 +48,18 @@
 		"docgen",
 		"docsgen",
 		"node",
-		"discordjs"
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/docgen"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
 		"commander": "^14.0.3",
 		"jsdoc-to-markdown": "^8.0.3",

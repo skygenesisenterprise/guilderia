@@ -1,5 +1,5 @@
 import type { Buffer } from 'node:buffer';
-import type { RESTPatchAPIChannelJSONBody, Snowflake } from 'discord-api-types/v10';
+import type { RESTPatchAPIChannelJSONBody, Snowflake } from 'guilderia-api-types/v10';
 import type { REST } from '../REST.js';
 import { RateLimitError } from '../errors/RateLimitError.js';
 import { RequestMethod } from './types.js';

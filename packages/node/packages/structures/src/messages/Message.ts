@@ -1,8 +1,8 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APIMessage, MessageFlags } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APIMessage, MessageFlags } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { MessageFlagsBitField } from '../bitfields/MessageFlagsBitField.js';
-import { dateToDiscordISOTimestamp } from '../utils/optimization.js';
+import { dateToGuilderiaISOTimestamp } from '../utils/optimization.js';
 import { kData, kEditedTimestamp } from '../utils/symbols.js';
 import { isFieldSet, isIdSet } from '../utils/type-guards.js';
 import type { Partialize } from '../utils/types.js';
@@ -10,7 +10,7 @@ import type { Partialize } from '../utils/types.js';
 // TODO: missing substructures: application
 
 /**
- * Represents a message on Discord.
+ * Represents a message on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructures `Message`, `Channel`, `MessageActivity`, `MessageCall`, `MessageReference`, `Attachment`, `Application`, `ChannelMention`, `Reaction`, `Poll`, `ResolvedInteractionData`, `RoleSubscriptionData`, `Sticker`, all the different `Component`s, ... which need to be instantiated and stored by an extending class using it
@@ -73,7 +73,7 @@ export class Message<Omitted extends keyof APIMessage | '' = 'edited_timestamp' 
 	 * The timestamp this message was created at
 	 */
 	public get createdTimestamp() {
-		return isIdSet(this.id) ? DiscordSnowflake.timestampFrom(this.id) : null;
+		return isIdSet(this.id) ? GuilderiaSnowflake.timestampFrom(this.id) : null;
 	}
 
 	/**
@@ -166,12 +166,12 @@ export class Message<Omitted extends keyof APIMessage | '' = 'edited_timestamp' 
 	public override toJSON() {
 		const clone = super.toJSON();
 		if (this[kEditedTimestamp]) {
-			clone.edited_timestamp = dateToDiscordISOTimestamp(new Date(this[kEditedTimestamp]));
+			clone.edited_timestamp = dateToGuilderiaISOTimestamp(new Date(this[kEditedTimestamp]));
 		}
 
 		const createdAt = this.createdAt;
 		if (createdAt) {
-			clone.timestamp = dateToDiscordISOTimestamp(createdAt);
+			clone.timestamp = dateToGuilderiaISOTimestamp(createdAt);
 		}
 
 		return clone;

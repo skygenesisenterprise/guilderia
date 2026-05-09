@@ -6,15 +6,15 @@ title: Audit Logs
 
 ### A Quick Background
 
-Audit logs are an excellent moderation tool offered by Discord to know what happened in a server and usually by whom. Making use of audit logs requires the `ViewAuditLog` permission. Audit logs may be fetched on a server, or they may be received via the gateway event `guildAuditLogEntryCreate` which requires the `GuildModeration` intent.
+Audit logs are an excellent moderation tool offered by Guilderia to know what happened in a server and usually by whom. Making use of audit logs requires the `ViewAuditLog` permission. Audit logs may be fetched on a server, or they may be received via the gateway event `guildAuditLogEntryCreate` which requires the `GuildModeration` intent.
 
-There are quite a few cases where you may use audit logs. This guide will limit itself to the most common use cases. Feel free to consult the [relevant Discord API page](https://discord.com/developers/docs/resources/audit-log) for more information.
+There are quite a few cases where you may use audit logs. This guide will limit itself to the most common use cases. Feel free to consult the [relevant Guilderia API page](https://guilderia.com/developers/docs/resources/audit-log) for more information.
 
 Keep in mind that these examples explore a straightforward case and are by no means exhaustive. Their purpose is to teach you how audit logs work, and expansion of these examples is likely needed to suit your specific use case.
 
 ## Fetching Audit Logs
 
-Let's start by glancing at the `Guild#fetchAuditLogs` method and how to work with it. Like many discord.js methods, it returns a [`Promise`](../additional-info/async-await) containing the `GuildAuditLogs` object. This object has one property, `entries`, which holds a [`Collection`](../additional-info/collections) of `GuildAuditLogsEntry` objects, and consequently, the information you want to retrieve.
+Let's start by glancing at the `Guild#fetchAuditLogs` method and how to work with it. Like many guilderia.js methods, it returns a [`Promise`](../additional-info/async-await) containing the `GuildAuditLogs` object. This object has one property, `entries`, which holds a [`Collection`](../additional-info/collections) of `GuildAuditLogsEntry` objects, and consequently, the information you want to retrieve.
 
 Here is the most basic fetch to look at some entries.
 
@@ -26,7 +26,7 @@ const firstEntry = fetchedLogs.entries.first();
 Simple, right? Now, let's look at utilizing its options:
 
 ```js
-const { AuditLogEvent } = require('discord.js');
+const { AuditLogEvent } = require('guilderia.js');
 
 const fetchedLogs = await guild.fetchAuditLogs({
 	type: AuditLogEvent.InviteCreate,
@@ -44,10 +44,10 @@ Audit logs may be received via the gateway event `guildAuditLogEntryCreate`. Thi
 
 ### Who deleted a message?
 
-One of the most common use cases for audit logs is understanding who deleted a message in a Discord server. If a user deleted another user's message, you can find out who did that as soon as you receive the corresponding audit log event.
+One of the most common use cases for audit logs is understanding who deleted a message in a Guilderia server. If a user deleted another user's message, you can find out who did that as soon as you receive the corresponding audit log event.
 
 ```js
-const { AuditLogEvent, Events } = require('discord.js');
+const { AuditLogEvent, Events } = require('guilderia.js');
 
 client.on(Events.GuildAuditLogEntryCreate, async (auditLog) => {
 	// Define your variables.
@@ -75,7 +75,7 @@ With this, you now have a very simple logger telling you who deleted a message a
 This is very similar to the example above.
 
 ```js
-const { AuditLogEvent, Events } = require('discord.js');
+const { AuditLogEvent, Events } = require('guilderia.js');
 
 client.on(Events.GuildAuditLogEntryCreate, async (auditLog) => {
 	// Define your variables.
@@ -95,4 +95,4 @@ client.on(Events.GuildAuditLogEntryCreate, async (auditLog) => {
 });
 ```
 
-If you want to check who banned a user, it's the same example as above except the `action` should be `AuditLogEvent.MemberBanAdd`. You can check the rest of the types over at the [discord-api-types documentation](https://discord-api-types.dev/api/discord-api-types-v10/enum/AuditLogEvent).
+If you want to check who banned a user, it's the same example as above except the `action` should be `AuditLogEvent.MemberBanAdd`. You can check the rest of the types over at the [guilderia-api-types documentation](https://guilderia-api-types.dev/api/guilderia-api-types-v10/enum/AuditLogEvent).

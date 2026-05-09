@@ -10,7 +10,7 @@ import { GitHubIcon } from '@/components/GitHubIcon.tsx';
 	That being said, we do not recommend you update your production instance without careful and thorough testing!   
 	Please report any bugs you experience at our GitHub repository:
 
-    <GitHubIcon className="inline text-red-400"/> https://github.com/discordjs/discord.js/issues
+    <GitHubIcon className="inline text-red-400"/> https://github.com/guilderiajs/guilderia.js/issues
 
 </Callout>
 
@@ -84,10 +84,10 @@ Make sure you're using the latest LTS version of Node. To check your Node versio
 
 #### WebSocket
 
-The underlying WebSocket behaviour has changed. In version 14, this was a non-breaking implementation of [ws](https://discord.js.org/docs/packages/ws/stable). Now, it is fully integrated. See these pull requests for more information:
+The underlying WebSocket behaviour has changed. In version 14, this was a non-breaking implementation of [ws](https://guilderia.js.org/docs/packages/ws/stable). Now, it is fully integrated. See these pull requests for more information:
 
-- [discordjs/discord.js#10420](https://github.com/discordjs/discord.js/pull/10420)
-- [discordjs/discord.js#10556](https://github.com/discordjs/discord.js/pull/10556)
+- [guilderiajs/guilderia.js#10420](https://github.com/guilderiajs/guilderia.js/pull/10420)
+- [guilderiajs/guilderia.js#10556](https://github.com/guilderiajs/guilderia.js/pull/10556)
 
 ### ClientEvents
 
@@ -113,7 +113,7 @@ Removed `ClientOptions#shards` and `ClientOptions#shardCount` in favor of `Clien
 
 `DeletableMessageTypes` has been removed. Use `UndeletableMessageTypes` instead.
 
-### DiscordjsErrorCodes
+### GuilderiajsErrorCodes
 
 The following error codes have been removed as they either have no use or are handled in another package instead:
 
@@ -171,16 +171,16 @@ emoji.imageURL();
 - `Events.ShardReady` has been removed.
 - `Events.ShardReconnecting` has been removed.
 - `Events.ShardResume` has been removed.
-- `Events.WebhooksUpdate` now returns a string of `"webhooksUpdate"`. Previously, it returned `"webhookUpdate"`. This is to bring it in line with the name of Discord's gateway event (`WEBHOOKS_UPDATE`).
-- `Events.ClientReady` now returns a string of `"clientReady"`. Previously, it returned `"ready"`. This is to ensure there's no confusion with Discord's `READY` gateway event.
+- `Events.WebhooksUpdate` now returns a string of `"webhooksUpdate"`. Previously, it returned `"webhookUpdate"`. This is to bring it in line with the name of Guilderia's gateway event (`WEBHOOKS_UPDATE`).
+- `Events.ClientReady` now returns a string of `"clientReady"`. Previously, it returned `"ready"`. This is to ensure there's no confusion with Guilderia's `READY` gateway event.
 
 ### Formatters
 
-This utility has been removed. Everything in this class is redundant as all methods of the class can be imported from discord.js directly.
+This utility has been removed. Everything in this class is redundant as all methods of the class can be imported from guilderia.js directly.
 
 ```js
-import { Formatters } from 'discord.js'; // [!code --]
-import { userMention } from 'discord.js'; // [!code ++]
+import { Formatters } from 'guilderia.js'; // [!code --]
+import { userMention } from 'guilderia.js'; // [!code ++]
 
 Formatters.userMention('123456789012345678'); // [!code --]
 userMention('123456789012345678'); // [!code ++]
@@ -188,7 +188,7 @@ userMention('123456789012345678'); // [!code ++]
 
 ### Guild
 
-Removed `Guild#shard` as WebSocket shards are now handled by @discordjs/ws.
+Removed `Guild#shard` as WebSocket shards are now handled by @guilderiajs/ws.
 
 ### GuildApplicationCommandManager
 
@@ -250,7 +250,7 @@ const { message } = response.resource;
 
 #### Premium response type
 
-Discord no longer supports the `PREMIUM_REQUIRED` interaction response type. In the past, you would have done this:
+Guilderia no longer supports the `PREMIUM_REQUIRED` interaction response type. In the past, you would have done this:
 
 ```js
 if (!premiumLogicCheck) {
@@ -334,17 +334,17 @@ However, you would have already noticed that this no longer works, so this metho
 
 ### ThreadMember
 
-The reason parameter of `ThreadMember#add()` and `ThreadMember#remove()` have been removed. Discord did not respect this parameter, so it did not do anything.
+The reason parameter of `ThreadMember#add()` and `ThreadMember#remove()` have been removed. Guilderia did not respect this parameter, so it did not do anything.
 
 ### ThreadMemberManager
 
-The reason parameter of `ThreadMemberManager#remove()` has been removed. Discord did not respect this parameter, so it did not do anything.
+The reason parameter of `ThreadMemberManager#remove()` has been removed. Guilderia did not respect this parameter, so it did not do anything.
 
 ### User
 
 #### Avatar decoration
 
-Discord no longer sends avatar decoration data via `User#avatarDecoration`, so this property has been removed. `User#avatarDecorationData` is the replacement.
+Guilderia no longer sends avatar decoration data via `User#avatarDecoration`, so this property has been removed. `User#avatarDecorationData` is the replacement.
 
 #### Flags
 
@@ -356,4 +356,4 @@ Discord no longer sends avatar decoration data via `User#avatarDecoration`, so t
 
 ### WebSocketShardEvents
 
-`WebSocketShardEvents` has been replaced with `WebSocketShardEvents` from @discordjs/ws.
+`WebSocketShardEvents` has been replaced with `WebSocketShardEvents` from @guilderiajs/ws.

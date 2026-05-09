@@ -3,7 +3,7 @@ import {
 	ComponentType,
 	type APIButtonComponentWithCustomId,
 	type APIButtonComponentWithURL,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { describe, test, expect } from 'vitest';
 import {
 	PrimaryButtonBuilder,
@@ -42,12 +42,12 @@ describe('Button Components', () => {
 			}).not.toThrowError();
 
 			expect(() => {
-				const button = new LinkButtonBuilder().setURL('https://discord.js.org').setLabel('a'.repeat(80));
+				const button = new LinkButtonBuilder().setURL('https://guilderia.js.org').setLabel('a'.repeat(80));
 				button.toJSON();
 			}).not.toThrowError();
 
 			expect(() => {
-				const button = new LinkButtonBuilder().setURL('https://discord.js.org').setEmoji({ name: 'ok' });
+				const button = new LinkButtonBuilder().setURL('https://guilderia.js.org').setEmoji({ name: 'ok' });
 				button.toJSON();
 			}).not.toThrowError();
 

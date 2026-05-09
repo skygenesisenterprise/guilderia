@@ -31,7 +31,7 @@ export default {
 			},
 			{
 				source: '/guide/:path*',
-				destination: 'https://discordjs.guide/:path*',
+				destination: 'https://guilderiajs.guide/:path*',
 				permanent: false,
 			},
 		];

@@ -1,13 +1,13 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import type { RequestData, REST } from '@discordjs/rest';
+import type { RequestData, REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPIApplicationRoleConnectionMetadataResult,
 	type RESTPutAPIApplicationRoleConnectionMetadataResult,
 	type RESTPutAPIApplicationRoleConnectionMetadataJSONBody,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class RoleConnectionsAPI {
 	public constructor(private readonly rest: REST) {}
@@ -15,7 +15,7 @@ export class RoleConnectionsAPI {
 	/**
 	 * Gets the role connection metadata records for the application
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/application-role-connection-metadata#get-application-role-connection-metadata-records}
+	 * @see {@link https://guilderia.com/developers/docs/resources/application-role-connection-metadata#get-application-role-connection-metadata-records}
 	 * @param applicationId - The id of the application to get role connection metadata records for
 	 * @param options - The options for fetching the role connection metadata records
 	 */
@@ -32,7 +32,7 @@ export class RoleConnectionsAPI {
 	/**
 	 * Updates the role connection metadata records for the application
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/application-role-connection-metadata#update-application-role-connection-metadata-records}
+	 * @see {@link https://guilderia.com/developers/docs/resources/application-role-connection-metadata#update-application-role-connection-metadata-records}
 	 * @param applicationId - The id of the application to update role connection metadata records for
 	 * @param body - The new role connection metadata records
 	 * @param options - The options for updating the role connection metadata records

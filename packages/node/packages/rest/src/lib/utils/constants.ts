@@ -1,13 +1,13 @@
-import { getUserAgentAppendix } from '@discordjs/util';
-import type { ImageSize } from 'discord-api-types/v10';
-import { APIVersion } from 'discord-api-types/v10';
+import { getUserAgentAppendix } from '@guilderiajs/util';
+import type { ImageSize } from 'guilderia-api-types/v10';
+import { APIVersion } from 'guilderia-api-types/v10';
 import { getDefaultStrategy } from '../../environment.js';
 import type { RESTOptions, ResponseLike } from './types.js';
 
-export type { ImageSize } from 'discord-api-types/v10';
+export type { ImageSize } from 'guilderia-api-types/v10';
 
 export const DefaultUserAgent =
-	`DiscordBot (https://discord.js.org, [VI]{{inject}}[/VI])` as `DiscordBot (https://discord.js.org, ${string})`;
+	`GuilderiaBot (https://guilderia.js.org, [VI]{{inject}}[/VI])` as `GuilderiaBot (https://guilderia.js.org, ${string})`;
 
 /**
  * The default string to append onto the user agent.
@@ -16,9 +16,9 @@ export const DefaultUserAgentAppendix = getUserAgentAppendix();
 
 export const DefaultRestOptions = {
 	agent: null,
-	api: 'https://discord.com/api',
+	api: 'https://guilderia.com/api',
 	authPrefix: 'Bot',
-	cdn: 'https://cdn.discordapp.com',
+	cdn: 'https://cdn.guilderiaapp.com',
 	headers: {},
 	invalidRequestWarningInterval: 0,
 	globalRequestsPerSecond: 50,
@@ -35,7 +35,7 @@ export const DefaultRestOptions = {
 	async makeRequest(...args): Promise<ResponseLike> {
 		return getDefaultStrategy()(...args);
 	},
-	mediaProxy: 'https://media.discordapp.net',
+	mediaProxy: 'https://media.guilderiaapp.net',
 } as const satisfies Required<RESTOptions>;
 
 /**
@@ -60,7 +60,7 @@ export type ImageExtension = (typeof ALLOWED_EXTENSIONS)[number];
 export type StickerExtension = (typeof ALLOWED_STICKER_EXTENSIONS)[number];
 
 export const OverwrittenMimeTypes = {
-	// https://github.com/discordjs/discord.js/issues/8557
+	// https://github.com/guilderiajs/guilderia.js/issues/8557
 	'image/apng': 'image/png',
 } as const satisfies Readonly<Record<string, string>>;
 

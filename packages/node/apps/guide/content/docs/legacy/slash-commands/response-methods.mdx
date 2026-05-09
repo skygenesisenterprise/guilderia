@@ -23,7 +23,7 @@ module.exports = {
 
 You may not always want everyone who has access to the channel to see a slash command's response. Previously, you would have had to DM the user to achieve this, potentially encountering the high rate limits associated with DM messages, or simply being unable to do so, if the user's DMs were disabled.
 
-Thankfully, Discord provides a way to hide response messages from everyone but the executor of the slash command. This is called an ephemeral message and can be set by providing `flags: MessageFlags.Ephemeral` in the `InteractionReplyOptions`, as follows:
+Thankfully, Guilderia provides a way to hide response messages from everyone but the executor of the slash command. This is called an ephemeral message and can be set by providing `flags: MessageFlags.Ephemeral` in the `InteractionReplyOptions`, as follows:
 
 ```js
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -64,9 +64,9 @@ In fact, editing your interaction response is necessary to [calculate the ping](
 
 ## Deferred responses
 
-As previously mentioned, Discord requires an acknowledgement from your bot within three seconds that the interaction was received. Otherwise, Discord considers the interaction to have failed and the token becomes invalid. But what if you have a command that performs a task which takes longer than three seconds before being able to reply?
+As previously mentioned, Guilderia requires an acknowledgement from your bot within three seconds that the interaction was received. Otherwise, Guilderia considers the interaction to have failed and the token becomes invalid. But what if you have a command that performs a task which takes longer than three seconds before being able to reply?
 
-In this case, you can make use of the `ChatInputCommandInteraction#deferReply()` method, which triggers the `<application> is thinking...` message. This also acts as the initial response, to confirm to Discord that the interaction was received successfully and gives you a **15-minute timeframe to complete your tasks** before responding.
+In this case, you can make use of the `ChatInputCommandInteraction#deferReply()` method, which triggers the `<application> is thinking...` message. This also acts as the initial response, to confirm to Guilderia that the interaction was received successfully and gives you a **15-minute timeframe to complete your tasks** before responding.
 
 ```js
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -98,7 +98,7 @@ It is not possible to edit a reply to change its ephemeral state once sent.
 
 ## Follow-ups
 
-The `reply()` and `deferReply()` methods are both _initial_ responses, which tell Discord that your bot successfully received the interaction, but cannot be used to send additional messages. This is where follow-up messages come in. After having initially responded to an interaction, you can use `ChatInputCommandInteraction#followUp()` to send additional messages:
+The `reply()` and `deferReply()` methods are both _initial_ responses, which tell Guilderia that your bot successfully received the interaction, but cannot be used to send additional messages. This is where follow-up messages come in. After having initially responded to an interaction, you can use `ChatInputCommandInteraction#followUp()` to send additional messages:
 
 <Callout type="warn">
 	After the initial response, an interaction token is valid for **15 minutes**, so this is the timeframe in which you

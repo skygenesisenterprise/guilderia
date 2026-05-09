@@ -1,4 +1,4 @@
-import type { ChannelType, GuildChannelType, GuildTextChannelType, ThreadChannelType } from 'discord-api-types/v10';
+import type { ChannelType, GuildChannelType, GuildTextChannelType, ThreadChannelType } from 'guilderia-api-types/v10';
 import { expectTypeOf } from 'vitest';
 import type { Channel } from '../../src/channels/Channel.js';
 

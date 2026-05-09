@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/api-extractor-utils",
+	"name": "@guilderiajs/api-extractor-utils",
 	"version": "1.0.0",
 	"description": "Utilities for api-extractor",
 	"private": true,
@@ -37,16 +37,16 @@
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/api-extractor-utils"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
-		"@discordjs/api-extractor-model": "workspace:^",
+		"@guilderiajs/api-extractor-model": "workspace:^",
 		"@microsoft/tsdoc": "~0.15.1"
 	},
 	"devDependencies": {

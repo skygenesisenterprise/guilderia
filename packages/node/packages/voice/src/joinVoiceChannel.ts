@@ -1,12 +1,12 @@
 import type { JoinConfig } from './DataStore';
 import { createVoiceConnection } from './VoiceConnection';
-import type { DiscordGatewayAdapterCreator } from './util/adapter';
+import type { GuilderiaGatewayAdapterCreator } from './util/adapter';
 
 /**
  * The options that can be given when creating a voice connection.
  */
 export interface CreateVoiceConnectionOptions {
-	adapterCreator: DiscordGatewayAdapterCreator;
+	adapterCreator: GuilderiaGatewayAdapterCreator;
 
 	/**
 	 * Whether to use the DAVE protocol for end-to-end encryption. Defaults to true.
@@ -31,7 +31,7 @@ export interface CreateVoiceConnectionOptions {
  */
 export interface JoinVoiceChannelOptions {
 	/**
-	 * The id of the Discord voice channel to join.
+	 * The id of the Guilderia voice channel to join.
 	 */
 	channelId: string;
 
@@ -57,7 +57,7 @@ export interface JoinVoiceChannelOptions {
 }
 
 /**
- * Creates a VoiceConnection to a Discord voice channel.
+ * Creates a VoiceConnection to a Guilderia voice channel.
  *
  * @param options - the options for joining the voice channel
  */

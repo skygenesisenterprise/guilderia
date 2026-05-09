@@ -9,7 +9,7 @@ One of the first things many people want to know is how to react with emojis, bo
 Here's the base code we'll be using:
 
 ```js title="reactionsample.js" lineNumbers
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Events, GatewayIntentBits } = require('guilderia.js');
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions],
@@ -28,7 +28,7 @@ client.login('your-token-goes-here');
 
 ### Unicode emojis
 
-To react with a Unicode emoji, you will need the actual Unicode character of the emoji. There are many ways to get a Unicode character of an emoji, but the easiest way would be through Discord itself. If you send a message with a Unicode emoji (such as `:smile:`, for example) and put a `\` before it, it will "escape" the emoji and display the Unicode character instead of the standard emoji image.
+To react with a Unicode emoji, you will need the actual Unicode character of the emoji. There are many ways to get a Unicode character of an emoji, but the easiest way would be through Guilderia itself. If you send a message with a Unicode emoji (such as `:smile:`, for example) and put a `\` before it, it will "escape" the emoji and display the Unicode character instead of the standard emoji image.
 
 To react with an emoji, you need to use the `message.react()` method. Once you have the emoji character, all you need to do is copy & paste it as a string inside the `.react()` method!
 
@@ -292,7 +292,7 @@ Make sure you enable partial structures for `Message`, `Channel`, and `Reaction`
 </Callout>
 
 ```js title="old-reactions.js"
-const { Client, Events, GatewayIntentBits, Partials } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Partials } = require('guilderia.js');
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions],

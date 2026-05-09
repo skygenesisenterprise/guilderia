@@ -1,12 +1,12 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APIStageInstance } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APIStageInstance } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import { isIdSet } from '../utils/type-guards.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents any stage instance on Discord.
+ * Represents any stage instance on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */
@@ -72,7 +72,7 @@ export class StageInstance<Omitted extends keyof APIStageInstance | '' = ''> ext
 	 * The timestamp the stage instance was created at
 	 */
 	public get createdTimestamp() {
-		return isIdSet(this.id) ? DiscordSnowflake.timestampFrom(this.id) : null;
+		return isIdSet(this.id) ? GuilderiaSnowflake.timestampFrom(this.id) : null;
 	}
 
 	/**

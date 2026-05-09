@@ -3,7 +3,7 @@ import {
 	InteractionContextType,
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { z } from 'zod';
 import { localeMapPredicate, memberPermissionsPredicate } from '../../../Assertions.js';
 import { ApplicationCommandOptionAllowedChannelTypes } from './mixins/ApplicationCommandOptionChannelTypesMixin.js';

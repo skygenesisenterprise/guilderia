@@ -1,10 +1,10 @@
-import type { APIVoiceState } from 'discord-api-types/v10';
+import type { APIVoiceState } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents any voice state on Discord.
+ * Represents any voice state on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructure `GuildMember` which needs to be instantiated and stored by an extending class using it

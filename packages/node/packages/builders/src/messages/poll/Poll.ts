@@ -1,5 +1,5 @@
-import type { JSONEncodable } from '@discordjs/util';
-import type { RESTAPIPoll, APIPollMedia, PollLayoutType, APIPollAnswer } from 'discord-api-types/v10';
+import type { JSONEncodable } from '@guilderiajs/util';
+import type { RESTAPIPoll, APIPollMedia, PollLayoutType, APIPollAnswer } from 'guilderia-api-types/v10';
 import { normalizeArray, type RestOrArray } from '../../util/normalizeArray.js';
 import { resolveBuilder } from '../../util/resolveBuilder.js';
 import { validate } from '../../util/validation.js';
@@ -172,7 +172,7 @@ export class PollBuilder implements JSONEncodable<RESTAPIPoll> {
 	 *
 	 * @remarks
 	 * This method is redundant while only one type of poll layout exists (`PollLayoutType.Default`)
-	 * with Discord using that as the layout type if none is specified.
+	 * with Guilderia using that as the layout type if none is specified.
 	 * @param type - The type of poll layout to use
 	 */
 	public setLayoutType(type: PollLayoutType): this {

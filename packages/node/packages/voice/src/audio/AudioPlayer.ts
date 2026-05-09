@@ -614,7 +614,7 @@ export class AudioPlayer extends EventEmitter {
 	}
 
 	/**
-	 * Signals to all the subscribed connections that they should send a packet to Discord indicating
+	 * Signals to all the subscribed connections that they should send a packet to Guilderia indicating
 	 * they are no longer speaking. Called once playback of a resource ends.
 	 */
 	private _signalStopSpeaking() {

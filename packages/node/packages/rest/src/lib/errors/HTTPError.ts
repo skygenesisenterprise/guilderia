@@ -1,5 +1,5 @@
 import type { InternalRequest } from '../utils/types.js';
-import type { RequestBody } from './DiscordAPIError.js';
+import type { RequestBody } from './GuilderiaAPIError.js';
 
 /**
  * Represents a HTTP error

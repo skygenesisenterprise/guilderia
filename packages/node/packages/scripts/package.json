@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/scripts",
+	"name": "@guilderiajs/scripts",
 	"version": "0.1.0",
 	"description": "A set of scripts that we use for our workflows",
 	"private": true,
@@ -47,22 +47,22 @@
 		"bot",
 		"client",
 		"node",
-		"discordjs"
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/scripts"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
 		"@actions/glob": "^0.6.1",
-		"@discordjs/api-extractor-model": "workspace:^",
-		"@discordjs/api-extractor-utils": "workspace:^",
+		"@guilderiajs/api-extractor-model": "workspace:^",
+		"@guilderiajs/api-extractor-utils": "workspace:^",
 		"@microsoft/tsdoc": "~0.15.1",
 		"@microsoft/tsdoc-config": "~0.17.1",
 		"@vercel/blob": "^2.3.2",

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/builders",
+	"name": "@guilderiajs/builders",
 	"version": "1.11.1",
 	"description": "A set of builders that you can use when creating your bot",
 	"scripts": {
@@ -42,38 +42,38 @@
 		"Crawl <icrawltogo@gmail.com>",
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
-		"Aura Román <kyradiscord@gmail.com>"
+		"Aura Román <kyraguilderia@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"discord",
+		"guilderia",
 		"api",
 		"bot",
 		"client",
 		"node",
-		"discordapp",
-		"discordjs"
+		"guilderiaapp",
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/builders"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
-		"@discordjs/util": "workspace:^",
-		"discord-api-types": "^0.38.43",
+		"@guilderiajs/util": "workspace:^",
+		"guilderia-api-types": "^0.38.43",
 		"ts-mixer": "^6.0.4",
 		"tslib": "^2.8.1",
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@discordjs/api-extractor": "workspace:^",
-		"@discordjs/scripts": "workspace:^",
+		"@guilderiajs/api-extractor": "workspace:^",
+		"@guilderiajs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
 		"@types/node": "^22.19.15",
 		"@vitest/coverage-v8": "^4.1.2",

@@ -30,7 +30,7 @@ guild.members.unban(user);
 ```
 
 <Callout>
-	Discord **validates** and **resolves** user ids for users not on the server in user slash command options. To retrieve
+	Guilderia **validates** and **resolves** user ids for users not on the server in user slash command options. To retrieve
 	and use the full structure from the resulting interaction, you can use the `CommandInteractionOptionResolver#getUser`
 	method.
 </Callout>
@@ -102,7 +102,7 @@ client.user.setActivity('activity');
 ### How do I set my status to "Watching/Listening to/Competing in ..."?
 
 ```js
-const { ActivityType } = require('discord.js');
+const { ActivityType } = require('guilderia.js');
 
 client.user.setActivity('activity', { type: ActivityType.Watching });
 client.user.setActivity('activity', { type: ActivityType.Listening });
@@ -117,7 +117,7 @@ client.user.setActivity('activity', { type: ActivityType.Competing });
 ### How do I make my bot display online/idle/dnd/invisible?
 
 ```js
-const { PresenceUpdateStatus } = require('discord.js');
+const { PresenceUpdateStatus } = require('guilderia.js');
 
 client.user.setStatus(PresenceUpdateStatus.Online);
 client.user.setStatus(PresenceUpdateStatus.Idle);
@@ -128,7 +128,7 @@ client.user.setStatus(PresenceUpdateStatus.Invisible);
 ### How do I set both status and activity in one go?
 
 ```js
-const { PresenceUpdateStatus } = require('discord.js');
+const { PresenceUpdateStatus } = require('guilderia.js');
 
 client.user.setPresence({ activities: [{ name: 'activity' }], status: PresenceUpdateStatus.Idle });
 ```
@@ -273,7 +273,7 @@ process.exit();
 
 ### What is the difference between a User and a GuildMember?
 
-A User represents a global Discord user, and a GuildMember represents a Discord user on a specific server. That means only GuildMembers can have permissions, roles, and nicknames, for example, because all of these things are server-bound information that could be different on each server that the user is in.
+A User represents a global Guilderia user, and a GuildMember represents a Guilderia user on a specific server. That means only GuildMembers can have permissions, roles, and nicknames, for example, because all of these things are server-bound information that could be different on each server that the user is in.
 
 ### How do I find all online members of a guild?
 

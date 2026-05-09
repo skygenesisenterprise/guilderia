@@ -2,8 +2,8 @@
 title: Permissions
 ---
 
-Permissions are Discord's primary feature, enabling users to customize their server's workings to their liking.
-Essentially, Permissions and permission overwrites tell Discord who is allowed to do what and where.
+Permissions are Guilderia's primary feature, enabling users to customize their server's workings to their liking.
+Essentially, Permissions and permission overwrites tell Guilderia who is allowed to do what and where.
 Permissions can be very confusing at first, but this guide is here to explain and clarify them, so let's dive in!
 
 ## Roles as bot permissions
@@ -22,21 +22,21 @@ member.roles.cache.some((role) => role.name === 'Mod');
 
 If you want to enhance this system slightly, you can include the guild owner by comparing the executing member's ID with `interaction.guild.ownerId`.
 
-To include permission checks like `Administrator` or `ManageGuild`, keep reading as we will cover Discord Permissions and all their intricacies in the following sections.
+To include permission checks like `Administrator` or `ManageGuild`, keep reading as we will cover Guilderia Permissions and all their intricacies in the following sections.
 
 ## Terminology
 
-- Permission: The ability to execute a certain action in Discord
+- Permission: The ability to execute a certain action in Guilderia
 - Overwrite: Rule on a channel to modify the permissions for a member or role
-- BitField: Binary representation of Discord permissions
+- BitField: Binary representation of Guilderia permissions
 - Base Permissions: Permissions for roles the member has, set on the guild level
 - Final Permissions: Permissions for a member or role, after all overwrites are applied
 - Flag: Human readable string in PascalCase (e.g., `KickMembers`) that refers to a position in the permission BitField. You can find a list of all valid flags on the `PermissionsBitField#Flags` page
 
 <Callout>
 	You can provide permission decimals wherever we use flag literals in this guide. If you are interested in a handy
-	permission calculator, you can look at the "Bot" section in the [Discord developer
-	portal](https://discord.com/developers/applications).
+	permission calculator, you can look at the "Bot" section in the [Guilderia developer
+	portal](https://guilderia.com/developers/applications).
 </Callout>
 
 ## Base permissions
@@ -46,7 +46,7 @@ To include permission checks like `Administrator` or `ManageGuild`, keep reading
 Base permissions are set on roles, not the guild member itself. To change them, you access a Role object (for example via `member.roles.cache.first()` or `guild.roles.cache.random()`) and use the `.setPermissions()` method. This is how you'd change the base permissions for the `@everyone` role, for example:
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 
 guild.roles.everyone.setPermissions([PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel]);
 ```
@@ -63,7 +63,7 @@ Any permission not referenced in the flag array or bit field is not granted to t
 Alternatively you can provide permissions as a property of `RoleCreateOptions` during role creation as an array of flag strings or a permission number:
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 
 guild.roles.create({
 	name: 'Mod',
@@ -76,7 +76,7 @@ guild.roles.create({
 To know if one of a member's roles has a permission enabled, you can use the `.has()` method on `GuildMember#permissions` and provide a permission flag, array, or number to check for. You can also specify if you want to allow the `Administrator` permission or the guild owner status to override this check with the following parameters.
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 
 if (member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
 	console.log('This member can kick');
@@ -120,7 +120,7 @@ Any permission flags not specified get neither an explicit allow nor deny overwr
 You can also provide an array of overwrites during channel creation, as shown below:
 
 ```js
-const { ChannelType, PermissionsBitField } = require('discord.js');
+const { ChannelType, PermissionsBitField } = require('guilderia.js');
 
 guild.channels.create({
 	name: 'new-channel',
@@ -155,7 +155,7 @@ channel.permissionOverwrites.edit(user.id, { ViewChannel: true });
 To replace all permission overwrites on the channel with a provided set of new overwrites, you can use the `.set()` method. This is extremely handy if you want to copy a channel's full set of overwrites to another one, as this method also allows passing an array or Collection of `PermissionOverwrites`.
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 // copying overwrites from another channel
 channel.permissionOverwrites.set(otherChannel.permissionOverwrites.cache);
 
@@ -186,7 +186,7 @@ channel.permissionOverwrites.delete(interaction.user.id);
 If the permission overwrites on a channel under a category match with the parent (category), it is considered synchronized. This means that any changes in the categories overwrites will now also change the channels overwrites. Changing the child channels overwrites will not affect the parent.
 
 <Callout>
-	This is indeed all that a "sync" in Discord categories means! Users and developers alike commonly misunderstand this
+	This is indeed all that a "sync" in Guilderia categories means! Users and developers alike commonly misunderstand this
 	and expect a proper "sync" state that applies in both directions.
 </Callout>
 
@@ -231,12 +231,12 @@ If you want to know how to work with the returned Permissions objects, keep read
 
 ## The Permissions object
 
-The `PermissionsBitField` object is a discord.js class containing a permissions bit field and a bunch of utility methods to manipulate it easily.
+The `PermissionsBitField` object is a guilderia.js class containing a permissions bit field and a bunch of utility methods to manipulate it easily.
 Remember that using these methods will not manipulate permissions, but rather create a new instance representing the changed bit field.
 
 ### Displaying permission flags
 
-discord.js provides a `toArray()` method, which can be used to convert a `Permissions` object into an array containing permission flags. This is useful if you want to display/list them and it enables you to use other array manipulation methods. For example:
+guilderia.js provides a `toArray()` method, which can be used to convert a `Permissions` object into an array containing permission flags. This is useful if you want to display/list them and it enables you to use other array manipulation methods. For example:
 
 ```js
 const memberPermissions = member.permissions.toArray();
@@ -265,11 +265,11 @@ const rolePermissions = role.permissions.serialize();
 
 ### Converting permission numbers
 
-Some methods and properties in discord.js return permission decimals rather than a Permissions object, making it hard to manipulate or read them if you don't want to use bitwise operations.
+Some methods and properties in guilderia.js return permission decimals rather than a Permissions object, making it hard to manipulate or read them if you don't want to use bitwise operations.
 However, you can pass these decimals to the Permissions constructor to convert them, as shown below.
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 
 const permissions = new PermissionsBitField(268_550_160n);
 ```
@@ -277,7 +277,7 @@ const permissions = new PermissionsBitField(268_550_160n);
 You can also use this approach for other `PermissionResolvable` like flag arrays or flags.
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 
 const flags = [
 	PermissionsBitField.Flags.ViewChannel,
@@ -298,7 +298,7 @@ The `.has()` method takes two parameters: the first being either a permission nu
 Let's say you want to know if the decimal bit field representation `268_550_160` has `ManageChannels` referenced:
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 
 const bitPermissions = new PermissionsBitField(268_550_160n);
 
@@ -345,7 +345,7 @@ console.log(adminPermissions.has(PermissionsBitField.Flags.ManageChannels, false
 The Permissions object enables you to easily add or remove individual permissions from an existing bit field without worrying about bitwise operations. Both `.add()` and `.remove()` can take a single permission flag or number, an array of permission flags or numbers, or multiple permission flags or numbers as multiple parameters.
 
 ```js
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('guilderia.js');
 
 const permissions = new PermissionsBitField([
 	PermissionsBitField.Flags.ViewChannel,

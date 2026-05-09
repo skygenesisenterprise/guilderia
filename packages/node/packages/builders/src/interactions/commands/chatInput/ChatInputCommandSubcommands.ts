@@ -1,9 +1,9 @@
-import type { JSONEncodable } from '@discordjs/util';
+import type { JSONEncodable } from '@guilderiajs/util';
 import type {
 	APIApplicationCommandSubcommandOption,
 	APIApplicationCommandSubcommandGroupOption,
-} from 'discord-api-types/v10';
-import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
+import { ApplicationCommandOptionType } from 'guilderia-api-types/v10';
 import { Mixin } from 'ts-mixer';
 import { normalizeArray, type RestOrArray } from '../../../util/normalizeArray.js';
 import { resolveBuilder } from '../../../util/resolveBuilder.js';
@@ -20,7 +20,7 @@ export interface ChatInputCommandSubcommandGroupData {
 /**
  * Represents a folder for subcommands.
  *
- * @see {@link https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups}
+ * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups}
  */
 export class ChatInputCommandSubcommandGroupBuilder
 	extends SharedNameAndDescription
@@ -88,7 +88,7 @@ export class ChatInputCommandSubcommandGroupBuilder
  *
  * @mixes {@link SharedNameAndDescription}
  * @mixes {@link SharedChatInputCommandOptions}
- * @see {@link https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups}
+ * @see {@link https://guilderia.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups}
  */
 export class ChatInputCommandSubcommandBuilder
 	extends Mixin(SharedNameAndDescription, SharedChatInputCommandOptions)

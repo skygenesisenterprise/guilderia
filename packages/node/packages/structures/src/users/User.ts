@@ -1,12 +1,12 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APIUser } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APIUser } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import { isIdSet } from '../utils/type-guards.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents any user on Discord.
+ * Represents any user on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has a substructure `AvatarDecorationData`, which needs to be instantiated and stored by an extending class using it
@@ -74,7 +74,7 @@ export class User<Omitted extends keyof APIUser | '' = ''> extends Structure<API
 	}
 
 	/**
-	 * Whether the user is an Official Discord System user
+	 * Whether the user is an Official Guilderia System user
 	 */
 	public get system() {
 		return this[kData].system ?? false;
@@ -108,7 +108,7 @@ export class User<Omitted extends keyof APIUser | '' = ''> extends Structure<API
 	}
 
 	/**
-	 * The user's primary Discord language
+	 * The user's primary Guilderia language
 	 *
 	 * @remarks This property is only set when the user was fetched with an Oauth2 token and the `identify` scope
 	 */
@@ -147,7 +147,7 @@ export class User<Omitted extends keyof APIUser | '' = ''> extends Structure<API
 	 * The timestamp the user was created at
 	 */
 	public get createdTimestamp() {
-		return isIdSet(this.id) ? DiscordSnowflake.timestampFrom(this.id) : null;
+		return isIdSet(this.id) ? GuilderiaSnowflake.timestampFrom(this.id) : null;
 	}
 
 	/**

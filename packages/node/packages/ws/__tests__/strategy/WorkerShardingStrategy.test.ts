@@ -1,6 +1,6 @@
 /* eslint-disable id-length */
-import type { GatewayDispatchPayload, GatewaySendPayload } from 'discord-api-types/v10';
-import { GatewayDispatchEvents, GatewayOpcodes } from 'discord-api-types/v10';
+import type { GatewayDispatchPayload, GatewaySendPayload } from 'guilderia-api-types/v10';
+import { GatewayDispatchEvents, GatewayOpcodes } from 'guilderia-api-types/v10';
 import { test, vi, expect, afterEach } from 'vitest';
 import {
 	WebSocketManager,

@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/proxy",
+	"name": "@guilderiajs/proxy",
 	"version": "2.1.1",
-	"description": "Tools for running an HTTP proxy for Discord's API",
+	"description": "Tools for running an HTTP proxy for Guilderia's API",
 	"scripts": {
 		"test": "vitest run --config ../../vitest.config.ts",
 		"build": "tsc --noEmit && tsup",
@@ -42,37 +42,37 @@
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyradiscord@gmail.com>",
+		"Aura Román <kyraguilderia@gmail.com>",
 		"DD <didinele.dev@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"discord",
+		"guilderia",
 		"api",
 		"rest",
 		"proxy",
-		"discordapp",
-		"discordjs"
+		"guilderiaapp",
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/proxy"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
-		"@discordjs/rest": "workspace:^",
-		"@discordjs/util": "workspace:^",
+		"@guilderiajs/rest": "workspace:^",
+		"@guilderiajs/util": "workspace:^",
 		"tslib": "^2.8.1",
 		"undici": "7.24.6"
 	},
 	"devDependencies": {
-		"@discordjs/api-extractor": "workspace:^",
-		"@discordjs/scripts": "workspace:^",
+		"@guilderiajs/api-extractor": "workspace:^",
+		"@guilderiajs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
 		"@types/node": "^22.19.15",
 		"@types/supertest": "^7.2.0",

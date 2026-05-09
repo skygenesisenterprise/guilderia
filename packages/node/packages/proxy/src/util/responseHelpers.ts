@@ -1,10 +1,10 @@
 import type { ServerResponse } from 'node:http';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
-import { DiscordAPIError, HTTPError, RateLimitError, type ResponseLike } from '@discordjs/rest';
+import { GuilderiaAPIError, HTTPError, RateLimitError, type ResponseLike } from '@guilderiajs/rest';
 
 /**
- * Populates a server response with the data from a Discord 2xx REST response
+ * Populates a server response with the data from a Guilderia 2xx REST response
  *
  * @param res - The server response to populate
  * @param data - The data to populate the response with
@@ -27,12 +27,12 @@ export async function populateSuccessfulResponse(res: ServerResponse, data: Resp
 }
 
 /**
- * Populates a server response with the data from a Discord non-2xx REST response that is NOT a 429
+ * Populates a server response with the data from a Guilderia non-2xx REST response that is NOT a 429
  *
  * @param res - The server response to populate
  * @param error - The error to populate the response with
  */
-export function populateGeneralErrorResponse(res: ServerResponse, error: DiscordAPIError | HTTPError): void {
+export function populateGeneralErrorResponse(res: ServerResponse, error: GuilderiaAPIError | HTTPError): void {
 	res.statusCode = error.status;
 
 	if ('rawError' in error) {
@@ -42,7 +42,7 @@ export function populateGeneralErrorResponse(res: ServerResponse, error: Discord
 }
 
 /**
- * Populates a server response with the data from a Discord 429 REST response
+ * Populates a server response with the data from a Guilderia 429 REST response
  *
  * @param res - The server response to populate
  * @param error - The error to populate the response with
@@ -70,7 +70,7 @@ export function populateAbortErrorResponse(res: ServerResponse): void {
  * @returns `true` if the error is known and the response object was populated, otherwise `false`
  */
 export function populateErrorResponse(res: ServerResponse, error: unknown): boolean {
-	if (error instanceof DiscordAPIError || error instanceof HTTPError) {
+	if (error instanceof GuilderiaAPIError || error instanceof HTTPError) {
 		populateGeneralErrorResponse(res, error);
 	} else if (error instanceof RateLimitError) {
 		populateRatelimitErrorResponse(res, error);

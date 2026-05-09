@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
-import { REST } from '@discordjs/rest';
+import { REST } from '@guilderiajs/rest';
 import supertest from 'supertest';
 import { MockAgent, setGlobalDispatcher, type Interceptable } from 'undici';
 import type { MockInterceptor } from 'undici/types/mock-interceptor.js';
@@ -20,10 +20,10 @@ const server = createServer(proxyRequests(api));
 
 beforeEach(() => {
 	mockAgent = new MockAgent();
-	mockAgent.disableNetConnect(); // prevent actual requests to Discord
+	mockAgent.disableNetConnect(); // prevent actual requests to Guilderia
 	setGlobalDispatcher(mockAgent); // enabled the mock client to intercept requests
 
-	mockPool = mockAgent.get('https://discord.com');
+	mockPool = mockAgent.get('https://guilderia.com');
 	api.setAgent(mockAgent);
 });
 

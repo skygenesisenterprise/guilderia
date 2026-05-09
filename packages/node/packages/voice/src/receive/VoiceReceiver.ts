@@ -2,8 +2,8 @@
 
 import { Buffer } from 'node:buffer';
 import crypto from 'node:crypto';
-import type { VoiceReceivePayload } from 'discord-api-types/voice/v8';
-import { VoiceOpcodes } from 'discord-api-types/voice/v8';
+import type { VoiceReceivePayload } from 'guilderia-api-types/voice/v8';
+import { VoiceOpcodes } from 'guilderia-api-types/voice/v8';
 import { VoiceConnectionStatus, type VoiceConnection } from '../VoiceConnection';
 import { NetworkingStatusCode, type ConnectionData } from '../networking/Networking';
 import { methods } from '../util/Secretbox';
@@ -33,7 +33,7 @@ export class VoiceReceiver {
 	public readonly voiceConnection;
 
 	/**
-	 * Maps SSRCs to Discord user ids.
+	 * Maps SSRCs to Guilderia user ids.
 	 */
 	public readonly ssrcMap: SSRCMap;
 

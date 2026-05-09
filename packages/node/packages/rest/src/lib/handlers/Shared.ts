@@ -2,8 +2,8 @@
 
 import type { RequestInit } from 'undici';
 import type { REST } from '../REST.js';
-import type { DiscordErrorData, OAuthErrorData } from '../errors/DiscordAPIError.js';
-import { DiscordAPIError } from '../errors/DiscordAPIError.js';
+import type { GuilderiaErrorData, OAuthErrorData } from '../errors/GuilderiaAPIError.js';
+import { GuilderiaAPIError } from '../errors/GuilderiaAPIError.js';
 import { HTTPError } from '../errors/HTTPError.js';
 import { RESTEvents } from '../utils/constants.js';
 import type { ResponseLike, HandlerRequestData, RouteData } from '../utils/types.js';
@@ -177,13 +177,13 @@ export async function handleErrors(
 		// Handle possible malformed requests
 		if (status >= 400 && status < 500) {
 			// The request will not succeed for some reason, parse the error returned from the api
-			const data = (await parseResponse(res)) as DiscordErrorData | OAuthErrorData;
-			const isDiscordError = 'code' in data;
+			const data = (await parseResponse(res)) as GuilderiaErrorData | OAuthErrorData;
+			const isGuilderiaError = 'code' in data;
 
 			// If we receive this status code, it means the token we had is no longer valid.
 			if (status === 401 && requestData.auth === true) {
-				if (isDiscordError && data.code !== 0 && !authFalseWarningEmitted) {
-					const errorText = `Encountered HTTP 401 with error ${data.code}: ${data.message}. Your token will be removed from this REST instance. If you are using @discordjs/rest directly, consider adding 'auth: false' to the request. Open an issue with your library if not.`;
+				if (isGuilderiaError && data.code !== 0 && !authFalseWarningEmitted) {
+					const errorText = `Encountered HTTP 401 with error ${data.code}: ${data.message}. Your token will be removed from this REST instance. If you are using @guilderiajs/rest directly, consider adding 'auth: false' to the request. Open an issue with your library if not.`;
 					// Use emitWarning if possible, probably not available in edge / web
 					if (typeof globalThis.process !== 'undefined' && typeof globalThis.process.emitWarning === 'function') {
 						globalThis.process.emitWarning(errorText);
@@ -198,7 +198,7 @@ export async function handleErrors(
 			}
 
 			// throw the API error
-			throw new DiscordAPIError(data, isDiscordError ? data.code : data.error, status, method, url, requestData);
+			throw new GuilderiaAPIError(data, isGuilderiaError ? data.code : data.error, status, method, url, requestData);
 		}
 
 		return res;

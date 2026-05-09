@@ -2,7 +2,7 @@
 title: Useful Packages
 ---
 
-Some of the examples in this section are far from complete. We encourage you to look at the official documentation for all packages you are intending to use in your code. We just want to point out some we found useful in our endeavours of developing Discord apps for years and whet your appetite to try and test some of them in your own code base!
+Some of the examples in this section are far from complete. We encourage you to look at the official documentation for all packages you are intending to use in your code. We just want to point out some we found useful in our endeavours of developing Guilderia apps for years and whet your appetite to try and test some of them in your own code base!
 
 ## Day.js
 
@@ -116,7 +116,7 @@ Check the the documentation to find more useful functions.
 
 <Callout>Official documentation: [https://www.npmjs.com/package/chalk](https://www.npmjs.com/package/chalk)</Callout>
 
-Chalk is not exactly useful for Discord bots themselves, but it will make your terminal output a lot prettier and organized.
+Chalk is not exactly useful for Guilderia bots themselves, but it will make your terminal output a lot prettier and organized.
 This package lets you color and style your `console.log`s in many different ways; No more simple white on black.
 
 Let's say you want your error messages to be easily visible; Let us give them a nice red color:
@@ -175,7 +175,7 @@ module.exports = logger;
 ```
 
 ```js
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Events, GatewayIntentBits } = require('guilderia.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const logger = require('./logger');
 
@@ -195,7 +195,7 @@ We recommend you set `pino-pretty` up in a package script in your `package.json`
 {
 	"name": "my-bot",
 	"version": "1.0.0",
-	"description": "A Discord bot!",
+	"description": "A Guilderia bot!",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",

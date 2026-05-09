@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import type { RequestData, REST } from '@discordjs/rest';
-import { Routes, type RESTGetAPIGatewayBotResult, type RESTGetAPIGatewayResult } from 'discord-api-types/v10';
+import type { RequestData, REST } from '@guilderiajs/rest';
+import { Routes, type RESTGetAPIGatewayBotResult, type RESTGetAPIGatewayResult } from 'guilderia-api-types/v10';
 
 export class GatewayAPI {
 	public constructor(private readonly rest: REST) {}
@@ -9,7 +9,7 @@ export class GatewayAPI {
 	/**
 	 * Gets gateway information.
 	 *
-	 * @see {@link https://discord.com/developers/docs/events/gateway#get-gateway}
+	 * @see {@link https://guilderia.com/developers/docs/events/gateway#get-gateway}
 	 * @param options - The options for fetching the gateway information
 	 */
 	public async get({ signal }: Pick<RequestData, 'signal'> = {}) {
@@ -22,7 +22,7 @@ export class GatewayAPI {
 	/**
 	 * Gets gateway information with additional metadata.
 	 *
-	 * @see {@link https://discord.com/developers/docs/events/gateway#get-gateway-bot}
+	 * @see {@link https://guilderia.com/developers/docs/events/gateway#get-gateway-bot}
 	 * @param options - The options for fetching the gateway information
 	 */
 	public async getBot({ auth, signal }: Pick<RequestData, 'auth' | 'signal'> = {}) {

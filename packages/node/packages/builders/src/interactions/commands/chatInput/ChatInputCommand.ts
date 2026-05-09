@@ -1,4 +1,4 @@
-import { ApplicationCommandType, type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import { ApplicationCommandType, type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'guilderia-api-types/v10';
 import { Mixin } from 'ts-mixer';
 import { validate } from '../../../util/validation.js';
 import { CommandBuilder } from '../Command.js';
@@ -10,7 +10,7 @@ import { SharedChatInputCommandSubcommands } from './mixins/SharedSubcommands.js
 /**
  * A builder that creates API-compatible JSON data for chat input commands.
  *
- * @mixes {@link CommandBuilder}\<{@link discord-api-types/v10#(RESTPostAPIChatInputApplicationCommandsJSONBody:interface)}\>
+ * @mixes {@link CommandBuilder}\<{@link guilderia-api-types/v10#(RESTPostAPIChatInputApplicationCommandsJSONBody:interface)}\>
  * @mixes {@link SharedChatInputCommandOptions}
  * @mixes {@link SharedNameAndDescription}
  * @mixes {@link SharedChatInputCommandSubcommands}

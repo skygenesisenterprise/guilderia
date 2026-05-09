@@ -1,10 +1,10 @@
-import type { APIConnection } from 'discord-api-types/v10';
+import type { APIConnection } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents a user's connection on Discord.
+ * Represents a user's connection on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */

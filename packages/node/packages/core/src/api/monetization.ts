@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { makeURLSearchParams, type RequestData, type REST } from '@discordjs/rest';
+import { makeURLSearchParams, type RequestData, type REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPIEntitlementsQuery,
@@ -13,7 +13,7 @@ import {
 	type RESTPostAPIEntitlementJSONBody,
 	type RESTPostAPIEntitlementResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class MonetizationAPI {
 	public constructor(private readonly rest: REST) {}
@@ -21,7 +21,7 @@ export class MonetizationAPI {
 	/**
 	 * Fetches the SKUs for an application.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/sku#list-skus}
+	 * @see {@link https://guilderia.com/developers/docs/resources/sku#list-skus}
 	 * @param applicationId - The application id to fetch SKUs for
 	 * @param options - The options for fetching the SKUs.
 	 */
@@ -32,7 +32,7 @@ export class MonetizationAPI {
 	/**
 	 * Fetches subscriptions for an SKU.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/subscription#list-sku-subscriptions}
+	 * @see {@link https://guilderia.com/developers/docs/resources/subscription#list-sku-subscriptions}
 	 * @param skuId - The SKU id to fetch subscriptions for
 	 * @param query - The query options for fetching subscriptions
 	 * @param options - The options for fetching subscriptions
@@ -52,7 +52,7 @@ export class MonetizationAPI {
 	/**
 	 * Fetches a subscription for an SKU.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/subscription#get-sku-subscription}
+	 * @see {@link https://guilderia.com/developers/docs/resources/subscription#get-sku-subscription}
 	 * @param skuId - The SKU id to fetch subscription for
 	 * @param subscriptionId - The subscription id to fetch
 	 * @param options - The options for fetching the subscription
@@ -71,7 +71,7 @@ export class MonetizationAPI {
 	/**
 	 * Fetches the entitlements for an application.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/entitlement#list-entitlements}
+	 * @see {@link https://guilderia.com/developers/docs/resources/entitlement#list-entitlements}
 	 * @param applicationId - The application id to fetch entitlements for
 	 * @param query - The query options for fetching entitlements
 	 * @param options - The options for fetching entitlements
@@ -91,7 +91,7 @@ export class MonetizationAPI {
 	/**
 	 * Fetches an entitlement for an application.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/entitlement#get-entitlement}
+	 * @see {@link https://guilderia.com/developers/docs/resources/entitlement#get-entitlement}
 	 * @param applicationId - The application id to fetch the entitlement for
 	 * @param entitlementId - The entitlement id to fetch
 	 * @param options - The options for fetching the entitlement
@@ -110,7 +110,7 @@ export class MonetizationAPI {
 	/**
 	 * Creates a test entitlement for an application's SKU.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/entitlement#create-test-entitlement}
+	 * @see {@link https://guilderia.com/developers/docs/resources/entitlement#create-test-entitlement}
 	 * @param applicationId - The application id to create the entitlement for
 	 * @param body - The data for creating the entitlement
 	 * @param options - The options for creating the entitlement
@@ -130,7 +130,7 @@ export class MonetizationAPI {
 	/**
 	 * Deletes a test entitlement for an application's SKU.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/entitlement#delete-test-entitlement}
+	 * @see {@link https://guilderia.com/developers/docs/resources/entitlement#delete-test-entitlement}
 	 * @param applicationId - The application id to delete the entitlement for
 	 * @param entitlementId - The entitlement id to delete
 	 * @param options - The options for deleting the entitlement
@@ -146,7 +146,7 @@ export class MonetizationAPI {
 	/**
 	 * Marks a given entitlement for the user as consumed. Only available for One-Time Purchase consumable SKUs.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/entitlement#consume-an-entitlement}
+	 * @see {@link https://guilderia.com/developers/docs/resources/entitlement#consume-an-entitlement}
 	 * @param applicationId - The application id to consume the entitlement for
 	 * @param entitlementId - The entitlement id to consume
 	 * @param options - The options for consuming the entitlement

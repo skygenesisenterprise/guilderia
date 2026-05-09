@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/guide",
+	"name": "@guilderiajs/guide",
 	"version": "0.1.0",
-	"description": "Imagine a bot... the most popular way to build discord bots",
+	"description": "Imagine a bot... the most popular way to build guilderia bots",
 	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
@@ -29,24 +29,24 @@
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"discord",
+		"guilderia",
 		"api",
 		"bot",
 		"client",
 		"node",
-		"discordapp",
-		"discordjs"
+		"guilderiaapp",
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "apps/website"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
 		"@opennextjs/cloudflare": "^1.18.0",
 		"@vercel/analytics": "^2.0.1",

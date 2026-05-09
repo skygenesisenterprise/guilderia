@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { makeURLSearchParams, type RawFile, type RequestData, type REST } from '@discordjs/rest';
+import { makeURLSearchParams, type RawFile, type RequestData, type REST } from '@guilderiajs/rest';
 import {
 	InteractionResponseType,
 	Routes,
@@ -12,7 +12,7 @@ import {
 	type RESTPostAPIInteractionCallbackQuery,
 	type RESTPostAPIInteractionCallbackWithResponseResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import type { WebhooksAPI } from './webhook.js';
 
 export interface CreateInteractionResponseOptions
@@ -43,7 +43,7 @@ export class InteractionsAPI {
 	/**
 	 * Replies to an interaction and returns an interaction callback object
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for replying
@@ -59,7 +59,7 @@ export class InteractionsAPI {
 	/**
 	 * Replies to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for replying
@@ -75,7 +75,7 @@ export class InteractionsAPI {
 	/**
 	 * Replies to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for replying
@@ -111,7 +111,7 @@ export class InteractionsAPI {
 	/**
 	 * Defers the reply to an interaction and returns an interaction callback object
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for deferring the reply
@@ -127,7 +127,7 @@ export class InteractionsAPI {
 	/**
 	 * Defers the reply to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for deferring the reply
@@ -143,7 +143,7 @@ export class InteractionsAPI {
 	/**
 	 * Defers the reply to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for deferring the reply
@@ -178,7 +178,7 @@ export class InteractionsAPI {
 	/**
 	 * Defers an update from a message component interaction and returns an interaction callback object
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for deferring the update
@@ -194,7 +194,7 @@ export class InteractionsAPI {
 	/**
 	 * Defers an update from a message component interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for deferring the update
@@ -210,7 +210,7 @@ export class InteractionsAPI {
 	/**
 	 * Defers an update from a message component interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for deferring the update
@@ -244,7 +244,7 @@ export class InteractionsAPI {
 	/**
 	 * Reply to a deferred interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-followup-message}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-followup-message}
 	 * @param applicationId - The application id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for replying
@@ -262,8 +262,8 @@ export class InteractionsAPI {
 	/**
 	 * Edits the initial reply to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#edit-original-interaction-response}
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#edit-followup-message}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#edit-original-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#edit-followup-message}
 	 * @param applicationId - The application id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The callback data for editing the reply
@@ -285,7 +285,7 @@ export class InteractionsAPI {
 	/**
 	 * Fetches the initial reply to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#get-original-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#get-original-interaction-response}
 	 * @param applicationId - The application id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param options - The options for fetching the reply
@@ -307,8 +307,8 @@ export class InteractionsAPI {
 	/**
 	 * Deletes the initial reply to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#delete-original-interaction-response}
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#delete-followup-message}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#delete-original-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#delete-followup-message}
 	 * @param applicationId - The application id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param messageId - The id of the message to delete. If omitted, the original reply will be deleted
@@ -326,7 +326,7 @@ export class InteractionsAPI {
 	/**
 	 * Updates the message the component interaction was triggered on and returns an interaction callback object
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The callback data for updating the interaction
@@ -342,7 +342,7 @@ export class InteractionsAPI {
 	/**
 	 * Updates the message the component interaction was triggered on
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The callback data for updating the interaction
@@ -358,7 +358,7 @@ export class InteractionsAPI {
 	/**
 	 * Updates the message the component interaction was triggered on
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The callback data for updating the interaction
@@ -394,7 +394,7 @@ export class InteractionsAPI {
 	/**
 	 * Sends an autocomplete response to an interaction and returns an interaction callback object
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The callback data for the autocomplete response
@@ -410,7 +410,7 @@ export class InteractionsAPI {
 	/**
 	 * Sends an autocomplete response to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The callback data for the autocomplete response
@@ -426,7 +426,7 @@ export class InteractionsAPI {
 	/**
 	 * Sends an autocomplete response to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The callback data for the autocomplete response
@@ -461,7 +461,7 @@ export class InteractionsAPI {
 	/**
 	 * Sends a modal response to an interaction and returns an interaction callback object
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The modal callback data to send
@@ -477,7 +477,7 @@ export class InteractionsAPI {
 	/**
 	 * Sends a modal response to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The modal callback data to send
@@ -493,7 +493,7 @@ export class InteractionsAPI {
 	/**
 	 * Sends a modal response to an interaction
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param callbackData - The modal callback data to send
@@ -528,7 +528,7 @@ export class InteractionsAPI {
 	/**
 	 * Launches an activity and returns an interaction callback object
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for launching the activity
@@ -544,7 +544,7 @@ export class InteractionsAPI {
 	/**
 	 * Launches an activity
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for launching the activity
@@ -560,7 +560,7 @@ export class InteractionsAPI {
 	/**
 	 * Launches an activity
 	 *
-	 * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
+	 * @see {@link https://guilderia.com/developers/docs/interactions/receiving-and-responding#create-interaction-response}
 	 * @param interactionId - The id of the interaction
 	 * @param interactionToken - The token of the interaction
 	 * @param body - The callback data for launching the activity

@@ -11,26 +11,26 @@ The main benefit of using an ORM like Sequelize is that it allows you to write c
 ## A simple tag system
 
 For this tutorial, we will create a simple tag system that will allow you to add a tag, output a tag, edit a tag, show tag info, list tags, and delete a tag.  
-To begin, you should install Sequelize into your discord.js project. We will explain SQlite as the first storage engine and show how to use other databases later. Note that you will need Node 7.6 or above to utilize the `async/await` operators.
+To begin, you should install Sequelize into your guilderia.js project. We will explain SQlite as the first storage engine and show how to use other databases later. Note that you will need Node 7.6 or above to utilize the `async/await` operators.
 
 ### Installing and using Sequelize
 
 Create a new project folder and run the following:
 
 ```sh tab="npm"
-npm install discord.js sequelize sqlite3
+npm install guilderia.js sequelize sqlite3
 ```
 
 ```sh tab="yarn"
-yarn add discord.js sequelize sqlite3
+yarn add guilderia.js sequelize sqlite3
 ```
 
 ```sh tab="pnpm"
-pnpm install discord.js sequelize sqlite3
+pnpm install guilderia.js sequelize sqlite3
 ```
 
 ```sh tab="bun"
-bun add discord.js sequelize sqlite3
+bun add guilderia.js sequelize sqlite3
 ```
 
 <Callout type="error" title="Attention! Security Risk!">
@@ -42,19 +42,19 @@ bun add discord.js sequelize sqlite3
 <Callout>
 	This section will still work with any provider supported by sequelize. We recommend PostgreSQL for larger applications.
 
-    Do note that "large" here should be interpreted as absolutely massive. Sqlite is used at scale by many companies and products you use every single day. The slight overhead should not be noticeable for the application of a Discord bot at all unless you are dealing with super complicated queries or are using specific features that do not exist in sqlite.
+    Do note that "large" here should be interpreted as absolutely massive. Sqlite is used at scale by many companies and products you use every single day. The slight overhead should not be noticeable for the application of a Guilderia bot at all unless you are dealing with super complicated queries or are using specific features that do not exist in sqlite.
 
     You can find out if sqlite might be a good choice for your project (it very likely is) by reading [their own article](https://www.sqlite.org/whentouse.html) on the topic.
 
 </Callout>
 
-After you have installed discord.js and Sequelize, you can start with the following skeleton code. The comment labels will tell you where to insert code later on.
+After you have installed guilderia.js and Sequelize, you can start with the following skeleton code. The comment labels will tell you where to insert code later on.
 
 ```js title="sequelize-example.js"
 // Require Sequelize
 const Sequelize = require('sequelize');
-// Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+// Require the necessary guilderia.js classes
+const { Client, Events, GatewayIntentBits } = require('guilderia.js');
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -71,7 +71,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 	// ...
 });
 
-// Login to Discord with your client's token
+// Login to Guilderia with your client's token
 client.login('your-token-goes-here');
 ```
 

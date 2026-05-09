@@ -3,7 +3,7 @@ import {
 	ComponentType,
 	type APIButtonComponent,
 	type APIButtonComponentWithURL,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { Mixin } from 'ts-mixer';
 import { BaseButtonBuilder } from './Button.js';
 import { EmojiOrLabelButtonMixin } from './mixins/EmojiOrLabelButtonMixin.js';
@@ -11,7 +11,7 @@ import { EmojiOrLabelButtonMixin } from './mixins/EmojiOrLabelButtonMixin.js';
 /**
  * A builder that creates API-compatible JSON data for buttons with links.
  *
- * @mixes {@link BaseButtonBuilder}\<{@link discord-api-types/v10#(APIButtonComponentWithURL:interface)}\>
+ * @mixes {@link BaseButtonBuilder}\<{@link guilderia-api-types/v10#(APIButtonComponentWithURL:interface)}\>
  * @mixes {@link EmojiOrLabelButtonMixin}
  */
 export class LinkButtonBuilder extends Mixin(BaseButtonBuilder<APIButtonComponentWithURL>, EmojiOrLabelButtonMixin) {
@@ -27,7 +27,7 @@ export class LinkButtonBuilder extends Mixin(BaseButtonBuilder<APIButtonComponen
 	 *
 	 * @remarks
 	 * This method is only available to buttons using the `Link` button style.
-	 * Only three types of URL schemes are currently supported: `https://`, `http://`, and `discord://`.
+	 * Only three types of URL schemes are currently supported: `https://`, `http://`, and `guilderia://`.
 	 * @param url - The URL to use
 	 */
 	public setURL(url: string) {

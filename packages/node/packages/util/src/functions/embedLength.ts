@@ -1,4 +1,4 @@
-import type { APIEmbed } from 'discord-api-types/v10';
+import type { APIEmbed } from 'guilderia-api-types/v10';
 
 /**
  * Calculates the length of an embed.

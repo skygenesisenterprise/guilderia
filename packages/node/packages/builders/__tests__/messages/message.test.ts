@@ -1,4 +1,4 @@
-import { AllowedMentionsTypes, MessageFlags } from 'discord-api-types/v10';
+import { AllowedMentionsTypes, MessageFlags } from 'guilderia-api-types/v10';
 import { describe, test, expect } from 'vitest';
 import { AllowedMentionsBuilder, EmbedBuilder, MessageBuilder } from '../../src/index.js';
 

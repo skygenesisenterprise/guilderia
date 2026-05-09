@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import type { RequestData, REST } from '@discordjs/rest';
+import type { RequestData, REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPIApplicationActivityInstanceResult,
@@ -14,7 +14,7 @@ import {
 	type RESTPostAPIApplicationEmojiJSONBody,
 	type RESTPostAPIApplicationEmojiResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class ApplicationsAPI {
 	public constructor(private readonly rest: REST) {}
@@ -22,7 +22,7 @@ export class ApplicationsAPI {
 	/**
 	 * Fetches the application associated with the requesting bot user.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/application#get-current-application}
+	 * @see {@link https://guilderia.com/developers/docs/resources/application#get-current-application}
 	 * @param options - The options for fetching the application
 	 */
 	public async getCurrent({ auth, signal }: Pick<RequestData, 'auth' | 'signal'> = {}) {
@@ -32,7 +32,7 @@ export class ApplicationsAPI {
 	/**
 	 * Edits properties of the application associated with the requesting bot user.
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/application#edit-current-application}
+	 * @see {@link https://guilderia.com/developers/docs/resources/application#edit-current-application}
 	 * @param body - The new application data
 	 * @param options - The options for editing the application
 	 */
@@ -50,7 +50,7 @@ export class ApplicationsAPI {
 	/**
 	 * Fetches all emojis of an application
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/emoji#list-application-emojis}
+	 * @see {@link https://guilderia.com/developers/docs/resources/emoji#list-application-emojis}
 	 * @param applicationId - The id of the application to fetch the emojis of
 	 * @param options - The options for fetching the emojis
 	 */
@@ -64,7 +64,7 @@ export class ApplicationsAPI {
 	/**
 	 * Fetches an emoji of an application
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/emoji#get-application-emoji}
+	 * @see {@link https://guilderia.com/developers/docs/resources/emoji#get-application-emoji}
 	 * @param applicationId - The id of the application to fetch the emoji of
 	 * @param emojiId - The id of the emoji to fetch
 	 * @param options - The options for fetching the emoji
@@ -83,7 +83,7 @@ export class ApplicationsAPI {
 	/**
 	 * Creates a new emoji of an application
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/emoji#create-application-emoji}
+	 * @see {@link https://guilderia.com/developers/docs/resources/emoji#create-application-emoji}
 	 * @param applicationId - The id of the application to create the emoji of
 	 * @param body - The data for creating the emoji
 	 * @param options - The options for creating the emoji
@@ -103,7 +103,7 @@ export class ApplicationsAPI {
 	/**
 	 * Edits an emoji of an application
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/emoji#modify-application-emoji}
+	 * @see {@link https://guilderia.com/developers/docs/resources/emoji#modify-application-emoji}
 	 * @param applicationId - The id of the application to edit the emoji of
 	 * @param emojiId - The id of the emoji to edit
 	 * @param body - The data for editing the emoji
@@ -125,7 +125,7 @@ export class ApplicationsAPI {
 	/**
 	 * Deletes an emoji of an application
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/emoji#delete-application-emoji}
+	 * @see {@link https://guilderia.com/developers/docs/resources/emoji#delete-application-emoji}
 	 * @param applicationId - The id of the application to delete the emoji of
 	 * @param emojiId - The id of the emoji to delete
 	 * @param options - The options for deleting the emoji
@@ -141,7 +141,7 @@ export class ApplicationsAPI {
 	/**
 	 * Fetches an activity instance of an application
 	 *
-	 * @see {@link https://docs.discord.com/developers/resources/application#get-application-activity-instance}
+	 * @see {@link https://docs.guilderia.com/developers/resources/application#get-application-activity-instance}
 	 * @param applicationId - The id of the application to fetch the activity instance of
 	 * @param instanceId - The id of the activity instance to fetch
 	 * @param options - The options for fetching the activity instance

@@ -1,5 +1,5 @@
-import type { JSONEncodable } from '@discordjs/util';
-import type { MessageReferenceType, RESTAPIMessageReference, Snowflake } from 'discord-api-types/v10';
+import type { JSONEncodable } from '@guilderiajs/util';
+import type { MessageReferenceType, RESTAPIMessageReference, Snowflake } from 'guilderia-api-types/v10';
 import { validate } from '../util/validation.js';
 import { messageReferencePredicate } from './Assertions.js';
 

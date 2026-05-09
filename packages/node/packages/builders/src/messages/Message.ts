@@ -1,4 +1,4 @@
-import type { FileBodyEncodable, FileBodyEncodableResult, JSONEncodable, RawFile } from '@discordjs/util';
+import type { FileBodyEncodable, FileBodyEncodableResult, JSONEncodable, RawFile } from '@guilderiajs/util';
 import type {
 	APIActionRowComponent,
 	APIAllowedMentions,
@@ -17,7 +17,7 @@ import type {
 	APISeparatorComponent,
 	APITextDisplayComponent,
 	APIMessageTopLevelComponent,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { ActionRowBuilder } from '../components/ActionRow.js';
 import { ComponentBuilder } from '../components/Component.js';
 import type { MessageTopLevelComponentBuilder } from '../components/Components.js';

@@ -2,7 +2,7 @@
 title: Modals
 ---
 
-Modals are pop-up forms that allow you to prompt users for additional input. This form-like interaction response blocks the user from interacting with Discord until the modal is submitted or dismissed. In this section, we will cover how to create, show, and receive modals using discord.js!
+Modals are pop-up forms that allow you to prompt users for additional input. This form-like interaction response blocks the user from interacting with Guilderia until the modal is submitted or dismissed. In this section, we will cover how to create, show, and receive modals using guilderia.js!
 
 <Callout>
 	This page is a follow-up to the [interactions (slash commands) page](../slash-commands/advanced-creation). Reading
@@ -11,7 +11,7 @@ Modals are pop-up forms that allow you to prompt users for additional input. Thi
 
 ## Building and responding with modals
 
-With the `ModalBuilder` class, discord.js offers a convenient way to build modals step by step using setters and callbacks.
+With the `ModalBuilder` class, guilderia.js offers a convenient way to build modals step by step using setters and callbacks.
 
 <Callout>
 	You can have a maximum of five top-level components per modal, each of which can be a label or a text display
@@ -19,7 +19,7 @@ With the `ModalBuilder` class, discord.js offers a convenient way to build modal
 </Callout>
 
 ```js
-const { Events, ModalBuilder } = require('discord.js');
+const { Events, ModalBuilder } = require('guilderia.js');
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
@@ -44,7 +44,7 @@ Label components wrap around other modal components (text input, select menus, e
 Since labels are not stand-alone components, we will use this example label to wrap a text input component in the next section:
 
 ```js
-const { LabelBuilder, ModalBuilder } = require('discord.js');
+const { LabelBuilder, ModalBuilder } = require('guilderia.js');
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
@@ -76,7 +76,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 Text input components prompt users for single or multi line free-form text.
 
 ```js
-const { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('guilderia.js');
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
@@ -111,7 +111,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 #### Input styles
 
-Discord offers two different input styles:
+Guilderia offers two different input styles:
 
 - `Short`, a single-line text entry
 - `Paragraph`, a multi-line text entry
@@ -141,7 +141,7 @@ const input = new TextInputBuilder()
 
 ### Select menu
 
-Select menus allow you to limit user input to a preselected list of values. Discord also offers select menus linked directly to native Discord entities like users, roles, and channels.
+Select menus allow you to limit user input to a preselected list of values. Guilderia also offers select menus linked directly to native Guilderia entities like users, roles, and channels.
 Since they behave very similarly to how they do in messages, please refer to the [corresponding guide page](../interactive-components/select-menus) for more information on configuring select menus.
 
 Here again, you wrap the select menu with a label component to add context to the selection and add the label to the modal:
@@ -238,8 +238,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
 File upload components allow you to prompt the user to upload a file from their system.
 
 <Callout type="warn">
-	Discord **does not send the file data** itself in the resulting interaction. You will have to download it from
-	Discords CDN to process and validate it. Do not execute arbitrary code people upload via your app!
+	Guilderia **does not send the file data** itself in the resulting interaction. You will have to download it from
+	Guilderias CDN to process and validate it. Do not execute arbitrary code people upload via your app!
 </Callout>
 
 ```js
@@ -305,7 +305,7 @@ You **cannot** limit and validate the **file size** or the **file extension**.
 
 ### Responding with a modal
 
-With the modal built, call `ChatInputCommandInteraction#showModal()` to send the interaction response to Discord and display the modal to the user.
+With the modal built, call `ChatInputCommandInteraction#showModal()` to send the interaction response to Guilderia and display the modal to the user.
 
 <Callout type="warn">
 	Showing a modal must be the first response to an interaction. You **cannot** defer modals.

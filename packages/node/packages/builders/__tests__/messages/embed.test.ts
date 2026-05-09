@@ -1,4 +1,4 @@
-import { embedLength } from '@discordjs/util';
+import { embedLength } from '@guilderiajs/util';
 import { describe, test, expect } from 'vitest';
 import { EmbedBuilder } from '../../src/index.js';
 
@@ -94,33 +94,33 @@ describe('Embed', () => {
 
 	describe('Embed URL', () => {
 		test('GIVEN an embed with a pre-defined url THEN returns valid toJSON data', () => {
-			const embed = new EmbedBuilder({ url: 'https://discord.js.org/', ...dummy });
+			const embed = new EmbedBuilder({ url: 'https://guilderia.js.org/', ...dummy });
 			expect(embed.toJSON()).toStrictEqual({
 				...base,
 				...dummy,
-				url: 'https://discord.js.org/',
+				url: 'https://guilderia.js.org/',
 			});
 		});
 
 		test('GIVEN an embed using Embed#setURL THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder(dummy);
-			embed.setURL('https://discord.js.org/');
+			embed.setURL('https://guilderia.js.org/');
 
 			expect(embed.toJSON()).toStrictEqual({
 				...base,
 				...dummy,
-				url: 'https://discord.js.org/',
+				url: 'https://guilderia.js.org/',
 			});
 		});
 
 		test('GIVEN an embed with a pre-defined title THEN unset title THEN return valid toJSON data', () => {
-			const embed = new EmbedBuilder({ url: 'https://discord.js.org', ...dummy });
+			const embed = new EmbedBuilder({ url: 'https://guilderia.js.org', ...dummy });
 			embed.clearURL();
 
 			expect(embed.toJSON()).toStrictEqual({ ...base, ...dummy, url: undefined });
 		});
 
-		test.each(['owo', 'discord://user'])('GIVEN an embed with an invalid URL THEN throws error', (input) => {
+		test.each(['owo', 'guilderia://user'])('GIVEN an embed with an invalid URL THEN throws error', (input) => {
 			const embed = new EmbedBuilder();
 
 			embed.setURL(input);
@@ -197,25 +197,25 @@ describe('Embed', () => {
 
 	describe('Embed Thumbnail', () => {
 		test('GIVEN an embed with a pre-defined thumbnail THEN returns valid toJSON data', () => {
-			const embed = new EmbedBuilder({ thumbnail: { url: 'https://discord.js.org/static/logo.svg' } });
-			expect(embed.toJSON()).toStrictEqual({ ...base, thumbnail: { url: 'https://discord.js.org/static/logo.svg' } });
+			const embed = new EmbedBuilder({ thumbnail: { url: 'https://guilderia.js.org/static/logo.svg' } });
+			expect(embed.toJSON()).toStrictEqual({ ...base, thumbnail: { url: 'https://guilderia.js.org/static/logo.svg' } });
 		});
 
 		test('GIVEN an embed using Embed#setThumbnail THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder();
-			embed.setThumbnail('https://discord.js.org/static/logo.svg');
+			embed.setThumbnail('https://guilderia.js.org/static/logo.svg');
 
-			expect(embed.toJSON()).toStrictEqual({ ...base, thumbnail: { url: 'https://discord.js.org/static/logo.svg' } });
+			expect(embed.toJSON()).toStrictEqual({ ...base, thumbnail: { url: 'https://guilderia.js.org/static/logo.svg' } });
 		});
 
 		test('GIVEN an embed using Embed#setThumbnail with attachment protocol THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder();
-			embed.setThumbnail('attachment://discordjs.webp');
-			expect(embed.toJSON()).toStrictEqual({ ...base, thumbnail: { url: 'attachment://discordjs.webp' } });
+			embed.setThumbnail('attachment://guilderiajs.webp');
+			expect(embed.toJSON()).toStrictEqual({ ...base, thumbnail: { url: 'attachment://guilderiajs.webp' } });
 		});
 
 		test('GIVEN an embed with a pre-defined thumbnail THEN unset thumbnail THEN return valid toJSON data', () => {
-			const embed = new EmbedBuilder({ thumbnail: { url: 'https://discord.js.org/static/logo.svg' }, ...dummy });
+			const embed = new EmbedBuilder({ thumbnail: { url: 'https://guilderia.js.org/static/logo.svg' }, ...dummy });
 			embed.clearThumbnail();
 
 			expect(embed.toJSON()).toStrictEqual({ ...base, ...dummy, thumbnail: undefined });
@@ -231,25 +231,25 @@ describe('Embed', () => {
 
 	describe('Embed Image', () => {
 		test('GIVEN an embed with a pre-defined image THEN returns valid toJSON data', () => {
-			const embed = new EmbedBuilder({ image: { url: 'https://discord.js.org/static/logo.svg' } });
-			expect(embed.toJSON()).toStrictEqual({ ...base, image: { url: 'https://discord.js.org/static/logo.svg' } });
+			const embed = new EmbedBuilder({ image: { url: 'https://guilderia.js.org/static/logo.svg' } });
+			expect(embed.toJSON()).toStrictEqual({ ...base, image: { url: 'https://guilderia.js.org/static/logo.svg' } });
 		});
 
 		test('GIVEN an embed using Embed#setImage with attachment protocol THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder();
-			embed.setImage('attachment://discordjs.webp');
-			expect(embed.toJSON()).toStrictEqual({ ...base, image: { url: 'attachment://discordjs.webp' } });
+			embed.setImage('attachment://guilderiajs.webp');
+			expect(embed.toJSON()).toStrictEqual({ ...base, image: { url: 'attachment://guilderiajs.webp' } });
 		});
 
 		test('GIVEN an embed using Embed#setImage THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder();
-			embed.setImage('https://discord.js.org/static/logo.svg');
+			embed.setImage('https://guilderia.js.org/static/logo.svg');
 
-			expect(embed.toJSON()).toStrictEqual({ ...base, image: { url: 'https://discord.js.org/static/logo.svg' } });
+			expect(embed.toJSON()).toStrictEqual({ ...base, image: { url: 'https://guilderia.js.org/static/logo.svg' } });
 		});
 
 		test('GIVEN an embed with a pre-defined image THEN unset image THEN return valid toJSON data', () => {
-			const embed = new EmbedBuilder({ image: { url: 'https://discord.js/org/static/logo.svg' }, ...dummy });
+			const embed = new EmbedBuilder({ image: { url: 'https://guilderia.js/org/static/logo.svg' }, ...dummy });
 			embed.clearImage();
 
 			expect(embed.toJSON()).toStrictEqual({ ...base, ...dummy, image: undefined });
@@ -266,29 +266,29 @@ describe('Embed', () => {
 	describe('Embed Author', () => {
 		test('GIVEN an embed with a pre-defined author THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder({
-				author: { name: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg', url: 'https://discord.js.org' },
+				author: { name: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg', url: 'https://guilderia.js.org' },
 			});
 			expect(embed.toJSON()).toStrictEqual({
 				...base,
-				author: { name: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg', url: 'https://discord.js.org' },
+				author: { name: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg', url: 'https://guilderia.js.org' },
 			});
 		});
 
 		test('GIVEN an embed using Embed#setAuthor THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder();
 			embed.setAuthor((author) =>
-				author.setName('Wumpus').setIconURL('https://discord.js.org/static/logo.svg').setURL('https://discord.js.org'),
+				author.setName('Wumpus').setIconURL('https://guilderia.js.org/static/logo.svg').setURL('https://guilderia.js.org'),
 			);
 
 			expect(embed.toJSON()).toStrictEqual({
 				...base,
-				author: { name: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg', url: 'https://discord.js.org' },
+				author: { name: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg', url: 'https://guilderia.js.org' },
 			});
 		});
 
 		test('GIVEN an embed with a pre-defined author THEN unset author THEN return valid toJSON data', () => {
 			const embed = new EmbedBuilder({
-				author: { name: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg', url: 'https://discord.js.org' },
+				author: { name: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg', url: 'https://guilderia.js.org' },
 				...dummy,
 			});
 			embed.clearAuthor();
@@ -307,28 +307,28 @@ describe('Embed', () => {
 	describe('Embed Footer', () => {
 		test('GIVEN an embed with a pre-defined footer THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder({
-				footer: { text: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg' },
+				footer: { text: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg' },
 			});
 			expect(embed.toJSON()).toStrictEqual({
 				...base,
-				footer: { text: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg' },
+				footer: { text: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg' },
 			});
 		});
 
 		test('GIVEN an embed using Embed#setAuthor THEN returns valid toJSON data', () => {
 			const embed = new EmbedBuilder();
-			embed.setFooter({ text: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg' });
+			embed.setFooter({ text: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg' });
 
 			expect(embed.toJSON()).toStrictEqual({
 				...base,
-				footer: { text: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg' },
+				footer: { text: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg' },
 			});
 		});
 
 		test('GIVEN an embed with a pre-defined footer THEN unset footer THEN return valid toJSON data', () => {
 			const embed = new EmbedBuilder({
 				...dummy,
-				footer: { text: 'Wumpus', icon_url: 'https://discord.js.org/static/logo.svg' },
+				footer: { text: 'Wumpus', icon_url: 'https://guilderia.js.org/static/logo.svg' },
 			});
 			embed.clearFooter();
 

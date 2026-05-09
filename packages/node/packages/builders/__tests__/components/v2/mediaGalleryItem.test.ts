@@ -17,7 +17,7 @@ describe('MediaGalleryItem', () => {
 			expect(item.toJSON()).toEqual({ media: { url: 'https://google.com' } });
 		});
 
-		test.each(['owo', 'discord://user'])(
+		test.each(['owo', 'guilderia://user'])(
 			'GIVEN a media gallery item with an invalid URL (%s) THEN throws error',
 			(input) => {
 				const item = new MediaGalleryItemBuilder();

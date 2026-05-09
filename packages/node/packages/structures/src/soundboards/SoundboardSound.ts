@@ -1,12 +1,12 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APISoundboardSound } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APISoundboardSound } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure';
 import { kData } from '../utils/symbols';
 import { isIdSet } from '../utils/type-guards';
 import type { Partialize } from '../utils/types';
 
 /**
- * Represents any soundboard sound on Discord.
+ * Represents any soundboard sound on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructure `User` which needs to be instantiated and stored by an extending class using it
@@ -83,7 +83,7 @@ export class SoundboardSound<Omitted extends keyof APISoundboardSound | '' = ''>
 	 */
 	public get createdTimestamp() {
 		return isIdSet(this[kData].sound_id) && isIdSet(this[kData].guild_id)
-			? DiscordSnowflake.timestampFrom(this[kData].sound_id)
+			? GuilderiaSnowflake.timestampFrom(this[kData].sound_id)
 			: null;
 	}
 

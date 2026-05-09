@@ -13,14 +13,14 @@ import {
 	ApiDeclaredItem,
 	type ApiMethod,
 	type ApiMethodSignature,
-} from '@discordjs/api-extractor-model';
+} from '@guilderiajs/api-extractor-model';
 import type { DocNode, DocParagraph, DocPlainText } from '@microsoft/tsdoc';
 import { type Meaning, ModuleSource } from '@microsoft/tsdoc/lib-commonjs/beta/DeclarationReference.js';
 import type { DocBlockJSON } from './tsdoc/CommentBlock.js';
 import { createCommentNode } from './tsdoc/index.js';
 
 export function findPackage(model: ApiModel, name: string): ApiPackage | undefined {
-	return (model.findMembersByName(name)[0] ?? model.findMembersByName(`@discordjs/${name}`)[0]) as
+	return (model.findMembersByName(name)[0] ?? model.findMembersByName(`@guilderiajs/${name}`)[0]) as
 		| ApiPackage
 		| undefined;
 }
@@ -62,8 +62,8 @@ export function generatePath(items: readonly ApiItem[], version: string) {
 		}
 	}
 
-	return path.includes('@discordjs/')
-		? path.replace(/@discordjs\/(?<package>.*)\/(?<member>.*)?/, `$<package>/${version}/$<member>`)
+	return path.includes('@guilderiajs/')
+		? path.replace(/@guilderiajs\/(?<package>.*)\/(?<member>.*)?/, `$<package>/${version}/$<member>`)
 		: path.replace(/(?<package>.*)\/(?<member>.*)?/, `$<package>/${version}/$<member>`);
 }
 
@@ -162,7 +162,7 @@ export interface ParameterDocumentation {
 }
 
 function createDapiTypesURL(meaning: Meaning, name: string) {
-	const base = 'https://discord-api-types.dev/api/discord-api-types-v10';
+	const base = 'https://guilderia-api-types.dev/api/guilderia-api-types-v10';
 
 	switch (meaning) {
 		case 'type':
@@ -188,7 +188,7 @@ export function genToken(model: ApiModel, token: ExcerptToken, version: string) 
 	if (
 		token.canonicalReference?.source instanceof ModuleSource &&
 		token.canonicalReference.symbol &&
-		token.canonicalReference.source.packageName === 'discord-api-types' &&
+		token.canonicalReference.source.packageName === 'guilderia-api-types' &&
 		token.canonicalReference.symbol.meaning
 	) {
 		return {

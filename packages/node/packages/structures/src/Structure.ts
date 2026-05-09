@@ -5,7 +5,7 @@ export const DataTemplatePropertyName = 'DataTemplate';
 export const OptimizeDataPropertyName = 'optimizeData';
 
 /**
- * Represents a data model from the Discord API
+ * Represents a data model from the Guilderia API
  *
  * @privateRemarks
  * Explanation of the type complexity surround Structure:

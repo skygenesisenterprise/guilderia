@@ -1,4 +1,4 @@
-import type { APIMediaGalleryComponent } from 'discord-api-types/v10';
+import type { APIMediaGalleryComponent } from 'guilderia-api-types/v10';
 import type { Partialize } from '../../utils/types.js';
 import { Component } from './Component.js';
 

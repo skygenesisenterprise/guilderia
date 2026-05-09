@@ -42,7 +42,7 @@ bun add @napi-rs/canvas
 Here is the base code you'll be using to get started:
 
 ```js lineNumbers title="index.js"
-const { AttachmentBuilder, Client, Events, GatewayIntentBits } = require('discord.js');
+const { AttachmentBuilder, Client, Events, GatewayIntentBits } = require('guilderia.js');
 const Canvas = require('@napi-rs/canvas');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -101,7 +101,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 Now, you need to load the image you want to use into Canvas.
 
-We'll be using [this image](https://github.com/discordjs/discord.js/blob/main/apps/guide/content/docs/legacy/popular-topics/images/canvas.jpg) as the background in the welcome image, but you can use whatever you want. Be sure to download the file, name it `wallpaper.jpg`, and save it inside the same directory as your main bot file.
+We'll be using [this image](https://github.com/guilderiajs/guilderia.js/blob/main/apps/guide/content/docs/legacy/popular-topics/images/canvas.jpg) as the background in the welcome image, but you can use whatever you want. Be sure to download the file, name it `wallpaper.jpg`, and save it inside the same directory as your main bot file.
 
 ```js lineNumbers=10 title="index.js"
 client.on(Events.InteractionCreate, async (interaction) => {

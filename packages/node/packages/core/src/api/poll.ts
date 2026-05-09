@@ -1,13 +1,13 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { makeURLSearchParams, type RequestData, type REST } from '@discordjs/rest';
+import { makeURLSearchParams, type RequestData, type REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPIPollAnswerVotersQuery,
 	type RESTGetAPIPollAnswerVotersResult,
 	type RESTPostAPIPollExpireResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class PollAPI {
 	public constructor(private readonly rest: REST) {}
@@ -15,7 +15,7 @@ export class PollAPI {
 	/**
 	 * Gets the list of users that voted for a specific answer in a poll
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/poll#get-answer-voters}
+	 * @see {@link https://guilderia.com/developers/docs/resources/poll#get-answer-voters}
 	 * @param channelId - The id of the channel containing the message
 	 * @param messageId - The id of the message containing the poll
 	 * @param answerId - The id of the answer to get voters for
@@ -39,7 +39,7 @@ export class PollAPI {
 	/**
 	 * Immediately expires (i.e. ends) a poll
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/poll#expire-poll}
+	 * @see {@link https://guilderia.com/developers/docs/resources/poll#expire-poll}
 	 * @param channelId - The id of the channel containing the message
 	 * @param messageId - The id of the message containing the poll
 	 * @param options - The options for expiring the poll

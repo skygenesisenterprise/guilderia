@@ -1,10 +1,10 @@
-import { MessageReferenceType, type APIMessageReference } from 'discord-api-types/v10';
+import { MessageReferenceType, type APIMessageReference } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents the reference to another message on a message on Discord.
+ * Represents the reference to another message on a message on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */

@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/proxy-container",
+	"name": "@guilderiajs/proxy-container",
 	"version": "1.0.0",
-	"description": "Lightweight HTTP proxy for Discord's API, brought to you as a container 📦",
+	"description": "Lightweight HTTP proxy for Guilderia's API, brought to you as a container 📦",
 	"scripts": {
 		"build": "tsc --noEmit && tsup",
 		"lint": "prettier --check . && cross-env TIMING=1 eslint --format=pretty src",
@@ -22,31 +22,31 @@
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyradiscord@gmail.com>",
+		"Aura Román <kyraguilderia@gmail.com>",
 		"DD <didinele.dev@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"discord",
+		"guilderia",
 		"api",
 		"rest",
 		"proxy",
-		"discordapp",
-		"discordjs"
+		"guilderiaapp",
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "apps/proxy-container"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
-		"@discordjs/proxy": "workspace:^",
-		"@discordjs/rest": "workspace:^",
+		"@guilderiajs/proxy": "workspace:^",
+		"@guilderiajs/rest": "workspace:^",
 		"tslib": "^2.8.1"
 	},
 	"devDependencies": {

@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 import * as path from 'node:path';
-import { EnumMemberOrder, ReleaseTag } from '@discordjs/api-extractor-model';
+import { EnumMemberOrder, ReleaseTag } from '@guilderiajs/api-extractor-model';
 import { TSDocConfiguration, TSDocTagDefinition } from '@microsoft/tsdoc';
 import { TSDocConfigFile } from '@microsoft/tsdoc-config';
 import {
@@ -74,7 +74,7 @@ export interface IExtractorConfigLoadForFolderOptions {
 	/**
 	 * An already constructed `RigConfig` object.  If omitted, then a new `RigConfig` object will be constructed.
 	 *
-	 * @deprecated this is unsupported in the discord.js version
+	 * @deprecated this is unsupported in the guilderia.js version
 	 */
 	rigConfig?: never;
 
@@ -151,7 +151,7 @@ export interface IExtractorConfigPrepareOptions {
 	/**
 	 * Allow customization of the tsdoc.json config file.  If omitted, this file will be loaded from its default
 	 * location.  If the file does not exist, then the standard definitions will be used from
-	 * `@discordjs/api-extractor/extends/tsdoc-base.json`.
+	 * `@guilderiajs/api-extractor/extends/tsdoc-base.json`.
 	 */
 	tsdocConfigFile?: TSDocConfigFile;
 }

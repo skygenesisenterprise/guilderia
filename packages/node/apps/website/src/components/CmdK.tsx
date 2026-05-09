@@ -15,7 +15,7 @@ import { cx } from '@/styles/cva';
 import { resolveKind } from '@/util/resolveNodeKind';
 
 const client = new MeiliSearch({
-	host: 'https://search.discordjs.dev',
+	host: 'https://search.guilderiajs.dev',
 	apiKey: 'f3482b8e976a8b1092394aafbfb91f391242f40b0a6f45a008a5a72b354fb07e',
 });
 

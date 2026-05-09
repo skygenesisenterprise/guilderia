@@ -1,4 +1,4 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
 import type {
 	APIActionRowComponent,
 	APIButtonComponent,
@@ -14,7 +14,7 @@ import type {
 	APIStringSelectComponent,
 	APIUser,
 	APIUserSelectComponent,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import {
 	MessageReferenceType,
 	MessageType,
@@ -24,14 +24,14 @@ import {
 	SeparatorSpacingSize,
 	ChannelType,
 	SelectMenuDefaultValueType,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { describe, expect, test } from 'vitest';
 import { Attachment } from '../src/messages/Attachment.js';
 import { Message } from '../src/messages/Message.js';
 import { ContainerComponent } from '../src/messages/components/ContainerComponent.js';
 import { Embed } from '../src/messages/embeds/Embed.js';
 import { User } from '../src/users/User.js';
-import { dateToDiscordISOTimestamp } from '../src/utils/optimization.js';
+import { dateToGuilderiaISOTimestamp } from '../src/utils/optimization.js';
 
 const user: APIUser = {
 	username: 'user',
@@ -44,7 +44,7 @@ const user: APIUser = {
 describe('message with embeds and attachments', () => {
 	const timestamp = '2025-10-09T17:48:20.192000+00:00';
 	const data: APIMessage = {
-		id: DiscordSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
+		id: GuilderiaSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
 		type: MessageType.Default,
 		position: 10,
 		channel_id: '2',
@@ -65,7 +65,7 @@ describe('message with embeds and attachments', () => {
 			{
 				author: {
 					name: 'embed author',
-					icon_url: 'https://discord.js.org/static/logo.svg',
+					icon_url: 'https://guilderia.js.org/static/logo.svg',
 				},
 				color: 255,
 				description: 'describe me',
@@ -80,10 +80,10 @@ describe('message with embeds and attachments', () => {
 					text: 'footer',
 				},
 				image: {
-					url: 'https://discord.js.org/static/logo.svg',
+					url: 'https://guilderia.js.org/static/logo.svg',
 				},
 				thumbnail: {
-					url: 'https://discord.js.org/static/logo.svg',
+					url: 'https://guilderia.js.org/static/logo.svg',
 				},
 				title: 'Title',
 				timestamp: '2025-10-19T21:39:40.193000+00:00',
@@ -105,10 +105,10 @@ describe('message with embeds and attachments', () => {
 		expect(instance.position).toBe(data.position);
 		expect(instance.content).toBe(data.content);
 		expect(instance.createdTimestamp).toBe(Date.parse(data.timestamp));
-		expect(dateToDiscordISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
+		expect(dateToGuilderiaISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
 		expect(instance.flags?.toJSON()).toBe(data.flags);
 		expect(instance.editedTimestamp).toBe(Date.parse(data.edited_timestamp!));
-		expect(dateToDiscordISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
+		expect(dateToGuilderiaISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
 		expect(instance.nonce).toBe(data.nonce);
 		expect(instance.pinned).toBe(data.pinned);
 		expect(instance.tts).toBe(data.tts);
@@ -175,7 +175,7 @@ describe('message with components', () => {
 			{
 				type: ComponentType.Button,
 				style: ButtonStyle.Link,
-				url: 'https://discord.js.org/',
+				url: 'https://guilderia.js.org/',
 				disabled: false,
 				id: 7,
 				label: 'DJS',
@@ -205,7 +205,7 @@ describe('message with components', () => {
 		items: [
 			{
 				media: {
-					url: 'https://discord.js.org/static/logo.svg',
+					url: 'https://guilderia.js.org/static/logo.svg',
 					content_type: 'image/svg+xml',
 					height: 50,
 					width: 50,
@@ -221,7 +221,7 @@ describe('message with components', () => {
 		accessory: {
 			type: ComponentType.Thumbnail,
 			media: {
-				url: 'https://discord.js.org/static/logo.svg',
+				url: 'https://guilderia.js.org/static/logo.svg',
 			},
 			description: 'Logo thumbnail',
 			id: 13,
@@ -404,7 +404,7 @@ describe('message with components', () => {
 		spoiler: true,
 	};
 	const data: APIMessage = {
-		id: DiscordSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
+		id: GuilderiaSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
 		type: MessageType.Reply,
 		position: 15,
 		channel_id: '2',
@@ -445,10 +445,10 @@ describe('message with components', () => {
 		expect(instance.position).toBe(data.position);
 		expect(instance.content).toBe(data.content);
 		expect(instance.createdTimestamp).toBe(Date.parse(data.timestamp));
-		expect(dateToDiscordISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
+		expect(dateToGuilderiaISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
 		expect(instance.flags?.toJSON()).toBe(data.flags);
 		expect(instance.editedTimestamp).toBe(Date.parse(data.edited_timestamp!));
-		expect(dateToDiscordISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
+		expect(dateToGuilderiaISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
 		expect(instance.nonce).toBe(data.nonce);
 		expect(instance.pinned).toBe(data.pinned);
 		expect(instance.tts).toBe(data.tts);

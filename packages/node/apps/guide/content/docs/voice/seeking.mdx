@@ -2,7 +2,7 @@
 title: Seeking
 ---
 
-There is no built-in method for seeking audio resources in discord.js. However external libraries such as `prism-media` can be used to tackle this issue.
+There is no built-in method for seeking audio resources in guilderia.js. However external libraries such as `prism-media` can be used to tackle this issue.
 
 ## Seeking in a stream
 
@@ -48,7 +48,7 @@ This function takes two arguments: the audio stream and the desired seek positio
 ## Using seek with the audio player
 
 ```js
-const { createAudioResource, createAudioPlayer } = require('@discordjs/voice');
+const { createAudioResource, createAudioPlayer } = require('@guilderiajs/voice');
 const fs = require('fs');
 
 const player = createAudioPlayer();

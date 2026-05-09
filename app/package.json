@@ -1,7 +1,7 @@
 {
-  "name": "@company-website/app",
+  "name": "@guilderia/app",
   "version": "1.0.0",
-  "description": "Frontend application for Company Website",
+  "description": "Frontend application for Guilderia App Frontend",
   "private": true,
   "type": "module",
   "scripts": {

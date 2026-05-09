@@ -1,10 +1,10 @@
-import type { APIReaction } from 'discord-api-types/v10';
+import type { APIReaction } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kBurstColors, kData } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents a reaction on a message on Discord.
+ * Represents a reaction on a message on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructures `Emoji`, `ReactionCountDetails` which need to be instantiated and stored by an extending class using it

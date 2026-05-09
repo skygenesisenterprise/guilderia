@@ -1,4 +1,4 @@
-import type { GuildTextChannelType } from 'discord-api-types/v10';
+import type { GuildTextChannelType } from 'guilderia-api-types/v10';
 import { kData } from '../../utils/symbols.js';
 import { TextChannelMixin } from './TextChannelMixin.js';
 

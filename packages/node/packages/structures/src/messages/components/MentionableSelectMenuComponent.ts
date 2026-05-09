@@ -1,4 +1,4 @@
-import type { APIMentionableSelectComponent } from 'discord-api-types/v10';
+import type { APIMentionableSelectComponent } from 'guilderia-api-types/v10';
 import type { Partialize } from '../../utils/types.js';
 import { SelectMenuComponent } from './SelectMenuComponent.js';
 

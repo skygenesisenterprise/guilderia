@@ -1,4 +1,4 @@
-import { ComponentType } from 'discord-api-types/v10';
+import { ComponentType } from 'guilderia-api-types/v10';
 import { describe, expect, test } from 'vitest';
 import { FileBuilder } from '../../../src/components/v2/File';
 

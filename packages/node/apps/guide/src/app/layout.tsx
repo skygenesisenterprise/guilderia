@@ -21,10 +21,10 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-	metadataBase: new URL(ENV.IS_LOCAL_DEV ? `http://localhost:${ENV.PORT}` : 'https://discordjs.guide'),
+	metadataBase: new URL(ENV.IS_LOCAL_DEV ? `http://localhost:${ENV.PORT}` : 'https://guilderiajs.guide'),
 	title: {
-		template: '%s | discord.js',
-		default: 'discord.js',
+		template: '%s | guilderia.js',
+		default: 'guilderia.js',
 	},
 	icons: {
 		other: [
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
 	manifest: '/site.webmanifest',
 
 	openGraph: {
-		siteName: 'discord.js',
+		siteName: 'guilderia.js',
 		type: 'website',
-		title: 'discord.js',
+		title: 'guilderia.js',
 	},
 
 	twitter: {

@@ -12,12 +12,12 @@ RUN corepack install
 
 FROM base AS builder
 
-RUN pnpm --filter='@discordjs/proxy-container...' install --frozen-lockfile --ignore-scripts
-RUN pnpm exec turbo run build --filter='@discordjs/proxy-container...' --output-logs=full
+RUN pnpm --filter='@guilderiajs/proxy-container...' install --frozen-lockfile --ignore-scripts
+RUN pnpm exec turbo run build --filter='@guilderiajs/proxy-container...' --output-logs=full
 
 FROM builder AS pruned
 
-RUN pnpm --filter='@discordjs/proxy-container' --prod deploy --legacy pruned
+RUN pnpm --filter='@guilderiajs/proxy-container' --prod deploy --legacy pruned
 
 FROM node:24-alpine AS proxy
 

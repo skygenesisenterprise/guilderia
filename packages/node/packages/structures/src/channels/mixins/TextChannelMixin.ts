@@ -1,4 +1,4 @@
-import type { TextChannelType } from 'discord-api-types/v10';
+import type { TextChannelType } from 'guilderia-api-types/v10';
 import { kData } from '../../utils/symbols.js';
 import type { Channel } from '../Channel.js';
 

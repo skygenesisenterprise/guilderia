@@ -1,15 +1,15 @@
 {
-	"name": "@discordjs/api-extractor-model",
+	"name": "@guilderiajs/api-extractor-model",
 	"version": "7.30.6",
 	"description": "A helper library for loading and saving the .api.json files created by API Extractor",
 	"private": true,
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/api-extractor-model"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"license": "MIT",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",

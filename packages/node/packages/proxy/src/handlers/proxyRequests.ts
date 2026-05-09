@@ -1,9 +1,9 @@
-import type { RequestMethod, REST, RouteLike } from '@discordjs/rest';
+import type { RequestMethod, REST, RouteLike } from '@guilderiajs/rest';
 import { populateSuccessfulResponse, populateErrorResponse } from '../util/responseHelpers.js';
 import type { RequestHandler } from '../util/util.js';
 
 /**
- * Creates an HTTP handler used to forward requests to Discord
+ * Creates an HTTP handler used to forward requests to Guilderia
  *
  * @param rest - REST instance to use for the requests
  */
@@ -36,10 +36,10 @@ export function proxyRequests(rest: REST): RequestHandler {
 		}
 
 		try {
-			const discordResponse = await rest.queueRequest({
+			const guilderiaResponse = await rest.queueRequest({
 				body: req,
 				fullRoute,
-				// This type cast is technically incorrect, but we want Discord to throw Method Not Allowed for us
+				// This type cast is technically incorrect, but we want Guilderia to throw Method Not Allowed for us
 				method: method as RequestMethod,
 				// We forward the auth header anyway
 				auth: false,
@@ -48,7 +48,7 @@ export function proxyRequests(rest: REST): RequestHandler {
 				headers,
 			});
 
-			await populateSuccessfulResponse(res, discordResponse);
+			await populateSuccessfulResponse(res, guilderiaResponse);
 		} catch (error) {
 			const knownError = populateErrorResponse(res, error);
 			if (!knownError) {

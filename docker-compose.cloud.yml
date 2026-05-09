@@ -1,10 +1,10 @@
 services:
-  company-website:
+  guilderia:
     build:
       context: .
       dockerfile: Dockerfile.cloud
-    image: skygenesisenterprise/company-website:latest
-    container_name: company-website
+    image: skygenesisenterprise/guilderia:latest
+    container_name: guilderia
     restart: unless-stopped
     expose:
       - "3000"

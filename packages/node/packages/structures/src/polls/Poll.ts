@@ -1,11 +1,11 @@
-import type { APIPoll } from 'discord-api-types/v10';
+import type { APIPoll } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
-import { dateToDiscordISOTimestamp } from '../utils/optimization.js';
+import { dateToGuilderiaISOTimestamp } from '../utils/optimization.js';
 import { kData, kExpiresTimestamp } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents a poll on a message on Discord.
+ * Represents a poll on a message on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructures `PollMedia`, `PollAnswer`, `PollResults` which need to be instantiated and stored by an extending class using it
@@ -19,7 +19,7 @@ export class Poll<Omitted extends keyof APIPoll | '' = ''> extends Structure<API
 	};
 
 	/**
-	 * Optimized storage of {@link discord-api-types/v10#(APIPoll:interface).expiry}
+	 * Optimized storage of {@link guilderia-api-types/v10#(APIPoll:interface).expiry}
 	 *
 	 * @internal
 	 */
@@ -79,7 +79,7 @@ export class Poll<Omitted extends keyof APIPoll | '' = ''> extends Structure<API
 	public override toJSON() {
 		const clone = super.toJSON();
 		if (this[kExpiresTimestamp]) {
-			clone.expiry = dateToDiscordISOTimestamp(new Date(this[kExpiresTimestamp]));
+			clone.expiry = dateToGuilderiaISOTimestamp(new Date(this[kExpiresTimestamp]));
 		}
 
 		return clone;

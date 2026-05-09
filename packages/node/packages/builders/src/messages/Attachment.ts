@@ -1,6 +1,6 @@
 import type { Buffer } from 'node:buffer';
-import type { JSONEncodable, RawFile } from '@discordjs/util';
-import type { RESTAPIAttachment, Snowflake } from 'discord-api-types/v10';
+import type { JSONEncodable, RawFile } from '@guilderiajs/util';
+import type { RESTAPIAttachment, Snowflake } from 'guilderia-api-types/v10';
 import { validate } from '../util/validation.js';
 import { attachmentPredicate } from './Assertions.js';
 
@@ -19,7 +19,7 @@ export class AttachmentBuilder implements JSONEncodable<RESTAPIAttachment> {
 	 * To retrieve this data, use {@link getRawFile}.
 	 *
 	 * @remarks This cannot be set via the constructor, primarily because of the behavior described
-	 * {@link https://discord.com/developers/docs/reference#editing-message-attachments | here}.
+	 * {@link https://guilderia.com/developers/docs/reference#editing-message-attachments | here}.
 	 * That is, when editing a message's attachments, you should only be providing file data for new attachments.
 	 */
 	private readonly fileData: Partial<Pick<RawFile, 'contentType' | 'data'>>;

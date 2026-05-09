@@ -1,4 +1,4 @@
-import type { APIApplicationCommandIntegerOption } from 'discord-api-types/v10';
+import type { APIApplicationCommandIntegerOption } from 'guilderia-api-types/v10';
 
 export interface ApplicationCommandNumericOptionMinMaxValueData extends Pick<
 	APIApplicationCommandIntegerOption,

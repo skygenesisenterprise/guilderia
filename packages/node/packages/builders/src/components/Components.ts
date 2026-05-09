@@ -4,8 +4,8 @@ import type {
 	APIMessageComponent,
 	APIModalComponent,
 	APISectionAccessoryComponent,
-} from 'discord-api-types/v10';
-import { ButtonStyle, ComponentType } from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
+import { ButtonStyle, ComponentType } from 'guilderia-api-types/v10';
 import { ActionRowBuilder } from './ActionRow.js';
 import { ComponentBuilder } from './Component.js';
 import type { BaseButtonBuilder } from './button/Button.js';

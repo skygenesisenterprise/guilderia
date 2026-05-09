@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/collection",
+	"name": "@guilderiajs/collection",
 	"version": "2.1.1",
-	"description": "Utility data structure used in discord.js",
+	"description": "Utility data structure used in guilderia.js",
 	"scripts": {
 		"test": "vitest run --config ../../vitest.config.ts",
 		"build": "tsc --noEmit && tsup",
@@ -42,7 +42,7 @@
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyradiscord@gmail.com>"
+		"Aura Román <kyraguilderia@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
@@ -52,17 +52,17 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/collection"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"devDependencies": {
-		"@discordjs/api-extractor": "workspace:^",
-		"@discordjs/scripts": "workspace:^",
+		"@guilderiajs/api-extractor": "workspace:^",
+		"@guilderiajs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
 		"@types/node": "^22.19.15",
 		"@vitest/coverage-v8": "^4.1.2",

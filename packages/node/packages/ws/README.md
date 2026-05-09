@@ -1,37 +1,37 @@
 <div align="center">
 	<br />
 	<p>
-		<a href="https://discord.js.org"><img src="https://discord.js.org/static/logo.svg" width="546" alt="discord.js" /></a>
+		<a href="https://guilderia.js.org"><img src="https://guilderia.js.org/static/logo.svg" width="546" alt="guilderia.js" /></a>
 	</p>
 	<br />
 	<p>
-		<a href="https://discord.gg/djs"><img src="https://img.shields.io/badge/join_us-on_discord-5865F2?logo=discord&logoColor=white" alt="Discord server" /></a>
-		<a href="https://www.npmjs.com/package/@discordjs/ws"><img src="https://img.shields.io/npm/v/@discordjs/ws.svg?maxAge=3600" alt="npm version" /></a>
-		<a href="https://www.npmjs.com/package/@discordjs/ws"><img src="https://img.shields.io/npm/dt/@discordjs/ws.svg?maxAge=3600" alt="npm downloads" /></a>
-		<a href="https://github.com/discordjs/discord.js/actions"><img src="https://github.com/discordjs/discord.js/actions/workflows/tests.yml/badge.svg" alt="Build status" /></a>
-		<a href="https://github.com/discordjs/discord.js/commits/main/packages/ws"><img alt="Last commit." src="https://img.shields.io/github/last-commit/discordjs/discord.js?logo=github&logoColor=ffffff&path=packages%2Fws" /></a>
-		<a href="https://codecov.io/gh/discordjs/discord.js"><img src="https://codecov.io/gh/discordjs/discord.js/branch/main/graph/badge.svg?precision=2&flag=ws" alt="Code coverage" /></a>
-		<a href="https://opencollective.com/discordjs"><img src="https://img.shields.io/opencollective/backers/discordjs?maxAge=3600&logo=opencollective" alt="backers" /></a>
+		<a href="https://guilderia.gg/djs"><img src="https://img.shields.io/badge/join_us-on_guilderia-5865F2?logo=guilderia&logoColor=white" alt="Guilderia server" /></a>
+		<a href="https://www.npmjs.com/package/@guilderiajs/ws"><img src="https://img.shields.io/npm/v/@guilderiajs/ws.svg?maxAge=3600" alt="npm version" /></a>
+		<a href="https://www.npmjs.com/package/@guilderiajs/ws"><img src="https://img.shields.io/npm/dt/@guilderiajs/ws.svg?maxAge=3600" alt="npm downloads" /></a>
+		<a href="https://github.com/guilderiajs/guilderia.js/actions"><img src="https://github.com/guilderiajs/guilderia.js/actions/workflows/tests.yml/badge.svg" alt="Build status" /></a>
+		<a href="https://github.com/guilderiajs/guilderia.js/commits/main/packages/ws"><img alt="Last commit." src="https://img.shields.io/github/last-commit/guilderiajs/guilderia.js?logo=github&logoColor=ffffff&path=packages%2Fws" /></a>
+		<a href="https://codecov.io/gh/guilderiajs/guilderia.js"><img src="https://codecov.io/gh/guilderiajs/guilderia.js/branch/main/graph/badge.svg?precision=2&flag=ws" alt="Code coverage" /></a>
+		<a href="https://opencollective.com/guilderiajs"><img src="https://img.shields.io/opencollective/backers/guilderiajs?maxAge=3600&logo=opencollective" alt="backers" /></a>
 	</p>
 	<p>
-		<a href="https://vercel.com/?utm_source=discordjs&utm_campaign=oss"><img src="https://raw.githubusercontent.com/discordjs/discord.js/main/.github/powered-by-vercel.svg" alt="Vercel" /></a>
-		<a href="https://www.cloudflare.com"><img src="https://raw.githubusercontent.com/discordjs/discord.js/main/.github/powered-by-workers.png" alt="Cloudflare Workers" height="44" /></a>
+		<a href="https://vercel.com/?utm_source=guilderiajs&utm_campaign=oss"><img src="https://raw.githubusercontent.com/guilderiajs/guilderia.js/main/.github/powered-by-vercel.svg" alt="Vercel" /></a>
+		<a href="https://www.cloudflare.com"><img src="https://raw.githubusercontent.com/guilderiajs/guilderia.js/main/.github/powered-by-workers.png" alt="Cloudflare Workers" height="44" /></a>
 	</p>
 </div>
 
 ## About
 
-`@discordjs/ws` is a powerful wrapper around Discord's gateway.
+`@guilderiajs/ws` is a powerful wrapper around Guilderia's gateway.
 
 ## Installation
 
 **Node.js 22.12.0 or newer is required.**
 
 ```sh
-npm install @discordjs/ws
-yarn add @discordjs/ws
-pnpm add @discordjs/ws
-bun add @discordjs/ws
+npm install @guilderiajs/ws
+yarn add @guilderiajs/ws
+pnpm add @guilderiajs/ws
+bun add @guilderiajs/ws
 ```
 
 ### Optional packages
@@ -44,14 +44,14 @@ bun add @discordjs/ws
 The example uses [ES modules](https://nodejs.org/api/esm.html#enabling).
 
 ```ts
-import { WebSocketManager, WebSocketShardEvents, CompressionMethod } from '@discordjs/ws';
-import { REST } from '@discordjs/rest';
-import type { RESTGetAPIGatewayBotResult } from 'discord-api-types/v10';
+import { WebSocketManager, WebSocketShardEvents, CompressionMethod } from '@guilderiajs/ws';
+import { REST } from '@guilderiajs/rest';
+import type { RESTGetAPIGatewayBotResult } from 'guilderia-api-types/v10';
 
-const rest = new REST().setToken(process.env.DISCORD_TOKEN);
-// This example will spawn Discord's recommended shard count, all under the current process.
+const rest = new REST().setToken(process.env.GUILDERIA_TOKEN);
+// This example will spawn Guilderia's recommended shard count, all under the current process.
 const manager = new WebSocketManager({
-	token: process.env.DISCORD_TOKEN,
+	token: process.env.GUILDERIA_TOKEN,
 	intents: 0, // for no intents
 	fetchGatewayInformation() {
 		return rest.get(Routes.gatewayBot()) as Promise<RESTGetAPIGatewayBotResult>;
@@ -75,7 +75,7 @@ await manager.connect();
 ```ts
 // Spawn 4 shards
 const manager = new WebSocketManager({
-	token: process.env.DISCORD_TOKEN,
+	token: process.env.GUILDERIA_TOKEN,
 	intents: 0,
 	shardCount: 4,
 	fetchGatewayInformation() {
@@ -88,7 +88,7 @@ const manager = new WebSocketManager({
 // Your bot will run 8 shards overall
 // This manager will only take care of 0, 2, 4, and 6
 const manager = new WebSocketManager({
-	token: process.env.DISCORD_TOKEN,
+	token: process.env.GUILDERIA_TOKEN,
 	intents: 0,
 	shardCount: 8,
 	shardIds: [0, 2, 4, 6],
@@ -99,7 +99,7 @@ const manager = new WebSocketManager({
 
 // Alternatively, if your shards are consecutive, you can pass in a range
 const manager = new WebSocketManager({
-	token: process.env.DISCORD_TOKEN,
+	token: process.env.GUILDERIA_TOKEN,
 	intents: 0,
 	shardCount: 8,
 	shardIds: {
@@ -117,12 +117,12 @@ const manager = new WebSocketManager({
 You can also have the shards spawn in worker threads:
 
 ```ts
-import { WebSocketManager, WorkerShardingStrategy } from '@discordjs/ws';
-import { REST } from '@discordjs/rest';
+import { WebSocketManager, WorkerShardingStrategy } from '@guilderiajs/ws';
+import { REST } from '@guilderiajs/rest';
 
-const rest = new REST().setToken(process.env.DISCORD_TOKEN);
+const rest = new REST().setToken(process.env.GUILDERIA_TOKEN);
 const manager = new WebSocketManager({
-	token: process.env.DISCORD_TOKEN,
+	token: process.env.GUILDERIA_TOKEN,
 	intents: 0,
 	shardCount: 6,
 	fetchGatewayInformation() {
@@ -138,12 +138,12 @@ const manager = new WebSocketManager({
 **Note**: By default, this will cause the workers to effectively only be responsible for the WebSocket connection, they simply pass up all the events back to the main process for the manager to emit. If you want to have the workers handle events as well, you can pass in a `workerPath` option to the `WorkerShardingStrategy` constructor:
 
 ```ts
-import { WebSocketManager, WorkerShardingStrategy } from '@discordjs/ws';
-import { REST } from '@discordjs/rest';
+import { WebSocketManager, WorkerShardingStrategy } from '@guilderiajs/ws';
+import { REST } from '@guilderiajs/rest';
 
-const rest = new REST().setToken(process.env.DISCORD_TOKEN);
+const rest = new REST().setToken(process.env.GUILDERIA_TOKEN);
 const manager = new WebSocketManager({
-	token: process.env.DISCORD_TOKEN,
+	token: process.env.GUILDERIA_TOKEN,
 	intents: 0,
 	fetchGatewayInformation() {
 		return rest.get(Routes.gatewayBot()) as Promise<RESTGetAPIGatewayBotResult>;
@@ -163,7 +163,7 @@ const manager = new WebSocketManager({
 And your `worker.ts` file:
 
 ```ts
-import { WorkerBootstrapper, WebSocketShardEvents } from '@discordjs/ws';
+import { WorkerBootstrapper, WebSocketShardEvents } from '@guilderiajs/ws';
 import { parentPort } from 'node:worker_threads';
 
 const bootstrapper = new WorkerBootstrapper();
@@ -194,8 +194,8 @@ parentPort!.postMessage({ custom: 'data' });
 - [Documentation][documentation]
 - [Guide][guide] ([source][guide-source])
   Also see the v13 to v14 [Update Guide][guide-update], which includes updated and removed items from the library.
-- [discord.js Discord server][discord]
-- [Discord Developers Discord server][discord-developers]
+- [guilderia.js Guilderia server][guilderia]
+- [Guilderia Developers Guilderia server][guilderia-developers]
 - [GitHub][source]
 - [npm][npm]
 - [Related libraries][related-libs]
@@ -208,17 +208,17 @@ See [the contribution guide][contributing] if you'd like to submit a PR.
 
 ## Help
 
-If you don't understand something in the documentation, you are experiencing problems, or you just need a gentle nudge in the right direction, please don't hesitate to join our official [discord.js Server][discord].
+If you don't understand something in the documentation, you are experiencing problems, or you just need a gentle nudge in the right direction, please don't hesitate to join our official [guilderia.js Server][guilderia].
 
-[website]: https://discord.js.org
-[website-source]: https://github.com/discordjs/discord.js/tree/main/apps/website
-[documentation]: https://discord.js.org/docs/packages/ws/stable
-[guide]: https://discordjs.guide
-[guide-source]: https://github.com/discordjs/discord.js/tree/main/apps/guide
-[guide-update]: https://discordjs.guide/legacy/additional-info/changes-in-v14
-[discord]: https://discord.gg/djs
-[discord-developers]: https://discord.gg/discord-developers
-[source]: https://github.com/discordjs/discord.js/tree/main/packages/ws
-[npm]: https://www.npmjs.com/package/@discordjs/ws
-[related-libs]: https://docs.discord.com/developers/developer-tools/community-resources#libraries
-[contributing]: https://github.com/discordjs/discord.js/blob/main/.github/CONTRIBUTING.md
+[website]: https://guilderia.js.org
+[website-source]: https://github.com/guilderiajs/guilderia.js/tree/main/apps/website
+[documentation]: https://guilderia.js.org/docs/packages/ws/stable
+[guide]: https://guilderiajs.guide
+[guide-source]: https://github.com/guilderiajs/guilderia.js/tree/main/apps/guide
+[guide-update]: https://guilderiajs.guide/legacy/additional-info/changes-in-v14
+[guilderia]: https://guilderia.gg/djs
+[guilderia-developers]: https://guilderia.gg/guilderia-developers
+[source]: https://github.com/guilderiajs/guilderia.js/tree/main/packages/ws
+[npm]: https://www.npmjs.com/package/@guilderiajs/ws
+[related-libs]: https://docs.guilderia.com/developers/developer-tools/community-resources#libraries
+[contributing]: https://github.com/guilderiajs/guilderia.js/blob/main/.github/CONTRIBUTING.md

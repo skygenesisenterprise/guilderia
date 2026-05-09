@@ -2,7 +2,7 @@
 title: Message Embeds
 ---
 
-If you have been around on Discord for a bit, chances are you have seen these special messages, often sent by bots.
+If you have been around on Guilderia for a bit, chances are you have seen these special messages, often sent by bots.
 They can have a colored border, embedded images, text fields, and other fancy properties.
 
 In the following section, we will explain how to compose an embed, send it, and what you need to be aware of while doing so.
@@ -13,18 +13,18 @@ Here is an example of how an embed may look. We will go over embed construction 
 
 ## Using the embed constructor
 
-discord.js features the `EmbedBuilder` utility class for easy construction and manipulation of embeds.
+guilderia.js features the `EmbedBuilder` utility class for easy construction and manipulation of embeds.
 
 ```js
 // at the top of your file
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('guilderia.js');
 
 // inside a command, event listener, etc.
 const exampleEmbed = new EmbedBuilder()
 	.setColor(0x0099ff)
 	.setTitle('Some title')
-	.setURL('https://discord.js.org/')
-	.setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
+	.setURL('https://guilderia.js.org/')
+	.setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://guilderia.js.org' })
 	.setDescription('Some description here')
 	.setThumbnail('https://i.imgur.com/AfFp7pu.png')
 	.addFields(
@@ -66,11 +66,11 @@ if (message.author.bot) {
 const exampleEmbed = {
 	color: 0x0099ff,
 	title: 'Some title',
-	url: 'https://discord.js.org',
+	url: 'https://guilderia.js.org',
 	author: {
 		name: 'Some name',
 		icon_url: 'https://i.imgur.com/AfFp7pu.png',
-		url: 'https://discord.js.org',
+		url: 'https://guilderia.js.org',
 	},
 	description: 'Some description here',
 	thumbnail: {
@@ -144,10 +144,10 @@ You can then reference and use the images inside the embed itself with `attachme
 ### Using the EmbedBuilder
 
 ```js
-const { AttachmentBuilder, EmbedBuilder } = require('discord.js');
+const { AttachmentBuilder, EmbedBuilder } = require('guilderia.js');
 // ...
-const file = new AttachmentBuilder('../assets/discordjs.png');
-const exampleEmbed = new EmbedBuilder().setTitle('Some title').setImage('attachment://discordjs.png');
+const file = new AttachmentBuilder('../assets/guilderiajs.png');
+const exampleEmbed = new EmbedBuilder().setTitle('Some title').setImage('attachment://guilderiajs.png');
 
 channel.send({ embeds: [exampleEmbed], files: [file] });
 ```
@@ -155,14 +155,14 @@ channel.send({ embeds: [exampleEmbed], files: [file] });
 ### Using an embed object
 
 ```js
-const { AttachmentBuilder } = require('discord.js');
+const { AttachmentBuilder } = require('guilderia.js');
 // ...
-const file = new AttachmentBuilder('../assets/discordjs.png');
+const file = new AttachmentBuilder('../assets/guilderiajs.png');
 
 const exampleEmbed = {
 	title: 'Some title',
 	image: {
-		url: 'attachment://discordjs.png',
+		url: 'attachment://guilderiajs.png',
 	},
 };
 
@@ -211,8 +211,8 @@ If you want to build the new embed data on a previously sent embed template, mak
 - The timestamp will automatically adjust the timezone depending on the user's device
 - Mentions of any kind in embeds will only render correctly within embed descriptions and field values
 - Mentions in embeds will not trigger a notification
-- Embeds allow masked links (e.g. `[Guide](https://discordjs.guide/ 'optional hovertext')`), but only in description and field values
-- Discord may strip characters from message content. See [the documentation](https://discord.com/developers/docs/resources/message#create-message) for more information
+- Embeds allow masked links (e.g. `[Guide](https://guilderiajs.guide/ 'optional hovertext')`), but only in description and field values
+- Guilderia may strip characters from message content. See [the documentation](https://guilderia.com/developers/docs/resources/message#create-message) for more information
 
 ## Embed limits
 
@@ -227,4 +227,4 @@ There are a few limits to be aware of while planning your embeds due to the API'
 - The sum of all characters from all embed structures in a message must not exceed **6000** characters
 - **10** embeds can be sent per message
 
-Source: [Discord API documentation](https://discord.com/developers/docs/resources/message#embed-object-embed-limits)
+Source: [Guilderia API documentation](https://guilderia.com/developers/docs/resources/message#embed-object-embed-limits)

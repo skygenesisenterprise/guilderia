@@ -9,7 +9,7 @@ export function Footer() {
 				<div className="flex flex-wrap place-content-center place-items-center gap-4">
 					<a
 						className="rounded"
-						href="https://vercel.com/?utm_source=discordjs&utm_campaign=oss"
+						href="https://vercel.com/?utm_source=guilderiajs&utm_campaign=oss"
 						rel="external noopener noreferrer"
 						target="_blank"
 						title="Vercel"
@@ -44,12 +44,12 @@ export function Footer() {
 					<div className="flex max-w-max flex-col gap-2">
 						<div className="text-lg font-semibold">Community</div>
 						<div className="flex flex-col gap-1">
-							<a className="rounded" href="https://discord.gg/djs" rel="external noopener noreferrer" target="_blank">
-								Discord
+							<a className="rounded" href="https://guilderia.gg/djs" rel="external noopener noreferrer" target="_blank">
+								Guilderia
 							</a>
 							<a
 								className="rounded"
-								href="https://github.com/discordjs/discord.js/discussions"
+								href="https://github.com/guilderiajs/guilderia.js/discussions"
 								rel="external noopener noreferrer"
 								target="_blank"
 							>
@@ -62,22 +62,22 @@ export function Footer() {
 						<div className="flex flex-col gap-1">
 							<a
 								className="rounded"
-								href="https://github.com/discordjs/discord.js"
+								href="https://github.com/guilderiajs/guilderia.js"
 								rel="external noopener noreferrer"
 								target="_blank"
 							>
-								discord.js
+								guilderia.js
 							</a>
-							<a className="rounded" href="https://discord.js.org/docs" rel="noopener noreferrer" target="_blank">
-								discord.js documentation
+							<a className="rounded" href="https://guilderia.js.org/docs" rel="noopener noreferrer" target="_blank">
+								guilderia.js documentation
 							</a>
 							<a
 								className="rounded"
-								href="https://discord-api-types.dev"
+								href="https://guilderia-api-types.dev"
 								rel="external noopener noreferrer"
 								target="_blank"
 							>
-								discord-api-types
+								guilderia-api-types
 							</a>
 						</div>
 					</div>

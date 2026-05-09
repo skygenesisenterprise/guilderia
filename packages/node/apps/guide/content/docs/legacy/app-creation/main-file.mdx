@@ -14,8 +14,8 @@ Open your code editor and create a new file. We suggest that you save the file a
 Here's the base code to get you started:
 
 ```js title="index.js"
-// Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+// Require the necessary guilderia.js classes
+const { Client, Events, GatewayIntentBits } = require('guilderia.js');
 const { token } = require('./config.json');
 
 // Create a new client instance
@@ -28,15 +28,15 @@ client.once(Events.ClientReady, (readyClient) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
-// Log in to Discord with your client's token
+// Log in to Guilderia with your client's token
 client.login(token);
 ```
 
-This is how you create a client instance for your Discord bot and log in to Discord. The `GatewayIntentBits.Guilds` intents option is necessary for the discord.js client to work as you expect it to, as it ensures that the caches for guilds, channels, and roles are populated and available for internal use.
+This is how you create a client instance for your Guilderia bot and log in to Guilderia. The `GatewayIntentBits.Guilds` intents option is necessary for the guilderia.js client to work as you expect it to, as it ensures that the caches for guilds, channels, and roles are populated and available for internal use.
 
-<Callout>The term "guild" is used by the Discord API and in discord.js to refer to a Discord server.</Callout>
+<Callout>The term "guild" is used by the Guilderia API and in guilderia.js to refer to a Guilderia server.</Callout>
 
-Intents also define which events Discord should send to your bot, and you may wish to enable more than just the minimum. You can read more about the other intents in the [Intents topic](../popular-topics/intents).
+Intents also define which events Guilderia should send to your bot, and you may wish to enable more than just the minimum. You can read more about the other intents in the [Intents topic](../popular-topics/intents).
 
 ## Running your application
 

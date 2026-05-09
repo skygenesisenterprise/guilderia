@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { Snowflake } from 'discord-api-types/v10';
-import { Routes } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { Snowflake } from 'guilderia-api-types/v10';
+import { Routes } from 'guilderia-api-types/v10';
 import { type FormData, fetch } from 'undici';
 import { MockAgent, setGlobalDispatcher } from 'undici';
 import type { Interceptable, MockInterceptor } from 'undici/types/mock-interceptor.js';
@@ -9,7 +9,7 @@ import { beforeEach, afterEach, test, expect, vitest } from 'vitest';
 import { REST } from '../src/index.js';
 import { genPath } from './util.js';
 
-const newSnowflake: Snowflake = DiscordSnowflake.generate().toString();
+const newSnowflake: Snowflake = GuilderiaSnowflake.generate().toString();
 
 const api = new REST().setToken('A-Very-Fake-Token');
 
@@ -17,7 +17,7 @@ const makeRequestMock = vitest.fn(fetch);
 
 const fetchApi = new REST({ makeRequest: makeRequestMock }).setToken('A-Very-Fake-Token');
 
-// @discordjs/rest uses the `content-type` header to detect whether to parse
+// @guilderiajs/rest uses the `content-type` header to detect whether to parse
 // the response as JSON or as an ArrayBuffer.
 const responseOptions: MockInterceptor.MockResponseOptions = {
 	headers: {
@@ -30,10 +30,10 @@ let mockPool: Interceptable;
 
 beforeEach(() => {
 	mockAgent = new MockAgent();
-	mockAgent.disableNetConnect(); // prevent actual requests to Discord
+	mockAgent.disableNetConnect(); // prevent actual requests to Guilderia
 	setGlobalDispatcher(mockAgent); // enabled the mock client to intercept requests
 
-	mockPool = mockAgent.get('https://discord.com');
+	mockPool = mockAgent.get('https://guilderia.com');
 	api.setAgent(mockAgent);
 	fetchApi.setAgent(mockAgent);
 });

@@ -1,7 +1,7 @@
-import type { REST } from '@discordjs/rest';
-import { calculateShardId, GatewayRateLimitError } from '@discordjs/util';
-import { WebSocketShardEvents } from '@discordjs/ws';
-import { DiscordSnowflake } from '@sapphire/snowflake';
+import type { REST } from '@guilderiajs/rest';
+import { calculateShardId, GatewayRateLimitError } from '@guilderiajs/util';
+import { WebSocketShardEvents } from '@guilderiajs/ws';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
 import { AsyncEventEmitter } from '@vladfrangu/async_event_emitter';
 import {
 	GatewayDispatchEvents,
@@ -83,7 +83,7 @@ import {
 	type GatewayWebhooksUpdateDispatchData,
 	type GatewayRequestSoundboardSoundsData,
 	type GatewaySoundboardSoundsDispatchData,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import type { Gateway } from './Gateway.js';
 import { API } from './api/index.js';
 
@@ -226,7 +226,7 @@ export class Client extends AsyncEventEmitter<MappedEvents> {
 	/**
 	 * Requests guild members from the gateway and returns an async iterator that yields the data from each guild members chunk event.
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/gateway-events#request-guild-members}
+	 * @see {@link https://guilderia.com/developers/docs/topics/gateway-events#request-guild-members}
 	 * @param options - The options for the request
 	 * @param timeout - The timeout for waiting for each guild members chunk event
 	 * @example
@@ -239,7 +239,7 @@ export class Client extends AsyncEventEmitter<MappedEvents> {
 	 */
 	public async *requestGuildMembersIterator(options: GatewayRequestGuildMembersData, timeout = 10_000) {
 		const shardId = calculateShardId(options.guild_id, await this.gateway.getShardCount());
-		const nonce = options.nonce ?? DiscordSnowflake.generate().toString();
+		const nonce = options.nonce ?? GuilderiaSnowflake.generate().toString();
 
 		const controller = new AbortController();
 
@@ -313,7 +313,7 @@ export class Client extends AsyncEventEmitter<MappedEvents> {
 	/**
 	 * Requests guild members from the gateway.
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/gateway-events#request-guild-members}
+	 * @see {@link https://guilderia.com/developers/docs/topics/gateway-events#request-guild-members}
 	 * @param options - The options for the request
 	 * @param timeout - The timeout for waiting for each guild members chunk event
 	 * @example
@@ -326,7 +326,7 @@ export class Client extends AsyncEventEmitter<MappedEvents> {
 		const members: RequestGuildMembersResult['members'] = [];
 		const notFound: RequestGuildMembersResult['notFound'] = [];
 		const presences: RequestGuildMembersResult['presences'] = [];
-		const nonce = options.nonce ?? DiscordSnowflake.generate().toString();
+		const nonce = options.nonce ?? GuilderiaSnowflake.generate().toString();
 
 		for await (const data of this.requestGuildMembersIterator({ ...options, nonce }, timeout)) {
 			members.push(...data.members);
@@ -340,7 +340,7 @@ export class Client extends AsyncEventEmitter<MappedEvents> {
 	/**
 	 * Requests soundboard sounds from the gateway and returns an async iterator that yields the data from each soundboard sounds event.
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/gateway-events#request-soundboard-sounds}
+	 * @see {@link https://guilderia.com/developers/docs/topics/gateway-events#request-soundboard-sounds}
 	 * @param options - The options for the request
 	 * @param timeout - The timeout for waiting for each soundboard sounds
 	 * @example
@@ -412,7 +412,7 @@ export class Client extends AsyncEventEmitter<MappedEvents> {
 	/**
 	 * Requests soundboard sounds from the gateway.
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/gateway-events#request-soundboard-sounds}
+	 * @see {@link https://guilderia.com/developers/docs/topics/gateway-events#request-soundboard-sounds}
 	 * @param options - The options for the request
 	 * @param timeout - The timeout for waiting for each soundboard sounds event
 	 * @example
@@ -439,7 +439,7 @@ export class Client extends AsyncEventEmitter<MappedEvents> {
 	/**
 	 * Updates the voice state of the bot user
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/gateway-events#update-voice-state}
+	 * @see {@link https://guilderia.com/developers/docs/topics/gateway-events#update-voice-state}
 	 * @param options - The options for updating the voice state
 	 */
 	public async updateVoiceState(options: GatewayVoiceStateUpdateData) {

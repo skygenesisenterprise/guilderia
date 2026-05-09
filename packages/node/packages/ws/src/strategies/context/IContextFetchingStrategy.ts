@@ -1,5 +1,5 @@
-import type { Awaitable } from '@discordjs/util';
-import type { APIGatewayBotInfo } from 'discord-api-types/v10';
+import type { Awaitable } from '@guilderiajs/util';
+import type { APIGatewayBotInfo } from 'guilderia-api-types/v10';
 import type { SessionInfo, WebSocketManager, WebSocketManagerOptions } from '../../ws/WebSocketManager.js';
 
 export interface FetchingStrategyOptions extends Pick<

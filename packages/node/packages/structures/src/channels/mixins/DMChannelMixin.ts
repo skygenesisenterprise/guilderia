@@ -1,5 +1,5 @@
-import { channelLink } from '@discordjs/formatters';
-import type { ChannelType } from 'discord-api-types/v10';
+import { channelLink } from '@guilderiajs/formatters';
+import type { ChannelType } from 'guilderia-api-types/v10';
 import type { User } from '../../users/User.js';
 import type { Channel } from '../Channel.js';
 

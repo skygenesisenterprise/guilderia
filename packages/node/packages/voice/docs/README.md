@@ -1,1 +1,1 @@
-## [View the documentation here.](https://discord.js.org/docs/packages/voice/main)
+## [View the documentation here.](https://guilderia.js.org/docs/packages/voice/main)

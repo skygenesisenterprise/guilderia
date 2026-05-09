@@ -1,5 +1,5 @@
-import type { Collection } from '@discordjs/collection';
-import { range, type Awaitable } from '@discordjs/util';
+import type { Collection } from '@guilderiajs/collection';
+import { range, type Awaitable } from '@guilderiajs/util';
 import { AsyncEventEmitter } from '@vladfrangu/async_event_emitter';
 import type {
 	APIGatewayBotInfo,
@@ -10,7 +10,7 @@ import type {
 	GatewaySendPayload,
 	GatewayDispatchPayload,
 	GatewayReadyDispatchData,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import type { IShardingStrategy } from '../strategies/sharding/IShardingStrategy.js';
 import type { IIdentifyThrottler } from '../throttling/IIdentifyThrottler.js';
 import { DefaultWebSocketManagerOptions, type CompressionMethod, type Encoding } from '../utils/constants.js';
@@ -56,13 +56,13 @@ export interface SessionInfo {
 export interface RequiredWebSocketManagerOptions {
 	/**
 	 * Function for retrieving the information returned by the `/gateway/bot` endpoint.
-	 * We recommend using a REST client that respects Discord's rate limits, such as `@discordjs/rest`.
+	 * We recommend using a REST client that respects Guilderia's rate limits, such as `@guilderiajs/rest`.
 	 *
 	 * @example
 	 * ```ts
-	 * const rest = new REST().setToken(process.env.DISCORD_TOKEN);
+	 * const rest = new REST().setToken(process.env.GUILDERIA_TOKEN);
 	 * const manager = new WebSocketManager({
-	 *  token: process.env.DISCORD_TOKEN,
+	 *  token: process.env.GUILDERIA_TOKEN,
 	 *  fetchGatewayInformation() {
 	 *    return rest.get(Routes.gatewayBot()) as Promise<RESTGetAPIGatewayBotResult>;
 	 *  },
@@ -89,9 +89,9 @@ export interface OptionalWebSocketManagerOptions {
 	 *
 	 * @example
 	 * ```ts
-	 * const rest = new REST().setToken(process.env.DISCORD_TOKEN);
+	 * const rest = new REST().setToken(process.env.GUILDERIA_TOKEN);
 	 * const manager = new WebSocketManager({
-	 *  token: process.env.DISCORD_TOKEN,
+	 *  token: process.env.GUILDERIA_TOKEN,
 	 *  intents: 0, // for no intents
 	 *  fetchGatewayInformation() {
 	 *    return rest.get(Routes.gatewayBot()) as Promise<RESTGetAPIGatewayBotResult>;
@@ -154,7 +154,7 @@ export interface OptionalWebSocketManagerOptions {
 	retrieveSessionInfo(shardId: number): Awaitable<SessionInfo | null>;
 	/**
 	 * The total number of shards across all WebsocketManagers you intend to instantiate.
-	 * Use `null` to use Discord's recommended shard count
+	 * Use `null` to use Guilderia's recommended shard count
 	 */
 	shardCount: number | null;
 	/**
@@ -280,7 +280,7 @@ export class WebSocketManager extends AsyncEventEmitter<ManagerShardEventsMap> i
 	}
 
 	/**
-	 * Fetches the gateway information from Discord - or returns it from cache if available
+	 * Fetches the gateway information from Guilderia - or returns it from cache if available
 	 *
 	 * @param force - Whether to ignore the cache and force a fresh fetch
 	 */
@@ -316,7 +316,7 @@ export class WebSocketManager extends AsyncEventEmitter<ManagerShardEventsMap> i
 	}
 
 	/**
-	 * Yields the total number of shards across for your bot, accounting for Discord recommendations
+	 * Yields the total number of shards across for your bot, accounting for Guilderia recommendations
 	 */
 	public async getShardCount(): Promise<number> {
 		if (this.options.shardCount) {

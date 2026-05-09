@@ -1,4 +1,4 @@
-import { ButtonStyle, ChannelType, ComponentType, SelectMenuDefaultValueType } from 'discord-api-types/v10';
+import { ButtonStyle, ChannelType, ComponentType, SelectMenuDefaultValueType } from 'guilderia-api-types/v10';
 import { z } from 'zod';
 import { idPredicate, customIdPredicate, snowflakePredicate } from '../Assertions.js';
 
@@ -37,7 +37,7 @@ const buttonDangerPredicate = buttonCustomIdPredicateBase.safeExtend({ style: z.
 const buttonLinkPredicate = buttonPredicateBase
 	.extend({
 		style: z.literal(ButtonStyle.Link),
-		url: z.url({ protocol: /^(?:https?|discord)$/ }).max(512),
+		url: z.url({ protocol: /^(?:https?|guilderia)$/ }).max(512),
 		emoji: emojiPredicate.optional(),
 		label: buttonLabelPredicate.optional(),
 	})

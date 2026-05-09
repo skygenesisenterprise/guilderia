@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { makeURLSearchParams, type RequestData, type RawFile, type REST } from '@discordjs/rest';
+import { makeURLSearchParams, type RequestData, type RawFile, type REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPIWebhookWithTokenMessageQuery,
@@ -17,7 +17,7 @@ import {
 	type RESTPostAPIWebhookWithTokenSlackQuery,
 	type RESTPostAPIWebhookWithTokenWaitResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export type CreateWebhookMessageOptions = RESTPostAPIWebhookWithTokenJSONBody &
 	RESTPostAPIWebhookWithTokenQuery & { files?: RawFile[] };
@@ -33,8 +33,8 @@ export class WebhooksAPI {
 	/**
 	 * Fetches a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#get-webhook}
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#get-webhook-with-token}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#get-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#get-webhook-with-token}
 	 * @param id - The id of the webhook
 	 * @param options - The options for fetching the webhook
 	 */
@@ -51,8 +51,8 @@ export class WebhooksAPI {
 	/**
 	 * Edits a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#modify-webhook}
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#modify-webhook-with-token}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#modify-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#modify-webhook-with-token}
 	 * @param id - The id of the webhook to edit
 	 * @param body - The new webhook data
 	 * @param options - The options for editing the webhook
@@ -73,8 +73,8 @@ export class WebhooksAPI {
 	/**
 	 * Deletes a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#delete-webhook}
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#delete-webhook-with-token}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#delete-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#delete-webhook-with-token}
 	 * @param id - The id of the webhook to delete
 	 * @param options - The options for deleting the webhook
 	 */
@@ -92,7 +92,7 @@ export class WebhooksAPI {
 	/**
 	 * Executes a webhook and returns the created message
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#execute-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#execute-webhook}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param body - The data for executing the webhook
@@ -108,7 +108,7 @@ export class WebhooksAPI {
 	/**
 	 * Executes a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#execute-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#execute-webhook}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param body - The data for executing the webhook
@@ -124,7 +124,7 @@ export class WebhooksAPI {
 	/**
 	 * Executes a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#execute-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#execute-webhook}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param body - The data for executing the webhook
@@ -148,7 +148,7 @@ export class WebhooksAPI {
 	/**
 	 * Executes a slack webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#execute-slackcompatible-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#execute-slackcompatible-webhook}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param body - The data for executing the webhook
@@ -173,7 +173,7 @@ export class WebhooksAPI {
 	/**
 	 * Executes a github webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#execute-githubcompatible-webhook}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#execute-githubcompatible-webhook}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param body - The data for executing the webhook
@@ -198,7 +198,7 @@ export class WebhooksAPI {
 	/**
 	 * Fetches an associated message from a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#get-webhook-message}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#get-webhook-message}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param messageId - The id of the message to fetch
@@ -222,7 +222,7 @@ export class WebhooksAPI {
 	/**
 	 * Edits an associated message from a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#edit-webhook-message}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#edit-webhook-message}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param messageId - The id of the message to edit
@@ -248,7 +248,7 @@ export class WebhooksAPI {
 	/**
 	 * Deletes an associated message from a webhook
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/webhook#delete-webhook-message}
+	 * @see {@link https://guilderia.com/developers/docs/resources/webhook#delete-webhook-message}
 	 * @param id - The id of the webhook
 	 * @param token - The token of the webhook
 	 * @param messageId - The id of the message to delete

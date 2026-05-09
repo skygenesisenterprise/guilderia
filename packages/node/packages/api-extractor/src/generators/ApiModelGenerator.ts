@@ -12,7 +12,7 @@ import type {
 	IExcerptToken,
 	IApiTypeParameterOptions,
 	IApiPropertyOptions,
-} from '@discordjs/api-extractor-model';
+} from '@guilderiajs/api-extractor-model';
 import {
 	ApiItemKind,
 	ApiModel,
@@ -39,7 +39,7 @@ import {
 	EnumMemberOrder,
 	ExcerptTokenKind,
 	Navigation,
-} from '@discordjs/api-extractor-model';
+} from '@guilderiajs/api-extractor-model';
 import type * as tsdoc from '@microsoft/tsdoc';
 import { DeclarationReference, type Meaning } from '@microsoft/tsdoc/lib-commonjs/beta/DeclarationReference.js';
 import { JsonFile, Path } from '@rushstack/node-core-library';
@@ -229,7 +229,7 @@ const linkRegEx =
 const moduleNameRegEx = /^(?<package>(?:@[\w.-]+\/)?[\w.-]+)(?<path>(?:\/[\w.-]+)+)?$/i;
 
 function filePathFromJson(meta: DocgenMetaJson): string {
-	return `${meta.path.slice('packages/discord.js/'.length)}/${meta.file}`;
+	return `${meta.path.slice('packages/guilderia.js/'.length)}/${meta.file}`;
 }
 
 function fixPrimitiveTypes(type: string, symbol: string | undefined) {
@@ -1832,11 +1832,11 @@ export class ApiModelGenerator {
 			?.replaceAll(linkRegEx, (_match, _p1, _p2, _p3, _p4, _p5, _offset, _string, groups) => {
 				let target = groups.class ?? groups.url;
 				const external = this._jsDocJson?.externals.find((external) => groups.class && external.name === groups.class);
-				const match = /discord-api-types-(?<type>[^#]*?)(?:#|\/(?<kind>[^#/]*)\/)(?<name>[^/}]*)}$/.exec(
+				const match = /guilderia-api-types-(?<type>[^#]*?)(?:#|\/(?<kind>[^#/]*)\/)(?<name>[^/}]*)}$/.exec(
 					external?.see?.[0] ?? '',
 				);
 				if (match) {
-					target = `discord-api-types#(${match.groups!.name}:${
+					target = `guilderia-api-types#(${match.groups!.name}:${
 						/^v\d+$/.test(match.groups!.type!) ? match.groups!.kind : 'type'
 					})`;
 				}

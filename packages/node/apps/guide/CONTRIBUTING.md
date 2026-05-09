@@ -5,8 +5,8 @@
 Clone the code base into a local folder, `cd` into it, and install the dependencies:
 
 ```bash
-git clone https://github.com/discordjs/discord.js.git
-cd discord.js/apps/guide
+git clone https://github.com/guilderiajs/guilderia.js.git
+cd guilderia.js/apps/guide
 pnpm --filter guide install
 ```
 

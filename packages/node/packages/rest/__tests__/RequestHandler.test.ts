@@ -3,7 +3,7 @@
 import { MockAgent, setGlobalDispatcher } from 'undici';
 import type { Interceptable, MockInterceptor } from 'undici/types/mock-interceptor.js';
 import { beforeEach, afterEach, test, expect, vitest } from 'vitest';
-import { DiscordAPIError, HTTPError, RateLimitError, REST, RESTEvents } from '../src/index.js';
+import { GuilderiaAPIError, HTTPError, RateLimitError, REST, RESTEvents } from '../src/index.js';
 import { genPath } from './util.js';
 
 let mockAgent: MockAgent;
@@ -18,7 +18,7 @@ beforeEach(() => {
 	mockAgent.disableNetConnect();
 	setGlobalDispatcher(mockAgent);
 
-	mockPool = mockAgent.get('https://discord.com');
+	mockPool = mockAgent.get('https://guilderia.com');
 	api.setAgent(mockAgent);
 	invalidAuthApi.setAgent(mockAgent);
 	rateLimitErrorApi.setAgent(mockAgent);
@@ -28,7 +28,7 @@ afterEach(async () => {
 	await mockAgent.close();
 });
 
-// @discordjs/rest uses the `content-type` header to detect whether to parse
+// @guilderiajs/rest uses the `content-type` header to detect whether to parse
 // the response as JSON or as an ArrayBuffer.
 const responseOptions: MockInterceptor.MockResponseOptions = {
 	headers: {
@@ -509,13 +509,13 @@ test('Unauthorized', async () => {
 	// Ensure authless requests don't reset the token
 	const promiseWithoutTokenClear = invalidAuthApi.get('/unauthorized', { auth: false });
 	await expect(promiseWithoutTokenClear).rejects.toThrowError('401: Unauthorized');
-	await expect(promiseWithoutTokenClear).rejects.toBeInstanceOf(DiscordAPIError);
+	await expect(promiseWithoutTokenClear).rejects.toBeInstanceOf(GuilderiaAPIError);
 	expect(setTokenSpy).not.toHaveBeenCalled();
 
 	// Ensure authed requests do reset the token
 	const promise = invalidAuthApi.get('/unauthorized');
 	await expect(promise).rejects.toThrowError('401: Unauthorized');
-	await expect(promise).rejects.toBeInstanceOf(DiscordAPIError);
+	await expect(promise).rejects.toBeInstanceOf(GuilderiaAPIError);
 	expect(setTokenSpy).toHaveBeenCalledTimes(1);
 });
 
@@ -529,7 +529,7 @@ test('Bad Request', async () => {
 
 	const promise = api.get('/badRequest');
 	await expect(promise).rejects.toThrowError('Missing Permissions');
-	await expect(promise).rejects.toBeInstanceOf(DiscordAPIError);
+	await expect(promise).rejects.toBeInstanceOf(GuilderiaAPIError);
 });
 
 test('malformedRequest', async () => {
@@ -546,7 +546,7 @@ test('malformedRequest', async () => {
 			data: '',
 		}));
 
-	await expect(api.get('/malformedRequest')).rejects.toBeInstanceOf(DiscordAPIError);
+	await expect(api.get('/malformedRequest')).rejects.toBeInstanceOf(GuilderiaAPIError);
 });
 
 // TODO: flaky due to changes in undici

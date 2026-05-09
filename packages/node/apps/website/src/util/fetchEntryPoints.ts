@@ -15,7 +15,7 @@ export async function fetchEntryPoints(packageName: string, version: string): Pr
 			const fileContent = await readFile(
 				join(
 					process.cwd(),
-					`${hasEntryPoint ? `../../../discord-api-types` : `../../packages/${packageName}`}/docs/${packageName}/split/${version}.entrypoints.api.json`,
+					`${hasEntryPoint ? `../../../guilderia-api-types` : `../../packages/${packageName}`}/docs/${packageName}/split/${version}.entrypoints.api.json`,
 				),
 				'utf8',
 			);

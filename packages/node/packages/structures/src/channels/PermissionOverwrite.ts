@@ -1,11 +1,11 @@
-import type { APIOverwrite } from 'discord-api-types/v10';
+import type { APIOverwrite } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { PermissionsBitField } from '../bitfields/PermissionsBitField.js';
 import { kAllow, kData, kDeny } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents metadata of a thread channel on Discord.
+ * Represents metadata of a thread channel on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */

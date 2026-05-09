@@ -1,4 +1,4 @@
-import { type APIMediaGalleryItem, type APIMediaGalleryComponent, ComponentType } from 'discord-api-types/v10';
+import { type APIMediaGalleryItem, type APIMediaGalleryComponent, ComponentType } from 'guilderia-api-types/v10';
 import { normalizeArray, type RestOrArray } from '../../util/normalizeArray.js';
 import { resolveBuilder } from '../../util/resolveBuilder.js';
 import { validate } from '../../util/validation.js';
@@ -38,7 +38,7 @@ export class MediaGalleryBuilder extends ComponentBuilder<APIMediaGalleryCompone
 	 * 		{
 	 * 			description: "Some text here",
 	 * 			media: {
-	 * 				url: 'https://cdn.discordapp.com/embed/avatars/2.png',
+	 * 				url: 'https://cdn.guilderiaapp.com/embed/avatars/2.png',
 	 * 			},
 	 * 		},
 	 * 	],
@@ -52,7 +52,7 @@ export class MediaGalleryBuilder extends ComponentBuilder<APIMediaGalleryCompone
 	 * 		{
 	 * 			description: "alt text",
 	 * 			media: {
-	 * 				url: 'https://cdn.discordapp.com/embed/avatars/5.png',
+	 * 				url: 'https://cdn.guilderiaapp.com/embed/avatars/5.png',
 	 * 			},
 	 * 		},
 	 * 	],

@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, type APIApplicationCommandStringOption } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType, type APIApplicationCommandStringOption } from 'guilderia-api-types/v10';
 import { Mixin } from 'ts-mixer';
 import { stringOptionPredicate } from '../Assertions.js';
 import type { ApplicationCommandOptionWithAutocompleteData } from '../mixins/ApplicationCommandOptionWithAutocompleteMixin.js';

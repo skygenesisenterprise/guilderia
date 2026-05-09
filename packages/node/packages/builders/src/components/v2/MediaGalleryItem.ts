@@ -1,5 +1,5 @@
-import type { JSONEncodable } from '@discordjs/util';
-import type { APIMediaGalleryItem } from 'discord-api-types/v10';
+import type { JSONEncodable } from '@guilderiajs/util';
+import type { APIMediaGalleryItem } from 'guilderia-api-types/v10';
 import { validate } from '../../util/validation.js';
 import { mediaGalleryItemPredicate } from './Assertions.js';
 
@@ -16,7 +16,7 @@ export class MediaGalleryItemBuilder implements JSONEncodable<APIMediaGalleryIte
 	 * const item = new MediaGalleryItemBuilder({
 	 * 	description: "Some text here",
 	 * 	media: {
-	 * 		url: 'https://cdn.discordapp.com/embed/avatars/2.png',
+	 * 		url: 'https://cdn.guilderiaapp.com/embed/avatars/2.png',
 	 * 	},
 	 * });
 	 * ```
@@ -25,7 +25,7 @@ export class MediaGalleryItemBuilder implements JSONEncodable<APIMediaGalleryIte
 	 * ```ts
 	 * const item = new MediaGalleryItemBuilder({
 	 * 	media: {
-	 * 		url: 'https://cdn.discordapp.com/embed/avatars/5.png',
+	 * 		url: 'https://cdn.guilderiaapp.com/embed/avatars/5.png',
 	 * 	},
 	 * })
 	 * 	.setDescription("alt text");

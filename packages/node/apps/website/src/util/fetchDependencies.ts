@@ -19,8 +19,8 @@ export async function fetchDependencies({
 			const parsedDependencies = JSON.parse(fileContent);
 
 			return Object.entries<string>(parsedDependencies)
-				.filter(([key]) => key.startsWith('@discordjs/') && !key.includes('api-extractor'))
-				.map(([key, value]) => `${key.replace('@discordjs/', '').replaceAll('.', '-')}-${sanitizeVersion(value)}`);
+				.filter(([key]) => key.startsWith('@guilderiajs/') && !key.includes('api-extractor'))
+				.map(([key, value]) => `${key.replace('@guilderiajs/', '').replaceAll('.', '-')}-${sanitizeVersion(value)}`);
 		} catch {
 			return [];
 		}
@@ -34,8 +34,8 @@ export async function fetchDependencies({
 		const parsedDependencies = await fileContent.json();
 
 		return Object.entries<string>(parsedDependencies)
-			.filter(([key]) => key.startsWith('@discordjs/') && !key.includes('api-extractor'))
-			.map(([key, value]) => `${key.replace('@discordjs/', '').replaceAll('.', '-')}-${sanitizeVersion(value)}`);
+			.filter(([key]) => key.startsWith('@guilderiajs/') && !key.includes('api-extractor'))
+			.map(([key, value]) => `${key.replace('@guilderiajs/', '').replaceAll('.', '-')}-${sanitizeVersion(value)}`);
 	} catch {
 		return [];
 	}

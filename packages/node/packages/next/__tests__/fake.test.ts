@@ -1,5 +1,5 @@
 import { describe, test } from 'vitest';
 
-describe('@discordjs/next', () => {
+describe('@guilderiajs/next', () => {
 	test.todo('Should totally write tests');
 });

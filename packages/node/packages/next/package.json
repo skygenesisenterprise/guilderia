@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/next",
+	"name": "@guilderiajs/next",
 	"version": "0.1.0",
-	"description": "A powerful TypeScript library for interacting with the Discord API",
+	"description": "A powerful TypeScript library for interacting with the Guilderia API",
 	"scripts": {
 		"test": "vitest run --config ../../vitest.config.ts",
 		"build": "tsc --noEmit && tsup",
@@ -50,33 +50,33 @@
 		"Crawl <icrawltogo@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyradiscord@gmail.com>"
+		"Aura Román <kyraguilderia@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/next"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
-		"@discordjs/builders": "workspace:^",
-		"@discordjs/collection": "workspace:^",
-		"@discordjs/core": "workspace:^",
-		"@discordjs/formatters": "workspace:^",
-		"@discordjs/rest": "workspace:^",
-		"@discordjs/util": "workspace:^",
-		"@discordjs/ws": "workspace:^",
-		"discord-api-types": "^0.38.43"
+		"@guilderiajs/builders": "workspace:^",
+		"@guilderiajs/collection": "workspace:^",
+		"@guilderiajs/core": "workspace:^",
+		"@guilderiajs/formatters": "workspace:^",
+		"@guilderiajs/rest": "workspace:^",
+		"@guilderiajs/util": "workspace:^",
+		"@guilderiajs/ws": "workspace:^",
+		"guilderia-api-types": "^0.38.43"
 	},
 	"devDependencies": {
-		"@discordjs/api-extractor": "workspace:^",
-		"@discordjs/scripts": "workspace:^",
+		"@guilderiajs/api-extractor": "workspace:^",
+		"@guilderiajs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
 		"@types/node": "^22.19.15",
 		"@vitest/coverage-v8": "^4.1.2",

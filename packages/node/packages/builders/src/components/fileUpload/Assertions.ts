@@ -1,4 +1,4 @@
-import { ComponentType } from 'discord-api-types/v10';
+import { ComponentType } from 'guilderia-api-types/v10';
 import { z } from 'zod';
 import { customIdPredicate, idPredicate } from '../../Assertions';
 

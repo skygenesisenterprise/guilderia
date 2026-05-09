@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
 import { EventEmitter } from 'node:events';
-import type { VoiceSendPayload } from 'discord-api-types/voice/v8';
-import { VoiceOpcodes } from 'discord-api-types/voice/v8';
+import type { VoiceSendPayload } from 'guilderia-api-types/voice/v8';
+import { VoiceOpcodes } from 'guilderia-api-types/voice/v8';
 import WebSocket, { type MessageEvent } from 'ws';
 
 /**
@@ -39,7 +39,7 @@ export interface VoiceWebSocket extends EventEmitter {
 
 /**
  * An extension of the WebSocket class to provide helper functionality when interacting
- * with the Discord Voice gateway.
+ * with the Guilderia Voice gateway.
  */
 export class VoiceWebSocket extends EventEmitter {
 	/**
@@ -70,7 +70,7 @@ export class VoiceWebSocket extends EventEmitter {
 	public ping?: number;
 
 	/**
-	 * The last sequence number acknowledged from Discord. Will be `-1` if no sequence numbered messages have been received.
+	 * The last sequence number acknowledged from Guilderia. Will be `-1` if no sequence numbered messages have been received.
 	 */
 	public sequence = -1;
 

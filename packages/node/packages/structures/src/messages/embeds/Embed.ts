@@ -1,6 +1,6 @@
-import type { APIEmbed } from 'discord-api-types/v10';
+import type { APIEmbed } from 'guilderia-api-types/v10';
 import { Structure } from '../../Structure.js';
-import { dateToDiscordISOTimestamp } from '../../utils/optimization.js';
+import { dateToGuilderiaISOTimestamp } from '../../utils/optimization.js';
 import { kCreatedTimestamp, kData } from '../../utils/symbols.js';
 import type { Partialize } from '../../utils/types.js';
 
@@ -96,7 +96,7 @@ export class Embed<Omitted extends keyof APIEmbed | '' = ''> extends Structure<A
 	public override toJSON() {
 		const clone = super.toJSON();
 		if (this[kCreatedTimestamp]) {
-			clone.timestamp = dateToDiscordISOTimestamp(new Date(this[kCreatedTimestamp]));
+			clone.timestamp = dateToGuilderiaISOTimestamp(new Date(this[kCreatedTimestamp]));
 		}
 
 		return clone;

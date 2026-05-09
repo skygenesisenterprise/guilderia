@@ -3,7 +3,7 @@
 import { MockAgent, setGlobalDispatcher } from 'undici';
 import type { Interceptable, MockInterceptor } from 'undici/types/mock-interceptor';
 import { beforeEach, afterEach, test, expect } from 'vitest';
-import { DiscordAPIError, REST, BurstHandlerMajorIdKey } from '../src/index.js';
+import { GuilderiaAPIError, REST, BurstHandlerMajorIdKey } from '../src/index.js';
 import { BurstHandler } from '../src/lib/handlers/BurstHandler.js';
 import { genPath } from './util.js';
 
@@ -21,7 +21,7 @@ beforeEach(() => {
 	mockAgent.disableNetConnect();
 	setGlobalDispatcher(mockAgent);
 
-	mockPool = mockAgent.get('https://discord.com');
+	mockPool = mockAgent.get('https://guilderia.com');
 	api.setAgent(mockAgent);
 });
 
@@ -29,7 +29,7 @@ afterEach(async () => {
 	await mockAgent.close();
 });
 
-// @discordjs/rest uses the `content-type` header to detect whether to parse
+// @guilderiajs/rest uses the `content-type` header to detect whether to parse
 // the response as JSON or as an ArrayBuffer.
 const responseOptions: MockInterceptor.MockResponseOptions = {
 	headers: {
@@ -89,7 +89,7 @@ test('Handle 404', async () => {
 		body: { type: 4, data: { content: 'Malicious' } },
 	});
 	await expect(promise).rejects.toThrowError('Unknown interaction');
-	await expect(promise).rejects.toBeInstanceOf(DiscordAPIError);
+	await expect(promise).rejects.toBeInstanceOf(GuilderiaAPIError);
 });
 
 let unexpected429 = true;

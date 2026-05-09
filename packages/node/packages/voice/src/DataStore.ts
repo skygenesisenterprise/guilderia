@@ -1,4 +1,4 @@
-import { GatewayOpcodes } from 'discord-api-types/v10';
+import { GatewayOpcodes } from 'guilderia-api-types/v10';
 import type { VoiceConnection } from './VoiceConnection';
 import type { AudioPlayer } from './audio/index';
 

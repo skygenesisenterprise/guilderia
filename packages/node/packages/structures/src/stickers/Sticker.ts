@@ -1,12 +1,12 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APISticker } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APISticker } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import { isIdSet } from '../utils/type-guards.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents a sticker on Discord.
+ * Represents a sticker on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */
@@ -76,7 +76,7 @@ export class Sticker<Omitted extends keyof APISticker | '' = ''> extends Structu
 	 * The timestamp the sticker was created at
 	 */
 	public get createdTimestamp() {
-		return isIdSet(this.id) ? DiscordSnowflake.timestampFrom(this.id) : null;
+		return isIdSet(this.id) ? GuilderiaSnowflake.timestampFrom(this.id) : null;
 	}
 
 	/**

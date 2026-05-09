@@ -25,7 +25,7 @@ The [command handler](./handling-commands), dynamically reads the command files 
 
 ### Command Deployment
 
-The command deployment script to register your slash commands with Discord.
+The command deployment script to register your slash commands with Guilderia.
 
 </Step>
 </Steps>
@@ -48,8 +48,8 @@ Create a `deploy-commands.js` file in your project directory. This file will be 
 
 Add two more properties to your `config.json` file, which we'll need in the deployment script:
 
-- `clientId`: Your application's client id ([Discord Developer Portal](https://discord.com/developers/applications) > "General Information" > application id)
-- `guildId`: Your development server's id ([Enable developer mode](https://support.discord.com/hc/articles/206346498) > Right-click the server title > "Copy ID")
+- `clientId`: Your application's client id ([Guilderia Developer Portal](https://guilderia.com/developers/applications) > "General Information" > application id)
+- `guildId`: Your development server's id ([Enable developer mode](https://support.guilderia.com/hc/articles/206346498) > Right-click the server title > "Copy ID")
 
 ```json title="config.json"
 {
@@ -63,7 +63,7 @@ Add two more properties to your `config.json` file, which we'll need in the depl
 With these defined, you can use the deployment script below:
 
 ```js title="deploy-commands.js" lineNumbers
-const { REST, Routes } = require('discord.js');
+const { REST, Routes } = require('guilderia.js');
 const { clientId, guildId, token } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -109,7 +109,7 @@ const rest = new REST().setToken(token);
 })();
 ```
 
-Once you fill in these values, run `node deploy-commands.js` in your project directory to register your commands to the guild specified. If you see the success message, check for the commands in the server by typing `/`! If all goes well, you should be able to run them and see your bot's response in Discord!
+Once you fill in these values, run `node deploy-commands.js` in your project directory to register your commands to the guild specified. If you see the success message, check for the commands in the server by typing `/`! If all goes well, you should be able to run them and see your bot's response in Guilderia!
 
 ### Global commands
 
@@ -126,7 +126,7 @@ await rest.put(Routes.applicationCommands(clientId), { body: commands });
 <Callout>
     Guild-based deployment of commands is best suited for development and testing in your own personal server. Once you're satisfied that it's ready, deploy the command globally to publish it to all guilds that your bot is in.
 
-    You may wish to have a separate application and token in the Discord Dev Portal for your dev application, to avoid duplication between your guild-based commands and the global deployment.
+    You may wish to have a separate application and token in the Guilderia Dev Portal for your dev application, to avoid duplication between your guild-based commands and the global deployment.
 
 </Callout>
 

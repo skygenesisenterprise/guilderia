@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { makeURLSearchParams, type RequestData, type REST } from '@discordjs/rest';
+import { makeURLSearchParams, type RequestData, type REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPICurrentUserApplicationRoleConnectionResult,
@@ -18,7 +18,7 @@ import {
 	type RESTPutAPICurrentUserApplicationRoleConnectionJSONBody,
 	type RESTPutAPICurrentUserApplicationRoleConnectionResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class UsersAPI {
 	public constructor(private readonly rest: REST) {}
@@ -26,7 +26,7 @@ export class UsersAPI {
 	/**
 	 * Fetches a user by their id
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#get-user}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#get-user}
 	 * @param userId - The id of the user to fetch
 	 * @param options - The options for fetching the user
 	 */
@@ -37,7 +37,7 @@ export class UsersAPI {
 	/**
 	 * Returns the user object of the requester's account
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#get-current-user}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#get-current-user}
 	 * @param options - The options for fetching the current user
 	 */
 	public async getCurrent({ auth, signal }: Pick<RequestData, 'auth' | 'signal'> = {}) {
@@ -47,7 +47,7 @@ export class UsersAPI {
 	/**
 	 * Returns a list of partial guild objects the current user is a member of
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#get-current-user-guilds}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#get-current-user-guilds}
 	 * @param query - The query options for fetching the current user's guilds
 	 * @param options - The options for fetching the guilds
 	 */
@@ -65,7 +65,7 @@ export class UsersAPI {
 	/**
 	 * Leaves the guild with the given id
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#leave-guild}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#leave-guild}
 	 * @param guildId - The id of the guild
 	 * @param options - The options for leaving the guild
 	 */
@@ -76,7 +76,7 @@ export class UsersAPI {
 	/**
 	 * Edits the current user
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#modify-current-user}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#modify-current-user}
 	 * @param body - The new data for the current user
 	 * @param options - The options for editing the user
 	 */
@@ -90,7 +90,7 @@ export class UsersAPI {
 	/**
 	 * Fetches the guild member for the current user
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#get-current-user-guild-member}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#get-current-user-guild-member}
 	 * @param guildId - The id of the guild
 	 * @param options - The options for fetching the guild member
 	 */
@@ -104,7 +104,7 @@ export class UsersAPI {
 	/**
 	 * Edits the guild member for the current user
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/guild#modify-current-member}
+	 * @see {@link https://guilderia.com/developers/docs/resources/guild#modify-current-member}
 	 * @param guildId - The id of the guild
 	 * @param body - The new data for the guild member
 	 * @param options - The options for editing the guild member
@@ -125,7 +125,7 @@ export class UsersAPI {
 	/**
 	 * Opens a new DM channel with a user
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#create-dm}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#create-dm}
 	 * @param userId - The id of the user to open a DM channel with
 	 * @param options - The options for opening the DM
 	 */
@@ -140,7 +140,7 @@ export class UsersAPI {
 	/**
 	 * Gets the current user's connections
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#get-user-connections}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#get-user-connections}
 	 * @param options - The options for fetching the user's connections
 	 */
 	public async getConnections({ auth, signal }: Pick<RequestData, 'auth' | 'signal'> = {}) {
@@ -150,7 +150,7 @@ export class UsersAPI {
 	/**
 	 * Gets the current user's active application role connection
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#get-user-application-role-connection}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#get-user-application-role-connection}
 	 * @param applicationId - The id of the application
 	 * @param options - The options for fetching the role connections
 	 */
@@ -167,7 +167,7 @@ export class UsersAPI {
 	/**
 	 * Updates the current user's application role connection
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/user#update-user-application-role-connection}
+	 * @see {@link https://guilderia.com/developers/docs/resources/user#update-user-application-role-connection}
 	 * @param applicationId - The id of the application
 	 * @param body - The data for updating the application role connection
 	 * @param options - The options for updating the application role connection

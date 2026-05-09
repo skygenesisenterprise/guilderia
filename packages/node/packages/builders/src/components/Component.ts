@@ -1,5 +1,5 @@
-import type { JSONEncodable } from '@discordjs/util';
-import type { APIBaseComponent, ComponentType } from 'discord-api-types/v10';
+import type { JSONEncodable } from '@guilderiajs/util';
+import type { APIBaseComponent, ComponentType } from 'guilderia-api-types/v10';
 
 export interface ComponentBuilderBaseData {
 	id?: number | undefined;

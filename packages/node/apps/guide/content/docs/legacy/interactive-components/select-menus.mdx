@@ -21,7 +21,7 @@ The "standard" and most customizable type of select menu is the string select me
 If you're a Pokémon fan, you've probably made a selection pretty similar to this example at some point in your life!
 
 ```js
-const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder } = require('discord.js');
+const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder } = require('guilderia.js');
 
 module.exports = {
 	// data: new SlashCommandBuilder()...
@@ -66,7 +66,7 @@ const {
 	StringSelectMenuBuilder,
 	StringSelectMenuOptionBuilder,
 	SlashCommandBuilder,
-} = require('discord.js');
+} = require('guilderia.js');
 // [!code focus:33]
 module.exports = {
 	// data: new SlashCommandBuilder()...
@@ -133,7 +133,7 @@ const select = new StringSelectMenuBuilder().setCustomId('select').addOptions(
 
 ## Auto-populating select menus
 
-Although the String select menu with its user-defined options is the most customizable, there are four other types of select menu that auto-populate with their corresponding Discord entities, much like slash command options. These are:
+Although the String select menu with its user-defined options is the most customizable, there are four other types of select menu that auto-populate with their corresponding Guilderia entities, much like slash command options. These are:
 
 - `UserSelectMenuBuilder`
 - `RoleSelectMenuBuilder`

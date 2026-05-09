@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/rest",
+	"name": "@guilderiajs/rest",
 	"version": "2.5.0",
-	"description": "The REST API for discord.js",
+	"description": "The REST API for guilderia.js",
 	"scripts": {
 		"test": "vitest run",
 		"build": "tsc --noEmit && tsup",
@@ -62,41 +62,41 @@
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyradiscord@gmail.com>"
+		"Aura Román <kyraguilderia@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"discord",
+		"guilderia",
 		"api",
 		"rest",
-		"discordapp",
-		"discordjs"
+		"guilderiaapp",
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/rest"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"homepage": "https://guilderia.js.org",
+	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
 	"dependencies": {
-		"@discordjs/collection": "workspace:^",
-		"@discordjs/util": "workspace:^",
+		"@guilderiajs/collection": "workspace:^",
+		"@guilderiajs/util": "workspace:^",
 		"@sapphire/async-queue": "^1.5.5",
 		"@sapphire/snowflake": "^3.5.5",
 		"@vladfrangu/async_event_emitter": "^2.4.7",
-		"discord-api-types": "^0.38.43",
+		"guilderia-api-types": "^0.38.43",
 		"magic-bytes.js": "^1.13.0",
 		"tslib": "^2.8.1",
 		"undici": "7.24.6",
 		"uuid": "^13.0.0"
 	},
 	"devDependencies": {
-		"@discordjs/api-extractor": "workspace:^",
-		"@discordjs/scripts": "workspace:^",
+		"@guilderiajs/api-extractor": "workspace:^",
+		"@guilderiajs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
 		"@types/node": "^22.19.15",
 		"@vitest/coverage-v8": "^4.1.2",

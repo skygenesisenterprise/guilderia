@@ -10,7 +10,7 @@ const makeRequestMock = vitest.fn(makeRequest);
 
 const api = new REST({ makeRequest: makeRequestMock }).setToken('A-Very-Fake-Token');
 
-// @discordjs/rest uses the `content-type` header to detect whether to parse
+// @guilderiajs/rest uses the `content-type` header to detect whether to parse
 // the response as JSON or as an ArrayBuffer.
 const responseOptions: MockInterceptor.MockResponseOptions = {
 	headers: {
@@ -23,10 +23,10 @@ let mockPool: Interceptable;
 
 beforeEach(() => {
 	mockAgent = new MockAgent();
-	mockAgent.disableNetConnect(); // prevent actual requests to Discord
+	mockAgent.disableNetConnect(); // prevent actual requests to Guilderia
 	setGlobalDispatcher(mockAgent); // enabled the mock client to intercept requests
 
-	mockPool = mockAgent.get('https://discord.com');
+	mockPool = mockAgent.get('https://guilderia.com');
 	api.setAgent(mockAgent);
 });
 

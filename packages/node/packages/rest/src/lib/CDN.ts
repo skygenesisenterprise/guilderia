@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/check-param-names */
-import { CDNRoutes } from 'discord-api-types/v10';
+import { CDNRoutes } from 'guilderia-api-types/v10';
 import {
 	ALLOWED_EXTENSIONS,
 	ALLOWED_SIZES,
@@ -118,7 +118,7 @@ export class CDN {
 	 * Generates an app asset URL for a client's asset.
 	 *
 	 * @param clientId - The client id that has the asset
-	 * @param assetHash - The hash provided by Discord for this asset
+	 * @param assetHash - The hash provided by Guilderia for this asset
 	 * @param options - Optional options for the asset
 	 */
 	public appAsset(clientId: string, assetHash: string, options?: Readonly<BaseImageURLOptions>): string {
@@ -129,7 +129,7 @@ export class CDN {
 	 * Generates an app icon URL for a client's icon.
 	 *
 	 * @param clientId - The client id that has the icon
-	 * @param iconHash - The hash provided by Discord for this icon
+	 * @param iconHash - The hash provided by Guilderia for this icon
 	 * @param options - Optional options for the icon
 	 */
 	public appIcon(clientId: string, iconHash: string, options?: Readonly<BaseImageURLOptions>): string {
@@ -140,7 +140,7 @@ export class CDN {
 	 * Generates an avatar URL, e.g. for a user or a webhook.
 	 *
 	 * @param id - The id that has the icon
-	 * @param avatarHash - The hash provided by Discord for this avatar
+	 * @param avatarHash - The hash provided by Guilderia for this avatar
 	 * @param options - Optional options for the avatar
 	 */
 	public avatar(id: string, avatarHash: string, options?: Readonly<ImageURLOptions>): string {
@@ -160,7 +160,7 @@ export class CDN {
 	 * Generates a banner URL, e.g. for a user or a guild.
 	 *
 	 * @param id - The id that has the banner splash
-	 * @param bannerHash - The hash provided by Discord for this banner
+	 * @param bannerHash - The hash provided by Guilderia for this banner
 	 * @param options - Optional options for the banner
 	 */
 	public banner(id: string, bannerHash: string, options?: Readonly<ImageURLOptions>): string {
@@ -171,7 +171,7 @@ export class CDN {
 	 * Generates an icon URL for a channel, e.g. a group DM.
 	 *
 	 * @param channelId - The channel id that has the icon
-	 * @param iconHash - The hash provided by Discord for this channel
+	 * @param iconHash - The hash provided by Guilderia for this channel
 	 * @param options - Optional options for the icon
 	 */
 	public channelIcon(channelId: string, iconHash: string, options?: Readonly<BaseImageURLOptions>): string {
@@ -194,7 +194,7 @@ export class CDN {
 	 * Generates a discovery splash URL for a guild's discovery splash.
 	 *
 	 * @param guildId - The guild id that has the discovery splash
-	 * @param splashHash - The hash provided by Discord for this splash
+	 * @param splashHash - The hash provided by Guilderia for this splash
 	 * @param options - Optional options for the splash
 	 */
 	public discoverySplash(guildId: string, splashHash: string, options?: Readonly<BaseImageURLOptions>): string {
@@ -216,7 +216,7 @@ export class CDN {
 	 *
 	 * @param guildId - The id of the guild
 	 * @param userId - The id of the user
-	 * @param avatarHash - The hash provided by Discord for this avatar
+	 * @param avatarHash - The hash provided by Guilderia for this avatar
 	 * @param options - Optional options for the avatar
 	 */
 	public guildMemberAvatar(
@@ -233,7 +233,7 @@ export class CDN {
 	 *
 	 * @param guildId - The id of the guild
 	 * @param userId - The id of the user
-	 * @param bannerHash - The hash provided by Discord for this banner
+	 * @param bannerHash - The hash provided by Guilderia for this banner
 	 * @param options - Optional options for the banner
 	 */
 	public guildMemberBanner(
@@ -249,7 +249,7 @@ export class CDN {
 	 * Generates an icon URL, e.g. for a guild.
 	 *
 	 * @param id - The id that has the icon splash
-	 * @param iconHash - The hash provided by Discord for this icon
+	 * @param iconHash - The hash provided by Guilderia for this icon
 	 * @param options - Optional options for the icon
 	 */
 	public icon(id: string, iconHash: string, options?: Readonly<ImageURLOptions>): string {
@@ -260,7 +260,7 @@ export class CDN {
 	 * Generates a URL for the icon of a role
 	 *
 	 * @param roleId - The id of the role that has the icon
-	 * @param roleIconHash - The hash provided by Discord for this role icon
+	 * @param roleIconHash - The hash provided by Guilderia for this role icon
 	 * @param options - Optional options for the role icon
 	 */
 	public roleIcon(roleId: string, roleIconHash: string, options?: Readonly<BaseImageURLOptions>): string {
@@ -271,7 +271,7 @@ export class CDN {
 	 * Generates a guild invite splash URL for a guild's invite splash.
 	 *
 	 * @param guildId - The guild id that has the invite splash
-	 * @param splashHash - The hash provided by Discord for this splash
+	 * @param splashHash - The hash provided by Guilderia for this splash
 	 * @param options - Optional options for the splash
 	 */
 	public splash(guildId: string, splashHash: string, options?: Readonly<BaseImageURLOptions>): string {
@@ -309,7 +309,7 @@ export class CDN {
 	 * Generates a team icon URL for a team's icon.
 	 *
 	 * @param teamId - The team id that has the icon
-	 * @param iconHash - The hash provided by Discord for this icon
+	 * @param iconHash - The hash provided by Guilderia for this icon
 	 * @param options - Optional options for the icon
 	 */
 	public teamIcon(teamId: string, iconHash: string, options?: Readonly<BaseImageURLOptions>): string {
@@ -320,7 +320,7 @@ export class CDN {
 	 * Generates a cover image for a guild scheduled event.
 	 *
 	 * @param scheduledEventId - The scheduled event id
-	 * @param coverHash - The hash provided by discord for this cover image
+	 * @param coverHash - The hash provided by guilderia for this cover image
 	 * @param options - Optional options for the cover image
 	 */
 	public guildScheduledEventCover(
@@ -355,7 +355,7 @@ export class CDN {
 	 * Constructs the URL for the resource, checking whether or not `hash` starts with `a_` if `dynamic` is set to `true`.
 	 *
 	 * @param route - The base cdn route
-	 * @param hash - The hash provided by Discord for this icon
+	 * @param hash - The hash provided by Guilderia for this icon
 	 * @param options - Optional options for the link
 	 */
 	private dynamicMakeURL(

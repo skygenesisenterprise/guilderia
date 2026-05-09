@@ -1,4 +1,4 @@
-import { SKUFlags } from 'discord-api-types/v10';
+import { SKUFlags } from 'guilderia-api-types/v10';
 import { BitField } from './BitField.js';
 
 /**

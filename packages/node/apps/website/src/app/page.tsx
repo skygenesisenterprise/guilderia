@@ -14,7 +14,7 @@ export default async function Page() {
 				<h1 className="text-base-heading-xl font-black sm:text-7xl sm:leading-tight">
 					The{' '}
 					<span className="bg-base-blurple-400 text-base-neutral-0 relative rounded-sm px-3 py-2">most popular</span>{' '}
-					way to build Discord bots.
+					way to build Guilderia bots.
 				</h1>
 				<p className="text-base-neutral-600 dark:text-base-neutral-300 md:my-6">{DESCRIPTION}</p>
 
@@ -24,7 +24,7 @@ export default async function Page() {
 					</Link>
 					<a
 						className={buttonStyles({ variant: 'discreet' })}
-						href="https://discordjs.guide"
+						href="https://guilderiajs.guide"
 						rel="noopener noreferrer"
 						target="_blank"
 					>
@@ -32,7 +32,7 @@ export default async function Page() {
 					</a>
 					<a
 						className={buttonStyles({ variant: 'discreet' })}
-						href="https://github.com/discordjs/discord.js"
+						href="https://github.com/guilderiajs/guilderia.js"
 						rel="external noopener noreferrer"
 						target="_blank"
 					>
@@ -45,7 +45,7 @@ export default async function Page() {
 
 			<div className="flex flex-col gap-4 md:flex-row">
 				<a
-					href="https://vercel.com/?utm_source=discordjs&utm_campaign=oss"
+					href="https://vercel.com/?utm_source=guilderiajs&utm_campaign=oss"
 					rel="external noopener noreferrer"
 					target="_blank"
 					title="Vercel"

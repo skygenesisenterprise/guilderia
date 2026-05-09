@@ -1,5 +1,5 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APIChannel, APIPartialChannel, ChannelType, ChannelFlags } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APIChannel, APIPartialChannel, ChannelType, ChannelFlags } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { ChannelFlagsBitField } from '../bitfields/ChannelFlagsBitField.js';
 import { kData } from '../utils/symbols.js';
@@ -24,7 +24,7 @@ export type ChannelDataType<Type extends ChannelType | 'unknown'> = Type extends
 	: APIPartialChannel;
 
 /**
- * Represents any channel on Discord.
+ * Represents any channel on Guilderia.
  *
  * @typeParam Type - Specify the type of the channel being constructed for more accurate data types
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
@@ -91,7 +91,7 @@ export class Channel<
 	 * The timestamp the channel was created at
 	 */
 	public get createdTimestamp() {
-		return isIdSet(this.id) ? DiscordSnowflake.timestampFrom(this.id) : null;
+		return isIdSet(this.id) ? GuilderiaSnowflake.timestampFrom(this.id) : null;
 	}
 
 	/**

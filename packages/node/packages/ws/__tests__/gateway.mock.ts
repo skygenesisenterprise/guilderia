@@ -1,4 +1,4 @@
-import type { RESTGetAPIGatewayBotResult } from 'discord-api-types/v10';
+import type { RESTGetAPIGatewayBotResult } from 'guilderia-api-types/v10';
 
 export const mockGatewayInformation: RESTGetAPIGatewayBotResult = {
 	shards: 1,
@@ -8,5 +8,5 @@ export const mockGatewayInformation: RESTGetAPIGatewayBotResult = {
 		remaining: 3,
 		total: 3,
 	},
-	url: 'wss://gateway.discord.gg',
+	url: 'wss://gateway.guilderia.gg',
 };

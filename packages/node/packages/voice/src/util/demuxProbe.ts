@@ -6,12 +6,12 @@ import { StreamType } from '..';
 import { noop } from './util';
 
 /**
- * Takes an Opus Head, and verifies whether the associated Opus audio is suitable to play in a Discord voice channel.
+ * Takes an Opus Head, and verifies whether the associated Opus audio is suitable to play in a Guilderia voice channel.
  *
  * @param opusHead - The Opus Head to validate
- * @returns `true` if suitable to play in a Discord voice channel, otherwise `false`
+ * @returns `true` if suitable to play in a Guilderia voice channel, otherwise `false`
  */
-export function validateDiscordOpusHead(opusHead: Buffer): boolean {
+export function validateGuilderiaOpusHead(opusHead: Buffer): boolean {
 	const channels = opusHead.readUInt8(9);
 	const sampleRate = opusHead.readUInt32LE(12);
 	return channels === 2 && sampleRate === 48_000;
@@ -44,7 +44,7 @@ export interface ProbeInfo {
 export async function demuxProbe(
 	stream: Readable,
 	probeSize = 1_024,
-	validator = validateDiscordOpusHead,
+	validator = validateGuilderiaOpusHead,
 ): Promise<ProbeInfo> {
 	return new Promise((resolve, reject) => {
 		// Preconditions

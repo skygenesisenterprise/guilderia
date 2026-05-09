@@ -1,10 +1,10 @@
-import type { APITeamMember } from 'discord-api-types/v10';
+import type { APITeamMember } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents any team member on Discord.
+ * Represents any team member on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructure `User` which needs to be instantiated and stored by an extending class using it
@@ -25,7 +25,7 @@ export class TeamMember<Omitted extends keyof APITeamMember | '' = ''> extends S
 	/**
 	 * User's membership state on the team
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/teams#data-models-membership-state-enum}
+	 * @see {@link https://guilderia.com/developers/docs/topics/teams#data-models-membership-state-enum}
 	 */
 	public get membershipState() {
 		return this[kData].membership_state;
@@ -41,7 +41,7 @@ export class TeamMember<Omitted extends keyof APITeamMember | '' = ''> extends S
 	/**
 	 * Role of the team member
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/teams#team-member-roles-team-member-role-types}
+	 * @see {@link https://guilderia.com/developers/docs/topics/teams#team-member-roles-team-member-role-types}
 	 */
 	public get role() {
 		return this[kData].role;

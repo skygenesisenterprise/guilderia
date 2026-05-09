@@ -1,4 +1,4 @@
-import type { ChannelType } from 'discord-api-types/v10';
+import type { ChannelType } from 'guilderia-api-types/v10';
 import { kData } from '../../utils/symbols.js';
 import type { Channel } from '../Channel.js';
 import { TextChannelMixin } from './TextChannelMixin.js';
@@ -29,7 +29,7 @@ export class VoiceChannelMixin<
 	}
 
 	/**
-	 * The camera video quality mode of the voice channel, {@link discord-api-types/v10#(VideoQualityMode:enum) | Auto} when not present.
+	 * The camera video quality mode of the voice channel, {@link guilderia-api-types/v10#(VideoQualityMode:enum) | Auto} when not present.
 	 */
 	public get videoQualityMode() {
 		return this[kData].video_quality_mode!;

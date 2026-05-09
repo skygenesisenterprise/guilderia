@@ -1,0 +1,16 @@
+{
+  "extends": "../../api-extractor.json",
+  "mainEntryPointFilePath": "<projectFolder>/typings/index.d.ts",
+  "bundledPackages": [
+    "guilderia-api-types",
+    "@guilderiajs/builders",
+    "@guilderiajs/collection",
+    "@guilderiajs/formatters",
+    "@guilderiajs/rest",
+    "@guilderiajs/util",
+    "@guilderiajs/ws"
+  ],
+  "docModel": {
+    "projectFolderUrl": "https://github.com/guilderiajs/guilderia.js/tree/main/packages/guilderia.js"
+  }
+}

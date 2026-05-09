@@ -1,10 +1,10 @@
-import type { APIAutoModerationRule } from 'discord-api-types/v10';
+import type { APIAutoModerationRule } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents an auto moderation rule on Discord.
+ * Represents an auto moderation rule on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructure `TriggerMetadata` which needs to be instantiated and stored by an extending class using it
@@ -57,7 +57,7 @@ export class AutoModerationRule<Omitted extends keyof APIAutoModerationRule | ''
 	/**
 	 * The rule event type
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-event-types}
+	 * @see {@link https://guilderia.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-event-types}
 	 */
 	public get eventType() {
 		return this[kData].event_type;
@@ -66,7 +66,7 @@ export class AutoModerationRule<Omitted extends keyof APIAutoModerationRule | ''
 	/**
 	 * The rule trigger type
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-trigger-types}
+	 * @see {@link https://guilderia.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-trigger-types}
 	 */
 	public get triggerType() {
 		return this[kData].trigger_type;

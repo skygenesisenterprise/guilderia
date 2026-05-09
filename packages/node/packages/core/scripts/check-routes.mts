@@ -1,4 +1,4 @@
-import { Routes } from 'discord-api-types/v10';
+import { Routes } from 'guilderia-api-types/v10';
 import { glob, readFile } from 'node:fs/promises';
 
 const usedRoutes = new Set<string>();

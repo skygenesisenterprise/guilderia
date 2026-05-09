@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import type { Buffer } from 'node:buffer';
 import { EventEmitter } from 'node:events';
-import type { GatewayVoiceServerUpdateDispatchData, GatewayVoiceStateUpdateDispatchData } from 'discord-api-types/v10';
+import type { GatewayVoiceServerUpdateDispatchData, GatewayVoiceStateUpdateDispatchData } from 'guilderia-api-types/v10';
 import type { JoinConfig } from './DataStore';
 import {
 	getVoiceConnection,
@@ -14,7 +14,7 @@ import type { PlayerSubscription } from './audio/PlayerSubscription';
 import type { VoiceWebSocket, VoiceUDPSocket } from './networking';
 import { Networking, NetworkingStatusCode, type NetworkingState } from './networking/Networking';
 import { VoiceReceiver } from './receive/index';
-import type { DiscordGatewayAdapterImplementerMethods } from './util/adapter';
+import type { GuilderiaGatewayAdapterImplementerMethods } from './util/adapter';
 import { noop } from './util/util';
 import type { CreateVoiceConnectionOptions } from './index';
 
@@ -43,17 +43,17 @@ export enum VoiceConnectionStatus {
 	Ready = 'ready',
 
 	/**
-	 * Sending a packet to the main Discord gateway to indicate we want to change our voice state.
+	 * Sending a packet to the main Guilderia gateway to indicate we want to change our voice state.
 	 */
 	Signalling = 'signalling',
 }
 
 /**
  * The state that a VoiceConnection will be in when it is waiting to receive a VOICE_SERVER_UPDATE and
- * VOICE_STATE_UPDATE packet from Discord, provided by the adapter.
+ * VOICE_STATE_UPDATE packet from Guilderia, provided by the adapter.
  */
 export interface VoiceConnectionSignallingState {
-	adapter: DiscordGatewayAdapterImplementerMethods;
+	adapter: GuilderiaGatewayAdapterImplementerMethods;
 	status: VoiceConnectionStatus.Signalling;
 	subscription?: PlayerSubscription | undefined;
 }
@@ -84,17 +84,17 @@ export enum VoiceConnectionDisconnectReason {
 }
 
 /**
- * The state that a VoiceConnection will be in when it is not connected to a Discord voice server nor is
+ * The state that a VoiceConnection will be in when it is not connected to a Guilderia voice server nor is
  * it attempting to connect. You can manually attempt to reconnect using VoiceConnection#reconnect.
  */
 export interface VoiceConnectionDisconnectedBaseState {
-	adapter: DiscordGatewayAdapterImplementerMethods;
+	adapter: GuilderiaGatewayAdapterImplementerMethods;
 	status: VoiceConnectionStatus.Disconnected;
 	subscription?: PlayerSubscription | undefined;
 }
 
 /**
- * The state that a VoiceConnection will be in when it is not connected to a Discord voice server nor is
+ * The state that a VoiceConnection will be in when it is not connected to a Guilderia voice server nor is
  * it attempting to connect. You can manually attempt to reconnect using VoiceConnection#reconnect.
  */
 export interface VoiceConnectionDisconnectedOtherState extends VoiceConnectionDisconnectedBaseState {
@@ -107,7 +107,7 @@ export interface VoiceConnectionDisconnectedOtherState extends VoiceConnectionDi
  */
 export interface VoiceConnectionDisconnectedWebSocketState extends VoiceConnectionDisconnectedBaseState {
 	/**
-	 * The close code of the WebSocket connection to the Discord voice server.
+	 * The close code of the WebSocket connection to the Guilderia voice server.
 	 */
 	closeCode: number;
 
@@ -115,7 +115,7 @@ export interface VoiceConnectionDisconnectedWebSocketState extends VoiceConnecti
 }
 
 /**
- * The states that a VoiceConnection can be in when it is not connected to a Discord voice server nor is
+ * The states that a VoiceConnection can be in when it is not connected to a Guilderia voice server nor is
  * it attempting to connect. You can manually attempt to connect using VoiceConnection#reconnect.
  */
 export type VoiceConnectionDisconnectedState =
@@ -123,22 +123,22 @@ export type VoiceConnectionDisconnectedState =
 	| VoiceConnectionDisconnectedWebSocketState;
 
 /**
- * The state that a VoiceConnection will be in when it is establishing a connection to a Discord
+ * The state that a VoiceConnection will be in when it is establishing a connection to a Guilderia
  * voice server.
  */
 export interface VoiceConnectionConnectingState {
-	adapter: DiscordGatewayAdapterImplementerMethods;
+	adapter: GuilderiaGatewayAdapterImplementerMethods;
 	networking: Networking;
 	status: VoiceConnectionStatus.Connecting;
 	subscription?: PlayerSubscription | undefined;
 }
 
 /**
- * The state that a VoiceConnection will be in when it has an active connection to a Discord
+ * The state that a VoiceConnection will be in when it has an active connection to a Guilderia
  * voice server.
  */
 export interface VoiceConnectionReadyState {
-	adapter: DiscordGatewayAdapterImplementerMethods;
+	adapter: GuilderiaGatewayAdapterImplementerMethods;
 	networking: Networking;
 	status: VoiceConnectionStatus.Ready;
 	subscription?: PlayerSubscription | undefined;
@@ -223,7 +223,7 @@ export class VoiceConnection extends EventEmitter {
 
 	/**
 	 * The two packets needed to successfully establish a voice connection. They are received
-	 * from the main Discord gateway after signalling to change the voice state.
+	 * from the main Guilderia gateway after signalling to change the voice state.
 	 */
 	private readonly packets: {
 		server: GatewayVoiceServerUpdateDispatchData | undefined;
@@ -455,7 +455,7 @@ export class VoiceConnection extends EventEmitter {
 	 *
 	 * @remarks
 	 * If the close code was anything other than 4014, it is likely that the closing was not intended, and so the
-	 * VoiceConnection will signal to Discord that it would like to rejoin the channel. This automatically attempts
+	 * VoiceConnection will signal to Guilderia that it would like to rejoin the channel. This automatically attempts
 	 * to re-establish the connection. This would be seen as a transition from the Ready state to the Signalling state.
 	 * @param code - The close code
 	 */

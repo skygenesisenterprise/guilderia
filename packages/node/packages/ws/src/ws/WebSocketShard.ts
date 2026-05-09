@@ -2,8 +2,8 @@ import { Buffer } from 'node:buffer';
 import { once } from 'node:events';
 import { setTimeout as sleep } from 'node:timers/promises';
 import type * as nativeZlib from 'node:zlib';
-import { Collection } from '@discordjs/collection';
-import { lazy, shouldUseGlobalFetchAndWebSocket } from '@discordjs/util';
+import { Collection } from '@guilderiajs/collection';
+import { lazy, shouldUseGlobalFetchAndWebSocket } from '@guilderiajs/util';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { AsyncEventEmitter } from '@vladfrangu/async_event_emitter';
 import {
@@ -15,7 +15,7 @@ import {
 	type GatewayReadyDispatchData,
 	type GatewayReceivePayload,
 	type GatewaySendPayload,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { WebSocket, type Data } from 'ws';
 import type * as ZlibSync from 'zlib-sync';
 import type { IContextFetchingStrategy } from '../strategies/context/IContextFetchingStrategy';
@@ -796,7 +796,7 @@ export class WebSocketShard extends AsyncEventEmitter<WebSocketShardEventsMap> {
 
 			case GatewayOpcodes.Reconnect: {
 				await this.destroy({
-					reason: 'Told to reconnect by Discord',
+					reason: 'Told to reconnect by Guilderia',
 					recover: WebSocketShardDestroyRecovery.Resume,
 				});
 				break;
@@ -868,7 +868,7 @@ export class WebSocketShard extends AsyncEventEmitter<WebSocketShardEventsMap> {
 			case CloseCodes.Normal: {
 				return this.destroy({
 					code,
-					reason: 'Got disconnected by Discord',
+					reason: 'Got disconnected by Guilderia',
 					recover: WebSocketShardDestroyRecovery.Reconnect,
 				});
 			}
@@ -883,12 +883,12 @@ export class WebSocketShard extends AsyncEventEmitter<WebSocketShardEventsMap> {
 			}
 
 			case GatewayCloseCodes.UnknownOpcode: {
-				this.debug(['An invalid opcode was sent to Discord.']);
+				this.debug(['An invalid opcode was sent to Guilderia.']);
 				return this.destroy({ code, recover: WebSocketShardDestroyRecovery.Resume });
 			}
 
 			case GatewayCloseCodes.DecodeError: {
-				this.debug(['An invalid payload was sent to Discord.']);
+				this.debug(['An invalid payload was sent to Guilderia.']);
 				return this.destroy({ code, recover: WebSocketShardDestroyRecovery.Resume });
 			}
 

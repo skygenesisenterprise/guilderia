@@ -1,7 +1,7 @@
 import type { Readable } from 'node:stream';
 import type { ReadableStream } from 'node:stream/web';
-import type { Collection } from '@discordjs/collection';
-import type { Awaitable, RawFile } from '@discordjs/util';
+import type { Collection } from '@guilderiajs/collection';
+import type { Awaitable, RawFile } from '@guilderiajs/util';
 import type { Agent, Dispatcher, RequestInit, BodyInit, Response } from 'undici';
 import type { IHandler } from '../interfaces/Handler.js';
 
@@ -28,7 +28,7 @@ export interface RESTOptions {
 	/**
 	 * The base api path, without version
 	 *
-	 * @defaultValue `'https://discord.com/api'`
+	 * @defaultValue `'https://guilderia.com/api'`
 	 */
 	api: string;
 	/**
@@ -41,11 +41,11 @@ export interface RESTOptions {
 	/**
 	 * The cdn path
 	 *
-	 * @defaultValue `'https://cdn.discordapp.com'`
+	 * @defaultValue `'https://cdn.guilderiaapp.com'`
 	 */
 	cdn: string;
 	/**
-	 * How many requests to allow sending per second (Infinity for unlimited, 50 for the standard global limit used by Discord)
+	 * How many requests to allow sending per second (Infinity for unlimited, 50 for the standard global limit used by Guilderia)
 	 *
 	 * @defaultValue `50`
 	 */
@@ -89,7 +89,7 @@ export interface RESTOptions {
 	/**
 	 * The media proxy path
 	 *
-	 * @defaultValue `'https://media.discordapp.net'`
+	 * @defaultValue `'https://media.guilderiaapp.net'`
 	 */
 	mediaProxy: string;
 	/**
@@ -278,7 +278,7 @@ export interface InvalidRequestWarningData {
 	remainingTime: number;
 }
 
-export type { RawFile } from '@discordjs/util';
+export type { RawFile } from '@guilderiajs/util';
 
 export interface AuthData {
 	/**

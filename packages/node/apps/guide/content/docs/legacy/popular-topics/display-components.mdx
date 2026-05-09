@@ -2,7 +2,7 @@
 title: Display Components
 ---
 
-While you might be familiar with [embeds](./embeds) in Discord, there are more ways to style and format your apps messages using **display components**, a comprehensive set of layout and content elements.
+While you might be familiar with [embeds](./embeds) in Guilderia, there are more ways to style and format your apps messages using **display components**, a comprehensive set of layout and content elements.
 
 To use the display components, you need to pass the `IsComponentsV2` message flag (in docs: `MessageFlags`) when sending a message. You only need to use this flag when sending a message using the display components system, not when deferring interaction responses.
 
@@ -20,7 +20,7 @@ To use the display components, you need to pass the `IsComponentsV2` message fla
 
 ## The component `id`
 
-All components can be passed an optional, unique, `id` field holding a 32-bit integer identifier to later identify them in interaction responses. Do not confuse this with the `custom_id` field for interactive components! You can find more information about this [in the discord api documentation](https://discord.com/developers/docs/components/reference#anatomy-of-a-component). Discord will automatically populate the `id` of components that don't have the `id` specified in the payload sequentially starting from `1`. The `id` value `0` is treated as empty. The order components are automatically filled in is an implementation detail and not officially document. If you want to work with the `id` (for example to find and replace the content of a specific component later on), you should explicitly specify it.
+All components can be passed an optional, unique, `id` field holding a 32-bit integer identifier to later identify them in interaction responses. Do not confuse this with the `custom_id` field for interactive components! You can find more information about this [in the guilderia api documentation](https://guilderia.com/developers/docs/components/reference#anatomy-of-a-component). Guilderia will automatically populate the `id` of components that don't have the `id` specified in the payload sequentially starting from `1`. The `id` value `0` is treated as empty. The order components are automatically filled in is an implementation detail and not officially document. If you want to work with the `id` (for example to find and replace the content of a specific component later on), you should explicitly specify it.
 
 In the following sections, we will explain all available display component types in detail and show you some examples on how you can use them.
 
@@ -39,7 +39,7 @@ Text Display components let you add markdown-formatted text to your message and 
 The example below shows how you can send a Text Display component in a channel.
 
 ```js
-const { TextDisplayBuilder, MessageFlags } = require('discord.js');
+const { TextDisplayBuilder, MessageFlags } = require('guilderia.js');
 
 const exampleTextDisplay = new TextDisplayBuilder().setContent(
 	'This text is inside a Text Display component! You can use **any __markdown__** available inside this component too.',
@@ -58,7 +58,7 @@ await channel.send({
 Sections represent text (one to three Text Display components) with an accessory. The accessory can either be an image (thumbnail) or button. If you do not want to send an accessory, use a [Text Display](#text-display) component instead. You can use the `SectionBuilder` class to easily create a Section component:
 
 ```js
-const { SectionBuilder, ButtonStyle, MessageFlags } = require('discord.js');
+const { SectionBuilder, ButtonStyle, MessageFlags } = require('guilderia.js');
 
 const exampleSection = new SectionBuilder()
 	.addTextDisplayComponents(
@@ -86,7 +86,7 @@ await channel.send({
 A Thumbnail is a display component that is visually similar to the `thumbnail` field inside an embed. Thumbnails are added as accessory inside a [Section](#section) component, support alt text for accessibility, and can be marked as a spoiler. You can use the `ThumbnailBuilder` class to easily create a Thumbnail component:
 
 ```js
-const { AttachmentBuilder, SectionBuilder, MessageFlags } = require('discord.js');
+const { AttachmentBuilder, SectionBuilder, MessageFlags } = require('guilderia.js');
 
 const file = new AttachmentBuilder('../assets/image.png');
 
@@ -116,7 +116,7 @@ For more information about using attachments in components refer to the guide on
 A Media Gallery is a display component that can display a grid of up to 10 media attachments. Each media item can have an optional alt text (description) and can be marked as spoiler. You can use the `MediaGalleryBuilder` and `MediaGalleryItemBuilder` classes to easily create a Media Gallery component and its items:
 
 ```js
-const { AttachmentBuilder, MediaGalleryBuilder, MessageFlags } = require('discord.js');
+const { AttachmentBuilder, MediaGalleryBuilder, MessageFlags } = require('guilderia.js');
 
 const file = new AttachmentBuilder('../assets/image.png');
 
@@ -146,7 +146,7 @@ await channel.send({
 A File is a display component that can display a single uploaded file within the body of the message. By using multiple File components, you can upload and display multiple files in a single message. File components cannot have alt texts (description), unlike a Thumbnail or Media Gallery component, but can be marked as a spoiler. You can use the `FileBuilder` class to easily create a File component:
 
 ```js
-const { AttachmentBuilder, FileBuilder, MessageFlags } = require('discord.js');
+const { AttachmentBuilder, FileBuilder, MessageFlags } = require('guilderia.js');
 
 const file = new AttachmentBuilder('../assets/guide.pdf');
 
@@ -173,7 +173,7 @@ A Separator is a layout component that adds vertical padding and optional visual
 The example below shows how you can send a Separator component in a channel, separating two Text Display components.
 
 ```js
-const { TextDisplayBuilder, SeparatorBuilder, SeparatorSpacingSize, MessageFlags } = require('discord.js');
+const { TextDisplayBuilder, SeparatorBuilder, SeparatorSpacingSize, MessageFlags } = require('guilderia.js');
 
 const exampleTextDisplay = new TextDisplayBuilder().setContent(
 	'This text is inside a Text Display component! You can use **any __markdown__** available inside this component too.',
@@ -203,7 +203,7 @@ The example below shows how to send a Container component in a channel. It conta
 - a Section component with two Text Display components and a Button component accessory.
 
 ```js
-const { ContainerBuilder, UserSelectMenuBuilder, ButtonStyle, MessageFlags } = require('discord.js');
+const { ContainerBuilder, UserSelectMenuBuilder, ButtonStyle, MessageFlags } = require('guilderia.js');
 
 const exampleContainer = new ContainerBuilder()
 	.setAccentColor(0x0099ff)

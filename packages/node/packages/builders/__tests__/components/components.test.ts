@@ -7,7 +7,7 @@ import {
 	type APITextInputComponent,
 	type APIActionRowComponent,
 	type APIComponentInMessageActionRow,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { describe, test, expect } from 'vitest';
 import {
 	ActionRowBuilder,

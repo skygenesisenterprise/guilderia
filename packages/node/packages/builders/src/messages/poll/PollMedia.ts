@@ -1,4 +1,4 @@
-import type { APIPollMedia } from 'discord-api-types/v10';
+import type { APIPollMedia } from 'guilderia-api-types/v10';
 
 /**
  * The base poll media builder that contains common symbols for poll media builders.

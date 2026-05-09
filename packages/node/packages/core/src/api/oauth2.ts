@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { type RequestData, type REST, makeURLSearchParams } from '@discordjs/rest';
+import { type RequestData, type REST, makeURLSearchParams } from '@guilderiajs/rest';
 import {
 	Routes,
 	RouteBases,
@@ -15,7 +15,7 @@ import {
 	type RESTPostOAuth2AccessTokenResult,
 	type RESTPostOAuth2TokenRevocationQuery,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class OAuth2API {
 	public constructor(private readonly rest: REST) {}
@@ -23,7 +23,7 @@ export class OAuth2API {
 	/**
 	 * Creates an OAuth2 authorization URL given the options
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-authorization-url-example}
+	 * @see {@link https://guilderia.com/developers/docs/topics/oauth2#authorization-code-grant-authorization-url-example}
 	 * @param options - The options for creating the authorization URL
 	 */
 	public generateAuthorizationURL(options: RESTOAuth2AuthorizationQuery) {
@@ -35,7 +35,7 @@ export class OAuth2API {
 	/**
 	 * Performs an OAuth2 token exchange, giving you an access token
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-exchange-example}
+	 * @see {@link https://guilderia.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-exchange-example}
 	 * @param body - The body of the token exchange request
 	 * @param options - The options for the token exchange request
 	 */
@@ -57,7 +57,7 @@ export class OAuth2API {
 	/**
 	 * Refreshes an OAuth2 access token, giving you a new one
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-refresh-token-exchange-example}
+	 * @see {@link https://guilderia.com/developers/docs/topics/oauth2#authorization-code-grant-refresh-token-exchange-example}
 	 * @param body - The options for the refresh token request
 	 * @param options - The options for the refresh token request
 	 */
@@ -81,7 +81,7 @@ export class OAuth2API {
 	 *
 	 * @remarks
 	 * This is primarily used for testing purposes
-	 * @see {@link https://discord.com/developers/docs/topics/oauth2#client-credentials-grant}
+	 * @see {@link https://guilderia.com/developers/docs/topics/oauth2#client-credentials-grant}
 	 * @param body - The options for the client credentials grant request
 	 * @param options - The options for the client credentials grant request
 	 */
@@ -103,7 +103,7 @@ export class OAuth2API {
 	/**
 	 * Fetches the current bot's application information
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/oauth2#get-current-bot-application-information}
+	 * @see {@link https://guilderia.com/developers/docs/topics/oauth2#get-current-bot-application-information}
 	 * @param options - The options for the current bot application information request
 	 */
 	public async getCurrentBotApplicationInformation({ auth, signal }: Pick<RequestData, 'auth' | 'signal'> = {}) {
@@ -116,7 +116,7 @@ export class OAuth2API {
 	/**
 	 * Fetches the current authorization information
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/oauth2#get-current-authorization-information}
+	 * @see {@link https://guilderia.com/developers/docs/topics/oauth2#get-current-authorization-information}
 	 * @param options - The options for the current authorization information request
 	 */
 	public async getCurrentAuthorizationInformation({ auth, signal }: Pick<RequestData, 'auth' | 'signal'> = {}) {
@@ -129,7 +129,7 @@ export class OAuth2API {
 	/**
 	 * Revokes an OAuth2 token
 	 *
-	 * @see {@link https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-token-revocation-example}
+	 * @see {@link https://guilderia.com/developers/docs/topics/oauth2#authorization-code-grant-token-revocation-example}
 	 * @param applicationId - The application id
 	 * @param applicationSecret - The application secret
 	 * @param body - The body of the token revocation request

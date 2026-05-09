@@ -27,7 +27,7 @@ The command handler, dynamically reads the command files and executes commands.
 
 ### Command Deployment
 
-The command [deployment script](./deploying-commands) to register your slash commands with Discord.
+The command [deployment script](./deploying-commands) to register your slash commands with Guilderia.
 
 </Step>
 </Steps>
@@ -44,7 +44,7 @@ In your `index.js` file, make these additions to the base template:
 // [!code ++:4]
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('guilderia.js');
 const { token } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -168,4 +168,4 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 #### Next steps
 
-Your command files are now loaded into your bot, and the event listener is prepared and ready to respond. In the next section, we cover the final step: a command deployment script you'll need to register your commands so they appear in the Discord client.
+Your command files are now loaded into your bot, and the event listener is prepared and ready to respond. In the next section, we cover the final step: a command deployment script you'll need to register your commands so they appear in the Guilderia client.

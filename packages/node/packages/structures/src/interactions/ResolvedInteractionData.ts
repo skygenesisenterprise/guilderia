@@ -1,4 +1,4 @@
-import type { APIInteractionDataResolved } from 'discord-api-types/v10';
+import type { APIInteractionDataResolved } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import type { Partialize } from '../utils/types.js';
 

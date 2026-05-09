@@ -1,5 +1,5 @@
-import type { APIThumbnailComponent } from 'discord-api-types/v10';
-import { ComponentType } from 'discord-api-types/v10';
+import type { APIThumbnailComponent } from 'guilderia-api-types/v10';
+import { ComponentType } from 'guilderia-api-types/v10';
 import { validate } from '../../util/validation.js';
 import { ComponentBuilder } from '../Component.js';
 import { thumbnailPredicate } from './Assertions.js';
@@ -23,7 +23,7 @@ export class ThumbnailBuilder extends ComponentBuilder<APIThumbnailComponent> {
 	 * const thumbnail = new ThumbnailBuilder({
 	 * 	description: 'some text',
 	 *  media: {
-	 *      url: 'https://cdn.discordapp.com/embed/avatars/4.png',
+	 *      url: 'https://cdn.guilderiaapp.com/embed/avatars/4.png',
 	 *  },
 	 * });
 	 * ```

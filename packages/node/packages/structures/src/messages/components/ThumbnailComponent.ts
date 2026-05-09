@@ -1,4 +1,4 @@
-import type { APIThumbnailComponent } from 'discord-api-types/v10';
+import type { APIThumbnailComponent } from 'guilderia-api-types/v10';
 import { kData } from '../../utils/symbols.js';
 import type { Partialize } from '../../utils/types.js';
 import { Component } from './Component.js';

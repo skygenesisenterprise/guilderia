@@ -117,7 +117,7 @@ export interface EscapeMarkdownOptions {
 }
 
 /**
- * Escapes any Discord-flavored markdown in a string.
+ * Escapes any Guilderia-flavored markdown in a string.
  *
  * @param text - Content to escape
  * @param options - Options for escaping the markdown

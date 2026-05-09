@@ -1,4 +1,4 @@
-import type { SKUFlags, APISKU } from 'discord-api-types/v10';
+import type { SKUFlags, APISKU } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { SKUFlagsBitField } from '../bitfields/SKUFlagsBitField.js';
 import { kData } from '../utils/symbols.js';
@@ -6,7 +6,7 @@ import { isFieldSet } from '../utils/type-guards.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents any SKU (stock-keeping units) on Discord.
+ * Represents any SKU (stock-keeping units) on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */
@@ -33,7 +33,7 @@ export class SKU<Omitted extends keyof APISKU | '' = ''> extends Structure<APISK
 	/**
 	 * Type of SKU
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/sku#sku-object-sku-types}
+	 * @see {@link https://guilderia.com/developers/docs/resources/sku#sku-object-sku-types}
 	 */
 	public get type() {
 		return this[kData].type;

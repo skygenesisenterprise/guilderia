@@ -13,7 +13,7 @@ There are many ways to create an audio resource. Below are some example scenario
 ```js
 const { createReadStream } = require('node:fs');
 const { join } = require('node:path');
-const { createAudioResource, StreamType } = require('@discordjs/voice');
+const { createAudioResource, StreamType } = require('@guilderiajs/voice');
 
 // Basic, default options are:
 // Input type is unknown, so will use FFmpeg to convert to Opus under-the-hood
@@ -52,7 +52,7 @@ The underlying streams of an audio resource are destroyed and flushed once an au
 For most scenarios, you will create an audio resource for immediate use by an audio player. The audio player will propagate errors from the resource for you, so you can attach `error` handlers to the player instead of the resource.
 
 ```js
-const { createAudioResource, createAudioPlayer } = require('@discordjs/voice');
+const { createAudioResource, createAudioPlayer } = require('@guilderiajs/voice');
 
 const player = createAudioPlayer();
 // An AudioPlayer will always emit an "error" event with a .resource property
@@ -71,7 +71,7 @@ player.play(resource);
 However, you can also attach an error handler specifically to the audio resource if you'd like to. This is **not recommended**, as you are not allowed to change the state of an audio player from the error handlers of an audio resource (on the other hand, you are allowed to do this from the error handle of an audio player, as shown above.)
 
 ```js
-const { createAudioResource, createAudioPlayer } = require('@discordjs/voice');
+const { createAudioResource, createAudioPlayer } = require('@guilderiajs/voice');
 
 const player = createAudioPlayer();
 
@@ -103,13 +103,13 @@ Make sure you consider whether it is worth enabling for your use case.
 
 If you are repeatedly playing the same resource, you may consider converting it to Ogg opus or WebM opus. Alternatively, if you are fetching an external resource and are able to specify a format that you'd like to stream the resource in, you should consider specifying Ogg opus or WebM opus.
 
-The reason for this is that you can remove FFmpeg from the process of streaming audio. FFmpeg is used to convert unknown inputs into Opus audio which can be streamed to Discord. If your audio is already in the Opus format, this removes one of the most computationally demanding parts of the audio pipeline from the streaming process, which would surely improve performance.
+The reason for this is that you can remove FFmpeg from the process of streaming audio. FFmpeg is used to convert unknown inputs into Opus audio which can be streamed to Guilderia. If your audio is already in the Opus format, this removes one of the most computationally demanding parts of the audio pipeline from the streaming process, which would surely improve performance.
 
 Both of the examples below will skip the FFmpeg component of the pipeline to improve performance.
 
 ```js
 const { createReadStream } = require('node:fs');
-const { createAudioResource, StreamType } = require('@discordjs/voice');
+const { createAudioResource, StreamType } = require('@guilderiajs/voice');
 
 let resource = createAudioResource(createReadStream('my_file.ogg'), {
 	inputType: StreamType.OggOpus,
@@ -135,7 +135,7 @@ This is achieved by probing a small chunk of the beginning of the audio stream t
 
 ```js
 const { createReadStream } = require('node:fs');
-const { demuxProbe, createAudioResource } = require('@discordjs/voice');
+const { demuxProbe, createAudioResource } = require('@guilderiajs/voice');
 
 async function probeAndCreateResource(readableStream) {
 	const { stream, type } = await demuxProbe(readableStream);

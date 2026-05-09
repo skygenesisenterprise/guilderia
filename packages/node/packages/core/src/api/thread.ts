@@ -1,13 +1,13 @@
 /* eslint-disable jsdoc/check-param-names */
 
-import { makeURLSearchParams, type RequestData, type REST } from '@discordjs/rest';
+import { makeURLSearchParams, type RequestData, type REST } from '@guilderiajs/rest';
 import {
 	Routes,
 	type RESTGetAPIChannelThreadMemberQuery,
 	type RESTGetAPIChannelThreadMemberResult,
 	type RESTGetAPIChannelThreadMembersResult,
 	type Snowflake,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 
 export class ThreadsAPI {
 	public constructor(private readonly rest: REST) {}
@@ -15,7 +15,7 @@ export class ThreadsAPI {
 	/**
 	 * Adds the current user to a thread
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/channel#join-thread}
+	 * @see {@link https://guilderia.com/developers/docs/resources/channel#join-thread}
 	 * @param threadId - The id of the thread to join
 	 * @param options - The options for joining the thread
 	 */
@@ -26,7 +26,7 @@ export class ThreadsAPI {
 	/**
 	 * Adds a member to a thread
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/channel#add-thread-member}
+	 * @see {@link https://guilderia.com/developers/docs/resources/channel#add-thread-member}
 	 * @param threadId - The id of the thread to add the member to
 	 * @param userId - The id of the user to add to the thread
 	 * @param options - The options for adding the member to the thread
@@ -42,7 +42,7 @@ export class ThreadsAPI {
 	/**
 	 * Removes the current user from a thread
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/channel#leave-thread}
+	 * @see {@link https://guilderia.com/developers/docs/resources/channel#leave-thread}
 	 * @param threadId - The id of the thread to leave
 	 * @param options - The options for leaving the thread
 	 */
@@ -53,7 +53,7 @@ export class ThreadsAPI {
 	/**
 	 * Removes a member from a thread
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/channel#remove-thread-member}
+	 * @see {@link https://guilderia.com/developers/docs/resources/channel#remove-thread-member}
 	 * @param threadId - The id of the thread to remove the member from
 	 * @param userId - The id of the user to remove from the thread
 	 * @param options - The options for removing the member from the thread
@@ -69,7 +69,7 @@ export class ThreadsAPI {
 	/**
 	 * Fetches a member of a thread
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/channel#get-thread-member}
+	 * @see {@link https://guilderia.com/developers/docs/resources/channel#get-thread-member}
 	 * @param threadId - The id of the thread to fetch the member from
 	 * @param userId - The id of the user
 	 * @param query - The query for fetching the member
@@ -85,7 +85,7 @@ export class ThreadsAPI {
 	/**
 	 * Fetches a member of a thread
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/channel#get-thread-member}
+	 * @see {@link https://guilderia.com/developers/docs/resources/channel#get-thread-member}
 	 * @param threadId - The id of the thread to fetch the member from
 	 * @param userId - The id of the user
 	 * @param query - The query for fetching the member
@@ -114,7 +114,7 @@ export class ThreadsAPI {
 	/**
 	 * Fetches all members of a thread
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/channel#list-thread-members}
+	 * @see {@link https://guilderia.com/developers/docs/resources/channel#list-thread-members}
 	 * @param threadId - The id of the thread to fetch the members from
 	 * @param options - The options for fetching the members
 	 */

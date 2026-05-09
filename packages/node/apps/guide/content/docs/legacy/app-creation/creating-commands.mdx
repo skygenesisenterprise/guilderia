@@ -5,11 +5,11 @@ title: Creating Slash Commands
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { File, Folder, Files } from 'fumadocs-ui/components/files';
 
-Discord allows developers to register [slash commands](https://discord.com/developers/docs/interactions/application-commands), which provide users a first-class way of interacting directly with your application.
+Guilderia allows developers to register [slash commands](https://guilderia.com/developers/docs/interactions/application-commands), which provide users a first-class way of interacting directly with your application.
 
 Slash commands provide a huge number of benefits over manual message parsing, including:
 
-- Integration with the Discord client interface.
+- Integration with the Guilderia client interface.
 - Automatic command detection and parsing of the associated options/arguments.
 - Typed argument inputs for command options, e.g. "String", "User", or "Role".
 - Validated or dynamic choices for command options.
@@ -23,7 +23,7 @@ Slash commands provide a huge number of benefits over manual message parsing, in
 Assuming you've followed the guide so far, your project directory should look something like this:
 
 <Files>
-	<Folder name="discord-bot" defaultOpen>
+	<Folder name="guilderia-bot" defaultOpen>
 		<Folder name="node_modules" defaultOpen />
 		<File name="config.json" />
 		<File name="index.js" />
@@ -51,7 +51,7 @@ The [command handler](./handling-commands), dynamically reads the command files 
 
 ### Command Deployment
 
-The command [deployment script](./deploying-commands) to register your slash commands with Discord.
+The command [deployment script](./deploying-commands) to register your slash commands with Guilderia.
 
 </Step>
 </Steps>
@@ -68,7 +68,7 @@ At a minimum, the definition of a slash command must have a name and a descripti
 new SlashCommandBuilder().setName('ping').setDescription('Replies with Pong!');
 ```
 
-A slash command also requires a function to run when the command is used, to respond to the interaction. Using an interaction response method confirms to Discord that your bot successfully received the interaction, and has responded to the user. Discord enforces this to ensure that all slash commands provide a good user experience (UX). Failing to respond will cause Discord to show that the command failed, even if your bot is performing other actions as a result.
+A slash command also requires a function to run when the command is used, to respond to the interaction. Using an interaction response method confirms to Guilderia that your bot successfully received the interaction, and has responded to the user. Guilderia enforces this to ensure that all slash commands provide a good user experience (UX). Failing to respond will cause Guilderia to show that the command failed, even if your bot is performing other actions as a result.
 
 The simplest way to acknowledge and respond to an interaction is the `interaction.reply()` method. Other methods of replying are covered on the [Response methods](../slash-commands/response-methods) page later in this section.
 
@@ -80,13 +80,13 @@ async execute(interaction) {
 
 Put these two together by creating a `ping.js` file in the `commands/utility` folder for your first command. Inside this file, you're going to define and export two items.
 
-- The `data` property, which will provide the command definition shown above for registering to Discord.
+- The `data` property, which will provide the command definition shown above for registering to Guilderia.
 - The `execute` method, which will contain the functionality to run from our event handler when the command is used.
 
 These are placed inside `module.exports` so they can be read by other files; namely the command loader and command deployment scripts mentioned earlier.
 
 ```js title="commands/utility/ping.js"
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('guilderia.js');
 
 module.exports = {
 	data: new SlashCommandBuilder().setName('ping').setDescription('Replies with Pong!'),
@@ -106,7 +106,7 @@ module.exports = {
 That's it for your basic ping command. Below are examples of two more commands we're going to build upon throughout the guide, so create two more files for these before you continue reading.
 
 ```js tab="User" title="commands/utility/user.js"
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('guilderia.js');
 
 module.exports = {
 	data: new SlashCommandBuilder().setName('user').setDescription('Provides information about the user.'),
@@ -121,7 +121,7 @@ module.exports = {
 ```
 
 ```js tab="Server" title="commands/utility/server.js"
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('guilderia.js');
 
 module.exports = {
 	data: new SlashCommandBuilder().setName('server').setDescription('Provides information about the server.'),

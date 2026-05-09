@@ -1,8 +1,8 @@
-import type { APIExtendedInvite, APIInvite } from 'discord-api-types/v10';
-import { InviteTargetType, InviteType } from 'discord-api-types/v10';
+import type { APIExtendedInvite, APIInvite } from 'guilderia-api-types/v10';
+import { InviteTargetType, InviteType } from 'guilderia-api-types/v10';
 import { describe, expect, test } from 'vitest';
 import { Invite } from '../src/invites/Invite.js';
-import { dateToDiscordISOTimestamp } from '../src/utils/optimization.js';
+import { dateToGuilderiaISOTimestamp } from '../src/utils/optimization.js';
 import { kPatch } from '../src/utils/symbols.js';
 
 describe('Invite', () => {
@@ -45,9 +45,9 @@ describe('Invite', () => {
 		expect(instance.uses).toBe(undefined);
 		expect(instance.expiresTimestamp).toBe(null);
 		expect(instance.expiresAt).toBe(null);
-		expect(instance.url).toBe('https://discord.gg/123');
+		expect(instance.url).toBe('https://guilderia.gg/123');
 		expect(instance.toJSON()).toEqual(data);
-		expect(`${instance}`).toBe('https://discord.gg/123');
+		expect(`${instance}`).toBe('https://guilderia.gg/123');
 		expect(instance.valueOf()).toBe(data.code);
 	});
 
@@ -55,7 +55,7 @@ describe('Invite', () => {
 		const instance = new Invite(dataExtended);
 		expect(instance.type).toBe(data.type);
 		expect(instance.code).toBe(dataExtended.code);
-		expect(dateToDiscordISOTimestamp(instance.createdAt!)).toBe(dataExtended.created_at);
+		expect(dateToGuilderiaISOTimestamp(instance.createdAt!)).toBe(dataExtended.created_at);
 		expect(instance.createdTimestamp).toBe(Date.parse(dataExtended.created_at));
 		expect(instance.maxAge).toBe(dataExtended.max_age);
 		expect(instance.maxUses).toBe(dataExtended.max_uses);
@@ -66,7 +66,7 @@ describe('Invite', () => {
 		expect(instance.uses).toBe(dataExtended.uses);
 		expect(instance.expiresTimestamp).toStrictEqual(Date.parse('2020-10-10T13:50:29.209000+00:00'));
 		expect(instance.expiresAt).toStrictEqual(new Date('2020-10-10T13:50:29.209000+00:00'));
-		expect(instance.url).toBe('https://discord.gg/123');
+		expect(instance.url).toBe('https://guilderia.gg/123');
 		expect(instance.toJSON()).toEqual({ ...dataExtended, expires_at: '2020-10-10T13:50:29.209000+00:00' });
 	});
 

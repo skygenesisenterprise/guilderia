@@ -1,13 +1,13 @@
-import { type APIInvite, type APIExtendedInvite, RouteBases } from 'discord-api-types/v10';
+import { type APIInvite, type APIExtendedInvite, RouteBases } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
-import { dateToDiscordISOTimestamp } from '../utils/optimization.js';
+import { dateToGuilderiaISOTimestamp } from '../utils/optimization.js';
 import { kData, kExpiresTimestamp, kCreatedTimestamp } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 export interface APIActualInvite extends APIInvite, Partial<Omit<APIExtendedInvite, keyof APIInvite>> {}
 
 /**
- * Represents an invitation to a Discord channel
+ * Represents an invitation to a Guilderia channel
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */
@@ -27,14 +27,14 @@ export class Invite<Omitted extends keyof APIActualInvite | '' = 'created_at' | 
 	};
 
 	/**
-	 * Optimized storage of {@link discord-api-types/v10#(APIActualInvite:interface).expires_at}
+	 * Optimized storage of {@link guilderia-api-types/v10#(APIActualInvite:interface).expires_at}
 	 *
 	 * @internal
 	 */
 	protected [kExpiresTimestamp]: number | null = null;
 
 	/**
-	 * Optimized storage of {@link discord-api-types/v10#(APIActualInvite:interface).created_at}
+	 * Optimized storage of {@link guilderia-api-types/v10#(APIActualInvite:interface).created_at}
 	 *
 	 * @internal
 	 */
@@ -192,11 +192,11 @@ export class Invite<Omitted extends keyof APIActualInvite | '' = 'created_at' | 
 	public override toJSON() {
 		const clone = super.toJSON();
 		if (this[kExpiresTimestamp]) {
-			clone.expires_at = dateToDiscordISOTimestamp(new Date(this[kExpiresTimestamp]));
+			clone.expires_at = dateToGuilderiaISOTimestamp(new Date(this[kExpiresTimestamp]));
 		}
 
 		if (this[kCreatedTimestamp]) {
-			clone.created_at = dateToDiscordISOTimestamp(new Date(this[kCreatedTimestamp]));
+			clone.created_at = dateToGuilderiaISOTimestamp(new Date(this[kCreatedTimestamp]));
 		}
 
 		return clone;

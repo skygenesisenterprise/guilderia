@@ -16,7 +16,7 @@ import {
 import * as _AudioPlayer from '../src/audio/AudioPlayer';
 import { PlayerSubscription as _PlayerSubscription } from '../src/audio/PlayerSubscription';
 import * as Networking from '../src/networking/Networking';
-import type { DiscordGatewayAdapterLibraryMethods } from '../src/util/adapter';
+import type { GuilderiaGatewayAdapterLibraryMethods } from '../src/util/adapter';
 
 vitest.mock('../src/audio/AudioPlayer');
 vitest.mock('../src/audio/PlayerSubscription');
@@ -46,7 +46,7 @@ function createFakeAdapter() {
 	const sendPayload = vitest.fn();
 	sendPayload.mockReturnValue(true);
 	const destroy = vitest.fn();
-	const libMethods: Partial<DiscordGatewayAdapterLibraryMethods> = {};
+	const libMethods: Partial<GuilderiaGatewayAdapterLibraryMethods> = {};
 	return {
 		sendPayload,
 		destroy,
@@ -237,7 +237,7 @@ describe('VoiceConnection#addServerPacket', () => {
 		const { voiceConnection } = createFakeVoiceConnection();
 		voiceConnection.configureNetworking = vitest.fn();
 		const dummy = {
-			endpoint: 'discord.com',
+			endpoint: 'guilderia.com',
 			guild_id: 123,
 			token: 'abc',
 		} as any;
@@ -251,7 +251,7 @@ describe('VoiceConnection#addServerPacket', () => {
 		voiceConnection['packets'].server = Symbol('old') as any;
 		voiceConnection.configureNetworking = vitest.fn();
 		const dummy = {
-			endpoint: 'discord.com',
+			endpoint: 'guilderia.com',
 			guild_id: 123,
 			token: 'abc',
 		} as any;

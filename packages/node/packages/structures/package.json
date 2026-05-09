@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/structures",
+	"name": "@guilderiajs/structures",
 	"version": "0.1.0",
-	"description": "Wrapper around Discord's structures",
+	"description": "Wrapper around Guilderia's structures",
 	"scripts": {
 		"build": "tsc --noEmit && tsup",
 		"build:docs": "tsc -p tsconfig.docs.json && cpy \"./src/*.d.ts\" \"./dist-docs\"",
@@ -41,33 +41,33 @@
 		"Crawl <icrawltogo@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyradiscord@gmail.com>",
+		"Aura Román <kyraguilderia@gmail.com>",
 		"Chai Kohen <chaikohen@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"discord",
+		"guilderia",
 		"api",
-		"discordapp",
-		"discordjs"
+		"guilderiaapp",
+		"guilderiajs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/guilderiajs/guilderia.js.git",
 		"directory": "packages/structures"
 	},
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/guilderiajs/guilderia.js/issues"
 	},
-	"homepage": "https://discord.js.org",
+	"homepage": "https://guilderia.js.org",
 	"dependencies": {
-		"@discordjs/formatters": "workspace:^",
+		"@guilderiajs/formatters": "workspace:^",
 		"@sapphire/snowflake": "^3.5.5",
-		"discord-api-types": "^0.38.43"
+		"guilderia-api-types": "^0.38.43"
 	},
 	"devDependencies": {
-		"@discordjs/api-extractor": "workspace:^",
-		"@discordjs/scripts": "workspace:^",
+		"@guilderiajs/api-extractor": "workspace:^",
+		"@guilderiajs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
 		"@types/node": "^22.19.15",
 		"@vitest/coverage-v8": "^4.1.2",

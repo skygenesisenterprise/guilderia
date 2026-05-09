@@ -1,10 +1,10 @@
-import type { APIAutoModerationAction } from 'discord-api-types/v10';
+import type { APIAutoModerationAction } from 'guilderia-api-types/v10';
 import { Structure } from '../../Structure.js';
 import { kData } from '../../utils/symbols.js';
 import type { Partialize } from '../../utils/types.js';
 
 /**
- * Represents an auto moderation action on Discord.
+ * Represents an auto moderation action on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructure `ActionMetadata` which needs to be instantiated and stored by an extending class using it
@@ -28,7 +28,7 @@ export class AutoModerationAction<Omitted extends keyof APIAutoModerationAction 
 	/**
 	 * The action type
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-action-object-action-types}
+	 * @see {@link https://guilderia.com/developers/docs/resources/auto-moderation#auto-moderation-action-object-action-types}
 	 */
 	public get type() {
 		return this[kData].type;

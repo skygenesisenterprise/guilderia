@@ -46,7 +46,7 @@ export function createDefaultAudioReceiveStreamOptions(): AudioReceiveStreamOpti
 
 /**
  * A readable stream of Opus packets received from a specific entity
- * in a Discord voice connection.
+ * in a Guilderia voice connection.
  */
 export class AudioReceiveStream extends Readable {
 	/**

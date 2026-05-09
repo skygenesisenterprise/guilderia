@@ -1,4 +1,4 @@
-import type { ApiItem, ApiModel } from '@discordjs/api-extractor-model';
+import type { ApiItem, ApiModel } from '@guilderiajs/api-extractor-model';
 import type { DocParamBlock } from '@microsoft/tsdoc';
 import { block, type DocBlockJSON } from './CommentBlock.js';
 

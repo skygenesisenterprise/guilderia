@@ -1,5 +1,5 @@
-import type { RawFile } from '@discordjs/rest';
-import type { APIInteractionResponseCallbackData } from 'discord-api-types/v10';
+import type { RawFile } from '@guilderiajs/rest';
+import type { APIInteractionResponseCallbackData } from 'guilderia-api-types/v10';
 
 export interface DescriptiveRawFile extends RawFile {
 	description?: string;

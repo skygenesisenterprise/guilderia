@@ -1,4 +1,4 @@
-import { ComponentType, TextInputStyle, type APIModalInteractionResponseCallbackData } from 'discord-api-types/v10';
+import { ComponentType, TextInputStyle, type APIModalInteractionResponseCallbackData } from 'guilderia-api-types/v10';
 import { describe, test, expect } from 'vitest';
 import { ModalBuilder, TextInputBuilder, LabelBuilder, TextDisplayBuilder } from '../../src/index.js';
 

@@ -1,10 +1,10 @@
-import { REST } from '@discordjs/rest';
+import { REST } from '@guilderiajs/rest';
 import type {
 	APIActionRowComponent,
 	APIComponentInModalActionRow,
 	RESTGetAPIChannelThreadMemberResult,
 	RESTPostAPIInteractionCallbackWithResponseResult,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { expectTypeOf, describe, test } from 'vitest';
 import { API } from '../src/index.js';
 

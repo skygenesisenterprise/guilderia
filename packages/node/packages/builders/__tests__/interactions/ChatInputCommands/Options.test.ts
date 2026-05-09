@@ -10,7 +10,7 @@ import {
 	type APIApplicationCommandRoleOption,
 	type APIApplicationCommandStringOption,
 	type APIApplicationCommandUserOption,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import { describe, test, expect } from 'vitest';
 import {
 	ChatInputCommandAttachmentOption,

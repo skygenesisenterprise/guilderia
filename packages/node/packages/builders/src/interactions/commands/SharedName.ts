@@ -1,4 +1,4 @@
-import type { Locale, RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import type { Locale, RESTPostAPIApplicationCommandsJSONBody } from 'guilderia-api-types/v10';
 
 export interface SharedNameData extends Partial<
 	Pick<RESTPostAPIApplicationCommandsJSONBody, 'name_localizations' | 'name'>

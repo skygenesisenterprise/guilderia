@@ -2,9 +2,9 @@
 title: Life Cycles
 ---
 
-Two of the main components that you'll interact with when using `@discordjs/voice` are:
+Two of the main components that you'll interact with when using `@guilderiajs/voice` are:
 
-- **VoiceConnection** – maintains a network connection to a Discord voice server
+- **VoiceConnection** – maintains a network connection to a Guilderia voice server
 - **AudioPlayer** – plays audio resources across a voice connection
 
 Both voice connections and audio players are _stateful_, and you can subscribe to changes in their state as they progress through their respective life cycles.
@@ -18,7 +18,7 @@ Listening to changes in the life cycles of voice connections and audio players c
 ## Subscribing to individual events
 
 ```js
-const { VoiceConnectionStatus, AudioPlayerStatus } = require('@discordjs/voice');
+const { VoiceConnectionStatus, AudioPlayerStatus } = require('@guilderiajs/voice');
 
 connection.on(VoiceConnectionStatus.Ready, (oldState, newState) => {
 	console.log('Connection is in the Ready state!');
@@ -30,10 +30,10 @@ player.on(AudioPlayerStatus.Playing, (oldState, newState) => {
 ```
 
 <Callout>
-	One advantage of listening for transitions to individual states is that it becomes a lot easier to write sequential logic. This is made easy using our [state transition helper](https://github.com/discordjs/discord.js/blob/main/packages/voice/src/util/entersState.ts). An example is shown below.
+	One advantage of listening for transitions to individual states is that it becomes a lot easier to write sequential logic. This is made easy using our [state transition helper](https://github.com/guilderiajs/guilderia.js/blob/main/packages/voice/src/util/entersState.ts). An example is shown below.
 
     ```js
-    const { AudioPlayerStatus, entersState } = require('@discordjs/voice');
+    const { AudioPlayerStatus, entersState } = require('@guilderiajs/voice');
 
     async function start() {
     	player.play(resource);

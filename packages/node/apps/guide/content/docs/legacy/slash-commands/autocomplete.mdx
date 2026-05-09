@@ -14,11 +14,11 @@ Autocomplete allows you to dynamically provide a selection of values to the user
 To use autocomplete with your commands, _instead_ of listing static choices, the option must be set to use autocompletion using `SlashCommandStringOption#setAutocomplete`:
 
 ```js title="commands/utility/guide".js
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('guilderia.js');
 
 const data = new SlashCommandBuilder()
 	.setName('guide')
-	.setDescription('Search discordjs.guide!')
+	.setDescription('Search guilderiajs.guide!')
 	// [!code word:setAutocomplete] [!code focus]
 	.addStringOption((option) => option.setName('query').setDescription('Phrase to search for').setAutocomplete(true));
 ```
@@ -66,7 +66,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('guide')
-		.setDescription('Search discordjs.guide!')
+		.setDescription('Search guilderiajs.guide!')
 		.addStringOption((option) => option.setName('query').setDescription('Phrase to search for').setAutocomplete(true)),
 	async autocomplete(interaction) {
 		// handle the autocompletion response (more on how to do that below)
@@ -98,7 +98,7 @@ The `CommandInteractionOptionResolver#getFocused` method returns the currently f
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('guide')
-		.setDescription('Search discordjs.guide!')
+		.setDescription('Search guilderiajs.guide!')
 		.addStringOption((option) => option.setName('query').setDescription('Phrase to search for').setAutocomplete(true)),
 	// [!code focus:12]
 	async autocomplete(interaction) {
@@ -125,7 +125,7 @@ To distinguish between multiple options, you can pass `true` into `CommandIntera
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('guide')
-		.setDescription('Search discordjs.guide!')
+		.setDescription('Search guilderiajs.guide!')
 		.addStringOption((option) => option.setName('query').setDescription('Phrase to search for').setAutocomplete(true))
 		// [!code focus:3] [!code ++:3]
 		.addStringOption((option) =>
@@ -178,7 +178,7 @@ const boolean = interaction.options.getBoolean('choice');
 const number = interaction.options.getNumber('num');
 ```
 
-However, the `.getUser()`, `.getMember()`, `.getRole()`, `.getChannel()`, `.getMentionable()` and `.getAttachment()` methods are not available to autocomplete interactions. Discord does not send the respective full objects for these methods until the slash command is completed. For these, you can get the Snowflake value using `interaction.options.get('option').value`:
+However, the `.getUser()`, `.getMember()`, `.getRole()`, `.getChannel()`, `.getMentionable()` and `.getAttachment()` methods are not available to autocomplete interactions. Guilderia does not send the respective full objects for these methods until the slash command is completed. For these, you can get the Snowflake value using `interaction.options.get('option').value`:
 
 ### Notes
 

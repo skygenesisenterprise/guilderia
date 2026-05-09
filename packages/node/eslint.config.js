@@ -40,7 +40,7 @@ const nodeBinRuleset = {
 
 const typeScriptRuleset = merge(...typescript, {
 	files: [`**/*${commonFiles}`],
-	ignores: [`packages/discord.js/**/*.{js,mjs,cjs}`],
+	ignores: [`packages/guilderia.js/**/*.{js,mjs,cjs}`],
 	languageOptions: {
 		parserOptions: {
 			warnOnUnsupportedTypeScriptVersion: false,
@@ -121,7 +121,7 @@ export default defineConfig(
 		rules: { 'jsdoc/no-undefined-types': 0 },
 	},
 	{
-		files: [`packages/{api-extractor,brokers,create-discord-bot,docgen,ws}/**/*${commonFiles}`],
+		files: [`packages/{api-extractor,brokers,create-guilderia-bot,docgen,ws}/**/*${commonFiles}`],
 		rules: { 'n/no-sync': 0 },
 	},
 	{
@@ -161,7 +161,7 @@ export default defineConfig(
 		},
 	},
 	{
-		files: [`packages/discord.js/**/*.{js,cjs}`],
+		files: [`packages/guilderia.js/**/*.{js,cjs}`],
 		languageOptions: {
 			sourceType: 'commonjs',
 			parserOptions: {
@@ -204,7 +204,7 @@ export default defineConfig(
 		},
 	},
 	{
-		files: [`packages/discord.js/src/client/websocket/handlers/*.js`],
+		files: [`packages/guilderia.js/src/client/websocket/handlers/*.js`],
 		rules: {
 			'no-restricted-syntax': [
 				'error',
@@ -217,7 +217,7 @@ export default defineConfig(
 		},
 	},
 	{
-		files: [`packages/discord.js/typings/*{d.ts,test-d.ts,d.mts,test-d.mts}`],
+		files: [`packages/guilderia.js/typings/*{d.ts,test-d.ts,d.mts,test-d.mts}`],
 		rules: {
 			'@typescript-eslint/no-unsafe-declaration-merging': 0,
 			'@typescript-eslint/no-empty-object-type': 0,

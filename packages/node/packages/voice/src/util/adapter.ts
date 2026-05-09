@@ -1,10 +1,10 @@
-import type { GatewayVoiceServerUpdateDispatchData, GatewayVoiceStateUpdateDispatchData } from 'discord-api-types/v10';
+import type { GatewayVoiceServerUpdateDispatchData, GatewayVoiceStateUpdateDispatchData } from 'guilderia-api-types/v10';
 
 /**
- * Methods that are provided by the \@discordjs/voice library to implementations of
- * Discord gateway DiscordGatewayAdapters.
+ * Methods that are provided by the \@guilderiajs/voice library to implementations of
+ * Guilderia gateway GuilderiaGatewayAdapters.
  */
-export interface DiscordGatewayAdapterLibraryMethods {
+export interface GuilderiaGatewayAdapterLibraryMethods {
 	/**
 	 * Call this when the adapter can no longer be used (e.g. due to a disconnect from the main gateway)
 	 */
@@ -24,18 +24,18 @@ export interface DiscordGatewayAdapterLibraryMethods {
 }
 
 /**
- * Methods that are provided by the implementer of a Discord gateway DiscordGatewayAdapter.
+ * Methods that are provided by the implementer of a Guilderia gateway GuilderiaGatewayAdapter.
  */
-export interface DiscordGatewayAdapterImplementerMethods {
+export interface GuilderiaGatewayAdapterImplementerMethods {
 	/**
-	 * This will be called by \@discordjs/voice when the adapter can safely be destroyed as it will no
+	 * This will be called by \@guilderiajs/voice when the adapter can safely be destroyed as it will no
 	 * longer be used.
 	 */
 	destroy(): void;
 	/**
-	 * Implement this method such that the given payload is sent to the main Discord gateway connection.
+	 * Implement this method such that the given payload is sent to the main Guilderia gateway connection.
 	 *
-	 * @param payload - The payload to send to the main Discord gateway connection
+	 * @param payload - The payload to send to the main Guilderia gateway connection
 	 * @returns `false` if the payload definitely failed to send - in this case, the voice connection disconnects
 	 */
 	sendPayload(payload: any): boolean;
@@ -47,6 +47,6 @@ export interface DiscordGatewayAdapterImplementerMethods {
  * the implementer will return some methods that the library can call - e.g. to send messages on
  * the gateway, or to signal that the adapter can be removed.
  */
-export type DiscordGatewayAdapterCreator = (
-	methods: DiscordGatewayAdapterLibraryMethods,
-) => DiscordGatewayAdapterImplementerMethods;
+export type GuilderiaGatewayAdapterCreator = (
+	methods: GuilderiaGatewayAdapterLibraryMethods,
+) => GuilderiaGatewayAdapterImplementerMethods;

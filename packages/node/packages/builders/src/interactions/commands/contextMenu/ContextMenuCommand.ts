@@ -1,4 +1,4 @@
-import type { ApplicationCommandType, RESTPostAPIContextMenuApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import type { ApplicationCommandType, RESTPostAPIContextMenuApplicationCommandsJSONBody } from 'guilderia-api-types/v10';
 import { Mixin } from 'ts-mixer';
 import { CommandBuilder } from '../Command.js';
 import { SharedName } from '../SharedName.js';
@@ -11,7 +11,7 @@ export type ContextMenuCommandType = ApplicationCommandType.Message | Applicatio
 /**
  * A builder that creates API-compatible JSON data for context menu commands.
  *
- * @mixes {@link CommandBuilder}\<{@link discord-api-types/v10#(RESTPostAPIContextMenuApplicationCommandsJSONBody:interface)}\>
+ * @mixes {@link CommandBuilder}\<{@link guilderia-api-types/v10#(RESTPostAPIContextMenuApplicationCommandsJSONBody:interface)}\>
  * @mixes {@link SharedName}
  */
 export abstract class ContextMenuCommandBuilder extends Mixin(

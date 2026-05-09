@@ -1,9 +1,9 @@
-import type { JSONEncodable } from '@discordjs/util';
+import type { JSONEncodable } from '@guilderiajs/util';
 import type {
 	APILabelComponent,
 	APIModalInteractionResponseCallbackData,
 	APITextDisplayComponent,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import type { ActionRowBuilder } from '../../components/ActionRow.js';
 import type { AnyModalComponentBuilder } from '../../components/Components.js';
 import { createComponentBuilder } from '../../components/Components.js';

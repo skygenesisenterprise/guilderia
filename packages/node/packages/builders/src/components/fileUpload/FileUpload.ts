@@ -1,5 +1,5 @@
-import type { APIFileUploadComponent } from 'discord-api-types/v10';
-import { ComponentType } from 'discord-api-types/v10';
+import type { APIFileUploadComponent } from 'guilderia-api-types/v10';
+import { ComponentType } from 'guilderia-api-types/v10';
 import { validate } from '../../util/validation.js';
 import { ComponentBuilder } from '../Component.js';
 import { fileUploadPredicate } from './Assertions.js';

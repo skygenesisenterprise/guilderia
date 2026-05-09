@@ -1,10 +1,10 @@
-import type { APIThreadMetadata } from 'discord-api-types/v10';
+import type { APIThreadMetadata } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kArchiveTimestamp, kCreatedTimestamp, kData } from '../utils/symbols.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents metadata of a thread channel on Discord.
+ * Represents metadata of a thread channel on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */
@@ -80,7 +80,7 @@ export class ThreadMetadata<
 	}
 
 	/**
-	 * Whether the thread is locked; when a thread is locked, only users with {@link discord-api-types/v10#(PermissionFlagsBits:variable) | ManageThreads} can unarchive it.
+	 * Whether the thread is locked; when a thread is locked, only users with {@link guilderia-api-types/v10#(PermissionFlagsBits:variable) | ManageThreads} can unarchive it.
 	 */
 	public get locked() {
 		return this[kData].locked;

@@ -1,4 +1,4 @@
-import type { APIButtonComponent, APIButtonComponentWithSKUId, APIMessageComponentEmoji } from 'discord-api-types/v10';
+import type { APIButtonComponent, APIButtonComponentWithSKUId, APIMessageComponentEmoji } from 'guilderia-api-types/v10';
 
 export interface EmojiOrLabelButtonData extends Pick<
 	Exclude<APIButtonComponent, APIButtonComponentWithSKUId>,

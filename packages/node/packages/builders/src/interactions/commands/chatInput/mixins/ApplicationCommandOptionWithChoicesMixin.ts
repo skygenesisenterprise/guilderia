@@ -1,7 +1,7 @@
-import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
+import type { APIApplicationCommandOptionChoice } from 'guilderia-api-types/v10';
 import { normalizeArray, type RestOrArray } from '../../../../util/normalizeArray.js';
 
-// Unlike other places, we're not `Pick`ing from discord-api-types. The union includes `[]` and it breaks everything.
+// Unlike other places, we're not `Pick`ing from guilderia-api-types. The union includes `[]` and it breaks everything.
 export interface ApplicationCommandOptionWithChoicesData {
 	choices?: APIApplicationCommandOptionChoice<number | string>[];
 }

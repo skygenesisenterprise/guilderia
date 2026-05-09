@@ -1,13 +1,13 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APIEntitlement } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APIEntitlement } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
-import { dateToDiscordISOTimestamp } from '../utils/optimization.js';
+import { dateToGuilderiaISOTimestamp } from '../utils/optimization.js';
 import { kData, kStartsTimestamp, kEndsTimestamp } from '../utils/symbols.js';
 import { isIdSet } from '../utils/type-guards.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents any entitlement on Discord.
+ * Represents any entitlement on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  */
@@ -82,7 +82,7 @@ export class Entitlement<Omitted extends keyof APIEntitlement | '' = 'ends_at' |
 	/**
 	 * Type of entitlement
 	 *
-	 * @see {@link https://discord.com/developers/docs/resources/entitlement#entitlement-object-entitlement-types}
+	 * @see {@link https://guilderia.com/developers/docs/resources/entitlement#entitlement-object-entitlement-types}
 	 */
 	public get type() {
 		return this[kData].type;
@@ -143,7 +143,7 @@ export class Entitlement<Omitted extends keyof APIEntitlement | '' = 'ends_at' |
 	 * The timestamp the entitlement was created at
 	 */
 	public get createdTimestamp() {
-		return isIdSet(this.id) ? DiscordSnowflake.timestampFrom(this.id) : null;
+		return isIdSet(this.id) ? GuilderiaSnowflake.timestampFrom(this.id) : null;
 	}
 
 	/**
@@ -164,11 +164,11 @@ export class Entitlement<Omitted extends keyof APIEntitlement | '' = 'ends_at' |
 		const endsAtTimestamp = this[kEndsTimestamp];
 
 		if (startsAtTimestamp) {
-			clone.starts_at = dateToDiscordISOTimestamp(new Date(startsAtTimestamp));
+			clone.starts_at = dateToGuilderiaISOTimestamp(new Date(startsAtTimestamp));
 		}
 
 		if (endsAtTimestamp) {
-			clone.ends_at = dateToDiscordISOTimestamp(new Date(endsAtTimestamp));
+			clone.ends_at = dateToGuilderiaISOTimestamp(new Date(endsAtTimestamp));
 		}
 
 		return clone;

@@ -1,4 +1,4 @@
-import type { GatewayOpcodeRateLimitMetadataMap, GatewayRateLimitedDispatchData } from 'discord-api-types/v10';
+import type { GatewayOpcodeRateLimitMetadataMap, GatewayRateLimitedDispatchData } from 'guilderia-api-types/v10';
 
 /**
  * Represents the error thrown when the gateway emits a `RATE_LIMITED` event after a certain request.

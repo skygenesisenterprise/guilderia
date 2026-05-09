@@ -1,4 +1,4 @@
-import type { APITextChannel, ChannelType } from 'discord-api-types/v10';
+import type { APITextChannel, ChannelType } from 'guilderia-api-types/v10';
 import { Mixin } from '../Mixin.js';
 import type { MixinTypes } from '../MixinTypes.d.ts';
 import type { Partialize } from '../utils/types.js';

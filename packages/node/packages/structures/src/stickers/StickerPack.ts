@@ -1,12 +1,12 @@
-import { DiscordSnowflake } from '@sapphire/snowflake';
-import type { APIStickerPack } from 'discord-api-types/v10';
+import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import type { APIStickerPack } from 'guilderia-api-types/v10';
 import { Structure } from '../Structure.js';
 import { kData } from '../utils/symbols.js';
 import { isIdSet } from '../utils/type-guards.js';
 import type { Partialize } from '../utils/types.js';
 
 /**
- * Represents a sticker pack on Discord.
+ * Represents a sticker pack on Guilderia.
  *
  * @typeParam Omitted - Specify the properties that will not be stored in the raw data field as a union, implement via `DataTemplate`
  * @remarks has substructure `Sticker` which needs to be instantiated and stored by an extending class using it
@@ -62,7 +62,7 @@ export class StickerPack<Omitted extends keyof APIStickerPack | '' = ''> extends
 	/**
 	 * The id of the sticker pack's banner image
 	 *
-	 * @see {@link https://discord.com/developers/docs/reference#image-formatting}
+	 * @see {@link https://guilderia.com/developers/docs/reference#image-formatting}
 	 */
 	public get bannerAssetId() {
 		return this[kData].banner_asset_id;
@@ -72,7 +72,7 @@ export class StickerPack<Omitted extends keyof APIStickerPack | '' = ''> extends
 	 * The timestamp the sticker pack was created at
 	 */
 	public get createdTimestamp() {
-		return isIdSet(this.id) ? DiscordSnowflake.timestampFrom(this.id) : null;
+		return isIdSet(this.id) ? GuilderiaSnowflake.timestampFrom(this.id) : null;
 	}
 
 	/**

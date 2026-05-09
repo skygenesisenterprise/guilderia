@@ -1,9 +1,9 @@
-import type { JSONEncodable } from '@discordjs/util';
+import type { JSONEncodable } from '@guilderiajs/util';
 import type {
 	APIApplicationCommandBasicOption,
 	APIApplicationCommandOption,
 	ApplicationCommandOptionType,
-} from 'discord-api-types/v10';
+} from 'guilderia-api-types/v10';
 import type { z } from 'zod';
 import { validate } from '../../../../util/validation.js';
 import type { SharedNameAndDescriptionData } from '../../SharedNameAndDescription.js';
