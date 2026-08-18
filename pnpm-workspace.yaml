@@ -1,8 +1,5 @@
 packages:
-  - "app"
-  - "tools"
-  - "tests"
-  - "packages/snap"
+  - "apps"
   - "server/prisma"
   - "packages/node"
   - "packages/github"
