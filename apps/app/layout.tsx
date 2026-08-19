@@ -26,15 +26,15 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/guilderia.png",
+        url: "/enterprise-favicon.png",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/guilderia.png",
+        url: "/enterprise-favicon.png",
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/guilderia.svg",
+        url: "/enterprise-favicon.svg",
         type: "image/svg+xml",
       },
     ],

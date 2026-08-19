@@ -1,0 +1,1187 @@
+package services
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/url"
+	"strconv"
+	"strings"
+	"time"
+
+	"gorm.io/datatypes"
+	"gorm.io/gorm"
+
+	"github.com/skygenesisenterprise/guilderia/server/src/models"
+	"github.com/skygenesisenterprise/guilderia/server/src/utils"
+)
+
+// PlexMediaSource is a thin provider wrapper that adapts PlexMediaServer
+// responses to the canonical MediaSourceItem shape consumed by the routes
+// multiplexer. It also owns the SyncLibrary strategy that writes Plex rows
+// into the local anime index so the front-end can serve them without round
+// trips back to Plex on every request.
+type PlexMediaSource struct {
+	client *PlexClient
+	db     *gorm.DB
+}
+
+// NewPlexMediaSource instantiates a provider backed by the given client.
+func NewPlexMediaSource(client *PlexClient, db *gorm.DB) *PlexMediaSource {
+	return &PlexMediaSource{client: client, db: db}
+}
+
+// Name identifies the provider.
+func (s *PlexMediaSource) Name() string { return "plex" }
+
+// GetClient returns the underlying PlexClient (used by dedicated Plex routes
+// that bypass the multiplexer — e.g. /api/v1/integrations/plex/identity).
+func (s *PlexMediaSource) GetClient() *PlexClient { return s.client }
+
+// enabled fails fast when the client is missing or not configured.
+func (s *PlexMediaSource) enabled() error {
+	if s.client == nil || !s.client.Enabled() {
+		return plexDisabledError()
+	}
+	return nil
+}
+
+// ---- Library / items ----------------------------------------------------
+
+func (s *PlexMediaSource) ListLibraries(ctx context.Context) ([]map[string]interface{}, error) {
+	if err := s.enabled(); err != nil {
+		return nil, err
+	}
+	dirs, _, err := s.client.ListLibraries(ctx)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]map[string]interface{}, 0, len(dirs))
+	for _, dir := range dirs {
+		out = append(out, mapPlexLibrary(dir))
+	}
+	return out, nil
+}
+
+func (s *PlexMediaSource) GetLibrary(ctx context.Context, id string) (map[string]interface{}, error) {
+	if err := s.enabled(); err != nil {
+		return nil, err
+	}
+	lib, err := s.client.GetLibrary(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return mapPlexLibrary(lib), nil
+}
+
+func (s *PlexMediaSource) ListItems(ctx context.Context, libraryID string, limit, offset int, sortBy, query string) ([]map[string]interface{}, int, error) {
+	if err := s.enabled(); err != nil {
+		return nil, 0, err
+	}
+	if limit <= 0 {
+		limit = 20
+	}
+	if offset < 0 {
+		offset = 0
+	}
+	// Plex pagination is encoded into X-Plex-Container-Size /
+	// X-Plex-Container-Start and is opaque; if a sort/query came from the
+	// client we still pass them but Plex may honour only a subset.
+	if query != "" {
+		items, err := s.client.SearchItems(ctx, query, "", limit)
+		if err == nil {
+			return convertPlexItems(items), len(items), nil
+		}
+		// Fall through to library listing if search fails for some reason.
+	}
+	items, total, err := s.client.ListLibraryItems(ctx, libraryID, "", limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	return convertPlexItems(items), total, nil
+}
+
+func (s *PlexMediaSource) GetItem(ctx context.Context, id string) (map[string]interface{}, error) {
+	if err := s.enabled(); err != nil {
+		return nil, err
+	}
+	item, err := s.client.GetItemMetadata(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return mapPlexItem(item), nil
+}
+
+func (s *PlexMediaSource) SearchItems(ctx context.Context, query string, limit int) ([]map[string]interface{}, error) {
+	if err := s.enabled(); err != nil {
+		return nil, err
+	}
+	if limit <= 0 {
+		limit = 20
+	}
+	items, err := s.client.SearchItems(ctx, query, "", limit)
+	if err != nil {
+		return nil, err
+	}
+	return convertPlexItems(items), nil
+}
+
+// ---- Playback -----------------------------------------------------------
+
+func (s *PlexMediaSource) GetStreamURL(ctx context.Context, itemID string, profile string) (string, error) {
+	if err := s.enabled(); err != nil {
+		return "", err
+	}
+	return BuildPlexStreamURL(ctx, s.client, itemID, profile)
+}
+
+// GetStreamURLForItem is a thin alias exposed for symmetry with the legacy
+// `static bool` API of the Jellyfin/Legacy providers; the platform uses a
+// string codec profile and we forward the call through GetStreamURL so
+// downstream integration stays one-line of code.
+func (s *PlexMediaSource) GetStreamURLForItem(ctx context.Context, itemID string) (string, error) {
+	return s.GetStreamURL(ctx, itemID, "native")
+}
+
+func (s *PlexMediaSource) GetPlaybackInfo(ctx context.Context, itemID string) (map[string]interface{}, error) {
+	if err := s.enabled(); err != nil {
+		return nil, err
+	}
+	item, err := s.client.GetItemMetadata(ctx, itemID)
+	if err != nil {
+		return nil, err
+	}
+	info := mapPlexItem(item)
+	if streamURL, err := s.GetStreamURL(ctx, itemID, "native"); err == nil {
+		info["streamUrl"] = streamURL
+	}
+	return info, nil
+}
+
+func (s *PlexMediaSource) ReportPlaybackProgress(ctx context.Context, itemID string, positionTicks int64, stopped bool) error {
+	if err := s.enabled(); err != nil {
+		return err
+	}
+	state := "playing"
+	if stopped {
+		state = "stopped"
+	}
+	// Plex accepts milliseconds; positionTicks is the canonical platform tick
+	// (1 tick = 100 ns), so convert accordingly.
+	timeMs := positionTicks / int64(time.Millisecond)
+	item, err := s.client.GetItemMetadata(ctx, itemID)
+	durationMs := int64(0)
+	if err == nil {
+		if d, ok := item["duration"].(float64); ok {
+			durationMs = int64(d)
+		}
+	}
+	return s.client.UpdateTimeline(ctx, itemID, state, timeMs, durationMs)
+}
+
+// ---- Maintenance --------------------------------------------------------
+
+func (s *PlexMediaSource) SyncLibrary(ctx context.Context, libraryID string) (map[string]interface{}, error) {
+	if err := s.enabled(); err != nil {
+		return nil, err
+	}
+	if s.db == nil {
+		return nil, fmt.Errorf("database unavailable")
+	}
+	now := time.Now().UTC()
+	log := models.SourceSyncLog{
+		Common:     models.Common{ID: now.Format("20060102150405") + "-" + libraryID, CreatedAt: now, UpdatedAt: now},
+		LibraryID:  libraryID,
+		SourceType: "plex",
+		Status:     "running",
+		StartedAt:  now,
+	}
+	if err := s.db.Create(&log).Error; err != nil {
+		return nil, err
+	}
+
+	pageSize := 100
+	created, updated := 0, 0
+	episodesImported := 0
+	offset := 0
+	for {
+		items, total, err := s.client.ListLibraryItems(ctx, libraryID, "", pageSize, offset)
+		if err != nil {
+			completedAt := time.Now().UTC()
+			errMsg := err.Error()
+			log.Status = "failed"
+			log.ErrorMessage = &errMsg
+			log.CompletedAt = &completedAt
+			s.db.Save(&log)
+			return nil, err
+		}
+		for _, it := range items {
+			mapped := mapPlexItem(it)
+			sourceID := getStringFromMap(mapped, "sourceId")
+			if sourceID == "" {
+				sourceID = toString(it["ratingKey"])
+			}
+			if sourceID == "" {
+				continue
+			}
+			rawMeta, _ := json.Marshal(mapped)
+			existing := models.Anime{}
+			tx := s.db.Where("source = ? AND metadata->>'sourceId' = ?", "plex", sourceID).First(&existing)
+			if tx.Error == gorm.ErrRecordNotFound {
+				row := models.Anime{
+				Common:        models.Common{ID: sourceID, CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC()},
+				Slug:          uniqueSlug(ctx, s.db, generateSlug(getStringFromMap(mapped, "name"))),
+				Title:         getStringFromMap(mapped, "name"),
+					JapaneseTitle: getStringFromMap(mapped, "originalTitle"),
+					Synopsis:      getStringFromMap(mapped, "overview"),
+					Status:        "released",
+					Rating:        getFloat64FromMap(mapped, "rating"),
+					ReleaseYear:   getIntFromMap(mapped, "year"),
+					Source:        "plex",
+					Metadata:      datatypes.JSON(rawMeta),
+				}
+				if err := s.db.Create(&row).Error; err == nil {
+					created++
+				}
+			} else if tx.Error == nil {
+				existing.Title = getStringFromMap(mapped, "name")
+				existing.UpdatedAt = time.Now().UTC()
+				existing.Metadata = datatypes.JSON(rawMeta)
+				if err := s.db.Save(&existing).Error; err == nil {
+					updated++
+				}
+			}
+			// Series carry their episodes only on the provider — import the
+			// season/episode grid so series have a playable episode list in
+			// the catalog (watch page, season rails). Best-effort: a failure
+			// on one show must not abort the whole library sync.
+			if getStringFromMap(mapped, "type") == "Series" {
+				if n, err := importPlexShowEpisodes(ctx, s.db, s.client, sourceID, sourceID); err == nil {
+					episodesImported += n
+				}
+			}
+		}
+		offset += pageSize
+		if total > 0 && offset >= total {
+			break
+		}
+		if len(items) < pageSize {
+			break
+		}
+	}
+
+	completedAt := time.Now().UTC()
+	log.ItemsCreated = created
+	log.ItemsUpdated = updated
+	log.CompletedAt = &completedAt
+	log.Status = "completed"
+	s.db.Save(&log)
+
+	// Best-effort refresh trigger so Plex re-scans the library after we read
+	// it (helps catch metadata updates without polling).
+	_ = s.client.RefreshLibrary(ctx, libraryID)
+
+	return map[string]interface{}{
+		"libraryId":         libraryID,
+		"source":            "plex",
+		"itemsCreated":      created,
+		"itemsUpdated":      updated,
+		"itemsRemoved":      0,
+		"episodesImported":  episodesImported,
+		"startedAt":         now,
+		"completedAt":       completedAt,
+	}, nil
+}
+
+func (s *PlexMediaSource) GetSyncStatus(ctx context.Context, libraryID string) (map[string]interface{}, error) {
+	if err := s.enabled(); err != nil {
+		return nil, err
+	}
+	if s.db == nil {
+		return nil, fmt.Errorf("database unavailable")
+	}
+	var log models.SourceSyncLog
+	s.db.Where("source_type = ? AND library_id = ?", "plex", libraryID).Order("created_at DESC").First(&log)
+	status := "idle"
+	if log.Status != "" {
+		status = log.Status
+	}
+	var lastSync *time.Time = log.CompletedAt
+	var errMsg string
+	if log.ErrorMessage != nil {
+		errMsg = *log.ErrorMessage
+	}
+	return map[string]interface{}{
+		"libraryId":    libraryID,
+		"source":       "plex",
+		"lastSyncAt":   lastSync,
+		"status":       status,
+		"itemCount":    log.ItemsCreated + log.ItemsUpdated,
+		"errorMessage": errMsg,
+	}, nil
+}
+
+// BuildPlexStreamURL produces the standard /video/:/transcode/universal/start
+// URL for a ratingKey using any resolved PlexClient (env-configured or loaded
+// from a persisted source_configs row).
+//
+// The returned URL points straight at the Plex Media Server and is handed to
+// the browser's <video> element; the token travels as a query parameter
+// because the media stream is fetched by the browser, not by the API server.
+//
+// profile is reserved for future transcoding profiles (e.g. forcing a codec).
+// When empty or "native", no codec params are sent and Plex picks the most
+// compatible stream for the player (direct play when possible, transcode
+// otherwise) — which is the safe default for browser playback.
+func BuildPlexStreamURL(ctx context.Context, client *PlexClient, ratingKey string, profile string) (string, error) {
+	if client == nil || !client.Enabled() {
+		return "", plexDisabledError()
+	}
+	if ratingKey == "" {
+		return "", fmt.Errorf("itemID required")
+	}
+	item, err := client.GetItemMetadata(ctx, ratingKey)
+	if err != nil {
+		return "", err
+	}
+	media := firstMedia(item)
+	if media == nil {
+		return "", fmt.Errorf("no media part available for %s", ratingKey)
+	}
+	part := firstPart(media)
+	if part == nil {
+		return "", fmt.Errorf("no part available for %s", ratingKey)
+	}
+	path := toString(part["key"])
+	if path == "" {
+		return "", fmt.Errorf("part has no key")
+	}
+	return buildPlexUniversalStreamURL(client.BaseURL(), path, client.Token(), profile)
+}
+
+// buildPlexUniversalStreamURL assembles the /video/:/transcode/universal/start
+// URL for a media part path. The universal transcode endpoint is the only one
+// that honors the path/mediaIndex/partIndex/protocol query parameters — hitting
+// the server root with these params returns the Plex web app HTML instead of a
+// stream. protocol is pinned to "hls" so Plex emits an HLS master playlist that
+// the same-origin proxy can re-write for the browser.
+func buildPlexUniversalStreamURL(baseURL, partPath, token, profile string) (string, error) {
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return "", err
+	}
+	u.Path = strings.TrimRight(u.Path, "/") + "/video/:/transcode/universal/start"
+	q := u.Query()
+	q.Set("path", partPath)
+	q.Set("mediaIndex", "0")
+	q.Set("partIndex", "0")
+	// protocol must be one of hls/dash/http — Plex returns HTTP 400 for any
+	// other value. "hls" is what the player needs; it is NOT derived from the
+	// URL scheme (http/https), that was the bug that 400'd every request.
+	q.Set("protocol", "hls")
+	// Force remux/transcode into browser-compatible MPEG-TS segments —
+	// browsers cannot direct-play MKV containers.
+	q.Set("directPlay", "0")
+	if profile == "" {
+		profile = "native"
+	}
+	q.Set("session", "kamisama-"+fmt.Sprintf("%x", len(partPath)))
+	q.Set("X-Plex-Token", token)
+	u.RawQuery = q.Encode()
+	return u.String(), nil
+}
+
+// ResolvePlexEpisodeKey maps a catalog (season, episode) pair to the Plex
+// ratingKey of the matching episode under the show, by listing the show's
+// leaves and matching parentIndex/index. Catalog rows only store the show
+// key (metadata.sourceId), so episode keys are resolved on demand.
+func ResolvePlexEpisodeKey(ctx context.Context, client *PlexClient, showKey string, seasonNumber, episodeNumber int) (string, error) {
+	if client == nil || !client.Enabled() {
+		return "", plexDisabledError()
+	}
+	if showKey == "" {
+		return "", fmt.Errorf("show key required")
+	}
+	episodes, err := client.GetShowEpisodes(ctx, showKey)
+	if err != nil {
+		return "", err
+	}
+	for _, ep := range episodes {
+		if toInt(ep["parentIndex"]) == seasonNumber && toInt(ep["index"]) == episodeNumber {
+			if key := toString(ep["ratingKey"]); key != "" {
+				return key, nil
+			}
+		}
+	}
+	return "", fmt.Errorf("episode %d of season %d not found on provider", episodeNumber, seasonNumber)
+}
+
+// ImportPlexShowEpisodes refreshes the season/episode grid of an existing
+// catalog row from its Plex show key (metadata.sourceId). Idempotent — rows
+// are upserted by (anime_id, number) / episode id — and returns the number of
+// episodes written. Exported for the admin per-item sync so series imported
+// before the episode importer existed get their episodes backfilled on demand.
+func ImportPlexShowEpisodes(ctx context.Context, db *gorm.DB, client *PlexClient, animeID, showKey string) (int, error) {
+	if db == nil || client == nil || !client.Enabled() || animeID == "" || showKey == "" {
+		return 0, nil
+	}
+	return importPlexShowEpisodes(ctx, db, client, animeID, showKey)
+}
+
+// ImportPlexItem fetches a single Plex item by ratingKey and upserts it into
+// the local anime index (deduplicated by source + metadata->>'sourceId').
+// It returns the canonical MediaSourceItem shape plus import metadata so the
+// UI can reflect the result immediately.
+func ImportPlexItem(ctx context.Context, db *gorm.DB, client *PlexClient, ratingKey string) (map[string]interface{}, error) {
+	if client == nil || !client.Enabled() {
+		return nil, plexDisabledError()
+	}
+	if db == nil {
+		return nil, fmt.Errorf("database unavailable")
+	}
+	if ratingKey == "" {
+		return nil, fmt.Errorf("ratingKey required")
+	}
+	raw, err := client.GetItemMetadata(ctx, ratingKey)
+	if err != nil {
+		return nil, err
+	}
+	mapped := mapPlexItem(raw)
+	sourceID := getStringFromMap(mapped, "sourceId")
+	if sourceID == "" {
+		sourceID = ratingKey
+	}
+	rawMeta, _ := json.Marshal(mapped)
+	now := time.Now().UTC()
+
+	existing := models.Anime{}
+	tx := db.Where("source = ? AND metadata->>'sourceId' = ?", "plex", sourceID).First(&existing)
+	if tx.Error == gorm.ErrRecordNotFound {
+		row := models.Anime{
+			Common:         models.Common{ID: sourceID, CreatedAt: now, UpdatedAt: now},
+			Slug:           uniqueSlug(ctx, db, generateSlug(getStringFromMap(mapped, "name"))),
+			Title:          getStringFromMap(mapped, "name"),
+			JapaneseTitle:  getStringFromMap(mapped, "originalTitle"),
+			Synopsis:       getStringFromMap(mapped, "overview"),
+			CoverImageUrl:  getStringFromMap(mapped, "imageUrl"),
+			BannerImageUrl: getStringFromMap(mapped, "artUrl"),
+			Status:         "added",
+			Rating:         getFloat64FromMap(mapped, "rating"),
+			ReleaseYear:    getIntFromMap(mapped, "year"),
+			Source:         "plex",
+			Metadata:       datatypes.JSON(rawMeta),
+		}
+		if err := db.Create(&row).Error; err != nil {
+			return nil, err
+		}
+		// Series carry their episodes only on the provider — import the
+		// season/episode grid so the detail/watch pages have a playable
+		// episode list instead of an empty seasons array.
+		if getStringFromMap(mapped, "type") == "Series" {
+			_, _ = importPlexShowEpisodes(ctx, db, client, row.ID, sourceID)
+		}
+		return map[string]interface{}{
+			"item":     mapped,
+			"animeId":  row.ID,
+			"created":  true,
+			"updated":  false,
+			"sourceId": sourceID,
+			"title":    row.Title,
+		}, nil
+	}
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	existing.Title = getStringFromMap(mapped, "name")
+	existing.UpdatedAt = now
+	existing.Metadata = datatypes.JSON(rawMeta)
+	// Keep provider artwork in sync so the catalog rows carry the poster and
+	// backdrop/banner even before a dedicated asset sync runs. Only overwrite
+	// when the provider returns artwork, to avoid clobbering curated images.
+	if img := getStringFromMap(mapped, "imageUrl"); img != "" {
+		existing.CoverImageUrl = img
+	}
+	if art := getStringFromMap(mapped, "artUrl"); art != "" {
+		existing.BannerImageUrl = art
+	}
+	if err := db.Save(&existing).Error; err != nil {
+		return nil, err
+	}
+	// Series carry their episodes only on the provider — import the
+	// season/episode grid so the detail/watch pages have a playable
+	// episode list instead of an empty seasons array.
+	if getStringFromMap(mapped, "type") == "Series" {
+		_, _ = importPlexShowEpisodes(ctx, db, client, existing.ID, sourceID)
+	}
+	return map[string]interface{}{
+		"item":     mapped,
+		"animeId":  existing.ID,
+		"created":  false,
+		"updated":  true,
+		"sourceId": sourceID,
+		"title":    existing.Title,
+	}, nil
+}
+
+// ImportPlexMetadataForAnime searches the configured Plex server for a title
+// matching an existing catalog row (e.g. one just imported from AniList) and
+// merges the matching Plex item's metadata into that row — artwork, rating,
+// year, genres, the Plex source link and, for series, the real season/episode
+// grid. The row is re-marked with source "plex" and metadata.sourceId so Plex
+// becomes its default source and later library syncs update it instead of
+// creating a duplicate. Best-effort: it returns nil (and does nothing) when
+// Plex is unavailable or no plausible match is found.
+func ImportPlexMetadataForAnime(ctx context.Context, db *gorm.DB, client *PlexClient, anime *models.Anime) error {
+	if db == nil || client == nil || !client.Enabled() || anime == nil {
+		return nil
+	}
+	title := strings.TrimSpace(anime.Title)
+	if title == "" {
+		return nil
+	}
+	results, err := client.SearchItems(ctx, title, "", 10)
+	if err != nil || len(results) == 0 {
+		return nil
+	}
+	best := bestPlexMatch(title, results)
+	if best == nil {
+		return nil
+	}
+	ratingKey := toString(best["ratingKey"])
+	if ratingKey == "" {
+		ratingKey = toString(best["key"])
+	}
+	if ratingKey == "" {
+		return nil
+	}
+	// Search results can be thin — re-fetch the full metadata block so we get
+	// artwork, genres and leaf counts before merging.
+	full, err := client.GetItemMetadata(ctx, ratingKey)
+	if err != nil {
+		full = best
+	}
+	return mergePlexMetadataIntoAnime(ctx, db, client, anime, ratingKey, full)
+}
+
+// bestPlexMatch picks the search result whose title best matches the query,
+// preferring an exact normalized match, then falls back to the first result.
+func bestPlexMatch(query string, results []map[string]interface{}) map[string]interface{} {
+	key := normalizePlexTitle(query)
+	for _, r := range results {
+		if normalizePlexTitle(toString(r["title"])) == key {
+			return r
+		}
+	}
+	return results[0]
+}
+
+// normalizePlexTitle lowercases a title and collapses punctuation and
+// whitespace so provider titles ("Fate/Zero" vs "Fate: Zero") can be compared.
+func normalizePlexTitle(value string) string {
+	lower := strings.ToLower(value)
+	var b strings.Builder
+	prevSpace := false
+	for _, r := range lower {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {
+			if prevSpace {
+				b.WriteByte(' ')
+				prevSpace = false
+			}
+			b.WriteRune(r)
+		} else {
+			prevSpace = true
+		}
+	}
+	return strings.TrimSpace(b.String())
+}
+
+// mergePlexMetadataIntoAnime applies the mapped Plex item onto an existing
+// catalog row and records Plex as its default source.
+func mergePlexMetadataIntoAnime(ctx context.Context, db *gorm.DB, client *PlexClient, anime *models.Anime, ratingKey string, raw map[string]interface{}) error {
+	mapped := mapPlexItem(raw)
+	sourceID := getStringFromMap(mapped, "sourceId")
+	if sourceID == "" {
+		sourceID = ratingKey
+	}
+	now := time.Now().UTC()
+	// The row was not Plex-sourced before (imported from AniList, created
+	// manually, …): its seasons/episodes are placeholders stamped by that
+	// flow and will be replaced by the real Plex grid below.
+	resourcingFromOtherProvider := anime.Source != "plex"
+
+	anime.Source = "plex"
+	if img := getStringFromMap(mapped, "imageUrl"); img != "" {
+		anime.CoverImageUrl = img
+	}
+	if art := getStringFromMap(mapped, "artUrl"); art != "" {
+		anime.BannerImageUrl = art
+	}
+	if name := getStringFromMap(mapped, "name"); name != "" {
+		anime.Title = name
+	}
+	if orig := getStringFromMap(mapped, "originalTitle"); orig != "" && anime.JapaneseTitle == "" {
+		anime.JapaneseTitle = orig
+	}
+	if overview := getStringFromMap(mapped, "overview"); overview != "" {
+		anime.Synopsis = overview
+	}
+	if year := getIntFromMap(mapped, "year"); year > 0 {
+		anime.ReleaseYear = year
+	}
+	if rating := getFloat64FromMap(mapped, "rating"); rating > 0 {
+		anime.Rating = rating
+	}
+	// Plex reports the total episode count for shows on the leafCount field.
+	if v, ok := raw["leafCount"].(float64); ok && int(v) > 0 {
+		anime.TotalEpisodes = int(v)
+	}
+
+	// Merge into the JSONB metadata: keep any existing keys (anilist_id,
+	// genres, …) and add the Plex link with Plex as the first/default source.
+	var meta map[string]any
+	if len(anime.Metadata) > 0 {
+		_ = json.Unmarshal(anime.Metadata, &meta)
+	}
+	if meta == nil {
+		meta = map[string]any{}
+	}
+	meta["sourceId"] = sourceID
+	if ptype := getStringFromMap(mapped, "type"); ptype != "" {
+		meta["type"] = ptype
+	}
+	ext, _ := meta["external_ids"].(map[string]any)
+	if ext == nil {
+		ext = map[string]any{}
+	}
+	ext["plex"] = sourceID
+	meta["external_ids"] = ext
+	meta["sources"] = plexSourceList(meta, sourceID)
+
+	rawMeta, err := json.Marshal(meta)
+	if err != nil {
+		return err
+	}
+	anime.Metadata = datatypes.JSON(rawMeta)
+	anime.UpdatedAt = now
+
+	if err := db.WithContext(ctx).Save(anime).Error; err != nil {
+		return err
+	}
+
+	// Series carry their episodes only on the provider — import the real
+	// season/episode grid so the row has a playable episode list. Rows being
+	// re-sourced from another provider keep their placeholder seasons/
+	// episodes (AniList stamps Episode 1..N with random ids), so drop those
+	// first: only the real Plex grid should remain on the row.
+	if getStringFromMap(mapped, "type") == "Series" {
+		if resourcingFromOtherProvider {
+			_ = db.WithContext(ctx).Where("anime_id = ?", anime.ID).Delete(&models.Episode{}).Error
+			_ = db.WithContext(ctx).Where("anime_id = ?", anime.ID).Delete(&models.AnimeSeason{}).Error
+		}
+		_, _ = importPlexShowEpisodes(ctx, db, client, anime.ID, sourceID)
+	}
+	return nil
+}
+
+// plexSourceList returns the metadata.sources array with Plex placed first (as
+// the default source) while preserving any other linked sources (e.g. AniList).
+func plexSourceList(meta map[string]any, sourceID string) []any {
+	existing, _ := meta["sources"].([]any)
+	if existing == nil {
+		existing = []any{}
+	}
+	out := make([]any, 0, len(existing)+1)
+	out = append(out, map[string]any{
+		"provider":     "Plex",
+		"externalId":   sourceID,
+		"status":       "active",
+		"lastSyncedAt": time.Now().UTC().Format(time.RFC3339),
+	})
+	for _, s := range existing {
+		if obj, ok := s.(map[string]any); ok && obj["provider"] == "Plex" {
+			continue
+		}
+		out = append(out, s)
+	}
+	return out
+}
+
+// importPlexShowEpisodes fetches the real season + episode grid of a Plex
+// show (via /allLeaves) and upserts it under the local anime row. Without
+// this, series imported from Plex have an empty season list and the watch
+// page shows "épisode introuvable" even though the provider serves the
+// episodes. Idempotent: existing season/episode rows are matched by
+// (anime_id, number) and updated in place. Returns the number of episodes
+// written.
+func importPlexShowEpisodes(ctx context.Context, db *gorm.DB, client *PlexClient, animeID, showKey string) (int, error) {
+	if db == nil || client == nil || !client.Enabled() || animeID == "" || showKey == "" {
+		return 0, nil
+	}
+	rawEps, err := client.GetShowEpisodes(ctx, showKey)
+	if err != nil {
+		return 0, err
+	}
+	if len(rawEps) == 0 {
+		return 0, nil
+	}
+
+	now := time.Now().UTC()
+	// Group the flat leaf list by season number (parentIndex).
+	bySeason := make(map[int][]map[string]interface{})
+	for _, raw := range rawEps {
+		seasonNum := toInt(raw["parentIndex"])
+		if seasonNum <= 0 {
+			seasonNum = 1
+		}
+		bySeason[seasonNum] = append(bySeason[seasonNum], raw)
+	}
+
+	imported := 0
+	for seasonNum, eps := range bySeason {
+		// Upsert the season row.
+		season := models.AnimeSeason{}
+		err := db.WithContext(ctx).Where("anime_id = ? AND number = ?", animeID, seasonNum).First(&season).Error
+		if err == gorm.ErrRecordNotFound {
+			season = models.AnimeSeason{
+				Common:       models.Common{ID: utils.NewID(), CreatedAt: now, UpdatedAt: now},
+				AnimeID:      animeID,
+				Number:       seasonNum,
+				Title:        fmt.Sprintf("Season %d", seasonNum),
+				EpisodeCount: len(eps),
+			}
+			if err := db.WithContext(ctx).Create(&season).Error; err != nil {
+				continue
+			}
+		} else if err != nil {
+			continue
+		} else {
+			season.EpisodeCount = len(eps)
+			season.UpdatedAt = now
+			if err := db.WithContext(ctx).Save(&season).Error; err != nil {
+				continue
+			}
+		}
+
+		for _, raw := range eps {
+			epNum := toInt(raw["index"])
+			if epNum <= 0 {
+				continue
+			}
+			mapped := mapPlexItem(raw)
+			epID := getStringFromMap(mapped, "sourceId")
+			if epID == "" {
+				epID = fmt.Sprintf("%s-s%de%d", animeID, seasonNum, epNum)
+			}
+			title := getStringFromMap(mapped, "name")
+			if title == "" {
+				title = fmt.Sprintf("Episode %d", epNum)
+			}
+			thumb := getStringFromMap(mapped, "imageUrl")
+			if thumb == "" {
+				thumb = getStringFromMap(mapped, "artUrl")
+			}
+			ep := models.Episode{
+				Common:       models.Common{ID: epID, CreatedAt: now, UpdatedAt: now},
+				AnimeID:      animeID,
+				SeasonID:     &season.ID,
+				Number:       epNum,
+				Title:        title,
+				Synopsis:     getStringFromMap(mapped, "overview"),
+				ThumbnailUrl: thumb,
+				Duration:     getFloat64FromMap(mapped, "duration"),
+				IsSubbed:     true,
+			}
+			// Upsert by stable provider key.
+			var existing models.Episode
+			terr := db.WithContext(ctx).Where("id = ?", epID).First(&existing).Error
+			if terr == gorm.ErrRecordNotFound {
+				if err := db.WithContext(ctx).Create(&ep).Error; err == nil {
+					imported++
+				}
+			} else if terr == nil {
+				ep.UpdatedAt = now
+				if err := db.WithContext(ctx).Model(&existing).Updates(map[string]interface{}{
+					"anime_id":      ep.AnimeID,
+					"season_id":     ep.SeasonID,
+					"number":        ep.Number,
+					"title":         ep.Title,
+					"synopsis":      ep.Synopsis,
+					"thumbnail_url": ep.ThumbnailUrl,
+					"duration":      ep.Duration,
+					"is_subbed":     true,
+					"updated_at":    now,
+				}).Error; err == nil {
+					imported++
+				}
+			}
+		}
+	}
+
+	// Keep the show's total episode count in sync with the imported grid.
+	if imported > 0 {
+		_ = db.WithContext(ctx).Model(&models.Anime{}).Where("id = ?", animeID).
+			Update("total_episodes", imported).Error
+	}
+	return imported, nil
+}
+
+// ---- Helpers --------------------------------------------------------------
+
+// mapPlexLibrary converts a Plex Directory into a MediaSourceLibrary map.
+func mapPlexLibrary(dir map[string]interface{}) map[string]interface{} {
+	out := map[string]interface{}{
+		"id":        toString(dir["key"]),
+		"sourceId":  toString(dir["key"]),
+		"name":      toString(dir["title"]),
+		"type":      strings.ToLower(toString(dir["type"])),
+		"itemCount": toInt(dir["size"]),
+	}
+	rawCopy := jsonRawFromDir(dir)
+	if rawCopy != nil {
+		out["rawMetadata"] = rawCopy
+	}
+	return out
+}
+
+// mapPlexItem converts a Plex Metadata item into the canonical
+// MediaSourceItem shape used by the routes.
+func mapPlexItem(item map[string]interface{}) map[string]interface{} {
+	id := toString(item["ratingKey"])
+	if id == "" {
+		id = toString(item["key"])
+	}
+	parent := toString(item["parentRatingKey"])
+	grandparent := toString(item["grandparentRatingKey"])
+	out := map[string]interface{}{
+		"id":            id,
+		"sourceId":      id,
+		"parentId":      parent,
+		"showId":        grandparent,
+		"name":          toString(item["title"]),
+		"originalTitle": toString(item["originalTitle"]),
+		"type":          plexTypeToCanonical(toString(item["type"])),
+		"year":          toInt(item["year"]),
+		"rating":        toFloat(plexRating(item)),
+		"overview":      toString(plexSummary(item)),
+		"genres":        plexGenres(item),
+		"container":     plexContainer(item),
+		"videoCodec":    plexCodec(item, "Video"),
+		"audioCodec":    plexCodec(item, "Audio"),
+		"width":         plexResolution(item, "width"),
+		"height":        plexResolution(item, "height"),
+		"bitrate":       plexBitrate(item),
+		"imageUrl":      plexImage(item, "thumb"),
+		"artUrl":        plexImage(item, "art"),
+		"duration":      plexDuration(item),
+	}
+	if !strings.HasPrefix(strings.ToLower(out["type"].(string)), "show") {
+		if v, ok := item["parentIndex"]; ok {
+			out["seasonNumber"] = toInt(v)
+		}
+		if v, ok := item["index"]; ok {
+			out["episodeNumber"] = toInt(v)
+		}
+	}
+	rawCopy := jsonRawFromItem(item)
+	if rawCopy != nil {
+		out["rawMetadata"] = rawCopy
+	}
+	return out
+}
+
+func convertPlexItems(items []map[string]interface{}) []map[string]interface{} {
+	out := make([]map[string]interface{}, 0, len(items))
+	for _, item := range items {
+		out = append(out, mapPlexItem(item))
+	}
+	return out
+}
+
+// MapPlexItems normalizes raw Plex metadata items into the canonical
+// MediaSourceItem shape (id, name, imageUrl, artUrl, overview, genres, ...)
+// so routes and the front-end never touch provider-specific field names.
+func MapPlexItems(items []map[string]interface{}) []map[string]interface{} {
+	return convertPlexItems(items)
+}
+
+func jsonRawFromItem(item map[string]interface{}) datatypes.JSON {
+	raw, err := json.Marshal(item)
+	if err != nil {
+		return nil
+	}
+	return datatypes.JSON(raw)
+}
+
+func jsonRawFromDir(dir map[string]interface{}) datatypes.JSON {
+	return jsonRawFromItem(dir)
+}
+
+func plexTypeToCanonical(t string) string {
+	switch strings.ToLower(t) {
+	case "movie":
+		return "Movie"
+	case "show":
+		return "Series"
+	case "season":
+		return "Season"
+	case "episode":
+		return "Episode"
+	case "artist":
+		return "Artist"
+	case "album":
+		return "Album"
+	case "track":
+		return "Track"
+	case "photo":
+		return "Photo"
+	default:
+		return strings.Title(t)
+	}
+}
+
+func plexGenres(item map[string]interface{}) []string {
+	raw, ok := item["Genre"].([]interface{})
+	if !ok {
+		// Some Plex endpoints emit `Genre` as a single object with `tag`.
+		if single, ok := item["Genre"].(map[string]interface{}); ok {
+			if tag := toString(single["tag"]); tag != "" {
+				return []string{tag}
+			}
+		}
+		return nil
+	}
+	out := make([]string, 0, len(raw))
+	for _, g := range raw {
+		if m, ok := g.(map[string]interface{}); ok {
+			if tag := toString(m["tag"]); tag != "" {
+				out = append(out, tag)
+			}
+		}
+	}
+	return out
+}
+
+func plexRating(item map[string]interface{}) interface{} {
+	if r, ok := item["rating"]; ok && r != nil {
+		if f, ok := r.(float64); ok && f > 0 {
+			return f
+		}
+	}
+	if r, ok := item["audienceRating"]; ok && r != nil {
+		if f, ok := r.(float64); ok && f > 0 {
+			return f
+		}
+	}
+	return nil
+}
+
+func plexSummary(item map[string]interface{}) interface{} {
+	if s, ok := item["summary"]; ok && s != nil {
+		if str := toString(s); str != "" {
+			return str
+		}
+	}
+	if s, ok := item["tagline"]; ok && s != nil {
+		if str := toString(s); str != "" {
+			return str
+		}
+	}
+	return ""
+}
+
+func plexContainer(item map[string]interface{}) string {
+	media := firstMedia(item)
+	if media == nil {
+		return ""
+	}
+	return toString(media["container"])
+}
+
+func plexCodec(item map[string]interface{}, kind string) string {
+	media := firstMedia(item)
+	if media == nil {
+		return ""
+	}
+	for _, raw := range mediaStreams(media) {
+		if streamKindMatches(raw, kind) {
+			return toString(raw["codec"])
+		}
+	}
+	return ""
+}
+
+func plexResolution(item map[string]interface{}, axis string) int {
+	media := firstMedia(item)
+	if media == nil {
+		return 0
+	}
+	for _, raw := range mediaStreams(media) {
+		if streamKindMatches(raw, "video") {
+			return toInt(raw[axis])
+		}
+	}
+	return 0
+}
+
+// mediaStreams returns the per-media audio/video/subtitle entries whether
+// the upstream field is a single map, an array, or unspecified.
+func mediaStreams(media map[string]interface{}) []map[string]interface{} {
+	if media == nil {
+		return nil
+	}
+	switch v := media["MediaStreams"].(type) {
+	case []interface{}:
+		out := make([]map[string]interface{}, 0, len(v))
+		for _, raw := range v {
+			if m, ok := raw.(map[string]interface{}); ok {
+				out = append(out, m)
+			}
+		}
+		return out
+	case map[string]interface{}:
+		return []map[string]interface{}{v}
+	}
+	return nil
+}
+
+// streamKindMatches accepts Plex's streamType which can be:
+//   - numeric (1=video, 2=audio, 3=subtitle)
+//   - string ("Video", "Audio", "Subtitle", "video", "audio", "subtitle")
+//
+// Other forms are returned as not matching so the caller can default to "".
+func streamKindMatches(stream map[string]interface{}, want string) bool {
+	if stream == nil {
+		return false
+	}
+	wantLower := strings.ToLower(want)
+	var wantInt int
+	switch wantLower {
+	case "video":
+		wantInt = 1
+	case "audio":
+		wantInt = 2
+	case "subtitle":
+		wantInt = 3
+	}
+	switch v := stream["streamType"].(type) {
+	case float64:
+		return int(v) == wantInt
+	case int:
+		return v == wantInt
+	case int64:
+		return int(v) == wantInt
+	case string:
+		got := strings.ToLower(v)
+		if got == wantLower {
+			return true
+		}
+		// Plex occasionally returns singular / plural variations.
+		switch wantLower {
+		case "audio":
+			return got == "music"
+		case "subtitle":
+			return got == "subtitles" || got == "caption" || got == "captions"
+		}
+	}
+	return false
+}
+
+func plexBitrate(item map[string]interface{}) int64 {
+	media := firstMedia(item)
+	if media == nil {
+		return 0
+	}
+	return toInt64(media["bitrate"])
+}
+
+func plexDuration(item map[string]interface{}) float64 {
+	d := toFloat(item["duration"])
+	if d <= 0 {
+		return 0
+	}
+	return d / 1000.0
+}
+
+// plexImage extracts a Plex image URL and routes it through the local image
+// proxy so the X-Plex-Token never needs to reach the browser. When the value
+// is already absolute we still route it through the proxy to keep auth on
+// the server side.
+func plexImage(item map[string]interface{}, kind string) string {
+	val, _ := item[kind].(string)
+	if val == "" {
+		return ""
+	}
+	return "/api/v1/integrations/plex/image?path=" + url.QueryEscape(val)
+}
+
+func firstMedia(item map[string]interface{}) map[string]interface{} {
+	if media, ok := item["Media"].([]interface{}); ok && len(media) > 0 {
+		if m, ok := media[0].(map[string]interface{}); ok {
+			return m
+		}
+	}
+	return nil
+}
+
+func firstPart(media map[string]interface{}) map[string]interface{} {
+	if parts, ok := media["Part"].([]interface{}); ok && len(parts) > 0 {
+		if p, ok := parts[0].(map[string]interface{}); ok {
+			return p
+		}
+	}
+	// Single Part instead of array.
+	if single, ok := media["Part"].(map[string]interface{}); ok {
+		return single
+	}
+	return nil
+}
+
+func toInt64(v interface{}) int64 {
+	switch val := v.(type) {
+	case nil:
+		return 0
+	case int:
+		return int64(val)
+	case int64:
+		return val
+	case float64:
+		return int64(val)
+	case string:
+		i, _ := strconv.ParseInt(val, 10, 64)
+		return i
+	default:
+		return 0
+	}
+}
+
+func getStringFromMap(m map[string]interface{}, key string) string {
+	if v, ok := m[key].(string); ok {
+		return v
+	}
+	return ""
+}
+
+func getIntFromMap(m map[string]interface{}, key string) int {
+	if v, ok := m[key].(int); ok {
+		return v
+	}
+	if v, ok := m[key].(float64); ok {
+		return int(v)
+	}
+	return 0
+}
+
+func getFloat64FromMap(m map[string]interface{}, key string) float64 {
+	if v, ok := m[key].(float64); ok {
+		return v
+	}
+	if v, ok := m[key].(int); ok {
+		return float64(v)
+	}
+	if v, ok := m[key].(string); ok {
+		f, _ := strconv.ParseFloat(v, 64)
+		return f
+	}
+	return 0
+}

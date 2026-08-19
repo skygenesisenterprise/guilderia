@@ -1,15 +1,3 @@
-/**
- * Sky Genesis Enterprise
- *
- * Scope: Official Website
- * Component: Footer
- * Layer: Public UI
- * Purpose: Provides global navigation, legal links, resources and trust entry points.
- *
- * Stability: Active
- * Owner: SGE Web Platform
- * Contact: contact@skygenesisenterprise.com
- */
 import Link from "next/link";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
