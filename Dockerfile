@@ -27,7 +27,7 @@ RUN CGO_ENABLED=1 GOOS=linux \
 # ══════════════════════════════════════════════════════════════════════════════
 # Stage 2 — Node / pnpm (frontend deps + optional static export)
 # ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-alpine AS node-builder
+FROM node:25-slim AS node-builder
 
 ARG NODE_ENV=production
 ARG BUILD_STATIC
@@ -60,7 +60,7 @@ RUN mkdir -p /app/apps/out
 # ══════════════════════════════════════════════════════════════════════════════
 # Stage 3 — Prisma client generation
 # ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-alpine AS prisma-builder
+FROM node:25-slim AS prisma-builder
 
 ARG DATABASE_URL
 
@@ -80,7 +80,7 @@ RUN if [ -n "${DATABASE_URL:-}" ]; then \
 # ══════════════════════════════════════════════════════════════════════════════
 # Stage final — unified runtime (development superset + production runtime)
 # ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-alpine
+FROM node:25-slim
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
@@ -92,8 +92,8 @@ RUN apk add --no-cache \
     bash \
     git \
     wget \
-    build-base \
-    libc6-compat \
+    build-essential \
+    libc6-compact \
     postgresql \
     postgresql-client \
     openssl \
@@ -159,5 +159,9 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 3000
 EXPOSE 8080
+EXPOSE 9090
+EXPOSE 3478/tcp
+EXPOSE 3478/udp
+EXPOSE 50000-50100/udp
 
 ENTRYPOINT ["/entrypoint.sh"]

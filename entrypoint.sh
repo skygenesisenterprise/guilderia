@@ -372,6 +372,38 @@ run_postgresql() {
     wait ${pg_pid}
 }
 
+# ── WebRTC role ─────────────────────────────────────────────────────────────
+
+run_webrtc() {
+    configure_runtime
+
+    log_info "Guilderia WebRTC node starting"
+    log_info "Backend runtime configured for 0.0.0.0:${API_PORT}"
+
+    if [ -z "${DATABASE_URL:-}" ]; then
+        log_error "DATABASE_URL is required for the WebRTC node"
+        return 1
+    fi
+
+    if ! run_prisma_schema_deploy; then
+        if [ "${ALLOW_MIGRATION_FAILURE}" = "true" ]; then
+            log_warn "Prisma schema deployment failed; continuing because ALLOW_MIGRATION_FAILURE=true"
+        else
+            log_error "Prisma schema deployment failed"
+            return 1
+        fi
+    fi
+
+    backend_binary="$(find_backend_binary || true)"
+    if [ -z "${backend_binary}" ]; then
+        log_error "Go backend binary not found at /app/server/aether-server"
+        return 1
+    fi
+
+    log_info "Starting WebRTC node"
+    exec "${backend_binary}" webrtc "$@"
+}
+
 # ── Commands ──────────────────────────────────────────────────────────────────
 
 run_server() {
@@ -491,6 +523,10 @@ case "${role}" in
     postgresql)
         shift || true
         run_postgresql "$@"
+        ;;
+    webrtc)
+        shift || true
+        run_webrtc "$@"
         ;;
     *)
         configure_runtime

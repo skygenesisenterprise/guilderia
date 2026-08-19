@@ -93,6 +93,16 @@ services:
       RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
       MEILI_HOST: http://meilisearch:7700
       MEILI_API_KEY: ${MEILI_MASTER_KEY:-dev-master-key}
+      LIVEKIT_ENABLED: "true"
+      WEBRTC_PROVIDER: livekit
+      LIVEKIT_INTERNAL_URL: http://livekit:7880
+      LIVEKIT_PUBLIC_URL: ws://livekit.localhost:${LIVEKIT_PORT:-7880}
+      WEBRTC_PUBLIC_URL: ws://livekit.localhost:${LIVEKIT_PORT:-7880}
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY:-devkey}
+      LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET:-devsecretdevsecretdevsecretdevse}
+      WEBRTC_NODE_ID: ${WEBRTC_NODE_ID:-aether-meet-node-1}
+      WEBRTC_REGION: ${WEBRTC_REGION:-eu-west}
+      WEBRTC_TOKEN_TTL: ${WEBRTC_TOKEN_TTL:-10m}
     volumes:
       - ./server:/app/server
       - ./go.mod:/app/go.mod
@@ -112,6 +122,8 @@ services:
         condition: service_healthy
       meilisearch:
         condition: service_healthy
+      livekit:
+        condition: service_started
     networks:
       - guilderia
 
@@ -181,6 +193,97 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD:-redis-dev-password}
     expose:
       - "6379"
+    networks:
+      - guilderia
+
+  livekit:
+    image: livekit/livekit-server:${LIVEKIT_IMAGE_TAG:-v13.0.0}
+    restart: unless-stopped
+    entrypoint:
+      - /bin/sh
+      - /etc/livekit/render-livekit-config.sh
+    environment:
+      LIVEKIT_PORT: ${LIVEKIT_PORT:-7880}
+      LIVEKIT_RTC_TCP_PORT: ${LIVEKIT_RTC_TCP_PORT:-7881}
+      LIVEKIT_RTP_PORT_MIN: ${LIVEKIT_RTP_PORT_MIN:-50000}
+      LIVEKIT_RTP_PORT_MAX: ${LIVEKIT_RTP_PORT_MAX:-50100}
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY:-devkey}
+      LIVEKIT_KEYS: "${LIVEKIT_API_KEY:-devkey}: ${LIVEKIT_API_SECRET:-devsecretdevsecretdevsecretdevse}"
+      LIVEKIT_REDIS_ADDRESS: redis:6379
+      LIVEKIT_REDIS_PASSWORD: ${REDIS_PASSWORD:-redis-dev-password}
+      LIVEKIT_WEBHOOK_URL: http://webrtc:8080/api/v1/internal/webrtc/livekit/webhook
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${LIVEKIT_PORT:-7880}:7880/tcp"
+      - "${LIVEKIT_RTC_TCP_PORT:-7881}:7881/tcp"
+      - "${LIVEKIT_RTP_PORT_MIN:-50000}-${LIVEKIT_RTP_PORT_MAX:-50100}:50000-50100/udp"
+    volumes:
+      - ./infrastructure/livekit/livekit.yaml:/etc/livekit/livekit.yaml:ro
+      - ./infrastructure/livekit/render-livekit-config.sh:/etc/livekit/render-livekit-config.sh:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks: 
+      - guilderia
+
+  webrtc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: skygenesisenterprise/guilderia:${APP_IMAGE_TAG:-latest}
+    pull_policy: never
+    restart: unless-stopped
+    command: webrtc
+    expose:
+      - 8080
+    environment:
+      NODE_ENV: development
+      USE_EMBEDDED_DB: "false"
+      REDIS_ENABLED: "true"
+      REDIS_REQUIRED: "false"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis-dev-password}
+      REDIS_DB: "0"
+      REDIS_URL: redis://default:${REDIS_PASSWORD:-redis-dev-password}@redis:6379/0
+      REDIS_KEY_PREFIX: guilderia:v1
+      JWT_SECRET: ${JWT_SECRET:-dev-insecure-secret-change-me}
+      JWT_ISSUER: ${JWT_ISSUER:-guilderia}
+      HOST: 0.0.0.0
+      API_PORT: "8080"
+      POSTGRESQL__HOST: postgresql
+      POSTGRESQL__PORT: "5432"
+      POSTGRESQL__USER: ${PG_USER:-postgres}
+      POSTGRESQL__NAME: ${PG_DB:-postgres}
+      POSTGRESQL__PASSWORD: ${PG_PASS:-postgres}
+      DATABASE_URL: postgresql://${PG_USER:-postgres}:${PG_PASS:-postgres}@postgresql:5432/${PG_DB:-postgres}
+      LIVEKIT_ENABLED: "true"
+      WEBRTC_PROVIDER: livekit
+      LIVEKIT_INTERNAL_URL: http://livekit:7880
+      LIVEKIT_PUBLIC_URL: ws://livekit.localhost:${LIVEKIT_PORT:-7880}
+      WEBRTC_PUBLIC_URL: ws://livekit.localhost:${LIVEKIT_PORT:-7880}
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY:-devkey}
+      LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET:-devsecretdevsecretdevsecretdevse}
+      WEBRTC_NODE_ID: ${WEBRTC_NODE_ID:-guilderia-node-1}
+      WEBRTC_REGION: ${WEBRTC_REGION:-eu-west}
+      WEBRTC_TOKEN_TTL: ${WEBRTC_TOKEN_TTL:-10m}
+      WEBRTC_ROOM_EMPTY_TIMEOUT: ${WEBRTC_ROOM_EMPTY_TIMEOUT:-5m}
+      WEBRTC_PARTICIPANT_TTL: ${WEBRTC_PARTICIPANT_TTL:-2m}
+      WEBRTC_HEALTHCHECK_INTERVAL: ${WEBRTC_HEALTHCHECK_INTERVAL:-30s}
+      WEBRTC_BIND_IP: 0.0.0.0
+      TURN_ENABLED: "false"
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+      - media:/media
+      - certs:/certs
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      livekit:
+        condition: service_started
     networks:
       - guilderia
 
@@ -269,8 +372,8 @@ volumes:
   rabbitmq-data:
   meilisearch-data:
   pgadmin-data:
-  uptime-kuma-data:
   cdn-data:
+  media:
 
 networks:
   guilderia:
