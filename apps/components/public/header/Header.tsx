@@ -365,7 +365,7 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
       navigation={navigation}
       ctaUrls={{
         login: getDomainUrl("sso", "/login"),
-        app: getDomainUrl("main", "/channels/@me"),
+        app: getDomainUrl("main", "/channels/me"),
       }}
     />
   );

@@ -76,7 +76,7 @@ export function AuthForm() {
     if (hasAdminRole) {
       return "/dash";
     }
-    return "/channels/@me";
+    return "/channels/me";
   }
 
   async function handleOAuthLogin(provider: "google" | "github" | "discord" | "apple") {
