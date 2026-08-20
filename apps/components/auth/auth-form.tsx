@@ -8,6 +8,7 @@ import { getOAuthLoginUrl } from "@/lib/api/oauth";
 import { saveSession, saveSessionPreferences } from "@/lib/api/session-persistence";
 import { loginSchema, registerSchema } from "@/lib/auth/schemas";
 import { cn } from "@/lib/utils";
+import { getDomainUrl } from "@/lib/domains";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -75,8 +76,7 @@ export function AuthForm() {
     if (hasAdminRole) {
       return "/dash";
     }
-    const locale = pathname.split("/")[1] || "fr";
-    return `/${locale}`;
+    return "/channels/@me";
   }
 
   async function handleOAuthLogin(provider: "google" | "github" | "discord" | "apple") {
@@ -129,7 +129,9 @@ export function AuthForm() {
             description: "Your account has been created successfully.",
             variant: "default",
           });
-          router.push("/profile-change");
+          // After registration, redirect to the console domain.
+          // The first account is considered admin by default.
+          window.location.href = getDomainUrl("console", "/dash");
         }
       } else {
         // Soumission du formulaire de connexion
@@ -158,7 +160,12 @@ export function AuthForm() {
             description: "You have been logged in successfully.",
             variant: "default",
           });
-          router.push(getRedirectPath(response.user));
+          const redirectPath = getRedirectPath(response.user);
+          if (redirectPath === "/dash") {
+            window.location.href = getDomainUrl("console", "/dash");
+          } else {
+            router.push(redirectPath);
+          }
         }
       }
     } catch (error) {

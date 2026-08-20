@@ -2,22 +2,22 @@ export type Environment = 'production' | 'localhost'
 
 export interface DomainConfig {
   main: string
-  studios: string
+  console: string
   sso: string
   protocol: string
 }
 
 const DOMAINS: Record<Environment, DomainConfig> = {
   production: {
-    main: 'kami-sama.tv',
-    studios: 'studios.kami-sama.tv',
-    sso: 'sso.kami-sama.tv',
+    main: 'guilderia.com',
+    console: 'console.guilderia.com',
+    sso: 'sso.guilderia.com',
     protocol: 'https',
   },
   localhost: {
-    main: 'kami-sama.localhost',
-    studios: 'studios.kami-sama.localhost',
-    sso: 'sso.kami-sama.localhost',
+    main: 'guilderia.localhost',
+    console: 'console.guilderia.localhost',
+    sso: 'sso.guilderia.localhost',
     protocol: 'http',
   },
 }
@@ -31,11 +31,11 @@ export function getDomainConfig(): DomainConfig {
   return DOMAINS[detectEnvironment()]
 }
 
-export function getDomainUrl(service: 'main' | 'studios' | 'sso', path: string = ''): string {
+export function getDomainUrl(service: 'main' | 'console' | 'sso', path: string = ''): string {
   const config = getDomainConfig()
   return `${config.protocol}://${config[service]}${path}`
 }
 
-export function switchDomain(target: 'main' | 'studios' | 'sso', path: string): string {
+export function switchDomain(target: 'main' | 'console' | 'sso', path: string): string {
   return getDomainUrl(target, path)
 }

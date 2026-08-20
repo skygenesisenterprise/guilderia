@@ -254,7 +254,7 @@ export async function Footer({ locale: initialLocale }: FooterProps) {
   const socialLinks = [
     { name: "X (Twitter)", href: "https://x.com/SkyGEnterprise" },
     { name: "LinkedIn", href: "https://linkedin.com/company/skygenesisenterprise" },
-    { name: "GitHub", href: "https://github.com/skygenesisenterprise" },
+    { name: "GitHub", href: "https://github.com/skygenesisenterprise/guilderia" },
     { name: "YouTube", href: "https://youtube.com/@skygenesisenterprise" },
     { name: "Discord", href: "https://discord.gg/skygenesisenterprise" },
     { name: "Slack", href: "https://slack.com/skygenesisenterprise" },
@@ -286,7 +286,7 @@ export async function Footer({ locale: initialLocale }: FooterProps) {
             <div className="max-w-xs">
               <Link href={`/${locale}`} className="inline-flex items-center gap-2.5 group">
                 <span className="text-base font-semibold text-foreground tracking-tight group-hover:text-foreground transition-colors">
-                  Sky Genesis Enterprise
+                  Guilderia Enterprise
                 </span>
               </Link>
               <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
@@ -382,7 +382,9 @@ export async function Footer({ locale: initialLocale }: FooterProps) {
         <div className="mx-auto max-w-7xl px-6 py-5">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-muted-foreground">{t("copyright")}</p>
+              <p className="text-xs text-muted-foreground">
+                {new Date().getFullYear()} Guilderia Enterprise. Tous droits réservés - A Sky Genesis Enterprise Group Company
+              </p>
               <p className="text-xs text-muted-foreground">
                 <Link
                   href={`${prefix}/pgp`}

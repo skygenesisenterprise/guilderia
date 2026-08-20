@@ -1,11 +1,11 @@
 /**
  * Shared utility for reading/writing cookies that are shared across
- * subdomains (e.g. sso.kami-sama.localhost ↔ studios.kami-sama.localhost).
+ * subdomains (e.g. sso.guilderia.localhost ↔ console.guilderia.localhost).
  *
  * The domain is derived from the current hostname:
- *   sso.kami-sama.localhost → .kami-sama.localhost
- *   studios.kami-sama.lan   → .kami-sama.lan
- *   kami-sama.tv            → .kami-sama.tv
+ *   sso.guilderia.localhost   → .guilderia.localhost
+ *   console.guilderia.localhost → .guilderia.localhost
+ *   guilderia.com             → .guilderia.com
  */
 
 function getCookieDomain(): string {

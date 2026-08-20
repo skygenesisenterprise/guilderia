@@ -20,7 +20,7 @@ export default function OAuthCallbackPage() {
     const bootstrap = async () => {
       try {
         await authApi.bootstrap()
-        window.location.href = getDomainUrl('studios', '/dash')
+        window.location.href = getDomainUrl('console', '/dash')
       } catch {
         router.push('/login')
       }

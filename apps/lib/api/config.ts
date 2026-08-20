@@ -70,7 +70,7 @@ function parseUrl(value: string): URL | null {
  * On the client, derive the API base URL.
  *
  * When no explicit env-var is set we use a relative path (/api/v1) so that
- * every subdomain (sso., studios., main) talks to the same-origin Next.js
+ * every subdomain (sso., console., main) talks to the same-origin Next.js
  * server which proxies /api/* → the Go backend at localhost:8080.
  * This avoids CORS issues entirely and lets the browser send auth cookies
  * (domain=.kami-sama.localhost) automatically.

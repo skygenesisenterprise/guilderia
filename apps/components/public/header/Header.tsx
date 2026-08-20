@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { type Locale } from "@/lib/locale";
 import { HeaderClient } from "./HeaderClient";
+import { getDomainUrl } from "@/lib/domains";
 import {
   Globe,
   Sparkles,
@@ -30,7 +31,6 @@ import {
   Webhook,
   Grid,
   Plug,
-  ExternalLink,
 } from "lucide-react";
 
 interface HeaderProps {
@@ -63,19 +63,19 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
             {
               label: t("discoverOverview"),
               description: t("discoverOverviewDesc"),
-              href: "/discovery",
+              href: "/discovery/overview",
               icon: <Globe className="h-5 w-5" />,
             },
             {
               label: t("discoverFeatures"),
               description: t("discoverFeaturesDesc"),
-              href: "/features",
+              href: "/discovery/features",
               icon: <Sparkles className="h-5 w-5" />,
             },
             {
               label: t("discoverGuilds"),
               description: t("discoverGuildsDesc"),
-              href: "/discovery",
+              href: "/discovery/guilds",
               icon: <Users className="h-5 w-5" />,
             },
           ],
@@ -86,13 +86,13 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
             {
               label: t("discoverCloud"),
               description: t("discoverCloudDesc"),
-              href: "/download",
+              href: "/discovery/cloud",
               icon: <Cloud className="h-5 w-5" />,
             },
             {
               label: t("discoverSelfHost"),
               description: t("discoverSelfHostDesc"),
-              href: "/download",
+              href: "/discovery/self-host",
               icon: <Server className="h-5 w-5" />,
             },
           ],
@@ -109,19 +109,19 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
             {
               label: t("productsOverview"),
               description: t("productsOverviewDesc"),
-              href: "/features",
+              href: "/products/overview",
               icon: <Package className="h-5 w-5" />,
             },
             {
               label: t("productsGuilds"),
               description: t("productsGuildsDesc"),
-              href: "/discovery",
+              href: "/products/guilds",
               icon: <Users className="h-5 w-5" />,
             },
             {
               label: t("productsChannels"),
               description: t("productsChannelsDesc"),
-              href: "/features",
+              href: "/products/channels",
               icon: <MessageSquare className="h-5 w-5" />,
             },
           ],
@@ -132,13 +132,13 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
             {
               label: t("productsVoice"),
               description: t("productsVoiceDesc"),
-              href: "/features",
+              href: "/products/voices",
               icon: <Mic className="h-5 w-5" />,
             },
             {
               label: t("productsBots"),
               description: t("productsBotsDesc"),
-              href: "/features",
+              href: "/products/bots",
               icon: <Bot className="h-5 w-5" />,
             },
           ],
@@ -155,19 +155,19 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
             {
               label: t("safetyOverview"),
               description: t("safetyOverviewDesc"),
-              href: "/security",
+              href: "/security/overview",
               icon: <Shield className="h-5 w-5" />,
             },
             {
               label: t("safetyPrivacy"),
               description: t("safetyPrivacyDesc"),
-              href: "/security",
+              href: "/security/privacy",
               icon: <Lock className="h-5 w-5" />,
             },
             {
               label: t("safetyData"),
               description: t("safetyDataDesc"),
-              href: "/security",
+              href: "/security/data",
               icon: <Database className="h-5 w-5" />,
             },
           ],
@@ -178,13 +178,13 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
             {
               label: t("safetyInfrastructure"),
               description: t("safetyInfrastructureDesc"),
-              href: "/security",
+              href: "/security/infrastructure",
               icon: <Server className="h-5 w-5" />,
             },
             {
               label: t("safetyReport"),
               description: t("safetyReportDesc"),
-              href: "/security",
+              href: "/security/report",
               icon: <Flag className="h-5 w-5" />,
             },
           ],
@@ -200,12 +200,12 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
           items: [
             {
               label: t("questsDiscoverGuilds"),
-              href: "/discovery",
+              href: "/quests/guilds",
               icon: <Compass className="h-5 w-5" />,
             },
             {
               label: t("questsCommunity"),
-              href: "/discovery",
+              href: "/quests/community",
               icon: <Users className="h-5 w-5" />,
             },
           ],
@@ -215,22 +215,22 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
           items: [
             {
               label: t("questsEvents"),
-              href: "/quests",
+              href: "/quests/events",
               icon: <Calendar className="h-5 w-5" />,
             },
             {
               label: t("questsChallenges"),
-              href: "/quests",
+              href: "/quests/challenges",
               icon: <Zap className="h-5 w-5" />,
             },
             {
               label: t("questsContribute"),
-              href: "/download",
+              href: "/quests/contribute",
               icon: <GitBranch className="h-5 w-5" />,
             },
             {
               label: t("questsBadges"),
-              href: "/quests",
+              href: "/quests/badges",
               icon: <Award className="h-5 w-5" />,
             },
           ],
@@ -246,17 +246,17 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
           items: [
             {
               label: t("supportHelpCenter"),
-              href: "/security",
+              href: "/support/help-center",
               icon: <LifeBuoy className="h-5 w-5" />,
             },
             {
               label: t("supportDocumentation"),
-              href: "/developers",
+              href: "/support/documentation",
               icon: <BookOpen className="h-5 w-5" />,
             },
             {
               label: t("supportFaq"),
-              href: "/security",
+              href: "/support/faq",
               icon: <HelpCircle className="h-5 w-5" />,
             },
           ],
@@ -266,18 +266,18 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
           items: [
             {
               label: t("supportStatus"),
-              href: "/security",
+              href: "/support/status",
               icon: <Activity className="h-5 w-5" />,
               external: true,
             },
             {
               label: t("supportContact"),
-              href: "/security",
+              href: "/support/contact",
               icon: <Mail className="h-5 w-5" />,
             },
             {
               label: t("supportCommunity"),
-              href: "/discovery",
+              href: "/support/community",
               icon: <Users className="h-5 w-5" />,
             },
           ],
@@ -298,22 +298,22 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
           items: [
             {
               label: t("devPortal"),
-              href: "/developers",
+              href: "/developers/portal",
               icon: <Code className="h-5 w-5" />,
             },
             {
               label: t("devApi"),
-              href: "/developers",
+              href: "/developers/api",
               icon: <Terminal className="h-5 w-5" />,
             },
             {
               label: t("devBots"),
-              href: "/developers",
+              href: "/developers/bots",
               icon: <Bot className="h-5 w-5" />,
             },
             {
               label: t("devSdk"),
-              href: "/developers",
+              href: "/developers/sdk",
               icon: <Package className="h-5 w-5" />,
             },
           ],
@@ -323,24 +323,18 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
           items: [
             {
               label: t("devWebhooks"),
-              href: "/developers",
+              href: "/developer/webhooks",
               icon: <Webhook className="h-5 w-5" />,
             },
             {
               label: t("devApps"),
-              href: "/developers",
+              href: "/developers/apps",
               icon: <Grid className="h-5 w-5" />,
             },
             {
               label: t("devIntegrations"),
-              href: "/developers",
+              href: "/developers/integrations",
               icon: <Plug className="h-5 w-5" />,
-            },
-            {
-              label: t("devGithub"),
-              href: "https://github.com/skygenesisenterprise/guilderia",
-              icon: <ExternalLink className="h-5 w-5" />,
-              external: true,
             },
           ],
         },
@@ -349,7 +343,7 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
     {
       type: "link" as const,
       label: t("careers"),
-      href: "/company",
+      href: "/careers",
     },
   ];
 
@@ -359,6 +353,7 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
     blog: t("blog"),
     careers: t("careers"),
     openGuilderia: t("openGuilderia"),
+    login: t("login"),
     menuLabel: "Open menu",
   };
 
@@ -368,6 +363,10 @@ export async function Header({ locale: initialLocale }: HeaderProps) {
       translations={translations}
       links={links}
       navigation={navigation}
+      ctaUrls={{
+        login: getDomainUrl("sso", "/login"),
+        app: getDomainUrl("main", "/channels/@me"),
+      }}
     />
   );
 }
