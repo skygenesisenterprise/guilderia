@@ -3,6 +3,11 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { LocaleProvider } from "@/context/locale-context";
 import { Locale } from "@/lib/locale";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Guilderia — Your Community. Your Guild. Your Way.",
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

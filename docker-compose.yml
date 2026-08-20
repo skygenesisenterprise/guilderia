@@ -11,6 +11,7 @@ services:
         BUILD_STATIC: ${BUILD_STATIC:-1}
         DATABASE_URL: postgresql://${PG_USER:-postgres}:${PG_PASS:-postgres}@postgresql:5432/${PG_DB:-postgres}?sslmode=disable
     image: skygenesisenterprise/guilderia:${APP_IMAGE_TAG:-latest}
+    pull_policy: never
     restart: unless-stopped
     expose:
       - "3000"
@@ -48,6 +49,7 @@ services:
         BUILD_STATIC: ${BUILD_STATIC:-1}
         DATABASE_URL: postgresql://${PG_USER:-postgres}:${PG_PASS:-postgres}@postgresql:5432/${PG_DB:-postgres}?sslmode=disable
     image: skygenesisenterprise/guilderia:${APP_IMAGE_TAG:-latest}
+    pull_policy: never
     restart: unless-stopped
     expose:
       - "8080"
@@ -100,7 +102,7 @@ services:
       WEBRTC_PUBLIC_URL: ws://livekit.localhost:${LIVEKIT_PORT:-7880}
       LIVEKIT_API_KEY: ${LIVEKIT_API_KEY:-devkey}
       LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET:-devsecretdevsecretdevsecretdevse}
-      WEBRTC_NODE_ID: ${WEBRTC_NODE_ID:-aether-meet-node-1}
+      WEBRTC_NODE_ID: ${WEBRTC_NODE_ID:-guilderia-node-1}
       WEBRTC_REGION: ${WEBRTC_REGION:-eu-west}
       WEBRTC_TOKEN_TTL: ${WEBRTC_TOKEN_TTL:-10m}
     volumes:
@@ -197,7 +199,7 @@ services:
       - guilderia
 
   livekit:
-    image: livekit/livekit-server:${LIVEKIT_IMAGE_TAG:-v13.0.0}
+    image: livekit/livekit-server:${LIVEKIT_IMAGE_TAG:-v1.13.0}
     restart: unless-stopped
     entrypoint:
       - /bin/sh
@@ -231,6 +233,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV:-development}
+        BUILD_STATIC: ${BUILD_STATIC:-0}
     image: skygenesisenterprise/guilderia:${APP_IMAGE_TAG:-latest}
     pull_policy: never
     restart: unless-stopped

@@ -27,7 +27,7 @@ RUN CGO_ENABLED=1 GOOS=linux \
 # ══════════════════════════════════════════════════════════════════════════════
 # Stage 2 — Node / pnpm (frontend deps + optional static export)
 # ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-slim AS node-builder
+FROM node:25-alpine AS node-builder
 
 ARG NODE_ENV=production
 ARG BUILD_STATIC
@@ -44,6 +44,10 @@ COPY apps/package.json ./apps/
 RUN mkdir -p apps/next/fond/google && \
     printf 'module.exports = {};\n' > apps/next/fond/google/index.js && \
     printf '{"name":"google","version":"0.0.0"}\n' > apps/next/fond/google/package.json && \
+    # Neutralise le script "prepare" racine (husky install): husky est une
+    # devDependency racine que le filtre --filter n'installe pas, ce qui faisait
+    # échouer pnpm install de façon non-déterministe dans le build.
+    sed -i '/"prepare": "husky install"/d' package.json && \
     pnpm install --filter @guilderia/apps... --no-frozen-lockfile
 
 COPY apps/ ./apps/
@@ -60,7 +64,7 @@ RUN mkdir -p /app/apps/out
 # ══════════════════════════════════════════════════════════════════════════════
 # Stage 3 — Prisma client generation
 # ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-slim AS prisma-builder
+FROM node:25-alpine AS prisma-builder
 
 ARG DATABASE_URL
 
@@ -80,7 +84,7 @@ RUN if [ -n "${DATABASE_URL:-}" ]; then \
 # ══════════════════════════════════════════════════════════════════════════════
 # Stage final — unified runtime (development superset + production runtime)
 # ══════════════════════════════════════════════════════════════════════════════
-FROM node:25-slim
+FROM node:25-alpine
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
@@ -92,8 +96,7 @@ RUN apk add --no-cache \
     bash \
     git \
     wget \
-    build-essential \
-    libc6-compact \
+    build-base \
     postgresql \
     postgresql-client \
     openssl \

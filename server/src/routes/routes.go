@@ -5,6 +5,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -17,94 +18,33 @@ import (
 )
 
 type Dependencies struct {
-	Config                   config.Config
-	Logger                   *slog.Logger
-	RuntimeRole              string
-	Database                 interfaces.Database
-	Redis                    *redisclient.Client
-	EventBus                 interfaces.EventBus
-	IdentityProvider         interfaces.IdentityProvider
-	AuthService              *services.AuthService
-	OAuthService             *services.OAuthService
-	UserService              *services.UserService
-	WorkspaceService         *services.WorkspaceService
-	Repos                    *services.Repositories
-	AnimeService             *services.AnimeService
-	EpisodeService           *services.EpisodeService
-	GenreService             *services.GenreService
-	StudioService            *services.StudioService
-	CharacterService         *services.CharacterService
-	MediaService             *services.MediaService
-	CommunityService         *services.CommunityService
-	WatchService             *services.WatchService
-	SchedulingService        *services.SchedulingService
-	NotificationService      *services.NotificationService
-	SearchService            *services.SearchService
-	SettingsService          *services.SettingsService
-	MediaSourceService       *services.MediaSourceService
-	TagService               *services.TagService
-	CategoryService          *services.CategoryService
-	CollectionService        *services.CollectionService
-	LibraryService           *services.LibraryService
-	DashboardService         *services.DashboardService
-	AnalyticsService         *services.AnalyticsService
-	AdminUserService         *services.AdminUserService
-	AdminProfileService      *services.AdminProfileService
-	AdminRoleService         *services.AdminRoleService
-	AdminPermissionService   *services.AdminPermissionService
-	CalendarService          *services.CalendarService
-	PremiereService          *services.PremiereService
-	SystemService            *services.SystemService
-	SupportService           *services.SupportService
-	ContactAdminService      *services.ContactAdminService
-	FAQService               *services.FAQService
-	ModerationService        *services.ModerationService
-	NotificationAdminService *services.NotificationAdminService
-	SettingsAdminService     *services.SettingsAdminService
-	AnilistService           *services.AnilistService
-	MalService               *services.MalService
-	ProfileService           *services.ProfileService
-	MfaService               *services.MfaService
-	RecommendationService    *services.RecommendationService
+	Config              config.Config
+	Logger              *slog.Logger
+	RuntimeRole         string
+	Database            interfaces.Database
+	Redis               *redisclient.Client
+	EventBus            interfaces.EventBus
+	IdentityProvider    interfaces.IdentityProvider
+	AuthService         *services.AuthService
+	Hub                 *services.Hub
+	UserService         *services.UserService
+	NotificationService *services.NotificationService
+	ProjectService      *services.ProjectService
+	TaskService         *services.TaskService
+	WorkspaceService    *services.WorkspaceService
+	TeamService         *services.TeamService
+	ChannelService      *services.ChannelService
+	ConversationService *services.ConversationService
+	MessageService      *services.MessageService
+	MeetingService      *services.MeetingService
+	WebRTCService       *services.WebRTCService
+	IntegrationService  *services.IntegrationService
+	AuditService        *services.AuditService
+	WebRTCMetrics       *services.WebRTCMetrics
 }
 
 func SetupRoutes(router *gin.Engine, deps Dependencies) {
 	handler := &apiHandler{deps: deps}
-	platform := NewPlatformHandler(deps)
-	anime := NewAnimeHandler(deps)
-	episode := NewEpisodeHandler(deps)
-	genre := NewGenreHandler(deps)
-	studio := NewStudioHandler(deps)
-	character := NewCharacterHandler(deps)
-	media := NewMediaHandler(deps)
-	mediaSource := NewMediaSourceHandler(deps)
-	community := NewCommunityHandler(deps)
-	watch := NewWatchHandler(deps)
-	scheduling := NewSchedulingHandler(deps)
-	notification := NewNotificationHandler(deps)
-	search := NewSearchHandler(deps)
-	settings := NewSettingsHandler(deps)
-	settingsAdmin := NewSettingsAdminHandler(deps)
-	tag := NewTagHandler(deps)
-	category := NewCategoryHandler(deps)
-	collection := NewCollectionHandler(deps)
-	library := NewLibraryHandler(deps)
-	dashboard := NewDashboardHandler(deps)
-	analytics := NewAnalyticsHandler(deps)
-	adminUser := NewAdminUserHandler(deps)
-	adminProfile := NewAdminProfileHandler(deps)
-	adminRole := NewAdminRoleHandler(deps)
-	adminPermission := NewAdminPermissionHandler(deps)
-	calendar := NewCalendarHandler(deps)
-	premiere := NewPremiereHandler(deps)
-	system := NewSystemHandler(deps)
-	support := NewSupportHandler(deps)
-	contactAdmin := NewContactAdminHandler(deps)
-	faq := NewFAQHandler(deps)
-	moderation := NewModerationHandler(deps)
-	notificationAdmin := NewNotificationAdminHandler(deps)
-
-	recommendation := NewRecommendationHandler(deps)
 
 	router.GET("/health/live", handler.live)
 	router.GET("/health/ready", handler.ready)
@@ -113,8 +53,8 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 	api := router.Group("/api/v1")
 	api.GET("/health", handler.health)
 	api.GET("/ready", handler.ready)
+	api.POST("/internal/webrtc/livekit/webhook", handler.livekitWebhook)
 	api.POST("/webhooks/:provider/:integrationId", handler.webhook)
-
 	auth := api.Group("/auth")
 	{
 		auth.POST("/register", handler.register)
@@ -125,8 +65,6 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 		auth.POST("/reset-password", handler.resetPassword)
 		auth.POST("/verify-email", handler.verifyEmail)
 		auth.POST("/resend-verification", handler.resendVerification)
-		auth.GET("/oauth/:provider", handler.oauthLogin)
-		auth.GET("/oauth/:provider/callback", handler.oauthCallback)
 		authProtected := auth.Group("")
 		authProtected.Use(middleware.Auth(deps.IdentityProvider))
 		{
@@ -135,22 +73,6 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 			authProtected.GET("/me", handler.authMe)
 			authProtected.GET("/sessions", handler.listAuthSessions)
 			authProtected.DELETE("/sessions/:sessionId", handler.deleteAuthSession)
-			authProtected.GET("/oauth/accounts", handler.listOAuthAccounts)
-			authProtected.DELETE("/oauth/:provider", handler.unlinkOAuthAccount)
-			authProtected.POST("/ensure-first-user-admin", handler.ensureFirstUserIsAdmin)
-			authProtected.GET("/first-user", handler.getFirstUserInfo)
-			authProtected.POST("/ensure-user-owner", handler.ensureUserIsOwner)
-		}
-
-		mfaProtected := auth.Group("/mfa")
-		mfaProtected.Use(middleware.Auth(deps.IdentityProvider))
-		{
-			mfaProtected.POST("/setup", handler.mfaSetup)
-			mfaProtected.POST("/verify", handler.mfaVerify)
-			mfaProtected.POST("/disable", handler.mfaDisable)
-			mfaProtected.POST("/validate-login", handler.mfaValidateLogin)
-			mfaProtected.POST("/recovery-codes", handler.mfaRecoveryCodes)
-			mfaProtected.POST("/regenerate-recovery-codes", handler.mfaRegenerateRecoveryCodes)
 		}
 	}
 
@@ -166,601 +88,123 @@ func SetupRoutes(router *gin.Engine, deps Dependencies) {
 		protected.GET("/workspaces/:workspaceId", handler.getWorkspace)
 		protected.PATCH("/workspaces/:workspaceId", handler.updateWorkspace)
 		protected.DELETE("/workspaces/:workspaceId", handler.deleteWorkspace)
+		protected.GET("/workspaces/:workspaceId/sso", handler.getWorkspaceSSO)
+		protected.PATCH("/workspaces/:workspaceId/sso", handler.updateWorkspaceSSO)
+
 		protected.GET("/workspaces/:workspaceId/members", handler.listWorkspaceMembers)
 		protected.POST("/workspaces/:workspaceId/members", handler.createWorkspaceMember)
 		protected.POST("/workspaces/:workspaceId/members/provision", handler.provisionWorkspaceUser)
 		protected.PATCH("/workspaces/:workspaceId/members/:userId", handler.updateWorkspaceMember)
 		protected.DELETE("/workspaces/:workspaceId/members/:userId", handler.deleteWorkspaceMember)
 
-		platformGroup := protected.Group("/platform")
-		{
-			platformGroup.GET("/home", platform.GetHomeData)
-			platformGroup.GET("/wallet", platform.GetWalletInfo)
-			platformGroup.GET("/user-info", platform.GetUserInfo)
-			platformGroup.PATCH("/user-info", platform.UpdateUserInfo)
-			platformGroup.GET("/security", platform.GetSecurityInfo)
-			platformGroup.POST("/password/change", platform.ChangePassword)
-			platformGroup.GET("/applications", platform.ListApplications)
-			platformGroup.GET("/applications/:applicationId", platform.GetApplicationDetails)
-			platformGroup.GET("/data-privacy", platform.GetDataPrivacyInfo)
-			platformGroup.PATCH("/data-privacy", platform.UpdatePrivacySettings)
-			platformGroup.GET("/contacts", platform.ListContacts)
-			platformGroup.GET("/contacts/:contactId", platform.GetContactDetails)
-			platformGroup.GET("/family", platform.ListFamilyMembers)
-			platformGroup.POST("/family/invite", platform.InviteFamilyMember)
-			platformGroup.GET("/storage", platform.GetStorageInfo)
-			platformGroup.GET("/storage/files", platform.ListFiles)
-			platformGroup.GET("/settings", platform.GetSettings)
-			platformGroup.PATCH("/settings", platform.UpdateSettings)
-		}
+		protected.GET("/workspaces/:workspaceId/teams", handler.listTeams)
+		protected.POST("/workspaces/:workspaceId/teams", handler.createTeam)
+		protected.GET("/teams/:teamId", handler.getTeam)
+		protected.PATCH("/teams/:teamId", handler.updateTeam)
+		protected.DELETE("/teams/:teamId", handler.deleteTeam)
 
-		animeGroup := protected.Group("/anime")
-		{
-			animeGroup.GET("", anime.List)
-			animeGroup.POST("", anime.Create)
-			animeGroup.GET("/:animeId", anime.GetByID)
-			animeGroup.GET("/slug/:slug", anime.GetBySlug)
-			animeGroup.PATCH("/:animeId", anime.Update)
-			animeGroup.DELETE("/:animeId", anime.Delete)
-			animeGroup.POST("/:animeId/sync", anime.Sync)
-		}
+		protected.GET("/workspaces/:workspaceId/channels", handler.listChannels)
+		protected.POST("/workspaces/:workspaceId/channels", handler.createChannel)
+		protected.GET("/channels/:channelId", handler.getChannel)
+		protected.PATCH("/channels/:channelId", handler.updateChannel)
+		protected.DELETE("/channels/:channelId", handler.deleteChannel)
 
-		genreGroup := protected.Group("/genres")
-		{
-			genreGroup.GET("", genre.List)
-			genreGroup.POST("", genre.Create)
-			genreGroup.GET("/:genreId", genre.GetByID)
-			genreGroup.GET("/slug/:slug", genre.GetBySlug)
-			genreGroup.PATCH("/:genreId", genre.Update)
-			genreGroup.DELETE("/:genreId", genre.Delete)
-		}
+		protected.GET("/workspaces/:workspaceId/conversations", handler.listConversations)
+		protected.POST("/workspaces/:workspaceId/conversations", handler.createConversation)
+		protected.GET("/conversations/:conversationId", handler.getConversation)
+		protected.PATCH("/conversations/:conversationId", handler.updateConversation)
+		protected.DELETE("/conversations/:conversationId", handler.deleteConversation)
 
-		studioGroup := protected.Group("/studios")
-		{
-			studioGroup.GET("", studio.List)
-			studioGroup.POST("", studio.Create)
-			studioGroup.GET("/:studioId", studio.GetByID)
-			studioGroup.GET("/slug/:slug", studio.GetBySlug)
-			studioGroup.PATCH("/:studioId", studio.Update)
-			studioGroup.DELETE("/:studioId", studio.Delete)
-		}
+		protected.GET("/conversations/:conversationId/messages", handler.listMessages)
+		protected.POST("/conversations/:conversationId/messages", handler.createMessage)
+		protected.POST("/conversations/:conversationId/read", handler.markRead)
+		protected.GET("/messages/:messageId", handler.getMessage)
+		protected.PATCH("/messages/:messageId", handler.updateMessage)
+		protected.DELETE("/messages/:messageId", handler.deleteMessage)
+		protected.POST("/messages/:messageId/reactions", handler.createReaction)
+		protected.DELETE("/messages/:messageId/reactions/:emoji", handler.deleteReaction)
 
-		characterGroup := protected.Group("/characters")
-		{
-			characterGroup.GET("", character.List)
-			characterGroup.POST("", character.Create)
-			characterGroup.GET("/:characterId", character.GetByID)
-			characterGroup.GET("/slug/:slug", character.GetBySlug)
-			characterGroup.PATCH("/:characterId", character.Update)
-			characterGroup.DELETE("/:characterId", character.Delete)
-		}
+		protected.GET("/workspaces/:workspaceId/meetings", handler.listMeetings)
+		protected.POST("/workspaces/:workspaceId/meetings", handler.createMeeting)
+		protected.GET("/meetings/:meetingId", handler.getMeeting)
+		protected.POST("/meetings/:meetingId/start", handler.startMeeting)
+		protected.POST("/meetings/:meetingId/end", handler.endMeeting)
+		protected.POST("/meetings/:meetingId/cancel", handler.cancelMeeting)
+		protected.GET("/meetings/:meetingId/participants", handler.listMeetingParticipants)
+		protected.POST("/meetings/:meetingId/participants", handler.addMeetingParticipant)
+		protected.POST("/meetings/:meetingId/join-token", handler.meetingJoinToken)
 
-		episodeGroup := protected.Group("/anime/:animeId/episodes")
-		{
-			episodeGroup.GET("", episode.ListByAnime)
-			episodeGroup.POST("", episode.Create)
-			episodeGroup.GET("/:episodeId", episode.GetByID)
-			episodeGroup.GET("/number/:episodeNumber", episode.GetNumber)
-			episodeGroup.PATCH("/:episodeId", episode.Update)
-			episodeGroup.DELETE("/:episodeId", episode.Delete)
-		}
+		protected.GET("/workspaces/:workspaceId/applications", handler.listApplications)
+		protected.POST("/workspaces/:workspaceId/applications", handler.createApplication)
+		protected.GET("/applications/:applicationId", handler.getApplication)
+		protected.PATCH("/applications/:applicationId", handler.updateApplication)
+		protected.DELETE("/applications/:applicationId", handler.deleteApplication)
 
-		mediaGroup := protected.Group("/media")
-		{
-			mediaGroup.GET("", media.List)
-			mediaGroup.POST("", media.Create)
-			mediaGroup.GET("/:mediaId", media.GetByID)
-			mediaGroup.PATCH("/:mediaId", media.Update)
-			mediaGroup.DELETE("/:mediaId", media.Delete)
-			mediaGroup.GET("/encoding-jobs", media.ListEncodingJobs)
-			mediaGroup.GET("/encoding-jobs/:jobId", media.GetEncodingJob)
-			mediaGroup.POST("/thumbnails/generate", media.GenerateThumbnail)
-			mediaGroup.POST("/encoding-jobs/:jobId/retry", media.RetryEncodingJob)
-			mediaGroup.POST("/encoding-jobs/:jobId/cancel", media.CancelEncodingJob)
-			mediaGroup.GET("/encoding/profiles", media.GetEncodingProfiles)
-			mediaGroup.GET("/uploads", media.ListUploads)
-			mediaGroup.POST("/uploads", media.InitiateUpload)
-			mediaGroup.GET("/uploads/:uploadId", media.GetUploadProgress)
-			mediaGroup.DELETE("/uploads/:uploadId", media.CancelUpload)
-			mediaGroup.POST("/uploads/:uploadId/complete", media.CompleteUpload)
-		}
+		protected.GET("/workspaces/:workspaceId/audit-logs", handler.listAuditLogs)
 
-		sourceGroup := protected.Group("/source")
-		{
-			sourceGroup.GET("/libraries", mediaSource.ListLibraries)
-			sourceGroup.GET("/libraries/:libraryId", mediaSource.GetLibrary)
-			sourceGroup.GET("/items", mediaSource.ListItems)
-			sourceGroup.GET("/items/:itemId", mediaSource.GetItem)
-			sourceGroup.GET("/items/search", mediaSource.SearchItems)
-			sourceGroup.GET("/items/:itemId/stream", mediaSource.GetStreamURL)
-			sourceGroup.GET("/items/:itemId/playback", mediaSource.GetPlaybackInfo)
-			sourceGroup.POST("/items/:itemId/progress", mediaSource.ReportProgress)
-			sourceGroup.POST("/libraries/:libraryId/sync", mediaSource.SyncLibrary)
-			sourceGroup.GET("/libraries/:libraryId/sync", mediaSource.GetSyncStatus)
-			sourceGroup.GET("/sync/logs", mediaSource.ListSyncLogs)
-		}
+		protected.GET("/notifications", handler.listNotifications)
+		protected.GET("/notifications/unread-count", handler.notificationsUnreadCount)
+		protected.POST("/notifications/:notificationId/read", handler.markNotificationRead)
+		protected.POST("/notifications/read-all", handler.markAllNotificationsRead)
+		protected.GET("/me/notification-preferences", handler.getNotificationPreferences)
+		protected.PATCH("/me/notification-preferences", handler.updateNotificationPreferences)
+		protected.GET("/me/preferences", handler.getPreferences)
+		protected.PATCH("/me/preferences", handler.updatePreferences)
 
-		communityGroup := protected.Group("/community")
-		{
-			communityGroup.GET("/reviews", community.ListReviews)
-			communityGroup.POST("/reviews", community.CreateReview)
-			communityGroup.GET("/reviews/:reviewId", community.GetReview)
-			communityGroup.PATCH("/reviews/:reviewId", community.UpdateReview)
-			communityGroup.DELETE("/reviews/:reviewId", community.DeleteReview)
-			communityGroup.GET("/reviews/:reviewId/comments", community.ListCommentsByReview)
-			communityGroup.POST("/reviews/:reviewId/comments", community.CreateComment)
-			communityGroup.PATCH("/comments/:commentId", community.UpdateComment)
-			communityGroup.DELETE("/comments/:commentId", community.DeleteComment)
-			communityGroup.GET("/watchlists", community.ListWatchlists)
-			communityGroup.POST("/watchlists", community.CreateWatchlist)
-			communityGroup.GET("/watchlists/:watchlistId", community.GetWatchlist)
-			communityGroup.PATCH("/watchlists/:watchlistId", community.UpdateWatchlist)
-			communityGroup.DELETE("/watchlists/:watchlistId", community.DeleteWatchlist)
-			communityGroup.GET("/watchlists/:watchlistId/anime", community.ListWatchlistAnime)
-			communityGroup.POST("/watchlists/:watchlistId/anime", community.AddToWatchlist)
-			communityGroup.DELETE("/watchlists/:watchlistId/anime/:animeId", community.RemoveFromWatchlist)
-			communityGroup.GET("/reports", community.ListReports)
-			communityGroup.POST("/reports", community.CreateReport)
-			communityGroup.PATCH("/reports/:reportId", community.UpdateReport)
-		}
+		protected.GET("/workspaces/:workspaceId/contacts", handler.listContacts)
+		protected.POST("/workspaces/:workspaceId/contacts", handler.createContact)
+		protected.GET("/contacts/:contactId", handler.getContact)
+		protected.PATCH("/contacts/:contactId", handler.updateContact)
+		protected.DELETE("/contacts/:contactId", handler.deleteContact)
+		protected.GET("/workspaces/:workspaceId/contact-groups", handler.listContactGroups)
+		protected.POST("/workspaces/:workspaceId/contact-groups", handler.createContactGroup)
+		protected.GET("/contact-groups/:groupId", handler.getContactGroup)
+		protected.PATCH("/contact-groups/:groupId", handler.updateContactGroup)
+		protected.DELETE("/contact-groups/:groupId", handler.deleteContactGroup)
 
-		watchGroup := protected.Group("/watch")
-		{
-			watchGroup.GET("/progress/:episodeId", watch.GetProgress)
-			watchGroup.PUT("/progress/:episodeId", watch.UpsertProgress)
-			watchGroup.GET("/progress", watch.ListProgress)
-			watchGroup.GET("/continue", watch.ContinueWatching)
-			watchGroup.GET("/history", watch.ListHistory)
-			watchGroup.POST("/history", watch.AddHistory)
-		}
+		protected.GET("/workspaces/:workspaceId/tasks", handler.listTasks)
+		protected.POST("/workspaces/:workspaceId/tasks", handler.createTask)
+		protected.GET("/tasks/:taskId", handler.getTask)
+		protected.PATCH("/tasks/:taskId", handler.updateTask)
+		protected.DELETE("/tasks/:taskId", handler.deleteTask)
+		protected.GET("/tasks/:taskId/comments", handler.listTaskComments)
+		protected.POST("/tasks/:taskId/comments", handler.createTaskComment)
+		protected.PATCH("/tasks/:taskId/order", handler.updateTaskOrder)
 
-		recommendationGroup := protected.Group("/recommendations")
-		{
-			recommendationGroup.GET("", recommendation.GetRecommendations)
-		}
+		// Routes pour les appels en temps réel
+		SetupCallRoutes(router)
 
-		schedulingGroup := protected.Group("/scheduling")
-		{
-			schedulingGroup.GET("/simulcasts", scheduling.ListSimulcasts)
-			schedulingGroup.POST("/simulcasts", scheduling.CreateSimulcast)
-			schedulingGroup.GET("/simulcasts/:simulcastId", scheduling.GetSimulcast)
-			schedulingGroup.PATCH("/simulcasts/:simulcastId", scheduling.UpdateSimulcast)
-			schedulingGroup.DELETE("/simulcasts/:simulcastId", scheduling.DeleteSimulcast)
-			schedulingGroup.GET("/simulcasts/week/:weekday", scheduling.GetSimulcastByWeek)
-			schedulingGroup.GET("/upcoming", scheduling.ListUpcomingReleases)
-			schedulingGroup.POST("/schedules", scheduling.CreateReleaseSchedule)
-			schedulingGroup.PATCH("/schedules/:scheduleId", scheduling.UpdateReleaseSchedule)
-			schedulingGroup.GET("/releases", scheduling.ListReleases)
-			schedulingGroup.GET("/releases/:releaseId", scheduling.GetRelease)
-			schedulingGroup.DELETE("/releases/:releaseId", scheduling.CancelRelease)
-			schedulingGroup.POST("/releases/:releaseId/publish", scheduling.PublishRelease)
-		}
+		protected.GET("/workspaces/:workspaceId/projects", handler.listProjects)
+		protected.POST("/workspaces/:workspaceId/projects", handler.createProject)
+		protected.GET("/projects/:projectId", handler.getProject)
+		protected.PATCH("/projects/:projectId", handler.updateProject)
+		protected.DELETE("/projects/:projectId", handler.deleteProject)
+		protected.GET("/projects/:projectId/members", handler.listProjectMembers)
+		protected.PUT("/projects/:projectId/members", handler.replaceProjectMembers)
 
-		schedulingGroup.GET("/calendar", calendar.ListEvents)
-		schedulingGroup.POST("/calendar", calendar.CreateEvent)
-		schedulingGroup.GET("/calendar/:eventId", calendar.GetEvent)
-		schedulingGroup.PATCH("/calendar/:eventId", calendar.UpdateEvent)
-		schedulingGroup.DELETE("/calendar/:eventId", calendar.DeleteEvent)
+		protected.GET("/workspaces/:workspaceId/files", handler.listFiles)
+		protected.POST("/workspaces/:workspaceId/files/uploads", handler.initializeFileUpload)
+		protected.GET("/files/:fileId", handler.getFile)
+		protected.POST("/files/:fileId/complete", handler.completeFileUpload)
+		protected.GET("/files/:fileId/download-url", handler.fileDownloadURL)
+		protected.DELETE("/files/:fileId", handler.deleteFile)
 
-		schedulingGroup.GET("/premieres", premiere.List)
-		schedulingGroup.POST("/premieres", premiere.Create)
-		schedulingGroup.GET("/premieres/:premiereId", premiere.GetByID)
-		schedulingGroup.PATCH("/premieres/:premiereId", premiere.Update)
-		schedulingGroup.DELETE("/premieres/:premiereId", premiere.Delete)
+		protected.GET("/workspaces/:workspaceId/documents", handler.listDocuments)
+		protected.POST("/workspaces/:workspaceId/documents", handler.createDocument)
+		protected.GET("/documents/:documentId", handler.getDocument)
+		protected.PATCH("/documents/:documentId", handler.updateDocument)
+		protected.DELETE("/documents/:documentId", handler.deleteDocument)
+		protected.GET("/workspaces/:workspaceId/resources", handler.listResources)
+		protected.POST("/workspaces/:workspaceId/resources", handler.createResource)
+		protected.GET("/resources/:resourceId", handler.getResource)
+		protected.PATCH("/resources/:resourceId", handler.updateResource)
+		protected.DELETE("/resources/:resourceId", handler.deleteResource)
 
-		notificationGroup := protected.Group("/notifications")
-		{
-			notificationGroup.GET("", notification.List)
-			notificationGroup.GET("/:notificationId", notification.GetByID)
-			notificationGroup.PATCH("/:notificationId/read", notification.MarkRead)
-			notificationGroup.POST("/read-all", notification.MarkAllRead)
-			notificationGroup.DELETE("/:notificationId", notification.Delete)
-			notificationGroup.GET("/unread-count", notification.UnreadCount)
-			notificationGroup.GET("/preferences", notification.GetPreferences)
-			notificationGroup.PUT("/preferences", notification.UpdatePreferences)
-		}
+		protected.GET("/workspaces/:workspaceId/calls/history", handler.listCallHistory)
+		protected.GET("/calls/:callId", handler.getCall)
+		protected.GET("/calls/:callId/voicemail", handler.getVoicemail)
 
-		searchGroup := protected.Group("/search")
-		{
-			searchGroup.GET("", search.Search)
-			searchGroup.GET("/anime", search.SearchAnime)
-			searchGroup.GET("/characters", search.SearchCharacters)
-			searchGroup.GET("/studios", search.SearchStudios)
-			searchGroup.GET("/suggestions", search.Suggestions)
-		}
-
-		profile := NewProfileHandler(deps)
-		profileGroup := protected.Group("/profiles")
-		{
-			profileGroup.GET("", profile.List)
-			profileGroup.POST("", profile.Create)
-			profileGroup.GET("/:profileId", profile.GetByID)
-			profileGroup.PATCH("/:profileId", profile.Update)
-			profileGroup.DELETE("/:profileId", profile.Delete)
-			profileGroup.POST("/:profileId/select", profile.Select)
-			profileGroup.POST("/:profileId/pin", profile.SetPin)
-			profileGroup.POST("/verify-pin", profile.VerifyPin)
-		}
-
-		anilist := NewAnilistHandler(deps)
-		anilistGroup := protected.Group("/integrations/anilist")
-		{
-			anilistGroup.GET("/search", anilist.Search)
-			anilistGroup.GET("/trending", anilist.Trending)
-			anilistGroup.GET("/popular", anilist.Popular)
-			anilistGroup.GET("/seasonal", anilist.Seasonal)
-			anilistGroup.GET("/airing-schedule", anilist.AiringSchedule)
-			anilistGroup.GET("/characters/:characterId", anilist.GetCharacter)
-			anilistGroup.GET("/staff/:staffId", anilist.GetStaff)
-			anilistGroup.GET("/:anilistId", anilist.GetMedia)
-			anilistGroup.POST("/:anilistId/import", anilist.ImportMedia)
-		}
-
-		plex := NewPlexHandler(deps)
-		plexGroup := protected.Group("/integrations/plex")
-		{
-			plexGroup.GET("/health", plex.HealthCheck)
-			plexGroup.GET("/identity", plex.GetIdentity)
-			plexGroup.GET("/remote", plex.RemoteConnections)
-			plexGroup.POST("/auth/start", plex.AuthStart)
-			plexGroup.GET("/auth/status", plex.AuthStatus)
-			plexGroup.POST("/auth/connect", plex.AuthConnect)
-			plexGroup.GET("/libraries", plex.ListLibraries)
-			plexGroup.GET("/libraries/:libraryId", plex.GetLibrary)
-			plexGroup.GET("/libraries/:libraryId/items", plex.ListItems)
-			plexGroup.POST("/libraries/:libraryId/refresh", plex.RefreshLibrary)
-			plexGroup.GET("/metadata/:ratingKey", plex.GetMetadata)
-			plexGroup.GET("/metadata/:ratingKey/children", plex.GetChildren)
-			plexGroup.GET("/hubs", plex.GetHubs)
-			plexGroup.GET("/search", plex.Search)
-			plexGroup.POST("/import", plex.ImportItem)
-			plexGroup.POST("/transcode", plex.TranscodeDecision)
-			plexGroup.POST("/scrobble", plex.Scrobble)
-			plexGroup.POST("/unscrobble", plex.Unscrobble)
-			plexGroup.POST("/timeline", plex.UpdateTimeline)
-		}
-
-		// Public image proxy: <img> tags cannot attach the Authorization header
-		// the protected group requires, so Plex artwork would never load in the
-		// browser. This route is reachable without auth; ImageProxy validates
-		// the path so it cannot be abused as an open proxy (SSRF).
-		api.GET("/integrations/plex/image", plex.ImageProxy)
-
-		// Media-server (Jellyfin) integration: health probe + the DB → Jellyfin
-		// mirror sync. The mirror pushes every Plex-fed catalog row (movies and,
-		// for series, each real episode) into the Jellyfin library so the watch
-		// page delegates all HLS playback to the media-server container.
-		jellyfin := NewJellyfinHandler(deps)
-		jellyfinGroup := protected.Group("/integrations/jellyfin")
-		{
-			jellyfinGroup.GET("/health", jellyfin.HealthCheck)
-			jellyfinGroup.POST("/sync", jellyfin.Sync)
-			jellyfinGroup.GET("/sync/status", jellyfin.SyncStatus)
-		}
-
-		mal := NewMalHandler(deps)
-		malGroup := protected.Group("/integrations/myanimelist")
-		{
-			malGroup.GET("/snapshot", mal.GetSnapshot)
-			malGroup.GET("/settings", mal.GetSettings)
-			malGroup.PUT("/settings", mal.SaveSettings)
-			malGroup.POST("/test", mal.TestConnection)
-			malGroup.GET("/search", mal.Search)
-			malGroup.POST("/actions/sync", mal.RunSync)
-		}
-
-		discover := NewDiscoverHandler(deps)
-		discoverGroup := api.Group("/discover")
-		{
-			discoverGroup.GET("", discover.GetDiscover)
-			discoverGroup.GET("/catalog", discover.GetPublishedCatalog)
-			discoverGroup.GET("/search", discover.Search)
-		discoverGroup.GET("/item/:slug", discover.GetItemBySlug)
-		discoverGroup.GET("/item/:slug/stream", discover.GetStreamURL)
-		// Same-origin Plex stream proxy: serves the HLS manifest (rewritten
-		// to point every URL line back at /segment/*) and every variant /
-		// segment which hls.js dereferences through /segment/<origin>. Keeps
-		// the X-Plex-Token off the browser network trace and dodges Plex's
-		// flaky CORS headers.
-		discoverGroup.GET("/item/:slug/stream/proxy", discover.ProxyStream)
-		discoverGroup.GET("/item/:slug/stream/proxy/manifest", discover.ProxyStream)
-		discoverGroup.GET("/item/:slug/stream/proxy/segment/*subpath", discover.ProxyStream)
-		discoverGroup.GET("/sections", discover.GetDiscoverSections)
-			discoverGroup.GET("/continue-watching", discover.GetDiscoverContinueWatching)
-			discoverGroup.GET("/content/:anilistId", discover.GetContentDetail)
-		}
-
-		settingsGroup := protected.Group("/settings")
-		{
-			settingsGroup.GET("", settings.List)
-			settingsGroup.GET("/seo", settings.GetSeoMeta)
-			settingsGroup.PUT("/seo", settings.UpsertSeoMeta)
-			settingsGroup.GET("/:key", settings.GetByKey)
-			settingsGroup.PUT("/:key", settings.Upsert)
-			settingsGroup.DELETE("/:key", settings.Delete)
-
-			settingsGroup.GET("/general", settingsAdmin.GetGeneral)
-			settingsGroup.PUT("/general", settingsAdmin.UpdateGeneral)
-
-			settingsGroup.GET("/security", settingsAdmin.GetSecurity)
-			settingsGroup.PUT("/security", settingsAdmin.UpdateSecurity)
-			settingsGroup.GET("/security/sessions", settingsAdmin.GetSessions)
-			settingsGroup.PUT("/security/sessions", settingsAdmin.UpdateSessions)
-			settingsGroup.GET("/security/rate-limit", settingsAdmin.GetRateLimit)
-			settingsGroup.PUT("/security/rate-limit", settingsAdmin.UpdateRateLimit)
-			settingsGroup.GET("/security/2fa", settingsAdmin.Get2FA)
-			settingsGroup.PUT("/security/2fa", settingsAdmin.Update2FA)
-
-			settingsGroup.GET("/branding", settingsAdmin.GetBranding)
-			settingsGroup.PUT("/branding", settingsAdmin.UpdateBranding)
-			settingsGroup.POST("/branding/logo", settingsAdmin.UploadLogo)
-			settingsGroup.POST("/branding/favicon", settingsAdmin.UploadFavicon)
-			settingsGroup.POST("/branding/preview", settingsAdmin.PreviewBranding)
-
-			settingsGroup.GET("/email", settingsAdmin.GetEmail)
-			settingsGroup.PUT("/email", settingsAdmin.UpdateEmail)
-			settingsGroup.POST("/email/test", settingsAdmin.SendTestEmail)
-			settingsGroup.GET("/email/templates", settingsAdmin.ListEmailTemplates)
-			settingsGroup.PATCH("/email/templates/:templateId", settingsAdmin.UpdateEmailTemplate)
-			settingsGroup.GET("/email/logs", settingsAdmin.ListEmailLogs)
-
-			settingsGroup.GET("/seo/pages", settingsAdmin.ListSEOPages)
-			settingsGroup.PUT("/seo/pages/:pagePath", settingsAdmin.UpdateSEOPage)
-			settingsGroup.GET("/seo/sitemap", settingsAdmin.GetSitemap)
-			settingsGroup.GET("/seo/robots", settingsAdmin.GetRobots)
-
-			settingsGroup.GET("/storage", settingsAdmin.GetStorage)
-			settingsGroup.PUT("/storage", settingsAdmin.UpdateStorage)
-			settingsGroup.POST("/storage/test", settingsAdmin.TestStorage)
-			settingsGroup.GET("/storage/usage", settingsAdmin.GetStorageUsage)
-			settingsGroup.GET("/storage/buckets", settingsAdmin.ListBuckets)
-
-			settingsGroup.GET("/cdn", settingsAdmin.GetCDN)
-			settingsGroup.PUT("/cdn", settingsAdmin.UpdateCDN)
-			settingsGroup.POST("/cdn/purge", settingsAdmin.PurgeCDN)
-			settingsGroup.GET("/cdn/stats", settingsAdmin.GetCDNStats)
-
-			settingsGroup.GET("/domains", settingsAdmin.ListDomains)
-			settingsGroup.POST("/domains", settingsAdmin.CreateDomain)
-			settingsGroup.GET("/domains/:domainId", settingsAdmin.GetDomain)
-			settingsGroup.DELETE("/domains/:domainId", settingsAdmin.DeleteDomain)
-			settingsGroup.POST("/domains/:domainId/verify", settingsAdmin.VerifyDomain)
-			settingsGroup.POST("/domains/:domainId/ssl", settingsAdmin.GenerateSSL)
-
-			settingsGroup.GET("/apis", settingsAdmin.ListAPIKeys)
-			settingsGroup.POST("/apis", settingsAdmin.CreateAPIKey)
-			settingsGroup.GET("/apis/:keyId", settingsAdmin.GetAPIKey)
-			settingsGroup.PATCH("/apis/:keyId", settingsAdmin.UpdateAPIKey)
-			settingsGroup.DELETE("/apis/:keyId", settingsAdmin.DeleteAPIKey)
-			settingsGroup.GET("/apis/:keyId/usage", settingsAdmin.GetAPIKeyUsage)
-
-			settingsGroup.PUT("/oauth/:provider", settingsAdmin.UpdateOAuth)
-			settingsGroup.POST("/oauth/:provider/test", settingsAdmin.TestOAuth)
-			settingsGroup.GET("/oauth/:provider/callback-url", settingsAdmin.GetCallbackURL)
-
-			settingsGroup.GET("/integrations", settingsAdmin.ListIntegrations)
-			settingsGroup.POST("/integrations", settingsAdmin.CreateIntegration)
-			settingsGroup.GET("/integrations/:integrationId", settingsAdmin.GetIntegration)
-			settingsGroup.PATCH("/integrations/:integrationId", settingsAdmin.UpdateIntegration)
-			settingsGroup.DELETE("/integrations/:integrationId", settingsAdmin.DeleteIntegration)
-			settingsGroup.POST("/integrations/:integrationId/test", settingsAdmin.TestIntegration)
-			settingsGroup.GET("/integrations/:integrationId/logs", settingsAdmin.GetIntegrationLogs)
-
-			settingsGroup.GET("/maintenance", settingsAdmin.GetMaintenance)
-			settingsGroup.PUT("/maintenance", settingsAdmin.UpdateMaintenance)
-			settingsGroup.POST("/maintenance/cache-clear", settingsAdmin.ClearCache)
-			settingsGroup.POST("/maintenance/db-optimize", settingsAdmin.OptimizeDB)
-			settingsGroup.GET("/maintenance/jobs", settingsAdmin.ListMaintenanceJobs)
-		}
-
-		tagGroup := protected.Group("/tags")
-		{
-			tagGroup.GET("", tag.List)
-			tagGroup.POST("", tag.Create)
-			tagGroup.GET("/:tagId", tag.GetByID)
-			tagGroup.GET("/slug/:slug", tag.GetBySlug)
-			tagGroup.PATCH("/:tagId", tag.Update)
-			tagGroup.DELETE("/:tagId", tag.Delete)
-		}
-
-		categoryGroup := protected.Group("/categories")
-		{
-			categoryGroup.GET("", category.List)
-			categoryGroup.POST("", category.Create)
-			categoryGroup.GET("/:categoryId", category.GetByID)
-			categoryGroup.GET("/slug/:slug", category.GetBySlug)
-			categoryGroup.PATCH("/:categoryId", category.Update)
-			categoryGroup.DELETE("/:categoryId", category.Delete)
-		}
-
-		collectionGroup := protected.Group("/collections")
-		{
-			collectionGroup.GET("", collection.List)
-			collectionGroup.POST("", collection.Create)
-			collectionGroup.GET("/:collectionId", collection.GetByID)
-			collectionGroup.GET("/slug/:slug", collection.GetBySlug)
-			collectionGroup.PATCH("/:collectionId", collection.Update)
-			collectionGroup.DELETE("/:collectionId", collection.Delete)
-		}
-
-		libraryGroup := protected.Group("/libraries")
-		{
-			libraryGroup.GET("", library.List)
-			libraryGroup.POST("", library.Create)
-			libraryGroup.GET("/:libraryId", library.GetByID)
-			libraryGroup.PATCH("/:libraryId", library.Update)
-			libraryGroup.DELETE("/:libraryId", library.Delete)
-		}
-
-		dashboardGroup := protected.Group("/dashboard")
-		{
-			dashboardGroup.GET("/stats", dashboard.GetStats)
-			dashboardGroup.GET("/weekly-views", dashboard.GetWeeklyViews)
-			dashboardGroup.GET("/subscription-distribution", dashboard.GetSubscriptionDistribution)
-			dashboardGroup.GET("/top-anime", dashboard.GetTopAnime)
-			dashboardGroup.GET("/recent-uploads", dashboard.GetRecentUploads)
-		}
-
-		analyticsGroup := protected.Group("/analytics")
-		{
-			analyticsGroup.GET("/overview", analytics.GetOverview)
-			analyticsGroup.GET("/overview/period", analytics.GetOverviewByPeriod)
-			analyticsGroup.GET("/watch-time", analytics.GetWatchTime)
-			analyticsGroup.GET("/watch-time/by-anime", analytics.GetWatchTimeByAnime)
-			analyticsGroup.GET("/watch-time/by-episode", analytics.GetWatchTimeByEpisode)
-			analyticsGroup.GET("/watch-time/histogram", analytics.GetWatchTimeHistogram)
-			analyticsGroup.GET("/devices", analytics.GetDevices)
-			analyticsGroup.GET("/devices/browsers", analytics.GetDevicesBrowsers)
-			analyticsGroup.GET("/devices/os", analytics.GetDevicesOS)
-			analyticsGroup.GET("/popular", analytics.GetPopular)
-			analyticsGroup.GET("/popular/trending", analytics.GetPopularTrending)
-			analyticsGroup.GET("/popular/new", analytics.GetPopularNew)
-			analyticsGroup.GET("/geography", analytics.GetGeography)
-			analyticsGroup.GET("/geography/top-countries", analytics.GetGeographyTopCountries)
-			analyticsGroup.GET("/active-users", analytics.GetActiveUsers)
-			analyticsGroup.GET("/active-users/retention", analytics.GetActiveUsersRetention)
-			analyticsGroup.GET("/active-users/sessions", analytics.GetActiveUsersSessions)
-		}
-
-		systemHealthGroup := protected.Group("/system/health")
-		{
-			systemHealthGroup.GET("/services", system.HealthServices)
-			systemHealthGroup.GET("/uptime", system.HealthUptime)
-			systemHealthGroup.GET("/metrics", system.HealthMetrics)
-		}
-
-		systemLogsGroup := protected.Group("/system/logs")
-		{
-			systemLogsGroup.GET("", system.ListLogs)
-			systemLogsGroup.GET("/search", system.SearchLogs)
-			systemLogsGroup.GET("/:logId", system.GetLogByID)
-		}
-
-		systemQueueGroup := protected.Group("/system/queue")
-		{
-			systemQueueGroup.GET("", system.GetQueueStatus)
-			systemQueueGroup.GET("/jobs", system.ListQueueJobs)
-			systemQueueGroup.POST("/jobs/:jobId/retry", system.RetryQueueJob)
-			systemQueueGroup.POST("/jobs/:jobId/cancel", system.CancelQueueJob)
-			systemQueueGroup.POST("/flush", system.FlushQueue)
-		}
-
-		systemCacheGroup := protected.Group("/system/cache")
-		{
-			systemCacheGroup.GET("", system.GetCacheStatus)
-			systemCacheGroup.POST("/flush", system.FlushCache)
-			systemCacheGroup.POST("/flush/:pattern", system.FlushCacheByPattern)
-			systemCacheGroup.GET("/keys", system.ListCacheKeys)
-			systemCacheGroup.DELETE("/keys/:key", system.DeleteCacheKey)
-		}
-
-		systemSearchGroup := protected.Group("/system/search")
-		{
-			systemSearchGroup.GET("", system.GetSearchStatus)
-			systemSearchGroup.POST("/reindex", system.TriggerReindex)
-			systemSearchGroup.GET("/indexes", system.ListSearchIndexes)
-			systemSearchGroup.GET("/indexes/:indexName", system.GetSearchIndexStats)
-			systemSearchGroup.POST("/indexes/:indexName/update", system.UpdateSearchIndex)
-		}
-
-		systemBgJobsGroup := protected.Group("/system/background-jobs")
-		{
-			systemBgJobsGroup.GET("", system.ListBackgroundJobs)
-			systemBgJobsGroup.POST("/:jobId/run", system.RunBackgroundJob)
-			systemBgJobsGroup.POST("/:jobId/pause", system.PauseBackgroundJob)
-			systemBgJobsGroup.POST("/:jobId/resume", system.ResumeBackgroundJob)
-			systemBgJobsGroup.GET("/history", system.GetBackgroundJobHistory)
-		}
-
-		adminGroup := protected.Group("/admin")
-		{
-			adminGroup.GET("/users", adminUser.List)
-			adminGroup.GET("/users/:userId", adminUser.GetByID)
-			adminGroup.PATCH("/users/:userId", adminUser.Update)
-			adminGroup.DELETE("/users/:userId", adminUser.Delete)
-			adminGroup.POST("/users/:userId/disable", adminUser.Disable)
-			adminGroup.POST("/users/:userId/enable", adminUser.Enable)
-			adminGroup.GET("/users/:userId/sessions", adminUser.ListSessions)
-			adminGroup.DELETE("/users/:userId/sessions/:sessionId", adminUser.RevokeSession)
-
-			adminGroup.GET("/profiles", adminProfile.List)
-			adminGroup.GET("/profiles/:userId", adminProfile.GetByUserID)
-			adminGroup.PATCH("/profiles/:userId", adminProfile.Update)
-			adminGroup.DELETE("/profiles/:userId", adminProfile.Delete)
-
-			adminGroup.GET("/roles", adminRole.List)
-			adminGroup.POST("/roles", adminRole.Create)
-			adminGroup.GET("/roles/:roleId", adminRole.GetByID)
-			adminGroup.PATCH("/roles/:roleId", adminRole.Update)
-			adminGroup.DELETE("/roles/:roleId", adminRole.Delete)
-			adminGroup.POST("/roles/:roleId/assign", adminRole.Assign)
-			adminGroup.DELETE("/roles/:roleId/assign/:userId", adminRole.Unassign)
-
-			adminGroup.GET("/permissions", adminPermission.GetMatrix)
-			adminGroup.PATCH("/permissions", adminPermission.UpdateRolePermissions)
-			adminGroup.GET("/permissions/effective/:userId", adminPermission.GetEffectivePermissions)
-
-			adminGroup.GET("/comments", community.AdminListComments)
-			adminGroup.GET("/comments/:commentId", community.AdminGetComment)
-			adminGroup.PATCH("/comments/:commentId", community.AdminModerateComment)
-			adminGroup.DELETE("/comments/:commentId", community.AdminDeleteComment)
-			adminGroup.POST("/comments/:commentId/approve", community.AdminApproveComment)
-			adminGroup.POST("/comments/:commentId/flag", community.AdminFlagComment)
-
-			adminGroup.GET("/reviews", community.AdminListReviews)
-			adminGroup.POST("/reviews/:reviewId/feature", community.AdminFeatureReview)
-
-			adminGroup.GET("/reports", community.AdminListReports)
-			adminGroup.GET("/reports/:reportId", community.AdminGetReport)
-			adminGroup.PATCH("/reports/:reportId", community.AdminProcessReport)
-			adminGroup.POST("/reports/:reportId/resolve", community.AdminResolveReport)
-			adminGroup.POST("/reports/:reportId/dismiss", community.AdminDismissReport)
-
-			adminGroup.GET("/moderations", moderation.GetQueue)
-			adminGroup.GET("/moderations/:moderationId", moderation.GetItem)
-			adminGroup.POST("/moderations/:moderationId/approve", moderation.Approve)
-			adminGroup.POST("/moderations/:moderationId/reject", moderation.Reject)
-			adminGroup.POST("/moderations/:moderationId/escalate", moderation.Escalate)
-
-			adminGroup.GET("/watchlists/stats", community.AdminWatchlistStats)
-
-			adminGroup.GET("/notifications/templates", notificationAdmin.ListTemplates)
-			adminGroup.POST("/notifications/templates", notificationAdmin.CreateTemplate)
-			adminGroup.PATCH("/notifications/templates/:templateId", notificationAdmin.UpdateTemplate)
-			adminGroup.DELETE("/notifications/templates/:templateId", notificationAdmin.DeleteTemplate)
-			adminGroup.POST("/notifications/send", notificationAdmin.Send)
-			adminGroup.GET("/notifications/history", notificationAdmin.GetHistory)
-		}
-
-		supportGroup := protected.Group("/support")
-		{
-			supportGroup.GET("/tickets", support.ListTickets)
-			supportGroup.POST("/tickets", support.CreateTicket)
-			supportGroup.GET("/tickets/:ticketId", support.GetTicket)
-			supportGroup.PATCH("/tickets/:ticketId", support.UpdateTicket)
-			supportGroup.POST("/tickets/:ticketId/reply", support.ReplyToTicket)
-			supportGroup.POST("/tickets/:ticketId/close", support.CloseTicket)
-			supportGroup.POST("/tickets/:ticketId/escalate", support.EscalateTicket)
-
-			supportGroup.GET("/contact", contactAdmin.List)
-			supportGroup.GET("/contact/:messageId", contactAdmin.GetByID)
-			supportGroup.PATCH("/contact/:messageId", contactAdmin.Update)
-			supportGroup.POST("/contact/:messageId/reply", contactAdmin.Reply)
-			supportGroup.DELETE("/contact/:messageId", contactAdmin.Delete)
-
-			supportGroup.GET("/logs", support.SupportLogs)
-			supportGroup.GET("/logs/export", support.ExportLogs)
-		}
-
-		adminFaqGroup := protected.Group("/support/faq")
-		{
-			adminFaqGroup.GET("", faq.List)
-			adminFaqGroup.POST("", faq.Create)
-			adminFaqGroup.GET("/:faqId", faq.GetByID)
-			adminFaqGroup.PATCH("/:faqId", faq.Update)
-			adminFaqGroup.DELETE("/:faqId", faq.Delete)
-			adminFaqGroup.PUT("/reorder", faq.Reorder)
-		}
+		protected.GET("/realtime/ws", handler.realtime)
 	}
 }
 
@@ -790,6 +234,7 @@ func (h *apiHandler) runtimeRole() string {
 func (h *apiHandler) health(c *gin.Context) {
 	status := "healthy"
 	redisStatus := "disabled"
+	workerStatus := "disabled"
 	if err := h.deps.Database.Ping(c.Request.Context()); err != nil {
 		status = "degraded"
 	}
@@ -800,10 +245,26 @@ func (h *apiHandler) health(c *gin.Context) {
 			status = "degraded"
 		}
 	}
+	if h.runtimeRole() == "all" {
+		workerStatus = "healthy"
+	} else if h.deps.Config.Worker.Enabled && h.deps.Redis != nil && h.deps.Redis.Raw != nil {
+		workerStatus = "unavailable"
+		pattern := h.deps.Redis.Keys.Cache("worker-heartbeat", "*")
+		keys, err := h.deps.Redis.Raw.Keys(c.Request.Context(), pattern).Result()
+		if err == nil && len(keys) > 0 {
+			workerStatus = "healthy"
+		}
+	}
+	realtimeStatus := "healthy"
+	if !h.deps.Config.Realtime.Enabled {
+		realtimeStatus = "disabled"
+	}
 	utils.Success(c, http.StatusOK, gin.H{
 		"status":   status,
 		"database": "healthy",
 		"redis":    redisStatus,
+		"worker":   workerStatus,
+		"realtime": realtimeStatus,
 		"role":     h.runtimeRole(),
 		"version":  h.deps.Config.App.Version,
 	})
@@ -812,7 +273,7 @@ func (h *apiHandler) health(c *gin.Context) {
 func (h *apiHandler) ready(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
 	defer cancel()
-	result := gin.H{"database": "healthy", "redis": "disabled"}
+	result := gin.H{"database": "healthy", "redis": "disabled", "realtime": "healthy", "worker": "disabled", "webrtc": "disabled"}
 	if err := h.deps.Database.Ping(ctx); err != nil {
 		result["database"] = "unhealthy"
 		utils.Error(c, utils.ErrDependencyUnavailable)
@@ -830,10 +291,39 @@ func (h *apiHandler) ready(c *gin.Context) {
 			result["redis"] = "healthy"
 		}
 	}
+	if h.deps.Config.Realtime.Enabled {
+		if err := h.deps.EventBus.Healthy(ctx); err != nil {
+			result["realtime"] = "unhealthy"
+			utils.Error(c, utils.ErrDependencyUnavailable)
+			return
+		}
+	}
+	if h.runtimeRole() == "all" {
+		result["worker"] = "healthy"
+	} else if h.deps.Config.Worker.Enabled && h.deps.Redis != nil && h.deps.Redis.Raw != nil {
+		pattern := h.deps.Redis.Keys.Cache("worker-heartbeat", "*")
+		keys, err := h.deps.Redis.Raw.Keys(ctx, pattern).Result()
+		if err != nil || len(keys) == 0 {
+			result["worker"] = "unavailable"
+		} else {
+			result["worker"] = "healthy"
+		}
+	}
+	if h.deps.WebRTCService != nil && h.deps.Config.WebRTC.Provider == "livekit" {
+		if err := h.deps.WebRTCService.Ready(ctx); err != nil {
+			result["webrtc"] = "unhealthy"
+			utils.Error(c, utils.ErrDependencyUnavailable)
+			return
+		}
+		result["webrtc"] = "healthy"
+	}
 	utils.Success(c, http.StatusOK, gin.H{
 		"status":   "ready",
 		"database": result["database"],
 		"redis":    result["redis"],
+		"worker":   result["worker"],
+		"realtime": result["realtime"],
+		"webrtc":   result["webrtc"],
 		"role":     h.runtimeRole(),
 		"version":  h.deps.Config.App.Version,
 	})
@@ -852,13 +342,13 @@ func (h *apiHandler) me(c *gin.Context) {
 		"displayName":       user.DisplayName,
 		"avatarUrl":         user.AvatarURL,
 		"status":            user.Status,
-		"presenceStatus":    "offline",
+		"presenceStatus":    user.PresenceStatus,
 		"roles":             principal.Roles,
 		"permissions":       principal.Permissions,
 		"workspaceId":       principal.WorkspaceID,
 		"createdAt":         user.CreatedAt,
 		"updatedAt":         user.UpdatedAt,
-		"lastSeenAt":        nil,
+		"lastSeenAt":        user.LastSeenAt,
 		"disabledAt":        user.DisabledAt,
 		"emailVerifiedAt":   user.EmailVerifiedAt,
 		"passwordChangedAt": user.PasswordChangedAt,
@@ -887,13 +377,13 @@ func (h *apiHandler) updateMe(c *gin.Context) {
 		"displayName":       user.DisplayName,
 		"avatarUrl":         user.AvatarURL,
 		"status":            user.Status,
-		"presenceStatus":    "offline",
+		"presenceStatus":    user.PresenceStatus,
 		"roles":             principal.Roles,
 		"permissions":       principal.Permissions,
 		"workspaceId":       principal.WorkspaceID,
 		"createdAt":         user.CreatedAt,
 		"updatedAt":         user.UpdatedAt,
-		"lastSeenAt":        nil,
+		"lastSeenAt":        user.LastSeenAt,
 		"disabledAt":        user.DisabledAt,
 		"emailVerifiedAt":   user.EmailVerifiedAt,
 		"passwordChangedAt": user.PasswordChangedAt,
@@ -932,6 +422,10 @@ func (h *apiHandler) createWorkspace(c *gin.Context) {
 func (h *apiHandler) getWorkspace(c *gin.Context)    { h.workspaceResource(c, "get") }
 func (h *apiHandler) updateWorkspace(c *gin.Context) { h.workspaceResource(c, "update") }
 func (h *apiHandler) deleteWorkspace(c *gin.Context) { h.workspaceResource(c, "delete") }
+func (h *apiHandler) getWorkspaceSSO(c *gin.Context) { h.workspaceSSOResource(c, "get") }
+func (h *apiHandler) updateWorkspaceSSO(c *gin.Context) {
+	h.workspaceSSOResource(c, "update")
+}
 
 func (h *apiHandler) workspaceResource(c *gin.Context, action string) {
 	principal, _ := h.principal(c)
@@ -962,6 +456,68 @@ func (h *apiHandler) workspaceResource(c *gin.Context, action string) {
 			return
 		}
 		utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+	}
+}
+
+func (h *apiHandler) workspaceSSOResource(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	workspaceID := c.Param("workspaceId")
+	switch action {
+	case "get":
+		item, err := h.deps.WorkspaceService.GetSSOConfig(c.Request.Context(), principal, workspaceID)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "update":
+		var req struct {
+			Provider           string            `json:"provider"`
+			Enabled            bool              `json:"enabled"`
+			EnforceSSO         bool              `json:"enforceSso"`
+			AllowPasswordAuth  bool              `json:"allowPasswordAuth"`
+			AllowAutoProvision bool              `json:"allowAutoProvision"`
+			AllowIDPInitiated  bool              `json:"allowIdpInitiated"`
+			DomainHint         string            `json:"domainHint"`
+			IssuerURL          string            `json:"issuerUrl"`
+			SSOURL             string            `json:"ssoUrl"`
+			EntityID           string            `json:"entityId"`
+			ClientID           string            `json:"clientId"`
+			ClientSecret       *string           `json:"clientSecret"`
+			ClearClientSecret  bool              `json:"clearClientSecret"`
+			Certificate        string            `json:"certificate"`
+			AllowedDomains     []string          `json:"allowedDomains"`
+			DefaultRole        string            `json:"defaultRole"`
+			AttributeMapping   map[string]string `json:"attributeMapping"`
+		}
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.WorkspaceService.UpdateSSOConfig(c.Request.Context(), principal, workspaceID, services.UpdateWorkspaceSSOInput{
+			Provider:           req.Provider,
+			Enabled:            req.Enabled,
+			EnforceSSO:         req.EnforceSSO,
+			AllowPasswordAuth:  req.AllowPasswordAuth,
+			AllowAutoProvision: req.AllowAutoProvision,
+			AllowIDPInitiated:  req.AllowIDPInitiated,
+			DomainHint:         req.DomainHint,
+			IssuerURL:          req.IssuerURL,
+			SSOURL:             req.SSOURL,
+			EntityID:           req.EntityID,
+			ClientID:           req.ClientID,
+			ClientSecret:       req.ClientSecret,
+			ClearClientSecret:  req.ClearClientSecret,
+			Certificate:        req.Certificate,
+			AllowedDomains:     req.AllowedDomains,
+			DefaultRole:        req.DefaultRole,
+			AttributeMapping:   req.AttributeMapping,
+		}, requestMetadata(c))
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
 	}
 }
 
@@ -1019,6 +575,7 @@ func (h *apiHandler) membersResource(c *gin.Context, action string) {
 				Role:              req.Role,
 				TemporaryPassword: req.TemporaryPassword,
 			},
+			requestMetadata(c),
 		)
 		if err != nil {
 			utils.Error(c, err)
@@ -1046,12 +603,732 @@ func (h *apiHandler) membersResource(c *gin.Context, action string) {
 	}
 }
 
+func (h *apiHandler) listTeams(c *gin.Context)          { h.teamCollection(c, "list") }
+func (h *apiHandler) createTeam(c *gin.Context)         { h.teamCollection(c, "create") }
+func (h *apiHandler) getTeam(c *gin.Context)            { h.teamItem(c, "get") }
+func (h *apiHandler) updateTeam(c *gin.Context)         { h.teamItem(c, "update") }
+func (h *apiHandler) deleteTeam(c *gin.Context)         { h.teamItem(c, "delete") }
+func (h *apiHandler) listChannels(c *gin.Context)       { h.channelCollection(c, "list") }
+func (h *apiHandler) createChannel(c *gin.Context)      { h.channelCollection(c, "create") }
+func (h *apiHandler) getChannel(c *gin.Context)         { h.channelItem(c, "get") }
+func (h *apiHandler) updateChannel(c *gin.Context)      { h.channelItem(c, "update") }
+func (h *apiHandler) deleteChannel(c *gin.Context)      { h.channelItem(c, "delete") }
+func (h *apiHandler) listConversations(c *gin.Context)  { h.conversationCollection(c, "list") }
+func (h *apiHandler) createConversation(c *gin.Context) { h.conversationCollection(c, "create") }
+func (h *apiHandler) getConversation(c *gin.Context)    { h.conversationItem(c, "get") }
+func (h *apiHandler) updateConversation(c *gin.Context) { h.conversationItem(c, "update") }
+func (h *apiHandler) deleteConversation(c *gin.Context) { h.conversationItem(c, "delete") }
+
+func (h *apiHandler) teamCollection(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	workspaceID := c.Param("workspaceId")
+	switch action {
+	case "list":
+		items, err := h.deps.TeamService.List(c.Request.Context(), principal, workspaceID)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.List(c, items, "", false)
+	case "create":
+		var req struct{ Name, Description string }
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.TeamService.Create(c.Request.Context(), principal, workspaceID, req.Name, req.Description)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusCreated, item)
+	}
+}
+
+func (h *apiHandler) teamItem(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	id := c.Param("teamId")
+	switch action {
+	case "get":
+		item, err := h.deps.TeamService.Get(c.Request.Context(), principal, id)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "update":
+		var req struct{ Name, Description string }
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.TeamService.Update(c.Request.Context(), principal, id, req.Name, req.Description)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "delete":
+		if err := h.deps.TeamService.Delete(c.Request.Context(), principal, id); err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+	}
+}
+
+func (h *apiHandler) channelCollection(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	workspaceID := c.Param("workspaceId")
+	switch action {
+	case "list":
+		items, err := h.deps.ChannelService.List(c.Request.Context(), principal, workspaceID)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.List(c, items, "", false)
+	case "create":
+		var req struct {
+			TeamID      *string `json:"teamId"`
+			Name        string  `json:"name"`
+			Slug        string  `json:"slug"`
+			Description string  `json:"description"`
+			Type        string  `json:"type"`
+			Visibility  string  `json:"visibility"`
+		}
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.ChannelService.Create(c.Request.Context(), principal, workspaceID, req.TeamID, req.Name, req.Slug, req.Description, req.Type, req.Visibility)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusCreated, item)
+	}
+}
+
+func (h *apiHandler) channelItem(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	id := c.Param("channelId")
+	switch action {
+	case "get":
+		item, err := h.deps.ChannelService.Get(c.Request.Context(), principal, id)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "update":
+		var req struct{ Name, Description, Visibility string }
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.ChannelService.Update(c.Request.Context(), principal, id, req.Name, req.Description, req.Visibility)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "delete":
+		if err := h.deps.ChannelService.Delete(c.Request.Context(), principal, id); err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+	}
+}
+
+func (h *apiHandler) conversationCollection(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	workspaceID := c.Param("workspaceId")
+	switch action {
+	case "list":
+		items, err := h.deps.ConversationService.ListWithMembers(c.Request.Context(), principal, workspaceID)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.List(c, items, "", false)
+	case "create":
+		var req struct {
+			Type      string   `json:"type"`
+			Name      string   `json:"name"`
+			MemberIDs []string `json:"memberIds"`
+		}
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.ConversationService.CreateWithMembers(c.Request.Context(), principal, workspaceID, req.Type, req.Name, req.MemberIDs)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusCreated, item)
+	}
+}
+
+func (h *apiHandler) conversationItem(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	id := c.Param("conversationId")
+	switch action {
+	case "get":
+		item, err := h.deps.ConversationService.GetWithMembers(c.Request.Context(), principal, id)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "update":
+		var req struct{ Name string }
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.ConversationService.UpdateWithMembers(c.Request.Context(), principal, id, req.Name)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "delete":
+		if err := h.deps.ConversationService.Delete(c.Request.Context(), principal, id); err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+	}
+}
+
+func (h *apiHandler) listMessages(c *gin.Context) {
+	principal, _ := h.principal(c)
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "50"))
+	items, next, hasMore, err := h.deps.MessageService.List(c.Request.Context(), principal, c.Param("conversationId"), c.Query("cursor"), limit)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.List(c, items, next, hasMore)
+}
+
+func (h *apiHandler) createMessage(c *gin.Context) {
+	var req struct {
+		Type     string         `json:"type"`
+		Content  string         `json:"content"`
+		Metadata map[string]any `json:"metadata"`
+	}
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	item, err := h.deps.MessageService.Create(c.Request.Context(), principal, c.Param("conversationId"), req.Type, req.Content, c.GetHeader("Idempotency-Key"), req.Metadata)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusCreated, item)
+}
+
+func (h *apiHandler) getMessage(c *gin.Context) {
+	principal, _ := h.principal(c)
+	item, err := h.deps.MessageService.Get(c.Request.Context(), principal, c.Param("messageId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+
+func (h *apiHandler) updateMessage(c *gin.Context) {
+	var req struct{ Content string }
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	item, err := h.deps.MessageService.Update(c.Request.Context(), principal, c.Param("messageId"), req.Content)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+
+func (h *apiHandler) deleteMessage(c *gin.Context) {
+	principal, _ := h.principal(c)
+	if err := h.deps.MessageService.Delete(c.Request.Context(), principal, c.Param("messageId")); err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+}
+
+func (h *apiHandler) createReaction(c *gin.Context) {
+	var req struct {
+		Emoji string `json:"emoji"`
+	}
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	item, err := h.deps.MessageService.AddReaction(c.Request.Context(), principal, c.Param("messageId"), req.Emoji)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusCreated, item)
+}
+
+func (h *apiHandler) deleteReaction(c *gin.Context) {
+	principal, _ := h.principal(c)
+	if err := h.deps.MessageService.RemoveReaction(c.Request.Context(), principal, c.Param("messageId"), c.Param("emoji")); err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+}
+
+func (h *apiHandler) markRead(c *gin.Context) {
+	var req struct {
+		MessageID string `json:"messageId"`
+	}
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	if err := h.deps.MessageService.MarkRead(c.Request.Context(), principal, c.Param("conversationId"), req.MessageID); err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"updated": true})
+}
+
+func (h *apiHandler) listMeetings(c *gin.Context) {
+	principal, _ := h.principal(c)
+	items, err := h.deps.MeetingService.List(c.Request.Context(), principal, c.Param("workspaceId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.List(c, items, "", false)
+}
+
+func (h *apiHandler) createMeeting(c *gin.Context) {
+	var req struct {
+		Title          string  `json:"title"`
+		ConversationID *string `json:"conversationId"`
+	}
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	item, err := h.deps.MeetingService.Create(c.Request.Context(), principal, c.Param("workspaceId"), req.Title, req.ConversationID)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusCreated, item)
+}
+
+func (h *apiHandler) getMeeting(c *gin.Context)   { h.meetingAction(c, "get") }
+func (h *apiHandler) startMeeting(c *gin.Context) { h.meetingAction(c, "start") }
+func (h *apiHandler) endMeeting(c *gin.Context)   { h.meetingAction(c, "end") }
+func (h *apiHandler) cancelMeeting(c *gin.Context) {
+	principal, _ := h.principal(c)
+	item, err := h.deps.MeetingService.Cancel(c.Request.Context(), principal, c.Param("meetingId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+func (h *apiHandler) listMeetingParticipants(c *gin.Context) {
+	principal, _ := h.principal(c)
+	items, err := h.deps.MeetingService.ListParticipants(c.Request.Context(), principal, c.Param("meetingId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.List(c, items, "", false)
+}
+func (h *apiHandler) addMeetingParticipant(c *gin.Context) {
+	var req struct {
+		UserID string `json:"userId"`
+		Role   string `json:"role"`
+	}
+	if c.ShouldBindJSON(&req) != nil || req.UserID == "" {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	item, err := h.deps.MeetingService.AddParticipant(c.Request.Context(), principal, c.Param("meetingId"), req.UserID, req.Role)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusCreated, item)
+}
+
+func (h *apiHandler) meetingAction(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	id := c.Param("meetingId")
+	switch action {
+	case "get":
+		item, err := h.deps.MeetingService.Get(c.Request.Context(), principal, id)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "start":
+		item, err := h.deps.MeetingService.Start(c.Request.Context(), principal, id)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	case "end":
+		item, err := h.deps.MeetingService.End(c.Request.Context(), principal, id)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, item)
+	}
+}
+
+func (h *apiHandler) meetingJoinToken(c *gin.Context) {
+	principal, _ := h.principal(c)
+	token, err := h.deps.MeetingService.JoinToken(c.Request.Context(), principal, c.Param("meetingId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, token)
+}
+
+func (h *apiHandler) livekitWebhook(c *gin.Context) {
+	if h.deps.WebRTCService == nil {
+		utils.Error(c, utils.ErrMeetingProviderUnavailable)
+		return
+	}
+	if err := h.deps.WebRTCService.HandleLiveKitWebhook(c.Request.Context(), c.Request); err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"status": "accepted"})
+}
+
 func (h *apiHandler) metrics(c *gin.Context) {
-	c.String(http.StatusOK, "")
+	if h.deps.WebRTCMetrics == nil {
+		c.String(http.StatusOK, "")
+		return
+	}
+	c.Header("Content-Type", "text/plain; version=0.0.4")
+	c.String(http.StatusOK, h.deps.WebRTCMetrics.RenderPrometheus())
+}
+
+func (h *apiHandler) listApplications(c *gin.Context)  { h.applicationCollection(c, "list") }
+func (h *apiHandler) createApplication(c *gin.Context) { h.applicationCollection(c, "create") }
+func (h *apiHandler) getApplication(c *gin.Context)    { h.applicationItem(c, "get") }
+func (h *apiHandler) updateApplication(c *gin.Context) { h.applicationItem(c, "update") }
+func (h *apiHandler) deleteApplication(c *gin.Context) { h.applicationItem(c, "delete") }
+
+func (h *apiHandler) applicationCollection(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	workspaceID := c.Param("workspaceId")
+	switch action {
+	case "list":
+		items, err := h.deps.IntegrationService.List(c.Request.Context(), principal, workspaceID)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.List(c, items, "", false)
+	case "create":
+		var req struct {
+			Provider      string         `json:"provider"`
+			Name          string         `json:"name"`
+			Configuration map[string]any `json:"configuration"`
+		}
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.IntegrationService.Create(c.Request.Context(), principal, workspaceID, req.Provider, req.Name, req.Configuration)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusCreated, item)
+	}
+}
+
+func (h *apiHandler) applicationItem(c *gin.Context, action string) {
+	principal, _ := h.principal(c)
+	id := c.Param("applicationId")
+	switch action {
+	case "get":
+		item, err := h.deps.IntegrationService.Get(c.Request.Context(), principal, id)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, sanitizeIntegration(item))
+	case "update":
+		var req struct{ Name, Status string }
+		if c.ShouldBindJSON(&req) != nil {
+			utils.Error(c, utils.ErrValidationFailed)
+			return
+		}
+		item, err := h.deps.IntegrationService.Update(c.Request.Context(), principal, id, req.Name, req.Status)
+		if err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, sanitizeIntegration(item))
+	case "delete":
+		if err := h.deps.IntegrationService.Delete(c.Request.Context(), principal, id); err != nil {
+			utils.Error(c, err)
+			return
+		}
+		utils.Success(c, http.StatusOK, gin.H{"deleted": true})
+	}
 }
 
 func (h *apiHandler) webhook(c *gin.Context) {
 	payload, _ := io.ReadAll(io.LimitReader(c.Request.Body, 1<<20))
-	_ = payload
+	if err := h.deps.IntegrationService.HandleWebhook(c.Request.Context(), c.Param("provider"), c.Param("integrationId"), payload, c.Request.Header); err != nil {
+		utils.Error(c, err)
+		return
+	}
 	utils.Success(c, http.StatusAccepted, gin.H{"accepted": true})
+}
+
+func (h *apiHandler) listAuditLogs(c *gin.Context) {
+	principal, _ := h.principal(c)
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "100"))
+	items, err := h.deps.AuditService.List(c.Request.Context(), principal, c.Param("workspaceId"), limit)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.List(c, items, "", false)
+}
+
+func (h *apiHandler) realtime(c *gin.Context) {
+	principal, ok := h.principal(c)
+	if !ok {
+		utils.Error(c, utils.ErrUnauthorized)
+		return
+	}
+	h.deps.Hub.Handle(c, principal)
+}
+
+func (h *apiHandler) listNotifications(c *gin.Context) {
+	principal, _ := h.principal(c)
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "50"))
+	items, next, hasMore, err := h.deps.NotificationService.List(c.Request.Context(), principal, c.Query("cursor"), limit)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.List(c, items, next, hasMore)
+}
+func (h *apiHandler) notificationsUnreadCount(c *gin.Context) {
+	principal, _ := h.principal(c)
+	count, err := h.deps.NotificationService.UnreadCount(c.Request.Context(), principal)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"count": count})
+}
+func (h *apiHandler) markNotificationRead(c *gin.Context) {
+	principal, _ := h.principal(c)
+	updated, err := h.deps.NotificationService.MarkRead(c.Request.Context(), principal, c.Param("notificationId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"updated": updated})
+}
+func (h *apiHandler) markAllNotificationsRead(c *gin.Context) {
+	principal, _ := h.principal(c)
+	updated, err := h.deps.NotificationService.MarkAllRead(c.Request.Context(), principal)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, gin.H{"updated": updated})
+}
+func (h *apiHandler) getNotificationPreferences(c *gin.Context) {
+	principal, _ := h.principal(c)
+	item, err := h.deps.UserService.GetNotificationPreferences(c.Request.Context(), principal)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+func (h *apiHandler) updateNotificationPreferences(c *gin.Context) {
+	principal, _ := h.principal(c)
+	var req services.NotificationPreferencesDTO
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	item, err := h.deps.UserService.UpdateNotificationPreferences(c.Request.Context(), principal, req)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+func (h *apiHandler) getPreferences(c *gin.Context) {
+	principal, _ := h.principal(c)
+	item, err := h.deps.UserService.GetPreferences(c.Request.Context(), principal)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+func (h *apiHandler) updatePreferences(c *gin.Context) {
+	principal, _ := h.principal(c)
+	var req services.UserPreferencesDTO
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	item, err := h.deps.UserService.UpdatePreferences(c.Request.Context(), principal, req)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusOK, item)
+}
+
+func (h *apiHandler) listContacts(c *gin.Context)      { h.notImplemented(c, "contacts listing") }
+func (h *apiHandler) createContact(c *gin.Context)     { h.notImplemented(c, "contact creation") }
+func (h *apiHandler) getContact(c *gin.Context)        { h.notImplemented(c, "contact retrieval") }
+func (h *apiHandler) updateContact(c *gin.Context)     { h.notImplemented(c, "contact update") }
+func (h *apiHandler) deleteContact(c *gin.Context)     { h.notImplemented(c, "contact deletion") }
+func (h *apiHandler) listContactGroups(c *gin.Context) { h.notImplemented(c, "contact group listing") }
+func (h *apiHandler) createContactGroup(c *gin.Context) {
+	h.notImplemented(c, "contact group creation")
+}
+func (h *apiHandler) getContactGroup(c *gin.Context)    { h.notImplemented(c, "contact group retrieval") }
+func (h *apiHandler) updateContactGroup(c *gin.Context) { h.notImplemented(c, "contact group update") }
+func (h *apiHandler) deleteContactGroup(c *gin.Context) {
+	h.notImplemented(c, "contact group deletion")
+}
+
+func (h *apiHandler) listTasks(c *gin.Context) {
+	principal, _ := h.principal(c)
+	items, err := h.deps.TaskService.List(c.Request.Context(), principal, c.Param("workspaceId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.List(c, items, "", false)
+}
+func (h *apiHandler) createTask(c *gin.Context) {
+	var req struct {
+		Title       string     `json:"title"`
+		Description string     `json:"description"`
+		Status      string     `json:"status"`
+		Priority    string     `json:"priority"`
+		Project     string     `json:"project"`
+		DueAt       *time.Time `json:"dueAt"`
+	}
+	if c.ShouldBindJSON(&req) != nil {
+		utils.Error(c, utils.ErrValidationFailed)
+		return
+	}
+	principal, _ := h.principal(c)
+	item, err := h.deps.TaskService.Create(
+		c.Request.Context(),
+		principal,
+		c.Param("workspaceId"),
+		req.Title,
+		req.Description,
+		req.Status,
+		req.Priority,
+		req.Project,
+		req.DueAt,
+	)
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.Success(c, http.StatusCreated, item)
+}
+func (h *apiHandler) getTask(c *gin.Context)           { h.notImplemented(c, "task retrieval") }
+func (h *apiHandler) updateTask(c *gin.Context)        { h.notImplemented(c, "task update") }
+func (h *apiHandler) deleteTask(c *gin.Context)        { h.notImplemented(c, "task deletion") }
+func (h *apiHandler) listTaskComments(c *gin.Context)  { h.notImplemented(c, "task comment listing") }
+func (h *apiHandler) createTaskComment(c *gin.Context) { h.notImplemented(c, "task comment creation") }
+func (h *apiHandler) updateTaskOrder(c *gin.Context)   { h.notImplemented(c, "task ordering") }
+
+func (h *apiHandler) listProjects(c *gin.Context) {
+	principal, _ := h.principal(c)
+	items, err := h.deps.ProjectService.List(c.Request.Context(), principal, c.Param("workspaceId"))
+	if err != nil {
+		utils.Error(c, err)
+		return
+	}
+	utils.List(c, items, "", false)
+}
+func (h *apiHandler) createProject(c *gin.Context) { h.notImplemented(c, "project creation") }
+func (h *apiHandler) getProject(c *gin.Context)    { h.notImplemented(c, "project retrieval") }
+func (h *apiHandler) updateProject(c *gin.Context) { h.notImplemented(c, "project update") }
+func (h *apiHandler) deleteProject(c *gin.Context) { h.notImplemented(c, "project deletion") }
+func (h *apiHandler) listProjectMembers(c *gin.Context) {
+	h.notImplemented(c, "project member listing")
+}
+func (h *apiHandler) replaceProjectMembers(c *gin.Context) {
+	h.notImplemented(c, "project member management")
+}
+
+func (h *apiHandler) listFiles(c *gin.Context) { h.notImplemented(c, "file listing") }
+func (h *apiHandler) initializeFileUpload(c *gin.Context) {
+	h.notImplemented(c, "file upload initialization")
+}
+func (h *apiHandler) getFile(c *gin.Context) { h.notImplemented(c, "file retrieval") }
+func (h *apiHandler) completeFileUpload(c *gin.Context) {
+	h.notImplemented(c, "file upload completion")
+}
+func (h *apiHandler) fileDownloadURL(c *gin.Context) { h.notImplemented(c, "file download url") }
+func (h *apiHandler) deleteFile(c *gin.Context)      { h.notImplemented(c, "file deletion") }
+
+func (h *apiHandler) listDocuments(c *gin.Context)  { h.notImplemented(c, "document listing") }
+func (h *apiHandler) createDocument(c *gin.Context) { h.notImplemented(c, "document creation") }
+func (h *apiHandler) getDocument(c *gin.Context)    { h.notImplemented(c, "document retrieval") }
+func (h *apiHandler) updateDocument(c *gin.Context) { h.notImplemented(c, "document update") }
+func (h *apiHandler) deleteDocument(c *gin.Context) { h.notImplemented(c, "document deletion") }
+func (h *apiHandler) listResources(c *gin.Context)  { h.notImplemented(c, "resource listing") }
+func (h *apiHandler) createResource(c *gin.Context) { h.notImplemented(c, "resource creation") }
+func (h *apiHandler) getResource(c *gin.Context)    { h.notImplemented(c, "resource retrieval") }
+func (h *apiHandler) updateResource(c *gin.Context) { h.notImplemented(c, "resource update") }
+func (h *apiHandler) deleteResource(c *gin.Context) { h.notImplemented(c, "resource deletion") }
+
+func (h *apiHandler) listCallHistory(c *gin.Context) { h.notImplemented(c, "call history") }
+func (h *apiHandler) getCall(c *gin.Context)         { h.notImplemented(c, "call retrieval") }
+func (h *apiHandler) getVoicemail(c *gin.Context)    { h.notImplemented(c, "voicemail retrieval") }
+
+func (h *apiHandler) notImplemented(c *gin.Context, capability string) {
+	utils.Error(c, utils.NewError(http.StatusNotImplemented, "NOT_IMPLEMENTED", capability+" is not implemented yet.", nil))
+}
+
+func sanitizeIntegration(item any) any {
+	return item
 }

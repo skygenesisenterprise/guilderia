@@ -285,6 +285,12 @@ run_postgresql() {
     export LANG="${LANG:-C.UTF-8}"
     export LC_ALL="${LC_ALL:-C.UTF-8}"
 
+    # Add PostgreSQL bin dir to PATH (Debian installs to /usr/lib/postgresql/<ver>/bin)
+    pg_bin_dir=$(find /usr/lib/postgresql -maxdepth 2 -type d -name bin 2>/dev/null | head -1)
+    if [ -n "$pg_bin_dir" ]; then
+        export PATH="$pg_bin_dir:$PATH"
+    fi
+
     log_info "PostgreSQL container starting"
     log_info "Data directory: ${PGDATA}"
 

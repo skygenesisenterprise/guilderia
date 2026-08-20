@@ -17,13 +17,18 @@ import (
 	"github.com/skygenesisenterprise/guilderia/server/src/middleware"
 	"github.com/skygenesisenterprise/guilderia/server/src/routes"
 	"github.com/skygenesisenterprise/guilderia/server/src/services"
+	"golang.org/x/sync/errgroup"
 )
 
 type runtimeMode string
 
 const (
-	modeAPI    runtimeMode = "api"
-	modeServer runtimeMode = "server"
+	modeAPI       runtimeMode = "api"
+	modeWorker    runtimeMode = "worker"
+	modeScheduler runtimeMode = "scheduler"
+	modeWebRTC    runtimeMode = "webrtc"
+	modeAll       runtimeMode = "all"
+	modeServer    runtimeMode = "server"
 )
 
 func connectDatabase(ctx context.Context, logger *slog.Logger, cfg config.Config) (*services.DatabaseService, error) {
@@ -52,8 +57,11 @@ func parseRuntimeMode(args []string) (runtimeMode, error) {
 	if len(args) == 0 {
 		return modeAPI, nil
 	}
+
 	switch runtimeMode(args[0]) {
-	case modeAPI, modeServer:
+	case modeAPI, modeWorker, modeScheduler, modeWebRTC, modeAll:
+		return runtimeMode(args[0]), nil
+	case modeServer:
 		return modeAPI, nil
 	default:
 		return "", fmt.Errorf("unknown mode %q", args[0])
@@ -105,7 +113,6 @@ func main() {
 		os.Exit(1)
 	}
 	defer db.Close()
-
 	if err := db.AutoMigrate(); err != nil {
 		logger.Error("database migration failed", "error", err)
 		os.Exit(1)
@@ -137,60 +144,46 @@ func main() {
 	}()
 
 	repos := services.NewRepositories(db.Gorm())
+	metrics := &services.WorkerMetrics{}
+	webrtcMetrics := &services.WebRTCMetrics{}
+	queue := services.NewJobQueue(logger, cfg, redis, metrics)
+	producer := services.NewQueueProducer(logger, queue, cfg.Worker.MaxAttempts, metrics)
+	outboxService := services.NewOutboxService(logger, cfg.Outbox, repos.OutboxEvents(), producer)
 	identityProvider := services.NewIdentityProvider(cfg.Auth, repos)
 	authLimiter := services.NewAuthRateLimiter(redis)
 	eventBus := services.NewEventBus(cfg, redis)
 	defer eventBus.Close()
-	presence := services.NewPresenceService(logger, redis, eventBus, repos.Users(), 75*time.Second)
+	presence := services.NewPresenceService(logger, redis, eventBus, repos.Users(), cfg.Realtime.ClientTimeout)
 	defer presence.Close()
-
-	userService := services.NewUserService(repos.Users(), repos.UserSettings(), repos.NotificationPreferences(), presence)
-	workspaceService := services.NewWorkspaceService(db, cfg.Auth, repos.Users(), repos)
-	authService := services.NewAuthService(cfg.Auth, db, repos, identityProvider, authLimiter, workspaceService)
-
-	// S'assurer que le premier utilisateur a les rôles superadmin
-	if err := authService.EnsureFirstUserHasAdminRoles(context.Background()); err != nil {
-		logger.Warn("failed to ensure first user has admin roles", "error", err)
+	_, err = services.NewObjectStorage(cfg.Storage)
+	if err != nil {
+		logger.Error("storage initialization failed", "error", err)
+		os.Exit(1)
 	}
 
-	oauthService := services.NewOAuthService(cfg.OAuth, repos, authService, identityProvider, workspaceService, nil)
-
-	anilistService := services.NewAnilistService(cfg.Anilist, repos, logger)
-
-	animeService := services.NewAnimeService(repos, anilistService)
-	_episodeService := services.NewEpisodeService(repos)
-	genreService := services.NewGenreService(repos)
-	studioService := services.NewStudioService(repos)
-	characterService := services.NewCharacterService(repos)
-	mediaService := services.NewMediaService(repos)
-	communityService := services.NewCommunityService(repos)
-	watchService := services.NewWatchService(repos)
-	schedulingService := services.NewSchedulingService(repos)
-	notificationService := services.NewNotificationService(repos)
-	searchService := services.NewSearchService(repos)
-	settingsService := services.NewSettingsService(repos)
-	mediaSourceService := services.NewMediaSourceService(db.Gorm(), cfg.MediaSource)
-	libraryService := services.NewLibraryService(repos)
-	dashboardService := services.NewDashboardService(db.Gorm())
-	collectionService := services.NewCollectionService(db.Gorm())
-	analyticsService := services.NewAnalyticsService(db.Gorm())
-	adminUserService := services.NewAdminUserService(repos)
-	adminProfileService := services.NewAdminProfileService(repos)
-	adminRoleService := services.NewAdminRoleService(repos)
-	adminPermissionService := services.NewAdminPermissionService(repos)
-	supportService := services.NewSupportService(repos)
-	contactAdminService := services.NewContactAdminService(repos)
-	faqService := services.NewFAQService(repos)
-	moderationService := services.NewModerationService(repos)
-	notificationAdminService := services.NewNotificationAdminService(repos)
-	calendarService := services.NewCalendarService(repos)
-	premiereService := services.NewPremiereService(repos)
-	systemService := services.NewSystemService(db.Gorm(), redis)
-	settingsAdminService := services.NewSettingsAdminService(db.Gorm(), repos)
-	profileService := services.NewProfileService(db, repos)
-	malService := services.NewMalService(cfg.MyAnimeList, db.Gorm(), logger)
-	mfaService := services.NewMfaService(cfg.Auth, db, repos)
-	recommendationService := services.NewRecommendationService(db.Gorm())
+	userService := services.NewUserService(repos.Users(), repos.UserSettings(), repos.NotificationPreferences(), presence)
+	workspaceService := services.NewWorkspaceService(db, cfg.Auth, repos.Users(), repos, repos.AuditLogs(), outboxService, presence)
+	authService := services.NewAuthService(cfg.Auth, db, repos, identityProvider, outboxService, authLimiter, workspaceService)
+	teamService := services.NewTeamService(repos.Teams(), workspaceService)
+	projectService := services.NewProjectService(repos.Projects(), repos.Users(), workspaceService)
+	taskService := services.NewTaskService(repos.Tasks(), repos.Users(), workspaceService)
+	conversationService := services.NewConversationService(repos.Conversations(), repos.ConversationMembers(), workspaceService, eventBus)
+	channelService := services.NewChannelService(db, repos, workspaceService, repos.Conversations())
+	messageService := services.NewMessageService(db, repos, conversationService, workspaceService, eventBus, outboxService)
+	webrtcProvider := services.NewWebRTCProvider(cfg)
+	nodeSelector := services.NewNodeSelector(repos.WebRTCNodes(), cfg)
+	webrtcService := services.NewWebRTCService(logger, cfg, db, repos, workspaceService, webrtcProvider, nodeSelector, outboxService, producer, eventBus, webrtcMetrics)
+	meetingService := services.NewMeetingService(db, repos.Meetings(), repos.MeetingParticipants(), workspaceService, webrtcService, outboxService, producer)
+	integrationService := services.NewIntegrationService(repos.Integrations(), workspaceService, eventBus, repos.Messages(), producer)
+	auditService := services.NewAuditService(repos.AuditLogs(), workspaceService)
+	notificationService := services.NewNotificationService(repos.Notifications(), eventBus)
+	registry := services.NewJobRegistry()
+	notificationHandlers := services.NewNotificationHandlers(eventBus, repos.Messages(), repos.ConversationMembers(), notificationService, repos.WorkspaceMembers())
+	services.RegisterWorkerHandlers(registry, notificationHandlers, presence, integrationService, meetingService, authService)
+	scheduler := services.NewScheduler(redis, producer)
+	worker := services.NewWorker(logger, cfg, redis, queue, producer, registry, outboxService, scheduler, presence, integrationService, meetingService, metrics)
+	hub := services.NewHub(ctx, logger, cfg.Realtime, cfg.CORS.AllowedOrigins, eventBus, presence, workspaceService, conversationService)
+	defer hub.Close()
 
 	mode, err := parseRuntimeMode(os.Args[1:])
 	if err != nil {
@@ -207,57 +200,48 @@ func main() {
 		_ = router.SetTrustedProxies(cfg.App.TrustedProxies)
 	}
 	routes.SetupRoutes(router, routes.Dependencies{
-		Config:                   cfg,
-		Logger:                   logger,
-		Database:                 db,
-		Redis:                    redis,
-		EventBus:                 eventBus,
-		IdentityProvider:         identityProvider,
-		AuthService:              authService,
-		OAuthService:             oauthService,
-		UserService:              userService,
-		WorkspaceService:         workspaceService,
-		Repos:                    repos,
-		AnimeService:             animeService,
-		EpisodeService:           _episodeService,
-		GenreService:             genreService,
-		StudioService:            studioService,
-		CharacterService:         characterService,
-		MediaService:             mediaService,
-		CommunityService:         communityService,
-		WatchService:             watchService,
-		SchedulingService:        schedulingService,
-		NotificationService:      notificationService,
-		SearchService:            searchService,
-		SettingsService:          settingsService,
-		MediaSourceService:       mediaSourceService,
-		LibraryService:           libraryService,
-		DashboardService:         dashboardService,
-		CollectionService:        collectionService,
-		AnalyticsService:         analyticsService,
-		AdminUserService:         adminUserService,
-		AdminProfileService:      adminProfileService,
-		AdminRoleService:         adminRoleService,
-		AdminPermissionService:   adminPermissionService,
-		CalendarService:          calendarService,
-		PremiereService:          premiereService,
-		SystemService:            systemService,
-		SupportService:           supportService,
-		ContactAdminService:      contactAdminService,
-		FAQService:               faqService,
-		ModerationService:        moderationService,
-		NotificationAdminService: notificationAdminService,
-		SettingsAdminService:     settingsAdminService,
-		AnilistService:           anilistService,
-		MalService:               malService,
-		ProfileService:           profileService,
-		MfaService:               mfaService,
-		RecommendationService:    recommendationService,
-		RuntimeRole:              string(mode),
+		Config: cfg, Logger: logger, Database: db, Redis: redis, EventBus: eventBus,
+		IdentityProvider: identityProvider, AuthService: authService, Hub: hub, UserService: userService, NotificationService: notificationService, ProjectService: projectService, TaskService: taskService,
+		WorkspaceService: workspaceService, TeamService: teamService, ChannelService: channelService,
+		ConversationService: conversationService, MessageService: messageService,
+		MeetingService: meetingService, WebRTCService: webrtcService, IntegrationService: integrationService, AuditService: auditService, WebRTCMetrics: webrtcMetrics,
+		RuntimeRole: string(mode),
 	})
 
-	if err := runHTTPServer(ctx, logger, cfg, router, mode); err != nil {
-		logger.Error("server stopped unexpectedly", "error", err)
+	switch mode {
+	case modeAPI:
+		if err := runHTTPServer(ctx, logger, cfg, router, mode); err != nil {
+			logger.Error("server stopped unexpectedly", "error", err)
+			os.Exit(1)
+		}
+	case modeWorker:
+		if err := worker.RunConsumers(ctx); err != nil {
+			logger.Error("worker stopped with error", "error", err)
+			os.Exit(1)
+		}
+	case modeScheduler:
+		if err := worker.RunScheduler(ctx); err != nil {
+			logger.Error("scheduler stopped with error", "error", err)
+			os.Exit(1)
+		}
+	case modeAll:
+		group, groupCtx := errgroup.WithContext(ctx)
+		group.Go(func() error { return runHTTPServer(groupCtx, logger, cfg, router, mode) })
+		group.Go(func() error { return worker.RunAll(groupCtx) })
+		if err := group.Wait(); err != nil {
+			logger.Error("runtime stopped with error", "mode", string(mode), "error", err)
+			os.Exit(1)
+		}
+	case modeWebRTC:
+		group, groupCtx := errgroup.WithContext(ctx)
+		group.Go(func() error { return runHTTPServer(groupCtx, logger, cfg, router, mode) })
+		group.Go(func() error { return webrtcService.Run(groupCtx) })
+		if err := group.Wait(); err != nil {
+			logger.Error("runtime stopped with error", "mode", string(mode), "error", err)
+			os.Exit(1)
+		}
+	default:
+		logger.Error("unknown mode", "mode", string(mode))
 		os.Exit(1)
 	}
 }
