@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@guilderiajs/formatters",
+	"name": "@discordjs/formatters",
 	"version": "0.6.1",
-	"description": "A set of functions to format strings for Guilderia.",
+	"description": "A set of functions to format strings for Discord.",
 	"scripts": {
 		"test": "vitest run --config ../../vitest.config.ts",
 		"build": "tsc --noEmit && tsup",
@@ -40,28 +40,28 @@
 		"Crawl <icrawltogo@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyraguilderia@gmail.com>"
+		"Aura Román <kyradiscord@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/guilderiajs/guilderia.js.git",
+		"url": "https://github.com/discordjs/discord.js.git",
 		"directory": "packages/formatters"
 	},
 	"bugs": {
-		"url": "https://github.com/guilderiajs/guilderia.js/issues"
+		"url": "https://github.com/discordjs/discord.js/issues"
 	},
-	"homepage": "https://guilderia.js.org",
-	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
+	"homepage": "https://discord.js.org",
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
-		"guilderia-api-types": "^0.38.43"
+		"discord-api-types": "^0.38.50"
 	},
 	"devDependencies": {
-		"@guilderiajs/api-extractor": "workspace:^",
-		"@guilderiajs/scripts": "workspace:^",
+		"@discordjs/api-extractor": "workspace:^",
+		"@discordjs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
-		"@types/node": "^22.19.15",
+		"@types/node": "^24.13.2",
 		"@vitest/coverage-v8": "^4.1.2",
 		"cross-env": "^10.1.0",
 		"esbuild-plugin-version-injector": "^1.2.1",
@@ -76,7 +76,7 @@
 		"vitest": "^4.1.2"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=24.17.0"
 	},
 	"publishConfig": {
 		"access": "public",

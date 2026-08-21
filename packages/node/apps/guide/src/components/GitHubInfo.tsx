@@ -9,7 +9,7 @@ async function getRepoStars(owner: string, repo: string, token?: string): Promis
 	const endpoint = `https://api.github.com/repos/${owner}/${repo}`;
 	const headers = new Headers({
 		'Content-Type': 'application/json',
-		'User-Agent': 'guilderiajs-guide',
+		'User-Agent': 'discordjs-guide',
 	});
 
 	if (token) headers.set('Authorization', `Bearer ${token}`);

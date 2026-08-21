@@ -1,13 +1,13 @@
-import { getUserAgentAppendix } from '@guilderiajs/util';
-import type { ImageSize } from 'guilderia-api-types/v10';
-import { APIVersion } from 'guilderia-api-types/v10';
+import { getUserAgentAppendix } from '@discordjs/util';
+import type { ImageSize } from 'discord-api-types/v10';
+import { APIVersion } from 'discord-api-types/v10';
 import { getDefaultStrategy } from '../../environment.js';
 import type { RESTOptions, ResponseLike } from './types.js';
 
-export type { ImageSize } from 'guilderia-api-types/v10';
+export type { ImageSize } from 'discord-api-types/v10';
 
 export const DefaultUserAgent =
-	`GuilderiaBot (https://guilderia.js.org, [VI]{{inject}}[/VI])` as `GuilderiaBot (https://guilderia.js.org, ${string})`;
+	`DiscordBot (https://discord.js.org, [VI]{{inject}}[/VI])` as `DiscordBot (https://discord.js.org, ${string})`;
 
 /**
  * The default string to append onto the user agent.
@@ -16,14 +16,14 @@ export const DefaultUserAgentAppendix = getUserAgentAppendix();
 
 export const DefaultRestOptions = {
 	agent: null,
-	api: 'https://guilderia.com/api',
+	api: 'https://discord.com/api',
 	authPrefix: 'Bot',
-	cdn: 'https://cdn.guilderiaapp.com',
+	cdn: 'https://cdn.discordapp.com',
 	headers: {},
 	invalidRequestWarningInterval: 0,
 	globalRequestsPerSecond: 50,
 	offset: 50,
-	rejectOnRateLimit: null,
+	rejectOnRateLimit: false,
 	retries: 3,
 	retryBackoff: 0,
 	timeout: 15_000,
@@ -35,7 +35,7 @@ export const DefaultRestOptions = {
 	async makeRequest(...args): Promise<ResponseLike> {
 		return getDefaultStrategy()(...args);
 	},
-	mediaProxy: 'https://media.guilderiaapp.net',
+	mediaProxy: 'https://media.discordapp.net',
 } as const satisfies Required<RESTOptions>;
 
 /**
@@ -60,7 +60,7 @@ export type ImageExtension = (typeof ALLOWED_EXTENSIONS)[number];
 export type StickerExtension = (typeof ALLOWED_STICKER_EXTENSIONS)[number];
 
 export const OverwrittenMimeTypes = {
-	// https://github.com/guilderiajs/guilderia.js/issues/8557
+	// https://github.com/discordjs/discord.js/issues/8557
 	'image/apng': 'image/png',
 } as const satisfies Readonly<Record<string, string>>;
 

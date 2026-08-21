@@ -1,7 +1,7 @@
 import { request } from 'undici';
 
 export const PACKAGES = [
-	'guilderia.js',
+	'discord.js',
 	'brokers',
 	'builders',
 	'collection',
@@ -10,19 +10,20 @@ export const PACKAGES = [
 	'next',
 	'proxy',
 	'rest',
+	'rpc',
 	'structures',
 	'util',
 	'voice',
 	'ws',
-	'guilderia-api-types',
+	'discord-api-types',
 ];
 
 export async function fetchVersions(pkg: string) {
-	const response = await request(`https://guilderia.js.org/api/docs/versions?packageName=${pkg}`);
+	const response = await request(`https://discord.js.org/api/docs/versions?packageName=${pkg}`);
 	return response.body.json() as Promise<string[]>;
 }
 
 export async function fetchVersionDocs(pkg: string, version: string) {
-	const response = await request(`https://r2-docs.guilderiajs.dev/${pkg}/${version}.json`);
+	const response = await request(`https://r2-docs.discordjs.dev/${pkg}/${version}.json`);
 	return response.body.json();
 }

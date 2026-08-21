@@ -2,8 +2,8 @@
 
 import type { RequestInit } from 'undici';
 import type { REST } from '../REST.js';
-import type { GuilderiaErrorData, OAuthErrorData } from '../errors/GuilderiaAPIError.js';
-import { GuilderiaAPIError } from '../errors/GuilderiaAPIError.js';
+import type { DiscordErrorData, OAuthErrorData } from '../errors/DiscordAPIError.js';
+import { DiscordAPIError } from '../errors/DiscordAPIError.js';
 import { HTTPError } from '../errors/HTTPError.js';
 import { RESTEvents } from '../utils/constants.js';
 import type { ResponseLike, HandlerRequestData, RouteData } from '../utils/types.js';
@@ -71,12 +71,17 @@ export async function makeNetworkRequest(
 		() => controller.abort(),
 		normalizeTimeout(manager.options.timeout, routeId.bucketRoute, requestData.body),
 	);
-	if (requestData.signal) {
+	const userSignal = requestData.signal;
+	let onUserAbort: (() => void) | undefined;
+	if (userSignal) {
 		// If the user signal was aborted, abort the controller, else abort the local signal.
 		// The reason why we don't re-use the user's signal, is because users may use the same signal for multiple
 		// requests, and we do not want to cause unexpected side-effects.
-		if (requestData.signal.aborted) controller.abort();
-		else requestData.signal.addEventListener('abort', () => controller.abort());
+		if (userSignal.aborted) controller.abort();
+		else {
+			onUserAbort = () => controller.abort();
+			userSignal.addEventListener('abort', onUserAbort);
+		}
 	}
 
 	let res: ResponseLike;
@@ -108,6 +113,7 @@ export async function makeNetworkRequest(
 		throw error;
 	} finally {
 		clearTimeout(timeout);
+		if (onUserAbort) userSignal!.removeEventListener('abort', onUserAbort);
 	}
 
 	if (manager.listenerCount(RESTEvents.Response)) {
@@ -177,13 +183,13 @@ export async function handleErrors(
 		// Handle possible malformed requests
 		if (status >= 400 && status < 500) {
 			// The request will not succeed for some reason, parse the error returned from the api
-			const data = (await parseResponse(res)) as GuilderiaErrorData | OAuthErrorData;
-			const isGuilderiaError = 'code' in data;
+			const data = (await parseResponse(res)) as DiscordErrorData | OAuthErrorData;
+			const isDiscordError = 'code' in data;
 
 			// If we receive this status code, it means the token we had is no longer valid.
 			if (status === 401 && requestData.auth === true) {
-				if (isGuilderiaError && data.code !== 0 && !authFalseWarningEmitted) {
-					const errorText = `Encountered HTTP 401 with error ${data.code}: ${data.message}. Your token will be removed from this REST instance. If you are using @guilderiajs/rest directly, consider adding 'auth: false' to the request. Open an issue with your library if not.`;
+				if (isDiscordError && data.code !== 0 && !authFalseWarningEmitted) {
+					const errorText = `Encountered HTTP 401 with error ${data.code}: ${data.message}. Your token will be removed from this REST instance. If you are using @discordjs/rest directly, consider adding 'auth: false' to the request. Open an issue with your library if not.`;
 					// Use emitWarning if possible, probably not available in edge / web
 					if (typeof globalThis.process !== 'undefined' && typeof globalThis.process.emitWarning === 'function') {
 						globalThis.process.emitWarning(errorText);
@@ -198,7 +204,7 @@ export async function handleErrors(
 			}
 
 			// throw the API error
-			throw new GuilderiaAPIError(data, isGuilderiaError ? data.code : data.error, status, method, url, requestData);
+			throw new DiscordAPIError(data, isDiscordError ? data.code : data.error, status, method, url, requestData);
 		}
 
 		return res;

@@ -16,7 +16,7 @@ import {
 import * as _AudioPlayer from '../src/audio/AudioPlayer';
 import { PlayerSubscription as _PlayerSubscription } from '../src/audio/PlayerSubscription';
 import * as Networking from '../src/networking/Networking';
-import type { GuilderiaGatewayAdapterLibraryMethods } from '../src/util/adapter';
+import type { DiscordGatewayAdapterLibraryMethods } from '../src/util/adapter';
 
 vitest.mock('../src/audio/AudioPlayer');
 vitest.mock('../src/audio/PlayerSubscription');
@@ -46,7 +46,7 @@ function createFakeAdapter() {
 	const sendPayload = vitest.fn();
 	sendPayload.mockReturnValue(true);
 	const destroy = vitest.fn();
-	const libMethods: Partial<GuilderiaGatewayAdapterLibraryMethods> = {};
+	const libMethods: Partial<DiscordGatewayAdapterLibraryMethods> = {};
 	return {
 		sendPayload,
 		destroy,
@@ -237,7 +237,7 @@ describe('VoiceConnection#addServerPacket', () => {
 		const { voiceConnection } = createFakeVoiceConnection();
 		voiceConnection.configureNetworking = vitest.fn();
 		const dummy = {
-			endpoint: 'guilderia.com',
+			endpoint: 'discord.com',
 			guild_id: 123,
 			token: 'abc',
 		} as any;
@@ -251,7 +251,7 @@ describe('VoiceConnection#addServerPacket', () => {
 		voiceConnection['packets'].server = Symbol('old') as any;
 		voiceConnection.configureNetworking = vitest.fn();
 		const dummy = {
-			endpoint: 'guilderia.com',
+			endpoint: 'discord.com',
 			guild_id: 123,
 			token: 'abc',
 		} as any;
@@ -377,17 +377,17 @@ describe('VoiceConnection#onNetworkingClose', () => {
 		expect(adapter.sendPayload).not.toHaveBeenCalled();
 	});
 
-	test('Disconnects for code 4014', () => {
+	test.each([4_014, 4_021, 4_022])('Disconnects for close code %i', (code) => {
 		const { voiceConnection, adapter } = createFakeVoiceConnection();
-		voiceConnection['onNetworkingClose'](4_014);
+		voiceConnection['onNetworkingClose'](code);
 		expect(voiceConnection.state).toMatchObject({
 			status: VoiceConnectionStatus.Disconnected,
-			closeCode: 4_014,
+			closeCode: code,
 		});
 		expect(adapter.sendPayload).not.toHaveBeenCalled();
 	});
 
-	test('Attempts rejoin for codes != 4014', () => {
+	test('Attempts rejoin for close codes that should reconnect', () => {
 		const dummyPayload = Symbol('dummy') as any;
 		const { voiceConnection, adapter, joinConfig } = createFakeVoiceConnection();
 		DataStore.createJoinVoiceChannelPayload.mockImplementation((config) =>
@@ -399,7 +399,7 @@ describe('VoiceConnection#onNetworkingClose', () => {
 		expect(voiceConnection.rejoinAttempts).toEqual(1);
 	});
 
-	test('Attempts rejoin for codes != 4014 (with adapter failure)', () => {
+	test('Attempts rejoin for close codes that should reconnect (with adapter failure)', () => {
 		const dummyPayload = Symbol('dummy') as any;
 		const { voiceConnection, adapter, joinConfig } = createFakeVoiceConnection();
 		DataStore.createJoinVoiceChannelPayload.mockImplementation((config) =>

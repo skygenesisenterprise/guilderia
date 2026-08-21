@@ -34,7 +34,7 @@ import {
 	ExcerptTokenKind,
 	ExcerptToken,
 	ApiOptionalMixin,
-} from '@guilderiajs/api-extractor-model';
+} from '@discordjs/api-extractor-model';
 import { DocNodeKind, SelectorKind, StandardTags } from '@microsoft/tsdoc';
 import type {
 	DocEscapedText,
@@ -162,7 +162,7 @@ function resolveCanonicalReference(
 	) {
 		const member = canonicalReference.memberReferences[0]!;
 		return {
-			package: canonicalReference.packageName?.replace('@guilderiajs/', ''),
+			package: canonicalReference.packageName?.replace('@discordjs/', ''),
 			item: {
 				kind: member.selector!.selector,
 				displayName: member.memberIdentifier!.identifier,
@@ -256,7 +256,7 @@ function itemExcerptText(excerpt: Excerpt, apiPackage: ApiPackage, parent?: ApiT
 						displayName: foundItem.displayName,
 						containerKey: foundItem.containerKey,
 						uri: resolveItemURI(foundItem),
-						packageName: resolved.package?.replace('@guilderiajs/', ''),
+						packageName: resolved.package?.replace('@discordjs/', ''),
 						version: resolved.version,
 					},
 				};
@@ -278,7 +278,7 @@ function itemExcerptText(excerpt: Excerpt, apiPackage: ApiPackage, parent?: ApiT
 						displayName: token.text,
 						containerKey: `${parent.containerKey}|${token.text}`,
 						uri: `${resolveItemURI(parent)}#${token.text}`,
-						packageName: resolvedParent?.package?.replace('@guilderiajs/', ''),
+						packageName: resolvedParent?.package?.replace('@discordjs/', ''),
 					},
 				};
 			}
@@ -289,7 +289,7 @@ function itemExcerptText(excerpt: Excerpt, apiPackage: ApiPackage, parent?: ApiT
 		}
 
 		return {
-			text: token.text.replace(/import\("guilderia-api-types(?:\/v\d+)?"\)\./, ''),
+			text: token.text.replace(/import\("discord-api-types(?:\/v\d+)?"\)\./, ''),
 		};
 	});
 }
@@ -361,7 +361,7 @@ function itemTsDoc(item: DocNode, apiItem: ApiItem) {
 						text: linkText ?? foundItem?.displayName ?? resolved!.item.displayName,
 						uri: resolveItemURI(foundItem ?? resolved!.item),
 						resolvedPackage: {
-							packageName: resolved?.package ?? apiItem.getAssociatedPackage()?.displayName.replace('@guilderiajs/', ''),
+							packageName: resolved?.package ?? apiItem.getAssociatedPackage()?.displayName.replace('@discordjs/', ''),
 							version: resolved?.package
 								? (apiItem.getAssociatedPackage()?.dependencies?.[resolved.package] ?? null)
 								: null,
@@ -515,20 +515,20 @@ function resolveFileUrl(item: ApiDeclaredItem) {
 		const pkgName = parts?.shift();
 		const version = parts?.shift()?.split('_')?.[0];
 
-		// https://github.com/guilderiajs/guilderia.js/tree/main/node_modules/.pnpm/@guilderiajs+builders@1.9.0/node_modules/@guilderiajs/builders/dist/index.d.ts#L1764
-		// https://github.com/guilderiajs/guilderia.js/tree/main/node_modules/.pnpm/@guilderiajs+ws@1.1.1_bufferutil@4.0.8_utf-8-validate@6.0.4/node_modules/@guilderiajs/ws/dist/index.d.ts#L...
-		if (!unscoped && pkgName?.startsWith('guilderiajs+')) {
+		// https://github.com/discordjs/discord.js/tree/main/node_modules/.pnpm/@discordjs+builders@1.9.0/node_modules/@discordjs/builders/dist/index.d.ts#L1764
+		// https://github.com/discordjs/discord.js/tree/main/node_modules/.pnpm/@discordjs+ws@1.1.1_bufferutil@4.0.8_utf-8-validate@6.0.4/node_modules/@discordjs/ws/dist/index.d.ts#L...
+		if (!unscoped && pkgName?.startsWith('discordjs+')) {
 			let currentItem = item;
 			while (currentItem.parent && currentItem.parent.kind !== ApiItemKind.EntryPoint)
 				currentItem = currentItem.parent as ApiDeclaredItem;
 
 			return {
-				sourceURL: `/docs/packages/${pkgName.replace('guilderiajs+', '')}/${version}/${currentItem.displayName}:${currentItem.kind}`,
+				sourceURL: `/docs/packages/${pkgName.replace('discordjs+', '')}/${version}/${currentItem.displayName}:${currentItem.kind}`,
 			};
 		}
 
-		// https://github.com/guilderiajs/guilderia.js/tree/main/node_modules/.pnpm/guilderia-api-types@0.37.97/node_modules/guilderia-api-types/payloads/v10/gateway.d.ts#L240
-		if (pkgName === 'guilderia-api-types') {
+		// https://github.com/discordjs/discord.js/tree/main/node_modules/.pnpm/discord-api-types@0.37.97/node_modules/discord-api-types/payloads/v10/gateway.d.ts#L240
+		if (pkgName === 'discord-api-types') {
 			let currentItem = item;
 			while (currentItem.parent && currentItem.parent.kind !== ApiItemKind.EntryPoint)
 				currentItem = currentItem.parent as ApiDeclaredItem;
@@ -537,12 +537,17 @@ function resolveFileUrl(item: ApiDeclaredItem) {
 				sourceURL: `/docs/packages/${pkgName}/${version}/${(currentItem.parent as ApiEntryPoint).importPath}/${currentItem.displayName}:${currentItem.kind}`,
 			};
 		}
-	} else if (fileUrl?.includes('/dist/') && fileUrl.includes('/main/packages/')) {
-		const [, pkg] = fileUrl.split('/main/packages/');
+	} else if (fileUrl?.includes('/dist/') && fileUrl.includes('/packages/')) {
+		const [dir, pkg] = fileUrl.split('/packages/');
 		const pkgName = pkg!.split('/')[0];
-		const version = 'main';
+		const prefix = pkgName === 'discord.js' ? '' : '@discordjs/';
+		const version =
+			dir?.split('/').at(-1) === 'main'
+				? 'main'
+				: // eslint-disable-next-line unicorn/better-regex
+					item.getAssociatedPackage()?.dependencies?.[`${prefix}${pkgName}`]?.replace(/[~^]/, '');
 
-		// https://github.com/guilderiajs/guilderia.js/tree/main/packages/builders/dist/index.d.ts
+		// https://github.com/discordjs/discord.js/tree/main/packages/builders/dist/index.d.ts
 		let currentItem = item;
 		while (currentItem.parent && currentItem.parent.kind !== ApiItemKind.EntryPoint)
 			currentItem = currentItem.parent as ApiDeclaredItem;

@@ -20,7 +20,7 @@ export async function fetchSitemap({
 			const fileContent = await readFile(
 				join(
 					process.cwd(),
-					`${hasEntryPoint || normalizedEntryPoint ? `../../../guilderia-api-types` : `../../packages/${packageName}`}/docs/${packageName}/split/${version}.${normalizedEntryPoint}sitemap.api.json`,
+					`${hasEntryPoint || normalizedEntryPoint ? `../../../discord-api-types` : `../../packages/${packageName}`}/docs/${packageName}/split/${version}.${normalizedEntryPoint}sitemap.api.json`,
 				),
 				'utf8',
 			);

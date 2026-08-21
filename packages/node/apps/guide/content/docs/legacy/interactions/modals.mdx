@@ -2,7 +2,7 @@
 title: Modals
 ---
 
-Modals are pop-up forms that allow you to prompt users for additional input. This form-like interaction response blocks the user from interacting with Guilderia until the modal is submitted or dismissed. In this section, we will cover how to create, show, and receive modals using guilderia.js!
+Modals are pop-up forms that allow you to prompt users for additional input. This form-like interaction response blocks the user from interacting with Discord until the modal is submitted or dismissed. In this section, we will cover how to create, show, and receive modals using discord.js!
 
 <Callout>
 	This page is a follow-up to the [interactions (slash commands) page](../slash-commands/advanced-creation). Reading
@@ -11,7 +11,7 @@ Modals are pop-up forms that allow you to prompt users for additional input. Thi
 
 ## Building and responding with modals
 
-With the `ModalBuilder` class, guilderia.js offers a convenient way to build modals step by step using setters and callbacks.
+With the `ModalBuilder` class, discord.js offers a convenient way to build modals step by step using setters and callbacks.
 
 <Callout>
 	You can have a maximum of five top-level components per modal, each of which can be a label or a text display
@@ -19,7 +19,7 @@ With the `ModalBuilder` class, guilderia.js offers a convenient way to build mod
 </Callout>
 
 ```js
-const { Events, ModalBuilder } = require('guilderia.js');
+const { Events, ModalBuilder } = require('discord.js');
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
@@ -44,7 +44,7 @@ Label components wrap around other modal components (text input, select menus, e
 Since labels are not stand-alone components, we will use this example label to wrap a text input component in the next section:
 
 ```js
-const { LabelBuilder, ModalBuilder } = require('guilderia.js');
+const { LabelBuilder, ModalBuilder } = require('discord.js');
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
@@ -76,7 +76,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 Text input components prompt users for single or multi line free-form text.
 
 ```js
-const { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('guilderia.js');
+const { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
@@ -111,7 +111,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 #### Input styles
 
-Guilderia offers two different input styles:
+Discord offers two different input styles:
 
 - `Short`, a single-line text entry
 - `Paragraph`, a multi-line text entry
@@ -141,7 +141,7 @@ const input = new TextInputBuilder()
 
 ### Select menu
 
-Select menus allow you to limit user input to a preselected list of values. Guilderia also offers select menus linked directly to native Guilderia entities like users, roles, and channels.
+Select menus allow you to limit user input to a preselected list of values. Discord also offers select menus linked directly to native Discord entities like users, roles, and channels.
 Since they behave very similarly to how they do in messages, please refer to the [corresponding guide page](../interactive-components/select-menus) for more information on configuring select menus.
 
 Here again, you wrap the select menu with a label component to add context to the selection and add the label to the modal:
@@ -238,8 +238,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
 File upload components allow you to prompt the user to upload a file from their system.
 
 <Callout type="warn">
-	Guilderia **does not send the file data** itself in the resulting interaction. You will have to download it from
-	Guilderias CDN to process and validate it. Do not execute arbitrary code people upload via your app!
+	Discord **does not send the file data** itself in the resulting interaction. You will have to download it from
+	Discords CDN to process and validate it. Do not execute arbitrary code people upload via your app!
 </Callout>
 
 ```js
@@ -305,7 +305,7 @@ You **cannot** limit and validate the **file size** or the **file extension**.
 
 ### Responding with a modal
 
-With the modal built, call `ChatInputCommandInteraction#showModal()` to send the interaction response to Guilderia and display the modal to the user.
+With the modal built, call `ChatInputCommandInteraction#showModal()` to send the interaction response to Discord and display the modal to the user.
 
 <Callout type="warn">
 	Showing a modal must be the first response to an interaction. You **cannot** defer modals.
@@ -417,3 +417,170 @@ client.on(Events.InteractionCreate, (interaction) => {
 <Callout>
 	Empty text input submissions return an empty string `""`. Select menus without a selection return an empty array `[]`.
 </Callout>
+
+## Additional Modal Components
+
+### Radio Group
+
+Radio groups are an interactive component for selecting one option from a list of up to ten options.
+
+<Callout>Radio groups require at least two options to be sent</Callout>
+
+```js
+client.on(Events.InteractionCreate, async (interaction) => {
+	if (!interaction.isChatInputCommand()) return;
+	if (interaction.commandName === 'ping') {
+		// Create the modal
+		const modal = new ModalBuilder().setCustomId('myModal').setTitle('My Modal');
+
+		// [!code focus:12]
+		// [!code ++:9]
+		const radioGroupLabel = new LabelBuilder().setLabel('Radio Group').setRadioGroupComponent((radioGroup) =>
+			radioGroup.setCustomId('radiogroup').addOptions([
+				{ label: 'Option 1', value: 'option_1', description: 'The first option' },
+				{ label: 'Option 2', value: 'option_2', description: 'The default option', default: true },
+				{ label: 'Option 3', value: 'option_3' },
+			]),
+		);
+
+		// Add components to modal
+		// [!code ++:1]
+		modal.addLabelComponents(radioGroupLabel);
+
+		// Show modal to the user
+		await interaction.showModal(modal);
+	}
+});
+```
+
+#### Radio Group properties
+
+A Radio Group component can be customized to apply validation via the following `RadioGroupBuilder` methods:
+
+```js
+const radioGroup = new RadioGroupBuilder()
+	// Set the optional identifier for component
+	.setId(1)
+	// Require an option to be selected in this component (defaults to true)
+	.setRequired(true);
+```
+
+### Checkbox Group
+
+Checkbox groups are an interactive component for selecting up to ten options.
+
+```js
+client.on(Events.InteractionCreate, async (interaction) => {
+	if (!interaction.isChatInputCommand()) return;
+	if (interaction.commandName === 'ping') {
+		// Create the modal
+		const modal = new ModalBuilder().setCustomId('myModal').setTitle('My Modal');
+
+		// ...
+
+		// [!code focus:11]
+		// [!code ++:7]
+		const checkboxGroupLabel = new LabelBuilder().setLabel('Checkbox Group').setCheckboxGroupComponent((checkboxes) =>
+			checkboxes.setCustomId('checkboxes').addOptions([
+				{ label: 'Option A', value: 'option_a', description: 'The first option' },
+				{ label: 'Option B', value: 'option_b', description: 'The default option', default: true },
+				{ label: 'Option C', value: 'option_c' },
+			]),
+		);
+
+		// Add components to modal
+		// [!code --:1]
+		modal.addLabelComponents(radioGroupLabel);
+		// [!code ++:1]
+		modal.addLabelComponents(radioGroupLabel, checkboxGroupLabel);
+
+		// Show modal to the user
+		await interaction.showModal(modal);
+	}
+});
+```
+
+#### Checkbox Group properties
+
+A Checkbox Group component can be customized to apply validation via the following `CheckboxGroupBuilder` methods:
+
+```js
+const checkboxes = new CheckboxGroupBuilder()
+	// Set the optional identifier for component
+	.setId(1)
+	// Minimum number of boxes that must be checked (defaults to 1); min 0, max 10
+	.setMinValues(1)
+	// Maximum number of boxes that can be checked (defaults to 1); max 10
+	.setMaxValues(1)
+	// Require a box to be checked in this component (defaults to true)
+	.setRequired(true);
+```
+
+### Checkbox
+
+Checkbox is a single interactive component for simple yes/no style questions.
+
+<Callout>
+	Checkbox components can not be required. If a checkbox is to be required a Checkbox Group component needs to be used
+	instead.
+</Callout>
+
+```js
+client.on(Events.InteractionCreate, async (interaction) => {
+	if (!interaction.isChatInputCommand()) return;
+	if (interaction.commandName === 'ping') {
+		// Create the modal
+		const modal = new ModalBuilder().setCustomId('myModal').setTitle('My Modal');
+
+		// ...
+
+		// [!code focus:7]
+		// [!code ++:3]
+		const checkboxLabel = new LabelBuilder()
+			.setLabel('Did you enjoy this modal?')
+			.setCheckboxComponent((checkbox) => checkbox.setCustomId('checkbox'));
+
+		// Add components to modal
+		// [!code --:1]
+		modal.addLabelComponents(radioGroupLabel, checkboxGroupLabel);
+		// [!code ++:1]
+		modal.addLabelComponents(radioGroupLabel, checkboxGroupLabel, checkboxLabel);
+
+		// Show modal to the user
+		await interaction.showModal(modal);
+	}
+});
+```
+
+#### Checkbox properties
+
+A Checkbox component can be customized to apply validation via the following `CheckboxBuilder` method:
+
+```js
+const checkbox = new CheckboxBuilder()
+	// Set the optional identifier for component
+	.setId(1);
+```
+
+Restart your bot and invoke the `/ping` command again. You should see the modal as shown below:
+
+![Additional Modal Example](./images/additional-modal-example.png)
+
+### Receiving Additional Modal Components
+
+```js
+client.on(Events.InteractionCreate, async (interaction) => {
+	if (!interaction.isModalSubmit()) return;
+	if (interaction.customId === 'myModal') {
+		await interaction.reply({ content: 'Your submission was received successfully!' });
+
+		// [!code focus:4]
+		// Get the data entered by the user
+		const radioGroup = interaction.fields.getRadioGroup('radiogroup');
+		const checkboxes = interaction.fields.getCheckboxGroup('checkboxes');
+		const checkbox = interaction.fields.getCheckbox('checkbox');
+
+		console.log({ radioGroup, checkboxes, checkbox });
+	}
+});
+```

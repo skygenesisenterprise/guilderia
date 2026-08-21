@@ -1,7 +1,7 @@
 import type { Readable } from 'node:stream';
 import type { ReadableStream } from 'node:stream/web';
-import type { Collection } from '@guilderiajs/collection';
-import type { Awaitable, RawFile } from '@guilderiajs/util';
+import type { Collection } from '@discordjs/collection';
+import type { Awaitable, RawFile } from '@discordjs/util';
 import type { Agent, Dispatcher, RequestInit, BodyInit, Response } from 'undici';
 import type { IHandler } from '../interfaces/Handler.js';
 
@@ -28,7 +28,7 @@ export interface RESTOptions {
 	/**
 	 * The base api path, without version
 	 *
-	 * @defaultValue `'https://guilderia.com/api'`
+	 * @defaultValue `'https://discord.com/api'`
 	 */
 	api: string;
 	/**
@@ -41,11 +41,11 @@ export interface RESTOptions {
 	/**
 	 * The cdn path
 	 *
-	 * @defaultValue `'https://cdn.guilderiaapp.com'`
+	 * @defaultValue `'https://cdn.discordapp.com'`
 	 */
 	cdn: string;
 	/**
-	 * How many requests to allow sending per second (Infinity for unlimited, 50 for the standard global limit used by Guilderia)
+	 * How many requests to allow sending per second (Infinity for unlimited, 50 for the standard global limit used by Discord)
 	 *
 	 * @defaultValue `50`
 	 */
@@ -89,7 +89,7 @@ export interface RESTOptions {
 	/**
 	 * The media proxy path
 	 *
-	 * @defaultValue `'https://media.guilderiaapp.net'`
+	 * @defaultValue `'https://media.discordapp.net'`
 	 */
 	mediaProxy: string;
 	/**
@@ -99,14 +99,16 @@ export interface RESTOptions {
 	 */
 	offset: GetRateLimitOffsetFunction | number;
 	/**
-	 * Determines how rate limiting and pre-emptive throttling should be handled.
-	 * When an array of strings, each element is treated as a prefix for the request route
-	 * (e.g. `/channels` to match any route starting with `/channels` such as `/channels/:id/messages`)
-	 * for which to throw {@link RateLimitError}s. All other request routes will be queued normally
+	 * The default policy determining how rate limiting and pre-emptive throttling should be handled.
 	 *
-	 * @defaultValue `null`
+	 * Pass `true` to throw a {@link RateLimitError} on every rate limit, `false` to wait every
+	 * rate limit out, or a filter to decide per rate limit.
+	 *
+	 * This can be overridden per request via the {@link RequestData.rejectOnRateLimit | rejectOnRateLimit} request option.
+	 *
+	 * @defaultValue `false`
 	 */
-	rejectOnRateLimit: RateLimitQueueFilter | string[] | null;
+	rejectOnRateLimit: RateLimitQueueFilter | boolean;
 	/**
 	 * The number of retries for errors with the 500 code, or errors
 	 * that timeout
@@ -278,7 +280,7 @@ export interface InvalidRequestWarningData {
 	remainingTime: number;
 }
 
-export type { RawFile } from '@guilderiajs/util';
+export type { RawFile } from '@discordjs/util';
 
 export interface AuthData {
 	/**
@@ -340,6 +342,32 @@ export interface RequestData {
 	 */
 	reason?: string | undefined;
 	/**
+	 * Determines how a rate limit encountered while making this request should be handled.
+	 *
+	 * Pass `true` to throw a {@link RateLimitError} rather than wait, `false` to wait it out, or
+	 * a filter to decide based on rate limit data. Takes precedence over {@link RESTOptions.rejectOnRateLimit}, so
+	 * `false` opts this request out of an instance-wide policy. Leave it unset to inherit.
+	 *
+	 * @example
+	 * ```ts
+	 * // Fail rather than wait, no matter the rate limit
+	 * await rest.get(Routes.channel(channelId), { rejectOnRateLimit: true });
+	 *
+	 * // Give up rather than wait out a sublimit, which may be several minutes long
+	 * await rest.patch(Routes.channel(channelId), {
+	 * 	body: { name },
+	 * 	rejectOnRateLimit: (rateLimitData) => rateLimitData.sublimitTimeout > 0,
+	 * });
+	 *
+	 * // Spend at most 10 seconds waiting on rate limits
+	 * const deadline = Date.now() + 10_000;
+	 * await rest.get(Routes.channel(channelId), {
+	 * 	rejectOnRateLimit: (rateLimitData) => Date.now() + rateLimitData.retryAfter > deadline,
+	 * });
+	 * ```
+	 */
+	rejectOnRateLimit?: RateLimitQueueFilter | boolean | undefined;
+	/**
 	 * The signal to abort the queue entry or the REST call, where applicable
 	 */
 	signal?: AbortSignal | undefined;
@@ -381,7 +409,7 @@ export interface InternalRequest extends RequestData {
 	method: RequestMethod;
 }
 
-export interface HandlerRequestData extends Pick<InternalRequest, 'body' | 'files' | 'signal'> {
+export interface HandlerRequestData extends Pick<InternalRequest, 'body' | 'files' | 'rejectOnRateLimit' | 'signal'> {
 	auth: boolean | string;
 }
 

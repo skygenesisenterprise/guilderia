@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@guilderiajs/scripts",
+	"name": "@discordjs/scripts",
 	"version": "0.1.0",
 	"description": "A set of scripts that we use for our workflows",
 	"private": true,
@@ -47,24 +47,24 @@
 		"bot",
 		"client",
 		"node",
-		"guilderiajs"
+		"discordjs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/guilderiajs/guilderia.js.git",
+		"url": "https://github.com/discordjs/discord.js.git",
 		"directory": "packages/scripts"
 	},
 	"bugs": {
-		"url": "https://github.com/guilderiajs/guilderia.js/issues"
+		"url": "https://github.com/discordjs/discord.js/issues"
 	},
-	"homepage": "https://guilderia.js.org",
-	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
+	"homepage": "https://discord.js.org",
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
 		"@actions/glob": "^0.6.1",
-		"@guilderiajs/api-extractor-model": "workspace:^",
-		"@guilderiajs/api-extractor-utils": "workspace:^",
-		"@microsoft/tsdoc": "~0.15.1",
-		"@microsoft/tsdoc-config": "~0.17.1",
+		"@discordjs/api-extractor-model": "workspace:^",
+		"@discordjs/api-extractor-utils": "workspace:^",
+		"@microsoft/tsdoc": "~0.16.0",
+		"@microsoft/tsdoc-config": "~0.18.1",
 		"@vercel/blob": "^2.3.2",
 		"@vercel/postgres": "^0.10.0",
 		"commander": "^14.0.3",
@@ -74,7 +74,7 @@
 	},
 	"devDependencies": {
 		"@turbo/gen": "^2.8.21",
-		"@types/node": "^24.12.0",
+		"@types/node": "^24.13.2",
 		"cross-env": "^10.1.0",
 		"eslint": "^9.39.4",
 		"eslint-config-neon": "^0.3.2",
@@ -87,6 +87,6 @@
 		"typescript": "~5.9.3"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=24.17.0"
 	}
 }

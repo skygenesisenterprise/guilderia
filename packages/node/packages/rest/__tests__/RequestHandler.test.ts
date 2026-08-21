@@ -1,9 +1,10 @@
 /* eslint-disable id-length */
 /* eslint-disable promise/prefer-await-to-then */
+import { getEventListeners } from 'node:events';
 import { MockAgent, setGlobalDispatcher } from 'undici';
 import type { Interceptable, MockInterceptor } from 'undici/types/mock-interceptor.js';
 import { beforeEach, afterEach, test, expect, vitest } from 'vitest';
-import { GuilderiaAPIError, HTTPError, RateLimitError, REST, RESTEvents } from '../src/index.js';
+import { DiscordAPIError, HTTPError, RateLimitError, REST, RESTEvents } from '../src/index.js';
 import { genPath } from './util.js';
 
 let mockAgent: MockAgent;
@@ -11,14 +12,16 @@ let mockPool: Interceptable;
 
 const api = new REST({ timeout: 2_000, offset: 5 }).setToken('A-Very-Fake-Token');
 const invalidAuthApi = new REST({ timeout: 2_000 }).setToken('Definitely-Not-A-Fake-Token');
-const rateLimitErrorApi = new REST({ rejectOnRateLimit: ['/channels'] }).setToken('Obviously-Not-A-Fake-Token');
+const rateLimitErrorApi = new REST({
+	rejectOnRateLimit: (rateLimitData) => rateLimitData.route.startsWith('/channels'),
+}).setToken('Obviously-Not-A-Fake-Token');
 
 beforeEach(() => {
 	mockAgent = new MockAgent();
 	mockAgent.disableNetConnect();
 	setGlobalDispatcher(mockAgent);
 
-	mockPool = mockAgent.get('https://guilderia.com');
+	mockPool = mockAgent.get('https://discord.com');
 	api.setAgent(mockAgent);
 	invalidAuthApi.setAgent(mockAgent);
 	rateLimitErrorApi.setAgent(mockAgent);
@@ -28,7 +31,7 @@ afterEach(async () => {
 	await mockAgent.close();
 });
 
-// @guilderiajs/rest uses the `content-type` header to detect whether to parse
+// @discordjs/rest uses the `content-type` header to detect whether to parse
 // the response as JSON or as an ArrayBuffer.
 const responseOptions: MockInterceptor.MockResponseOptions = {
 	headers: {
@@ -44,6 +47,7 @@ let sublimitHits = 0;
 let serverOutage = true;
 let unexpected429 = true;
 let unexpected429cf = true;
+let optOut429 = true;
 const sublimitIntervals: {
 	reset: NodeJS.Timeout | null;
 	retry: NodeJS.Timeout | null;
@@ -408,6 +412,111 @@ test('Handle unexpected 429 cloudflare', async () => {
 	expect(Date.now()).toBeGreaterThanOrEqual(previous + 1_000);
 });
 
+test('rejectOnRateLimit rejects on the pre-emptive throttle', async () => {
+	mockPool
+		.intercept({
+			path: genPath('/preemptive'),
+			method: 'GET',
+		})
+		.reply(() => ({
+			statusCode: 200,
+			data: { test: true },
+			responseOptions: {
+				headers: {
+					...responseOptions.headers,
+					'x-ratelimit-limit': '1',
+					'x-ratelimit-remaining': '0',
+					'x-ratelimit-reset-after': '0.5',
+					via: '1.1 google',
+				},
+			},
+		}))
+		.times(1);
+
+	expect(await api.get('/preemptive')).toStrictEqual({ test: true });
+	await expect(api.get('/preemptive', { rejectOnRateLimit: true })).rejects.toBeInstanceOf(RateLimitError);
+});
+
+test('rejectOnRateLimit rejects on an unexpected 429', async () => {
+	mockPool
+		.intercept({
+			path: genPath('/reject-429'),
+			method: 'GET',
+		})
+		.reply(() => ({
+			statusCode: 429,
+			data: '',
+			responseOptions: {
+				headers: {
+					'retry-after': '1',
+					'x-ratelimit-scope': 'shared',
+					via: '1.1 google',
+				},
+			},
+		}))
+		.times(1);
+
+	const rejectOnRateLimit = vitest.fn(() => true);
+
+	await expect(api.get('/reject-429', { rejectOnRateLimit })).rejects.toBeInstanceOf(RateLimitError);
+
+	expect(rejectOnRateLimit).toHaveBeenCalledTimes(1);
+	expect(rejectOnRateLimit).toHaveBeenCalledWith(
+		expect.objectContaining({
+			global: false,
+			method: 'GET',
+			route: '/reject-429',
+			majorParameter: 'global',
+			// 1_005 because of `offset: 5`
+			retryAfter: 1_005,
+			sublimitTimeout: 1_005,
+			scope: 'shared',
+		}),
+	);
+});
+
+test('Per-call rejectOnRateLimit takes precedence over the instance-wide one', async () => {
+	mockPool
+		.intercept({
+			path: genPath('/channels/1111111111111111111'),
+			method: 'GET',
+		})
+		.reply(() => ({
+			statusCode: 429,
+			data: '',
+			responseOptions: { headers: { 'retry-after': '1', via: '1.1 google' } },
+		}))
+		.times(1);
+
+	mockPool
+		.intercept({
+			path: genPath('/channels/2222222222222222222'),
+			method: 'GET',
+		})
+		.reply(() => {
+			if (optOut429) {
+				optOut429 = false;
+
+				return {
+					statusCode: 429,
+					data: '',
+					responseOptions: { headers: { 'retry-after': '1', via: '1.1 google' } },
+				};
+			}
+
+			return { statusCode: 200, data: { test: true }, responseOptions };
+		})
+		.times(2);
+
+	await expect(rateLimitErrorApi.get('/channels/1111111111111111111')).rejects.toBeInstanceOf(RateLimitError);
+
+	const previous = performance.now();
+	expect(await rateLimitErrorApi.get('/channels/2222222222222222222', { rejectOnRateLimit: false })).toStrictEqual({
+		test: true,
+	});
+	expect(performance.now()).toBeGreaterThanOrEqual(previous + 1_000);
+});
+
 test('Handle global rate limits', async () => {
 	mockPool
 		.intercept({
@@ -509,13 +618,13 @@ test('Unauthorized', async () => {
 	// Ensure authless requests don't reset the token
 	const promiseWithoutTokenClear = invalidAuthApi.get('/unauthorized', { auth: false });
 	await expect(promiseWithoutTokenClear).rejects.toThrowError('401: Unauthorized');
-	await expect(promiseWithoutTokenClear).rejects.toBeInstanceOf(GuilderiaAPIError);
+	await expect(promiseWithoutTokenClear).rejects.toBeInstanceOf(DiscordAPIError);
 	expect(setTokenSpy).not.toHaveBeenCalled();
 
 	// Ensure authed requests do reset the token
 	const promise = invalidAuthApi.get('/unauthorized');
 	await expect(promise).rejects.toThrowError('401: Unauthorized');
-	await expect(promise).rejects.toBeInstanceOf(GuilderiaAPIError);
+	await expect(promise).rejects.toBeInstanceOf(DiscordAPIError);
 	expect(setTokenSpy).toHaveBeenCalledTimes(1);
 });
 
@@ -529,7 +638,7 @@ test('Bad Request', async () => {
 
 	const promise = api.get('/badRequest');
 	await expect(promise).rejects.toThrowError('Missing Permissions');
-	await expect(promise).rejects.toBeInstanceOf(GuilderiaAPIError);
+	await expect(promise).rejects.toBeInstanceOf(DiscordAPIError);
 });
 
 test('malformedRequest', async () => {
@@ -546,7 +655,23 @@ test('malformedRequest', async () => {
 			data: '',
 		}));
 
-	await expect(api.get('/malformedRequest')).rejects.toBeInstanceOf(GuilderiaAPIError);
+	await expect(api.get('/malformedRequest')).rejects.toBeInstanceOf(DiscordAPIError);
+});
+
+test('remove abort listeners after requests complete', async () => {
+	mockPool
+		.intercept({
+			path: genPath('/abort-listener-cleanup'),
+			method: 'GET',
+		})
+		.reply(200, { message: 'Hello World' }, responseOptions)
+		.times(2);
+
+	const controller = new AbortController();
+	for (let index = 0; index < 2; index++) {
+		await api.get('/abort-listener-cleanup', { signal: controller.signal });
+		expect(getEventListeners(controller.signal, 'abort')).toHaveLength(0);
+	}
 });
 
 // TODO: flaky due to changes in undici

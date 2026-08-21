@@ -5,7 +5,7 @@ import { isIPv4 } from 'node:net';
 
 /**
  * Stores an IP address and port. Used to store socket details for the local client as well as
- * for Guilderia.
+ * for Discord.
  */
 export interface SocketConfig {
 	ip: string;
@@ -13,7 +13,7 @@ export interface SocketConfig {
 }
 
 /**
- * Parses the response from Guilderia to aid with local IP discovery.
+ * Parses the response from Discord to aid with local IP discovery.
  *
  * @param message - The received message
  */
@@ -58,7 +58,7 @@ export class VoiceUDPSocket extends EventEmitter {
 	private readonly socket: Socket;
 
 	/**
-	 * The socket details for Guilderia (remote)
+	 * The socket details for Discord (remote)
 	 */
 	private readonly remote: SocketConfig;
 
@@ -112,7 +112,7 @@ export class VoiceUDPSocket extends EventEmitter {
 	}
 
 	/**
-	 * Called at a regular interval to check whether we are still able to send datagrams to Guilderia.
+	 * Called at a regular interval to check whether we are still able to send datagrams to Discord.
 	 */
 	private keepAlive() {
 		this.keepAliveBuffer.writeUInt32LE(this.keepAliveCounter, 0);
@@ -124,7 +124,7 @@ export class VoiceUDPSocket extends EventEmitter {
 	}
 
 	/**
-	 * Sends a buffer to Guilderia.
+	 * Sends a buffer to Discord.
 	 *
 	 * @param buffer - The buffer to send
 	 */
@@ -146,7 +146,7 @@ export class VoiceUDPSocket extends EventEmitter {
 	/**
 	 * Performs IP discovery to discover the local address and port to be used for the voice connection.
 	 *
-	 * @param ssrc - The SSRC received from Guilderia
+	 * @param ssrc - The SSRC received from Discord
 	 */
 	public async performIPDiscovery(ssrc: number): Promise<SocketConfig> {
 		return new Promise((resolve, reject) => {

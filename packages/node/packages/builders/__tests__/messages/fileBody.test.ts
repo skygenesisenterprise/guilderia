@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import type { RawFile } from '@guilderiajs/util';
+import type { RawFile } from '@discordjs/util';
 import { test, expect } from 'vitest';
 import { AttachmentBuilder, MessageBuilder } from '../../src/index.js';
 
@@ -33,6 +33,25 @@ test('AttachmentBuilder handles 0 as a valid id', () => {
 		key: 'files[0]',
 		name: 'test.txt',
 	});
+});
+
+test('AttachmentBuilder preserves zero-byte string files', () => {
+	const attachment = new AttachmentBuilder().setId(0).setFilename('empty.txt').setFileData('');
+
+	expect(attachment.getRawFile()).toStrictEqual({
+		data: '',
+		key: 'files[0]',
+		name: 'empty.txt',
+	});
+
+	const message = new MessageBuilder().setContent('empty attachment').addAttachments(attachment);
+	expect(message.toFileBody().files).toStrictEqual([
+		{
+			data: '',
+			key: 'files[0]',
+			name: 'empty.txt',
+		},
+	]);
 });
 
 test('MessageBuilder.toFileBody returns JSON body and files', () => {

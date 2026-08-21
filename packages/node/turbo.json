@@ -11,25 +11,25 @@
 			"outputs": ["dist/**"],
 			"outputLogs": "errors-only"
 		},
-		"@guilderiajs/ui#build-storybook": {
+		"@discordjs/ui#build-storybook": {
 			"dependsOn": ["build"],
 			"inputs": [".storybook/**/*", "src/**", "package.json", "tsconfig.json", "vite.config.ts"],
 			"outputs": ["dist/**", "storybook-static/**"],
 			"outputLogs": "errors-only"
 		},
-		"@guilderiajs/guide#build:local": {
+		"@discordjs/guide#build:local": {
 			"dependsOn": ["^build"],
 			"inputs": ["public/**", "src/**", "next.config.ts", "package.json", "tsconfig.json"],
 			"outputs": [".next/**", ".next/cache/**", ".source/**"],
 			"outputLogs": "full"
 		},
-		"@guilderiajs/guide#build:prod": {
+		"@discordjs/guide#build:prod": {
 			"dependsOn": ["^build"],
 			"inputs": ["public/**", "src/**", "next.config.ts", "package.json", "tsconfig.json"],
 			"outputs": [".next/**", ".next/cache/**", ".source/**"],
 			"outputLogs": "full"
 		},
-		"@guilderiajs/website#build:local": {
+		"@discordjs/website#build:local": {
 			"env": [
 				"VERCEL_ENV",
 				"NEXT_PUBLIC_LOCAL_DEV",
@@ -60,7 +60,7 @@
 			"outputs": [".next/**", ".next/cache/**", "src/assets/readme/**"],
 			"outputLogs": "full"
 		},
-		"@guilderiajs/website#build:prod": {
+		"@discordjs/website#build:prod": {
 			"env": [
 				"VERCEL_ENV",
 				"NEXT_PUBLIC_LOCAL_DEV",
@@ -121,7 +121,7 @@
 			"outputs": [],
 			"outputLogs": "errors-only"
 		},
-		"@guilderiajs/guide#lint": {
+		"@discordjs/guide#lint": {
 			"dependsOn": ["^build", "build:local"],
 			"inputs": [
 				"../../eslint.config.js",
@@ -135,7 +135,7 @@
 			"outputs": [],
 			"outputLogs": "errors-only"
 		},
-		"@guilderiajs/website#lint": {
+		"@discordjs/website#lint": {
 			"dependsOn": ["^build", "build:local"],
 			"inputs": [
 				"../../eslint.config.js",
@@ -165,7 +165,7 @@
 			"outputs": [],
 			"outputLogs": "errors-only"
 		},
-		"@guilderiajs/guide#format": {
+		"@discordjs/guide#format": {
 			"dependsOn": ["^build"],
 			"inputs": [
 				"../../eslint.config.js",
@@ -216,13 +216,13 @@
 			"persistent": true,
 			"outputLogs": "full"
 		},
-		"@guilderiajs/guide#dev": {
+		"@discordjs/guide#dev": {
 			"dependsOn": ["^build"],
 			"cache": false,
 			"persistent": true,
 			"outputLogs": "full"
 		},
-		"@guilderiajs/website#dev": {
+		"@discordjs/website#dev": {
 			"env": ["VERCEL_ENV", "NEXT_PUBLIC_LOCAL_DEV"],
 			"dependsOn": ["^build", "^docs"],
 			"cache": false,

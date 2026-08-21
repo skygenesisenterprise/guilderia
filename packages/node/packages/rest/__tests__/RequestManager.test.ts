@@ -14,7 +14,7 @@ beforeEach(() => {
 	mockAgent.disableNetConnect();
 	setGlobalDispatcher(mockAgent);
 
-	mockPool = mockAgent.get('https://guilderia.com');
+	mockPool = mockAgent.get('https://discord.com');
 	api.setAgent(mockAgent);
 });
 

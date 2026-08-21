@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@guilderiajs/docgen",
+	"name": "@discordjs/docgen",
 	"version": "0.12.1",
-	"description": "The docs.json generator for guilderia.js and its related projects",
+	"description": "The docs.json generator for discord.js and its related projects",
 	"private": true,
 	"scripts": {
 		"build": "tsup",
@@ -48,18 +48,18 @@
 		"docgen",
 		"docsgen",
 		"node",
-		"guilderiajs"
+		"discordjs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/guilderiajs/guilderia.js.git",
+		"url": "https://github.com/discordjs/discord.js.git",
 		"directory": "packages/docgen"
 	},
 	"bugs": {
-		"url": "https://github.com/guilderiajs/guilderia.js/issues"
+		"url": "https://github.com/discordjs/discord.js/issues"
 	},
-	"homepage": "https://guilderia.js.org",
-	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
+	"homepage": "https://discord.js.org",
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
 		"commander": "^14.0.3",
 		"jsdoc-to-markdown": "^8.0.3",
@@ -68,7 +68,7 @@
 	},
 	"devDependencies": {
 		"@types/jsdoc-to-markdown": "^7.0.6",
-		"@types/node": "^24.12.0",
+		"@types/node": "^24.13.2",
 		"cross-env": "^10.1.0",
 		"eslint": "^9.39.4",
 		"eslint-config-neon": "^0.3.2",
@@ -81,7 +81,7 @@
 		"typescript": "~5.9.3"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=24.17.0"
 	},
 	"publishConfig": {
 		"access": "public",

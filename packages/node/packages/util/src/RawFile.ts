@@ -23,12 +23,11 @@ export interface RawFile {
 	 */
 	key?: string;
 	/**
-	 * The name of the file. This is the actual filename that will be used when uploading to Guilderia.
+	 * The name of the file. This is the actual filename that will be used when uploading to Discord.
 	 * This is also the name you'll use to reference the file with attachment:// URLs.
 	 *
 	 * @example 'image.png'
 	 * @example 'document.pdf'
-	 * @example 'SPOILER_secret.jpeg'
 	 */
 	name: string;
 }

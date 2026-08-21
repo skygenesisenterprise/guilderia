@@ -9,7 +9,7 @@ import {
 	type APIMediaGalleryComponent,
 	type APISectionComponent,
 	ComponentType,
-} from 'guilderia-api-types/v10';
+} from 'discord-api-types/v10';
 import { normalizeArray, type RestOrArray } from '../../util/normalizeArray';
 import { resolveBuilder } from '../../util/resolveBuilder';
 import { validate } from '../../util/validation';

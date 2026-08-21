@@ -1,6 +1,6 @@
 import type { Buffer } from 'node:buffer';
-import type { JSONEncodable, RawFile } from '@guilderiajs/util';
-import type { RESTAPIAttachment, Snowflake } from 'guilderia-api-types/v10';
+import type { JSONEncodable, RawFile } from '@discordjs/util';
+import type { RESTAPIAttachment, Snowflake } from 'discord-api-types/v10';
 import { validate } from '../util/validation.js';
 import { attachmentPredicate } from './Assertions.js';
 
@@ -16,10 +16,10 @@ export class AttachmentBuilder implements JSONEncodable<RESTAPIAttachment> {
 	/**
 	 * This data is not included in the output of `toJSON()`. For this class specifically, this refers to binary data
 	 * that will wind up being included in the multipart/form-data request, if used with the `MessageBuilder`.
-	 * To retrieve this data, use {@link getRawFile}.
+	 * To retrieve this data, use {@link AttachmentBuilder.getRawFile}.
 	 *
 	 * @remarks This cannot be set via the constructor, primarily because of the behavior described
-	 * {@link https://guilderia.com/developers/docs/reference#editing-message-attachments | here}.
+	 * {@link https://discord.com/developers/docs/reference#editing-message-attachments | here}.
 	 * That is, when editing a message's attachments, you should only be providing file data for new attachments.
 	 */
 	private readonly fileData: Partial<Pick<RawFile, 'contentType' | 'data'>>;
@@ -107,7 +107,7 @@ export class AttachmentBuilder implements JSONEncodable<RESTAPIAttachment> {
 	 * Sets the file data to upload with this attachment.
 	 *
 	 * @param data - The file data
-	 * @remarks Note that this data is NOT included in the {@link toJSON} output. To retrieve it, use {@link getRawFile}.
+	 * @remarks Note that this data is NOT included in the {@link AttachmentBuilder.toJSON} output. To retrieve it, use {@link AttachmentBuilder.getRawFile}.
 	 */
 	public setFileData(data: Buffer | Uint8Array | string): this {
 		this.fileData.data = data;
@@ -125,7 +125,7 @@ export class AttachmentBuilder implements JSONEncodable<RESTAPIAttachment> {
 	/**
 	 * Sets the content type of the file data to upload with this attachment.
 	 *
-	 * @remarks Note that this data is NOT included in the {@link toJSON} output. To retrieve it, use {@link getRawFile}.
+	 * @remarks Note that this data is NOT included in the {@link AttachmentBuilder.toJSON} output. To retrieve it, use {@link AttachmentBuilder.getRawFile}.
 	 */
 	public setFileContentType(contentType: string): this {
 		this.fileData.contentType = contentType;
@@ -141,12 +141,12 @@ export class AttachmentBuilder implements JSONEncodable<RESTAPIAttachment> {
 	}
 
 	/**
-	 * Converts this attachment to a {@link RawFile} for uploading.
+	 * Converts this attachment to a {@link @discordjs/util#RawFile} for uploading.
 	 *
-	 * @returns A {@link RawFile} object, or `undefined` if no file data is set
+	 * @returns A {@link @discordjs/util#RawFile} object, or `undefined` if no file data is set
 	 */
 	public getRawFile(): Partial<RawFile> | undefined {
-		if (!this.fileData?.data) {
+		if (this.fileData.data === undefined) {
 			return;
 		}
 

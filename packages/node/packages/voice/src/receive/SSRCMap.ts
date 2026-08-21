@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events';
 
 /**
- * The known data for a user in a Guilderia voice connection.
+ * The known data for a user in a Discord voice connection.
  */
 export interface VoiceUserData {
 	/**
@@ -10,7 +10,7 @@ export interface VoiceUserData {
 	audioSSRC: number;
 
 	/**
-	 * The Guilderia user id of the user.
+	 * The Discord user id of the user.
 	 */
 	userId: string;
 

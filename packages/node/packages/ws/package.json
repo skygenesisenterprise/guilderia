@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@guilderiajs/ws",
+	"name": "@discordjs/ws",
 	"version": "2.0.2",
-	"description": "Wrapper around Guilderia's gateway",
+	"description": "Wrapper around Discord's gateway",
 	"scripts": {
 		"test": "vitest run --config ../../vitest.config.ts",
 		"build": "tsc --noEmit && tsup",
@@ -51,42 +51,42 @@
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Román <kyraguilderia@gmail.com>",
+		"Aura Román <kyradiscord@gmail.com>",
 		"DD <didinele.dev@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"guilderia",
+		"discord",
 		"api",
 		"gateway",
-		"guilderiaapp",
-		"guilderiajs"
+		"discordapp",
+		"discordjs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/guilderiajs/guilderia.js.git",
+		"url": "https://github.com/discordjs/discord.js.git",
 		"directory": "packages/ws"
 	},
 	"bugs": {
-		"url": "https://github.com/guilderiajs/guilderia.js/issues"
+		"url": "https://github.com/discordjs/discord.js/issues"
 	},
-	"homepage": "https://guilderia.js.org",
-	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
+	"homepage": "https://discord.js.org",
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
-		"@guilderiajs/collection": "workspace:^",
-		"@guilderiajs/util": "workspace:^",
+		"@discordjs/collection": "workspace:^",
+		"@discordjs/util": "workspace:^",
 		"@sapphire/async-queue": "^1.5.5",
 		"@types/ws": "^8.18.1",
 		"@vladfrangu/async_event_emitter": "^2.4.7",
-		"guilderia-api-types": "^0.38.43",
+		"discord-api-types": "^0.38.50",
 		"tslib": "^2.8.1",
 		"ws": "^8.20.0"
 	},
 	"devDependencies": {
-		"@guilderiajs/api-extractor": "workspace:^",
-		"@guilderiajs/scripts": "workspace:^",
+		"@discordjs/api-extractor": "workspace:^",
+		"@discordjs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
-		"@types/node": "^22.19.15",
+		"@types/node": "^24.13.2",
 		"@vitest/coverage-v8": "^4.1.2",
 		"cross-env": "^10.1.0",
 		"esbuild-plugin-version-injector": "^1.2.1",
@@ -103,7 +103,7 @@
 		"zlib-sync": "^0.1.10"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=24.17.0"
 	},
 	"publishConfig": {
 		"access": "public",

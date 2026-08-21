@@ -1,1 +1,1 @@
-export * from '@guilderiajs/formatters';
+export * from '@discordjs/formatters';

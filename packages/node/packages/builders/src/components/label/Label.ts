@@ -7,8 +7,8 @@ import type {
 	APIStringSelectComponent,
 	APITextInputComponent,
 	APIUserSelectComponent,
-} from 'guilderia-api-types/v10';
-import { ComponentType } from 'guilderia-api-types/v10';
+} from 'discord-api-types/v10';
+import { ComponentType } from 'discord-api-types/v10';
 import { resolveBuilder } from '../../util/resolveBuilder.js';
 import { validate } from '../../util/validation.js';
 import { ComponentBuilder } from '../Component.js';

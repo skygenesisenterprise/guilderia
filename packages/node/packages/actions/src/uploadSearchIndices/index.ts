@@ -1,6 +1,6 @@
 import process from 'node:process';
 import { setFailed } from '@actions/core';
-import { generateAllIndices } from '@guilderiajs/scripts';
+import { generateAllIndices } from '@discordjs/scripts';
 import Cloudflare from 'cloudflare';
 import { type EnqueuedTask, MeiliSearch } from 'meilisearch';
 import pLimit from 'p-limit';

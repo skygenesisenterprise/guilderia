@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 import * as path from 'node:path';
-import { EnumMemberOrder, ReleaseTag } from '@guilderiajs/api-extractor-model';
+import { EnumMemberOrder, ReleaseTag } from '@discordjs/api-extractor-model';
 import { TSDocConfiguration, TSDocTagDefinition } from '@microsoft/tsdoc';
 import { TSDocConfigFile } from '@microsoft/tsdoc-config';
 import {
@@ -11,15 +11,13 @@ import {
 	FileSystem,
 	PackageJsonLookup,
 	type INodePackageJson,
+	Objects,
 	PackageName,
 	Text,
 	InternalError,
 	Path,
 	NewlineKind,
 } from '@rushstack/node-core-library';
-import type { MergeWithCustomizer } from 'lodash';
-import cloneDeep from 'lodash/cloneDeep.js';
-import mergeWith from 'lodash/mergeWith.js';
 import * as resolve from 'resolve';
 import { PackageMetadataManager } from '../analyzer/PackageMetadataManager.js';
 import { MessageRouter } from '../collector/MessageRouter.js';
@@ -74,7 +72,7 @@ export interface IExtractorConfigLoadForFolderOptions {
 	/**
 	 * An already constructed `RigConfig` object.  If omitted, then a new `RigConfig` object will be constructed.
 	 *
-	 * @deprecated this is unsupported in the guilderia.js version
+	 * @deprecated this is unsupported in the discord.js version
 	 */
 	rigConfig?: never;
 
@@ -151,7 +149,7 @@ export interface IExtractorConfigPrepareOptions {
 	/**
 	 * Allow customization of the tsdoc.json config file.  If omitted, this file will be loaded from its default
 	 * location.  If the file does not exist, then the standard definitions will be used from
-	 * `@guilderiajs/api-extractor/extends/tsdoc-base.json`.
+	 * `@discordjs/api-extractor/extends/tsdoc-base.json`.
 	 */
 	tsdocConfigFile?: TSDocConfigFile;
 }
@@ -234,10 +232,10 @@ interface IExtractorConfigParameters {
 	untrimmedFilePath: string;
 }
 
-// Lodash merges array values by default, which is unintuitive for config files (and makes it impossible for derived configurations to overwrite arrays).
-// For example, given a base config containing an array property with value ["foo", "bar"] and a derived config that specifies ["baz"] for that property, lodash will produce ["baz", "bar"], which is unintuitive.
-// This customizer function ensures that arrays are always overwritten.
-const mergeCustomizer: MergeWithCustomizer = (_objValue, srcValue) => {
+// Arrays are overwritten rather than merged, which is the intuitive behavior for config files.
+// For example, given a base config containing an array property with value ["foo", "bar"] and a
+// derived config that specifies ["baz"] for that property, the result is ["baz"] (not ["baz", "bar"]).
+const mergeCustomizer: Objects.MergeWithCustomizer = (_objValue, srcValue) => {
 	if (Array.isArray(srcValue)) {
 		return srcValue;
 	}
@@ -727,11 +725,11 @@ export class ExtractorConfig {
 				}
 
 				// This step has to be performed in advance, since the currentConfigFolderPath information will be lost
-				// after lodash.merge() is performed.
+				// after merge() is performed.
 				ExtractorConfig._resolveConfigFileRelativePaths(baseConfig, currentConfigFolderPath);
 
 				// Merge extractorConfig into baseConfig, mutating baseConfig
-				mergeWith(baseConfig, configObject, mergeCustomizer);
+				Objects.mergeWith(baseConfig, configObject, mergeCustomizer);
 				configObject = baseConfig;
 
 				currentConfigFilePath = extendsField;
@@ -741,7 +739,11 @@ export class ExtractorConfig {
 		}
 
 		// Lastly, apply the defaults
-		configObject = mergeWith(cloneDeep(ExtractorConfig._defaultConfig), configObject, mergeCustomizer);
+		configObject = Objects.mergeWith(
+			structuredClone(ExtractorConfig._defaultConfig),
+			configObject,
+			mergeCustomizer,
+		) as Partial<IConfigFile>;
 
 		ExtractorConfig.jsonSchema.validateObject(configObject, jsonFilePath);
 

@@ -16,8 +16,8 @@ import type {
 	ApiConstructor,
 	ApiItemContainerMixin,
 	ApiReturnTypeMixin,
-} from '@guilderiajs/api-extractor-model';
-import { ApiDeclaredItem, ApiItemKind } from '@guilderiajs/api-extractor-model';
+} from '@discordjs/api-extractor-model';
+import { ApiDeclaredItem, ApiItemKind } from '@discordjs/api-extractor-model';
 import { generateTypeParamData } from './TypeParameterJSONEncoder.js';
 import { type TokenDocumentation, resolveName, genReference, genToken, genParameter, generatePath } from './parse.js';
 import type { DocBlockJSON } from './tsdoc/CommentBlock.js';

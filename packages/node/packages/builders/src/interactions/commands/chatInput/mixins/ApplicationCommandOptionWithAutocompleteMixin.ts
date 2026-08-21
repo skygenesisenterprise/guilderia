@@ -2,7 +2,7 @@ import type {
 	APIApplicationCommandIntegerOption,
 	APIApplicationCommandNumberOption,
 	APIApplicationCommandStringOption,
-} from 'guilderia-api-types/v10';
+} from 'discord-api-types/v10';
 
 export type AutocompletableOptions =
 	| APIApplicationCommandIntegerOption

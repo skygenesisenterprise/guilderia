@@ -4,7 +4,7 @@ import type { IRPCBroker } from '../Broker.js';
 import type { RedisBrokerOptions } from './BaseRedis.js';
 import { BaseRedisBroker, DefaultRedisBrokerOptions } from './BaseRedis.js';
 
-interface InternalPromise {
+export interface InternalPromise {
 	reject(error: any): void;
 	resolve(data: any): void;
 	timeout: NodeJS.Timeout;
@@ -31,7 +31,7 @@ export const DefaultRPCRedisBrokerOptions = {
  * @example
  * ```ts
  * // caller.js
- * import { RPCRedisBroker } from '@guilderiajs/brokers';
+ * import { RPCRedisBroker } from '@discordjs/brokers';
  * import Redis from 'ioredis';
  *
  * const broker = new RPCRedisBroker(new Redis());
@@ -40,7 +40,7 @@ export const DefaultRPCRedisBrokerOptions = {
  * await broker.destroy();
  *
  * // responder.js
- * import { RPCRedisBroker } from '@guilderiajs/brokers';
+ * import { RPCRedisBroker } from '@discordjs/brokers';
  * import Redis from 'ioredis';
  *
  * const broker = new RPCRedisBroker(new Redis());

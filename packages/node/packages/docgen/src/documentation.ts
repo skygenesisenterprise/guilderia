@@ -271,7 +271,7 @@ export class Documentation {
 	public serializeNew() {
 		return {
 			metadata: {
-				toolPackage: '@guilderiajs/docgen',
+				toolPackage: '@discordjs/docgen',
 				toolVersion: Documentation.FORMAT_VERSION,
 				schemaVersion: 1_011,
 				oldestForwardsCompatibleVersion: 1_001,
@@ -431,11 +431,11 @@ export class Documentation {
 					reportUnsupportedHtmlElements: false,
 				},
 			},
-			projectFolderUrl: 'https://github.com/guilderiajs/guilderia.js/tree/main/packages/guilderia.js',
+			projectFolderUrl: 'https://github.com/discordjs/discord.js/tree/main/packages/discord.js',
 			kind: 'Package',
-			canonicalReference: 'guilderia.js!',
+			canonicalReference: 'discord.js!',
 			docComment: '',
-			name: 'guilderia.js',
+			name: 'discord.js',
 			preserveMemberOrder: false,
 			members: [
 				...[...this.classes.values()].map((_class) => _class.serialize()),

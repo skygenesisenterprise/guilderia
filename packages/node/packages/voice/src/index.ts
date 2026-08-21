@@ -7,6 +7,7 @@ export {
 	Networking,
 	type ConnectionData,
 	type ConnectionOptions,
+	type NetworkingOptions,
 	type NetworkingState,
 	type NetworkingResumingState,
 	type NetworkingSelectingProtocolState,
@@ -19,7 +20,12 @@ export {
 	VoiceUDPSocket,
 	VoiceWebSocket,
 	type SocketConfig,
+	type BinaryWebSocketMessage,
 	DAVESession,
+	type SessionMethods,
+	type DAVESessionOptions,
+	type TransitionResult,
+	type ProposalsResult,
 } from './networking/index.js';
 
 export {
@@ -40,7 +46,7 @@ export {
 export { type JoinConfig, getVoiceConnection, getVoiceConnections, getGroups } from './DataStore';
 
 /**
- * The {@link https://github.com/guilderiajs/guilderia.js/blob/main/packages/voice#readme | @guilderiajs/voice} version
+ * The {@link https://github.com/discordjs/discord.js/blob/main/packages/voice#readme | @discordjs/voice} version
  * that you are currently using.
  */
 // This needs to explicitly be `string` so it is not typed as a "const string" that gets injected by esbuild

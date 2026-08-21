@@ -1,4 +1,4 @@
-import { embedLength } from '@guilderiajs/util';
+import { embedLength } from '@discordjs/util';
 import { z } from 'zod';
 
 const namePredicate = z.string().max(256);

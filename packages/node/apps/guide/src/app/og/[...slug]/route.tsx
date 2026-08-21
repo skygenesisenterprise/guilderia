@@ -44,7 +44,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 	return generateOGImage({
 		title: page.data.title,
 		description: page.data.description,
-		site: 'guilderia.js Guide',
+		site: 'discord.js Guide',
 		fonts: [
 			{
 				name: 'Geist',

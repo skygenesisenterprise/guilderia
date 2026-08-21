@@ -1,4 +1,4 @@
-import { GuilderiaSnowflake } from '@sapphire/snowflake';
+import { DiscordSnowflake } from '@sapphire/snowflake';
 import type {
 	APIActionRowComponent,
 	APIButtonComponent,
@@ -14,8 +14,9 @@ import type {
 	APIStringSelectComponent,
 	APIUser,
 	APIUserSelectComponent,
-} from 'guilderia-api-types/v10';
+} from 'discord-api-types/v10';
 import {
+	BaseThemeType,
 	MessageReferenceType,
 	MessageType,
 	MessageFlags,
@@ -24,14 +25,15 @@ import {
 	SeparatorSpacingSize,
 	ChannelType,
 	SelectMenuDefaultValueType,
-} from 'guilderia-api-types/v10';
+} from 'discord-api-types/v10';
 import { describe, expect, test } from 'vitest';
 import { Attachment } from '../src/messages/Attachment.js';
 import { Message } from '../src/messages/Message.js';
+import { SharedClientTheme } from '../src/messages/SharedClientTheme.js';
 import { ContainerComponent } from '../src/messages/components/ContainerComponent.js';
 import { Embed } from '../src/messages/embeds/Embed.js';
 import { User } from '../src/users/User.js';
-import { dateToGuilderiaISOTimestamp } from '../src/utils/optimization.js';
+import { dateToDiscordISOTimestamp } from '../src/utils/optimization.js';
 
 const user: APIUser = {
 	username: 'user',
@@ -44,7 +46,7 @@ const user: APIUser = {
 describe('message with embeds and attachments', () => {
 	const timestamp = '2025-10-09T17:48:20.192000+00:00';
 	const data: APIMessage = {
-		id: GuilderiaSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
+		id: DiscordSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
 		type: MessageType.Default,
 		position: 10,
 		channel_id: '2',
@@ -65,7 +67,7 @@ describe('message with embeds and attachments', () => {
 			{
 				author: {
 					name: 'embed author',
-					icon_url: 'https://guilderia.js.org/static/logo.svg',
+					icon_url: 'https://discord.js.org/static/logo.svg',
 				},
 				color: 255,
 				description: 'describe me',
@@ -80,10 +82,10 @@ describe('message with embeds and attachments', () => {
 					text: 'footer',
 				},
 				image: {
-					url: 'https://guilderia.js.org/static/logo.svg',
+					url: 'https://discord.js.org/static/logo.svg',
 				},
 				thumbnail: {
-					url: 'https://guilderia.js.org/static/logo.svg',
+					url: 'https://discord.js.org/static/logo.svg',
 				},
 				title: 'Title',
 				timestamp: '2025-10-19T21:39:40.193000+00:00',
@@ -105,10 +107,10 @@ describe('message with embeds and attachments', () => {
 		expect(instance.position).toBe(data.position);
 		expect(instance.content).toBe(data.content);
 		expect(instance.createdTimestamp).toBe(Date.parse(data.timestamp));
-		expect(dateToGuilderiaISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
+		expect(dateToDiscordISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
 		expect(instance.flags?.toJSON()).toBe(data.flags);
 		expect(instance.editedTimestamp).toBe(Date.parse(data.edited_timestamp!));
-		expect(dateToGuilderiaISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
+		expect(dateToDiscordISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
 		expect(instance.nonce).toBe(data.nonce);
 		expect(instance.pinned).toBe(data.pinned);
 		expect(instance.tts).toBe(data.tts);
@@ -175,7 +177,7 @@ describe('message with components', () => {
 			{
 				type: ComponentType.Button,
 				style: ButtonStyle.Link,
-				url: 'https://guilderia.js.org/',
+				url: 'https://discord.js.org/',
 				disabled: false,
 				id: 7,
 				label: 'DJS',
@@ -195,6 +197,8 @@ describe('message with components', () => {
 			url: 'attachment://file.txt',
 			attachment_id: '0',
 			content_type: 'text/plain',
+			// TODO: Eventually, this should allow `0`.
+			// @ts-expect-error: Eventually, this should allow `0`.
 			flags: 0,
 		},
 		id: 9,
@@ -205,7 +209,7 @@ describe('message with components', () => {
 		items: [
 			{
 				media: {
-					url: 'https://guilderia.js.org/static/logo.svg',
+					url: 'https://discord.js.org/static/logo.svg',
 					content_type: 'image/svg+xml',
 					height: 50,
 					width: 50,
@@ -221,7 +225,7 @@ describe('message with components', () => {
 		accessory: {
 			type: ComponentType.Thumbnail,
 			media: {
-				url: 'https://guilderia.js.org/static/logo.svg',
+				url: 'https://discord.js.org/static/logo.svg',
 			},
 			description: 'Logo thumbnail',
 			id: 13,
@@ -404,7 +408,7 @@ describe('message with components', () => {
 		spoiler: true,
 	};
 	const data: APIMessage = {
-		id: GuilderiaSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
+		id: DiscordSnowflake.generate({ timestamp: Date.parse(timestamp) }).toString(),
 		type: MessageType.Reply,
 		position: 15,
 		channel_id: '2',
@@ -445,10 +449,10 @@ describe('message with components', () => {
 		expect(instance.position).toBe(data.position);
 		expect(instance.content).toBe(data.content);
 		expect(instance.createdTimestamp).toBe(Date.parse(data.timestamp));
-		expect(dateToGuilderiaISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
+		expect(dateToDiscordISOTimestamp(instance.createdAt!)).toBe(data.timestamp);
 		expect(instance.flags?.toJSON()).toBe(data.flags);
 		expect(instance.editedTimestamp).toBe(Date.parse(data.edited_timestamp!));
-		expect(dateToGuilderiaISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
+		expect(dateToDiscordISOTimestamp(instance.editedAt!)).toBe(data.edited_timestamp);
 		expect(instance.nonce).toBe(data.nonce);
 		expect(instance.pinned).toBe(data.pinned);
 		expect(instance.tts).toBe(data.tts);
@@ -474,5 +478,34 @@ describe('message with components', () => {
 		expect(containerInstance.type).toBe(container.type);
 		expect(containerInstance.id).toBe(container.id);
 		expect(containerInstance.spoiler).toBe(container.spoiler);
+	});
+});
+
+describe('SharedClientTheme structure', () => {
+	const rawTheme = {
+		colors: ['5865F2', '7258F2', '9858F2'],
+		gradient_angle: 45,
+		base_mix: 58,
+		base_theme: BaseThemeType.Dark,
+	};
+
+	test('GIVEN a shared client theme THEN exposes all getters correctly', () => {
+		const instance = new SharedClientTheme(rawTheme);
+		expect(instance.colors).toStrictEqual(rawTheme.colors);
+		expect(instance.gradientAngle).toBe(rawTheme.gradient_angle);
+		expect(instance.baseMix).toBe(rawTheme.base_mix);
+		expect(instance.baseTheme).toBe(BaseThemeType.Dark);
+		expect(instance.toJSON()).toEqual(rawTheme);
+	});
+
+	test('GIVEN a shared client theme without base_theme THEN baseTheme is undefined', () => {
+		const { base_theme: _, ...withoutTheme } = rawTheme;
+		const instance = new SharedClientTheme(withoutTheme);
+		expect(instance.baseTheme).toBeUndefined();
+	});
+
+	test('GIVEN a shared client theme with null base_theme THEN baseTheme is null', () => {
+		const instance = new SharedClientTheme({ ...rawTheme, base_theme: null });
+		expect(instance.baseTheme).toBeNull();
 	});
 });

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@guilderiajs/actions",
+	"name": "@discordjs/actions",
 	"version": "0.1.0",
 	"description": "A set of actions that we use for our workflows",
 	"private": true,
@@ -28,24 +28,24 @@
 		"bot",
 		"client",
 		"node",
-		"guilderiajs"
+		"discordjs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/guilderiajs/guilderia.js.git",
+		"url": "https://github.com/discordjs/discord.js.git",
 		"directory": "packages/actions"
 	},
 	"bugs": {
-		"url": "https://github.com/guilderiajs/guilderia.js/issues"
+		"url": "https://github.com/discordjs/discord.js/issues"
 	},
-	"homepage": "https://guilderia.js.org",
-	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
+	"homepage": "https://discord.js.org",
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
 		"@actions/core": "^3.0.0",
 		"@actions/github": "^9.0.0",
 		"@actions/glob": "^0.6.1",
 		"@aws-sdk/client-s3": "^3.1019.0",
-		"@guilderiajs/scripts": "workspace:^",
+		"@discordjs/scripts": "workspace:^",
 		"cloudflare": "^5.2.0",
 		"commander": "^14.0.3",
 		"meilisearch": "^0.56.0",
@@ -57,7 +57,7 @@
 	"devDependencies": {
 		"@npm/types": "^2.1.0",
 		"@types/bun": "^1.3.11",
-		"@types/node": "^24.12.0",
+		"@types/node": "^24.13.2",
 		"@vitest/coverage-v8": "^4.1.2",
 		"cross-env": "^10.1.0",
 		"eslint": "^9.39.4",
@@ -72,6 +72,6 @@
 		"vitest": "^4.1.2"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=24.17.0"
 	}
 }

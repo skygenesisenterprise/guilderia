@@ -3,7 +3,7 @@
 import { MockAgent, setGlobalDispatcher } from 'undici';
 import type { Interceptable, MockInterceptor } from 'undici/types/mock-interceptor';
 import { beforeEach, afterEach, test, expect } from 'vitest';
-import { GuilderiaAPIError, REST, BurstHandlerMajorIdKey } from '../src/index.js';
+import { DiscordAPIError, RateLimitError, REST, BurstHandlerMajorIdKey } from '../src/index.js';
 import { BurstHandler } from '../src/lib/handlers/BurstHandler.js';
 import { genPath } from './util.js';
 
@@ -21,7 +21,7 @@ beforeEach(() => {
 	mockAgent.disableNetConnect();
 	setGlobalDispatcher(mockAgent);
 
-	mockPool = mockAgent.get('https://guilderia.com');
+	mockPool = mockAgent.get('https://discord.com');
 	api.setAgent(mockAgent);
 });
 
@@ -29,7 +29,7 @@ afterEach(async () => {
 	await mockAgent.close();
 });
 
-// @guilderiajs/rest uses the `content-type` header to detect whether to parse
+// @discordjs/rest uses the `content-type` header to detect whether to parse
 // the response as JSON or as an ArrayBuffer.
 const responseOptions: MockInterceptor.MockResponseOptions = {
 	headers: {
@@ -89,7 +89,7 @@ test('Handle 404', async () => {
 		body: { type: 4, data: { content: 'Malicious' } },
 	});
 	await expect(promise).rejects.toThrowError('Unknown interaction');
-	await expect(promise).rejects.toBeInstanceOf(GuilderiaAPIError);
+	await expect(promise).rejects.toBeInstanceOf(DiscordAPIError);
 });
 
 let unexpected429 = true;
@@ -136,6 +136,33 @@ test('Handle unexpected 429', async () => {
 
 	expect(await unexpectedLimit).toStrictEqual({ test: true });
 	expect(firstResolvedTime!).toBeGreaterThanOrEqual(previous + 1_000);
+});
+
+test('rejectOnRateLimit rejects on an unexpected 429', async () => {
+	mockPool
+		.intercept({
+			path: callbackPath,
+			method: 'POST',
+		})
+		.reply(() => ({
+			statusCode: 429,
+			data: '',
+			responseOptions: {
+				headers: {
+					'retry-after': '1',
+					via: '1.1 google',
+				},
+			},
+		}))
+		.times(1);
+
+	const promise = api.post('/interactions/1234567890123456789/totallyarealtoken/callback', {
+		auth: false,
+		body: { type: 4, data: { content: 'Reply' } },
+		rejectOnRateLimit: true,
+	});
+
+	await expect(promise).rejects.toBeInstanceOf(RateLimitError);
 });
 
 test('server responding too slow', async () => {

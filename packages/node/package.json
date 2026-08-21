@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@guilderia/guilderia.js",
+	"name": "@guilderia/node",
 	"version": "0.0.0",
 	"description": "A powerful library for interacting with the Guilderia API",
 	"private": true,
@@ -26,13 +26,21 @@
 		"release": "bun ./packages/actions/src/releasePackages/index.ts"
 	},
 	"type": "module",
+	"contributors": [
+		"Crawl <icrawltogo@gmail.com>",
+		"Amish Shah <amishshah.2k@gmail.com>",
+		"Vlad Frangu <me@vladfrangu.dev>",
+		"SpaceEEC <spaceeec@yahoo.com>",
+		"Aura Román <kyradiscord@gmail.com>"
+	],
 	"keywords": [
 		"guilderia",
+		"discord",
 		"api",
 		"bot",
 		"client",
 		"node",
-		"guilderiaapp"
+		"discordapp"
 	],
 	"repository": {
 		"type": "git",
@@ -41,7 +49,7 @@
 	"bugs": {
 		"url": "https://github.com/skygenesisenterprise/guilderia/issues"
 	},
-	"homepage": "https://guilderia.com",
+	"homepage": "https://wiki.guilderia.com/guilderia.js",
 	"funding": "https://github.com/skygenesisenterprise/guilderia?sponsor",
 	"devDependencies": {
 		"@commitlint/cli": "^20.5.0",
@@ -70,7 +78,7 @@
 		"vitest": "^4.1.2"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=24.17.0"
 	},
 	"packageManager": "pnpm@10.33.0"
 }

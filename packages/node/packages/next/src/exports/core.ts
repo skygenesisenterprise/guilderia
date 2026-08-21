@@ -1,1 +1,1 @@
-export * from '@guilderiajs/core';
+export * from '@discordjs/core';

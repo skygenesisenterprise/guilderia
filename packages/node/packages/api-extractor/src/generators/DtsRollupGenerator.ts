@@ -2,7 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import { ReleaseTag } from '@guilderiajs/api-extractor-model';
+import { ReleaseTag } from '@discordjs/api-extractor-model';
 import { FileSystem, type NewlineKind, InternalError } from '@rushstack/node-core-library';
 import * as ts from 'typescript';
 import { AstDeclaration } from '../analyzer/AstDeclaration.js';
@@ -269,6 +269,15 @@ export class DtsRollupGenerator {
 				break;
 
 			case ts.SyntaxKind.ExportKeyword:
+				if (DtsEmitHelpers.isExportKeywordInNamespaceExportDeclaration(span.node)) {
+					// This is an export declaration inside a namespace - preserve the export keyword
+					break;
+				}
+
+				// Otherwise, delete the export keyword -- we will re-add it below
+				span.modification.skipAll();
+				break;
+
 			case ts.SyntaxKind.DefaultKeyword:
 			case ts.SyntaxKind.DeclareKeyword:
 				// Delete any explicit "export" or "declare" keywords -- we will re-add them below
@@ -432,6 +441,12 @@ export class DtsRollupGenerator {
 							// Keep its separator since it often has useful whitespace
 							modification.suffix += nodeToTrim.nextSibling.separator;
 							nodeToTrim.nextSibling.modification.skipAll();
+						}
+
+						if (modification.suffix.trim().length === 0 && modification.prefix.trim().length === 0) {
+							// In case of blank prefix and suffix, remove indentation to avoid blank lines in place of removed members
+							modification.suffix = '';
+							modification.prefix = '';
 						}
 
 						trimmed = true;

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@guilderiajs/brokers",
+	"name": "@discordjs/brokers",
 	"version": "1.0.0",
 	"description": "Powerful set of message brokers",
 	"scripts": {
@@ -43,41 +43,41 @@
 		"Amish Shah <amishshah.2k@gmail.com>",
 		"SpaceEEC <spaceeec@yahoo.com>",
 		"Vlad Frangu <me@vladfrangu.dev>",
-		"Aura Roman <kyraguilderia@gmail.com>",
+		"Aura Roman <kyradiscord@gmail.com>",
 		"DD <didinele.dev@gmail.com>"
 	],
 	"license": "Apache-2.0",
 	"keywords": [
-		"guilderia",
+		"discord",
 		"api",
 		"message",
 		"brokers",
 		"redis",
-		"guilderiaapp",
-		"guilderiajs"
+		"discordapp",
+		"discordjs"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/guilderiajs/guilderia.js.git",
+		"url": "https://github.com/discordjs/discord.js.git",
 		"directory": "packages/brokers"
 	},
 	"bugs": {
-		"url": "https://github.com/guilderiajs/guilderia.js/issues"
+		"url": "https://github.com/discordjs/discord.js/issues"
 	},
-	"homepage": "https://guilderia.js.org",
-	"funding": "https://github.com/guilderiajs/guilderia.js?sponsor",
+	"homepage": "https://discord.js.org",
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
-		"@guilderiajs/core": "workspace:^",
-		"@guilderiajs/ws": "workspace:^",
+		"@discordjs/core": "workspace:^",
+		"@discordjs/ws": "workspace:^",
 		"@msgpack/msgpack": "^3.1.3",
 		"@vladfrangu/async_event_emitter": "^2.4.7",
 		"ioredis": "^5.10.1"
 	},
 	"devDependencies": {
-		"@guilderiajs/api-extractor": "workspace:^",
-		"@guilderiajs/scripts": "workspace:^",
+		"@discordjs/api-extractor": "workspace:^",
+		"@discordjs/scripts": "workspace:^",
 		"@favware/cliff-jumper": "^6.0.0",
-		"@types/node": "^22.19.15",
+		"@types/node": "^24.13.2",
 		"@vitest/coverage-v8": "^4.1.2",
 		"cross-env": "^10.1.0",
 		"esbuild-plugin-version-injector": "^1.2.1",
@@ -92,7 +92,7 @@
 		"vitest": "^4.1.2"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=24.17.0"
 	},
 	"publishConfig": {
 		"access": "public",
