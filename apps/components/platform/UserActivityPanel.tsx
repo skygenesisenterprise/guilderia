@@ -63,7 +63,7 @@ export function UserActivityPanel({
   user = defaultUser,
 }: UserActivityPanelProps) {
   return (
-    <div className="mx-2 mb-2 flex h-[52px] shrink-0 items-center gap-1 rounded-xl bg-[#313338] px-2 shadow-lg shadow-black/30">
+    <div className="mx-2 mb-2 flex h-13 shrink-0 items-center gap-1 rounded-xl bg-[#313338] px-2 shadow-lg shadow-black/30">
       <button type="button" className="group relative flex flex-1 items-center gap-2 rounded px-1 py-0.5 hover:bg-[#35373c]">
         <div className="relative shrink-0">
           <Avatar className="h-8 w-8">

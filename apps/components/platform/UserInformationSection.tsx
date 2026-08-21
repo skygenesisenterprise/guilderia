@@ -34,7 +34,7 @@ export function UserInformationSection({
   user = defaultUser,
 }: UserInformationSectionProps) {
   return (
-    <div className="flex h-[52px] shrink-0 items-center gap-1 bg-[#232428] px-2">
+    <div className="flex h-13 shrink-0 items-center gap-1 bg-[#232428] px-2">
       <button className="group relative flex flex-1 items-center gap-2 rounded px-1 py-0.5 hover:bg-[#35373c]">
         <div className="relative shrink-0">
           <Avatar className="h-8 w-8">

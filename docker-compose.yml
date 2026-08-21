@@ -56,7 +56,7 @@ services:
     command: ${WORKER_COMMAND:-air}
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 8080 || exit 1"]
-      start_period: ${WORKER_START_PERIOD:-180s}
+      start_period: ${WORKER_START_PERIOD:-30s}
       interval: 5s
       retries: 10
       timeout: 5s
@@ -145,8 +145,8 @@ services:
     command: postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      start_period: 20s
-      interval: 30s
+      start_period: 5s
+      interval: 5s
       retries: 5
       timeout: 5s
     volumes:
@@ -185,8 +185,8 @@ services:
       - ${REDIS_PASSWORD:-redis-dev-password}
     healthcheck:
       test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
-      start_period: 20s
-      interval: 30s
+      start_period: 5s
+      interval: 5s
       retries: 5
       timeout: 3s
     volumes:
@@ -297,10 +297,10 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "rabbitmq-diagnostics -q check_running"]
-      start_period: 30s
-      interval: 30s
+      start_period: 5s
+      interval: 5s
       retries: 5
-      timeout: 10s
+      timeout: 5s
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     environment:
@@ -317,8 +317,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:7700/health || exit 1"]
-      start_period: 10s
-      interval: 30s
+      start_period: 2s
+      interval: 5s
       retries: 5
       timeout: 5s
     volumes:
