@@ -1,0 +1,14 @@
+{
+	"extends": "./tsconfig.json",
+	"include": [
+		"./babel.config.js",
+		"docs",
+		"./docusaurus.config.ts",
+		"projects",
+		"scripts",
+		"./sidebars.ts",
+		"src/**/*.tsx",
+		"static",
+		"./eslint.config.ts"
+	]
+}

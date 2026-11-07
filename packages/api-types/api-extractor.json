@@ -1,0 +1,104 @@
+{
+	"$schema": "../discord.js/packages/api-extractor/src/schemas/api-extractor.schema.json",
+
+	"mainEntryPointFilePath": "<projectFolder>/v10.d.ts",
+	"mainEntryPointName": "v10",
+
+	"additionalEntryPoints": [
+		{ "modulePath": "v9", "filePath": "<projectFolder>/v9.d.ts" },
+		{ "modulePath": "rpc/v10", "filePath": "<projectFolder>/rpc/v10.d.ts" },
+		{ "modulePath": "voice/v4", "filePath": "<projectFolder>/voice/v4.d.ts" },
+		{ "modulePath": "voice/v8", "filePath": "<projectFolder>/voice/v8.d.ts" }
+	],
+
+	"bundledPackages": [],
+
+	"compiler": {
+		"overrideTsconfig": {
+			"compilerOptions": {
+				"allowUnreachableCode": false,
+				"allowUnusedLabels": false,
+				"exactOptionalPropertyTypes": true,
+				"noFallthroughCasesInSwitch": true,
+				"noImplicitOverride": true,
+				"noImplicitReturns": true,
+				"noPropertyAccessFromIndexSignature": false,
+				"noUncheckedIndexedAccess": true,
+				"noUnusedLocals": true,
+				"noUnusedParameters": true,
+				"strict": true,
+
+				"allowArbitraryExtensions": false,
+				"allowImportingTsExtensions": false,
+				"module": "NodeNext",
+				"moduleResolution": "nodenext",
+				"resolveJsonModule": true,
+				"resolvePackageJsonExports": false,
+				"resolvePackageJsonImports": false,
+
+				"declaration": true,
+				"declarationMap": true,
+				"importHelpers": false,
+				"newLine": "lf",
+				"noEmitHelpers": true,
+				"outDir": "dist",
+				"removeComments": false,
+				"sourceMap": true,
+
+				"esModuleInterop": false,
+				"forceConsistentCasingInFileNames": true,
+				"isolatedModules": true,
+
+				"experimentalDecorators": true,
+				"lib": ["ESNext"],
+				"target": "ES2022",
+				"useDefineForClassFields": true
+			},
+			"exclude": ["djs/**/*", "website/**/*", "node_modules/**/*"]
+		}
+	},
+	"apiReport": {
+		"enabled": false
+	},
+
+	"docModel": {
+		"enabled": true,
+
+		"apiJsonFilePath": "<projectFolder>/docs/docs.api.json",
+		"projectFolderUrl": "https://github.com/discordjs/discord-api-types/tree/main"
+	},
+
+	"dtsRollup": {
+		"enabled": false,
+
+		"untrimmedFilePath": "<projectFolder>/v10.d.ts"
+	},
+
+	"tsdocMetadata": {},
+
+	"newlineKind": "lf",
+
+	"messages": {
+		"compilerMessageReporting": {
+			"default": {
+				"logLevel": "warning"
+			}
+		},
+
+		"extractorMessageReporting": {
+			"default": {
+				"logLevel": "warning"
+			},
+
+			"ae-missing-release-tag": {
+				"logLevel": "none"
+			}
+		},
+
+		"tsdocMessageReporting": {
+			"default": {
+				"logLevel": "warning"
+			}
+		}
+	}
+}
