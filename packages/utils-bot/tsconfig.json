@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"outDir": "dist",
+		"strict": true,
+		"moduleResolution": "node",
+		"alwaysStrict": true,
+		"esModuleInterop": true,
+		"module": "ESNext",
+		"target": "ES2022",
+		"sourceMap": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"resolveJsonModule": true
+	}
+}

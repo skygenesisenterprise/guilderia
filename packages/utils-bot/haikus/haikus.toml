@@ -1,0 +1,8 @@
+[discordsupport]
+keywords = ["wrong-place", "discord", "support"]
+hoisted = true
+content = """
+This is the wrong place
+You should now go somewhere else:
+[Discord's support site](https://dis.gd/contact).
+"""

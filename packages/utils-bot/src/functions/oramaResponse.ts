@@ -1,0 +1,105 @@
+import { bold, hyperlink, inlineCode, subtext } from '@discordjs/builders';
+import type { Response } from 'polka';
+import { EMOJI_ID_GUIDE } from '../util/constants.js';
+import {
+	SectionPartType,
+	findRelevantDocsSection,
+	parseGithubDocsSections,
+	sectionPartToText,
+} from '../util/discordDocs.js';
+import { resolveResourceFromGuideUrl } from '../util/djsguide.js';
+import { logger } from '../util/logger.js';
+import { prepareErrorResponse, prepareResponse } from '../util/respond.js';
+
+type GuideCacheEntry = {
+	page: string;
+	timestamp: number;
+};
+
+const cache = new Map<string, GuideCacheEntry>();
+const invalid = new Set();
+
+async function getPage(url: string) {
+	if (invalid.has(url)) {
+		return null;
+	}
+
+	const cacheEntry = cache.get(url);
+
+	if (cacheEntry && cacheEntry.timestamp < Date.now() - 1_000 * 60 * 60) {
+		return cacheEntry.page;
+	}
+
+	const res = await fetch(url);
+
+	if (res.status === 404) {
+		invalid.add(url);
+		return null;
+	}
+
+	const page = await res.text();
+	cache.set(url, { page, timestamp: Date.now() });
+
+	return page;
+}
+
+export async function oramaResponse(
+	res: Response,
+	resultUrl: string,
+	{ user, ephemeral, quiet }: { ephemeral?: boolean; quiet?: boolean; user?: string },
+) {
+	const parsed = resolveResourceFromGuideUrl(resultUrl);
+	const contentParts: string[] = [];
+
+	const docsContents = (await getPage(parsed.githubUrl)) ?? (await getPage(parsed.githubFolderEntrypointUrl));
+
+	logger.debug({ resultUrl, parsed }, 'Guide page debug');
+	if (!docsContents) {
+		prepareErrorResponse(
+			res,
+			[
+				`Could not find a valid page based on your query ${inlineCode(resultUrl)}`,
+				subtext('Make sure to select an autocomplete result to ensure an existing article.'),
+			].join('\n'),
+		);
+		return res;
+	}
+
+	const sections = parseGithubDocsSections(docsContents.split(/\n+/));
+	const anchor = `#${parsed.anchor ?? parsed.endpoint}`;
+	const section = findRelevantDocsSection(sections, anchor, !parsed.anchor);
+
+	const title = section?.headline ?? parsed.endpoint ?? 'discord.js guide';
+	const header = `<:guide:${EMOJI_ID_GUIDE}> ${hyperlink(bold(title), parsed.guideUrl)}`;
+
+	contentParts.push(header);
+
+	const relevantLines =
+		section?.parts.filter((part) => part.type === SectionPartType.Text).map((part) => sectionPartToText(part)) ?? [];
+
+	if (relevantLines.length) {
+		const descriptionParts = [];
+		let descriptionLength = 0;
+
+		for (const line of relevantLines) {
+			if (descriptionLength + line.length < 500) {
+				descriptionParts.push(line);
+				descriptionLength += line.length;
+			}
+		}
+
+		const description = descriptionParts.join(' ');
+		const isTerminated = ['.', '?', '!'].some((terminator) => description.endsWith(terminator));
+		if (isTerminated) {
+			contentParts.push(description);
+		} else {
+			contentParts.push(`${description}...`);
+		}
+	}
+
+	prepareResponse(res, quiet ? header : contentParts.join('\n'), {
+		ephemeral,
+		suggestion: user ? { userId: user, kind: 'guide' } : undefined,
+	});
+	return res;
+}
