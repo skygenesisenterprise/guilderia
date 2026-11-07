@@ -1,0 +1,387 @@
+import { Client, GatewayDispatchEvents, GatewayIntentBits, MessageFlags } from "@discordjs/core";
+import { inlineCode } from "@discordjs/formatters";
+import { REST } from "@discordjs/rest";
+import { WebSocketManager } from "@discordjs/ws";
+import * as TOML from "@ltd/j-toml";
+import type { APIContainerComponent } from "discord-api-types/v10";
+import {
+  ApplicationCommandOptionType,
+  ApplicationCommandType,
+  ButtonStyle,
+  ChannelType,
+  MessageReferenceType,
+  Routes,
+} from "discord-api-types/v10";
+import { ComponentType, InteractionType } from "discord-api-types/v9";
+import { readFileSync } from "node:fs";
+import process from "node:process";
+import { URL, fileURLToPath } from "node:url";
+import { pino } from "pino";
+import "reflect-metadata";
+import { DeleteCommandResponseContextCommand } from "./interactions/context/deleteCommandResponseContext.js";
+import { IntentsLookupContextCommand } from "./interactions/context/intentsLookupContext.js";
+import { BitfieldLookupCommand } from "./interactions/slash/bitfieldLookup.js";
+import { formatBits, parseBits } from "./util/bits.js";
+
+import { PolicyCommand } from "./interactions/slash/policy.js";
+import { ASSISTCHANNELS, SUPPORT_CHANNEL, SUPPORT_CHANNEL_VOICE } from "./util/constants.js";
+
+type AutoResponse = {
+  content: string;
+  keyphrases: string[];
+  mention: boolean;
+  reply: boolean;
+};
+
+const autoResponseData = readFileSync(
+  fileURLToPath(new URL("../autoresponses/autoresponses.toml", import.meta.url)),
+);
+const logger = pino({ name: "toolkit" });
+const autoResponses: AutoResponse[] = [];
+
+try {
+  const parsedAutoResponses = TOML.parse(autoResponseData, 1, "\n");
+
+  for (const [key, value] of Object.entries(parsedAutoResponses)) {
+    const autoResponse = value as unknown as AutoResponse;
+    logger.info(
+      {
+        autopresponse: {
+          phrases: autoResponse.keyphrases,
+        },
+      },
+      `Registering autoresponse: ${key}`,
+    );
+    autoResponses.push(autoResponse);
+  }
+} catch (error_) {
+  const error = error_ as Error;
+  logger.error(error, error.message);
+}
+
+const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
+const gateway = new WebSocketManager({
+  token: process.env.DISCORD_TOKEN,
+  rest,
+  intents:
+    GatewayIntentBits.MessageContent | GatewayIntentBits.GuildMessages | GatewayIntentBits.Guilds,
+});
+const client = new Client({ rest, gateway });
+
+const embedHidePhrases = ["://discord.com", "://discord.js.org"];
+
+client.on(GatewayDispatchEvents.MessageCreate, async ({ data: message }) => {
+  if (message.author.bot) {
+    return;
+  }
+
+  if (embedHidePhrases.some((phrase) => message.content.includes(phrase))) {
+    await client.api.channels
+      .editMessage(message.channel_id, message.id, {
+        flags: (message.flags ?? 0) | MessageFlags.SuppressEmbeds,
+      })
+      .catch(() => null);
+  }
+
+  for (const response of autoResponses) {
+    if (
+      response.keyphrases.some(
+        (phrase) => phrase.length && message.content.toLowerCase().includes(phrase),
+      )
+    ) {
+      await client.api.channels
+        .createMessage(message.channel_id, {
+          content: response.content,
+          allowed_mentions: response.mention ? { replied_user: true } : { parse: [] },
+          message_reference: response.reply
+            ? {
+                message_id: message.id,
+                channel_id: message.channel_id,
+                guild_id: message.guild_id,
+                type: MessageReferenceType.Default,
+                fail_if_not_exists: false,
+              }
+            : undefined,
+        })
+        .catch(() => null);
+    }
+  }
+});
+
+const supportThreadParents = new Map<string, string>();
+
+client.on(GatewayDispatchEvents.ThreadCreate, async ({ data: channel }) => {
+  if (!channel.parent_id || !ASSISTCHANNELS.includes(channel.parent_id)) {
+    return;
+  }
+
+  supportThreadParents.set(channel.id, channel.parent_id);
+});
+
+function getComponent(parent?: string | null, lock = false) {
+  const parts: string[] = [];
+  if (parent === SUPPORT_CHANNEL_VOICE) {
+    parts.push(
+      "- What are your intents? `GuildVoiceStates` is **required** to receive voice data!",
+      "- Show what dependencies you are using -- `generateDependencyReport()` is exported from `@discordjs/voice`.",
+      "- Try looking at common examples: <https://github.com/discordjs/voice-examples>.",
+    );
+  }
+
+  if (parent === SUPPORT_CHANNEL) {
+    parts.push(
+      "- What's your exact discord.js `npm list discord.js` and node `node -v` version?",
+      "- Not a discord.js issue? Check out <#1081585952654360687>.",
+    );
+  }
+
+  parts.push(
+    "- Consider reading <#1115899560183730286> to improve your question!",
+    "- Explain what exactly your issue is.",
+    "- Post the full error stack trace, not just the top part!",
+    "- Show your code!",
+  );
+
+  return {
+    type: ComponentType.Container,
+    components: [
+      {
+        type: ComponentType.TextDisplay,
+        content: parts.join("\n"),
+      },
+      {
+        type: ComponentType.Section,
+        components: [
+          {
+            type: ComponentType.TextDisplay,
+            content: lock ? "Issue was marked as resolved." : "Issue solved? Press the button!",
+          },
+        ],
+        accessory: {
+          type: ComponentType.Button,
+          custom_id: "solved",
+          style: lock ? ButtonStyle.Secondary : ButtonStyle.Success,
+          label: "Solved",
+          disabled: lock,
+        },
+      },
+    ],
+  } as APIContainerComponent;
+}
+
+client.on(GatewayDispatchEvents.MessageCreate, async ({ data: message }) => {
+  const parent = supportThreadParents.get(message.channel_id);
+  if (message.id !== message.channel_id || !parent || !ASSISTCHANNELS.includes(parent)) {
+    return;
+  }
+
+  supportThreadParents.delete(message.channel_id);
+
+  await client.api.channels.createMessage(message.channel_id, {
+    flags: MessageFlags.IsComponentsV2,
+    components: [getComponent(parent)],
+  });
+});
+
+client.on(GatewayDispatchEvents.InteractionCreate, async ({ data: interaction }) => {
+  if (interaction.type === InteractionType.MessageComponent) {
+    if (
+      interaction.data.custom_id === "solved" &&
+      interaction.channel.type === ChannelType.PublicThread &&
+      interaction.member
+    ) {
+      const executor = interaction.member.user.id;
+      const isOwner = executor === interaction.channel.owner_id;
+
+      const isManager = (BigInt(interaction.member.permissions) & (1n << 52n)) === 1n << 52n;
+      const message = isOwner
+        ? "The thread owner has marked this issue as solved."
+        : isManager
+          ? "The issue has been marked as solved by support staff"
+          : undefined;
+
+      if (!isManager && !isOwner) {
+        await client.api.interactions.reply(interaction.id, interaction.token, {
+          flags: MessageFlags.Ephemeral,
+          content: "Only the thread owner or support staff can mark an issue as resolved!",
+        });
+        return;
+      }
+
+      await client.api.channels.createMessage(interaction.channel.id, {
+        content: message,
+      });
+
+      await client.api.interactions.updateMessage(interaction.id, interaction.token, {
+        components: [getComponent(interaction.channel.parent_id, true)],
+      });
+      await client.rest.patch(Routes.channel(interaction.channel.id), {
+        body: {
+          archived: true,
+          locked: true,
+        },
+        headers: {
+          "X-Audit-Log-Reason": `Marked as solved by ${interaction.member.user.username} (${interaction.member.user.id})`,
+        },
+      });
+    }
+
+    return;
+  }
+
+  if (interaction.type === InteractionType.ApplicationCommand) {
+    if (interaction.data.type === ApplicationCommandType.Message) {
+      const messages = interaction.data.resolved.messages;
+      const message = messages[interaction.data.target_id];
+
+      if (!message) {
+        logger.info("Expected to find message during context menu execution but found none.");
+        return;
+      }
+
+      if (interaction.data.name === DeleteCommandResponseContextCommand.name) {
+        const user = interaction.member?.user ?? interaction.user;
+        const commandauthorId = message.interaction_metadata?.user?.id;
+
+        if (user?.id !== commandauthorId) {
+          await client.api.interactions.reply(interaction.id, interaction.token, {
+            flags: MessageFlags.Ephemeral,
+            content: "You can only delete your own command responses.",
+          });
+          return;
+        }
+
+        try {
+          await client.api.channels.deleteMessage(message.channel_id, message.id, {
+            reason: "Command response deleted by author.",
+          });
+
+          await client.api.interactions.reply(interaction.id, interaction.token, {
+            flags: MessageFlags.Ephemeral,
+            content: "Command response deleted!",
+          });
+        } catch (_error) {
+          const error = _error as Error;
+          await client.api.interactions.reply(interaction.id, interaction.token, {
+            flags: MessageFlags.Ephemeral,
+            content: `Something went wrong here: ${inlineCode(error.message)}.`,
+          });
+        }
+
+        return;
+      }
+
+      if (interaction.data.name === IntentsLookupContextCommand.name) {
+        const res =
+          /intents:.*?(?<bits>\d{1,10})/gi.exec(message.content) ??
+          /intents\((?<bits>\d{1,10})\)/gi.exec(message.content) ??
+          /intents.*?(?<bits>\d{1,10})/gi.exec(message.content) ??
+          /(?:^|[\s`])(?<bits>\d{1,10}?)(?:$|[\s`])/gi.exec(message.content);
+
+        if (!res) {
+          await client.api.interactions.reply(interaction.id, interaction.token, {
+            flags: MessageFlags.Ephemeral,
+            content: "Cannot find any potential Gateway Intent numerals in this message.",
+          });
+          return;
+        }
+
+        const _bits = Number.parseInt(res[1]!, 10);
+        const bits = Number.isNaN(_bits) ? null : parseBits(_bits);
+
+        if (!bits) {
+          await client.api.interactions.reply(interaction.id, interaction.token, {
+            flags: MessageFlags.Ephemeral,
+            content: "Found a structure with expected Gatway Intents but could not resolve it.",
+          });
+          return;
+        }
+
+        const formatted = formatBits(bits);
+        await client.api.interactions.reply(interaction.id, interaction.token, {
+          flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+          components: [formatted],
+        });
+        return;
+      }
+    }
+
+    if (interaction.data.type === ApplicationCommandType.ChatInput) {
+      if (interaction.data.name === BitfieldLookupCommand.name) {
+        const sub = interaction.data.options?.[0];
+
+        if (sub?.type !== ApplicationCommandOptionType.Subcommand) {
+          return;
+        }
+
+        const bitsOption = sub.options?.[0];
+        if (bitsOption?.name !== "bitfield") {
+          return;
+        }
+
+        const _bits = bitsOption.value;
+
+        if (typeof _bits === "boolean") {
+          return;
+        }
+
+        const parsedBits = parseBits(_bits);
+
+        if (!parsedBits) {
+          await client.api.interactions.reply(interaction.id, interaction.token, {
+            flags: MessageFlags.Ephemeral,
+            content: `Could not resolve ${inlineCode(String(_bits))} to a supported bit field.`,
+          });
+          return;
+        }
+
+        const formatted = formatBits(parsedBits);
+
+        await client.api.interactions.reply(interaction.id, interaction.token, {
+          flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+          components: [formatted],
+        });
+
+        return;
+      }
+
+      if (interaction.data.name === PolicyCommand.name) {
+        await client.api.interactions.reply(interaction.id, interaction.token, {
+          flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
+          components: [
+            {
+              type: ComponentType.Section,
+              components: [
+                {
+                  type: ComponentType.TextDisplay,
+                  content:
+                    "This app processes message content in order to provide automated responses and hide intrusive link embeds. It does not persist any user data.",
+                },
+              ],
+              accessory: {
+                type: ComponentType.Button,
+                style: ButtonStyle.Link,
+                url: "https://github.com/discordjs/discord-toolkit-bot/blob/main/PRIVACY.md",
+                label: "Privacy Policy",
+              },
+            },
+          ],
+        });
+        return;
+      }
+    }
+  }
+
+  await client.api.interactions
+    .reply(interaction.id, interaction.token, {
+      content: "This command is currently not available, check back later!",
+      flags: MessageFlags.Ephemeral,
+    })
+    .catch(() => null);
+});
+
+process.on("uncaughtException", (error) => {
+  logger.error(error, error.message);
+});
+
+await gateway.connect();

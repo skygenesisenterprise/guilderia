@@ -1,0 +1,9 @@
+export const SUPPORT_CHANNEL_VOICE = "998942774994927646" as const;
+export const SUPPORT_CHANNEL = "986520997006032896" as const;
+export const SUPPORT_CHANNEL_OTHER = "1081585952654360687" as const;
+export const ASSISTCHANNELS = [
+  SUPPORT_CHANNEL,
+  SUPPORT_CHANNEL_VOICE,
+  SUPPORT_CHANNEL_OTHER,
+] as string[];
+export const CUSTOM_ID_SEPARATOR = ":" as const;
