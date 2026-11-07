@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2026-07-17/server.schema.json",
+  "name": "io.github.skygenesisenterprise/astron-collection-mcp",
+  "description": "Astron Collection MCP Server — agent-first operational interface for Astron Collection instances (discovery, diagnostics, controlled deployments). Business catalog by default; generated OpenAPI operations behind explicit opt-in advanced mode.",
+  "title": "Astron Collection MCP Server",
+  "version": "1.0.0",
+  "package": {
+    "name": "@astron-collection/mcp",
+    "version": "1.0.0",
+    "registry": "npm"
+  },
+  "transports": [
+    {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@astron-collection/mcp"]
+    },
+    {
+      "type": "streamable-http",
+      "url": "http://127.0.0.1:3000/mcp"
+    }
+  ],
+  "capabilities": {
+    "tools": true
+  },
+  "catalog": {
+    "modeDefault": "business",
+    "businessCapabilities": 19,
+    "advancedProfiles": ["read-only", "deploy", "full"]
+  },
+  "repository": {
+    "url": "https://github.com/skygenesisenterprise/astron-collection",
+    "subdirectory": "packages/mcp"
+  },
+  "homepage": "https://github.com/skygenesisenterprise/astron-collection/tree/master/packages/mcp#readme",
+  "license": "MIT"
+}
