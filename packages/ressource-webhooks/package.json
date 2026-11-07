@@ -1,0 +1,120 @@
+{
+	"$schema": "http://json.schemastore.org/package",
+	"name": "@guilderia/resource-webhooks",
+	"version": "0.1.0",
+	"description": "",
+	"contributors": [
+		"Sky Genesis Enterprise <github@skygenesisenterprise.com>"
+	],
+	"license": "MIT",
+	"private": true,
+	"main": "dist/index.js",
+	"type": "module",
+	"scripts": {
+		"build": "rimraf dist && tsc",
+		"deploy": "node --unhandled-rejections=strict dist/index.js",
+		"lint": "eslint src --ext .ts",
+		"lint:fix": "eslint src --ext .ts --fix",
+		"prettier": "prettier --write **/*.{ts,js,json,yml,yaml}"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/skygenesisenterprise/guilderia.git"
+	},
+	"bugs": {
+		"url": "https://github.com/skygenesisenterprise/guilderia/issues"
+	},
+	"homepage": "https://github.com/skygenesisenterprise/guilderia#readme",
+	"keywords": [
+		"guilderia",
+		"api",
+		"webhook",
+		"guilderia-app"
+	],
+	"dependencies": {
+		"discord.js": "^14.11.0"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^17.6.3",
+		"@commitlint/config-angular": "^17.6.3",
+		"@types/node": "^20.2.5",
+		"@typescript-eslint/eslint-plugin": "^5.59.8",
+		"@typescript-eslint/parser": "^5.59.8",
+		"discord-api-types": "^0.37.43",
+		"eslint": "^8.41.0",
+		"eslint-config-marine": "^9.4.1",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-plugin-import": "^2.27.5",
+		"eslint-plugin-prettier": "^4.2.1",
+		"husky": "^4.3.8",
+		"lint-staged": "^13.2.2",
+		"prettier": "^2.8.8",
+		"rimraf": "^5.0.1",
+		"typescript": "^5.0.4"
+	},
+	"engines": {
+		"node": ">=16.9.0"
+	},
+	"eslintConfig": {
+		"extends": "marine/prettier/node",
+		"parserOptions": {
+			"project": "./tsconfig.eslint.json"
+		},
+		"rules": {
+			"@typescript-eslint/naming-convention": 0
+		}
+	},
+	"prettier": {
+		"printWidth": 120,
+		"useTabs": true,
+		"singleQuote": true,
+		"quoteProps": "as-needed",
+		"trailingComma": "all",
+		"endOfLine": "lf"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged",
+			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+		}
+	},
+	"lint-staged": {
+		"*.js": [
+			"prettier --write"
+		],
+		"*.ts": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.{json,yml,yaml}": [
+			"prettier --write"
+		]
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-angular"
+		],
+		"rules": {
+			"type-enum": [
+				2,
+				"always",
+				[
+					"chore",
+					"build",
+					"ci",
+					"docs",
+					"feat",
+					"fix",
+					"perf",
+					"refactor",
+					"revert",
+					"style",
+					"test",
+					"types",
+					"wip"
+				]
+			]
+		}
+	},
+	"packageManager": "yarn@3.6.0"
+}
