@@ -6,7 +6,7 @@ vi.mock("@/server/api/utils/audit", () => ({
 
 const { audit } = await import("@/server/api/utils/audit");
 const { ProjectQuotaExceededError } = await import(
-	"@astron-collection/server/services/project-quota"
+	"@guilderia/server/services/project-quota"
 );
 const { withQuotaAudit } = await import("@/server/api/utils/quota");
 

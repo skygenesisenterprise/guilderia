@@ -1,6 +1,6 @@
-import { db } from "@astron-collection/server/db";
-import TrialExpiringEmail from "@astron-collection/server/emails/emails/trial-expiring";
-import { sendEmail } from "@astron-collection/server/verification/send-verification-email";
+import { db } from "@guilderia/server/db";
+import TrialExpiringEmail from "@guilderia/server/emails/emails/trial-expiring";
+import { sendEmail } from "@guilderia/server/verification/send-verification-email";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { eq } from "drizzle-orm";
@@ -69,8 +69,8 @@ export const sendTrialExpiringEmail = async (
 		email: owner.email,
 		subject:
 			daysRemaining === 1
-				? "Your Astron Collection trial ends tomorrow"
-				: `Your Astron Collection trial ends in ${daysRemaining} days`,
+				? "Your Guilderia trial ends tomorrow"
+				: `Your Guilderia trial ends in ${daysRemaining} days`,
 		text: htmlContent,
 	});
 

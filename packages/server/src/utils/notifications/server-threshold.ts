@@ -66,7 +66,7 @@ export const sendServerThresholdNotifications = async (
 		),
 		with: {
 			email: true,
-			discord: true,
+			guilderia: true,
 			telegram: true,
 			slack: true,
 			resend: true,
@@ -86,7 +86,7 @@ export const sendServerThresholdNotifications = async (
 	for (const notification of notificationList) {
 		const {
 			email,
-			discord,
+			guilderia,
 			telegram,
 			slack,
 			resend,
@@ -158,11 +158,11 @@ export const sendServerThresholdNotifications = async (
 				);
 			}
 
-			if (discord) {
+			if (guilderia) {
 				const decorate = (decoration: string, text: string) =>
-					`${discord.decoration ? decoration : ""} ${text}`.trim();
+					`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
-				await sendDiscordNotification(discord, {
+				await sendDiscordNotification(guilderia, {
 					title: decorate(">", `\`⚠️\` Server ${payload.Type} Alert`),
 					color: typeColor,
 					fields: [
@@ -203,7 +203,7 @@ export const sendServerThresholdNotifications = async (
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Astron Collection Server Monitoring Alert",
+						text: "Guilderia Server Monitoring Alert",
 					},
 				});
 			}
@@ -271,7 +271,7 @@ export const sendServerThresholdNotifications = async (
 				await sendMattermostNotification(mattermost, {
 					text: `**⚠️ Server ${payload.Type} Alert**\n\n**Server Name:** ${payload.ServerName}\n**Type:** ${payload.Type}\n**Current Value:** ${payload.Value.toFixed(2)}%\n**Threshold:** ${payload.Threshold.toFixed(2)}%\n**Message:** ${payload.Message}\n**Time:** ${date.toLocaleString()}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Astron Collection",
+					username: mattermost.username || "Guilderia",
 				});
 			}
 

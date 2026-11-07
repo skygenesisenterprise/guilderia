@@ -3,19 +3,19 @@
 	"name": "@discordjs/guide",
 	"version": "0.1.0",
 	"private": true,
-	"description": "Imagine a bot... the most popular way to build discord bots",
+	"description": "Imagine a bot... the most popular way to build guilderia bots",
 	"keywords": [
 		"api",
 		"bot",
 		"client",
-		"discord",
+		"guilderia",
 		"discordapp",
 		"discordjs",
 		"node"
 	],
-	"homepage": "https://discord.js.org",
+	"homepage": "https://guilderia.js.org",
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/discordjs/guilderia.js/issues"
 	},
 	"license": "Apache-2.0",
 	"contributors": [
@@ -23,10 +23,10 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git",
+		"url": "https://github.com/discordjs/guilderia.js.git",
 		"directory": "apps/guide"
 	},
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"funding": "https://github.com/discordjs/guilderia.js?sponsor",
 	"directories": {
 		"lib": "src"
 	},

@@ -89,7 +89,7 @@ export async function fetchApplication(
   if (!application) {
     throw new ApiError({
       code: "api_error",
-      message: "The Astron Collection API returned an unexpected application payload",
+      message: "The Guilderia API returned an unexpected application payload",
     });
   }
   return application;

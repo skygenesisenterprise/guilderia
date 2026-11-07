@@ -4,7 +4,7 @@ import {
 	execAsyncRemote,
 	findServerById,
 	getRemoteDocker,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { TRPCError } from "@trpc/server";
 import { quote } from "shell-quote";
 import { z } from "zod";

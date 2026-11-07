@@ -7,7 +7,7 @@ import {
 	TrafficServiceError,
 	updateTrafficProperty,
 	upsertTrafficSource,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import {
 	getAudienceReport,
 	getHttpReport,
@@ -17,7 +17,7 @@ import {
 	listTrafficPlatforms,
 	resolveTrafficRange,
 	TrafficRangeError,
-} from "@astron-collection/server/services/traffic-analytics";
+} from "@guilderia/server/services/traffic-analytics";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, withPermission } from "../trpc";

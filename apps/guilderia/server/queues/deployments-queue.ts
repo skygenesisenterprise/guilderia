@@ -8,7 +8,7 @@ import {
 	updateApplicationStatus,
 	updateCompose,
 	updatePreviewDeployment,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import type { InMemoryJob } from "./in-memory-queue";
 
 /**

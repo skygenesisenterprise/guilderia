@@ -1,6 +1,6 @@
-import { db } from "@astron-collection/server/db";
-import { notifications } from "@astron-collection/server/db/schema";
-import AstronCollectionRestartEmail from "@astron-collection/server/emails/emails/astron-collection-restart";
+import { db } from "@guilderia/server/db";
+import { notifications } from "@guilderia/server/db/schema";
+import GuilderiaRestartEmail from "@guilderia/server/emails/emails/guilderia-restart";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { eq } from "drizzle-orm";
@@ -19,15 +19,15 @@ import {
 	sendTelegramNotification,
 } from "./utils";
 
-export const sendAstronCollectionRestartNotifications = async () => {
+export const sendGuilderiaRestartNotifications = async () => {
 	try {
 		const date = new Date();
 		const unixDate = ~~(Number(date) / 1000);
 		const notificationList = await db.query.notifications.findMany({
-			where: eq(notifications.astronCollectionRestart, true),
+			where: eq(notifications.guilderiaRestart, true),
 			with: {
 				email: true,
-				discord: true,
+				guilderia: true,
 				telegram: true,
 				slack: true,
 				resend: true,
@@ -45,7 +45,7 @@ export const sendAstronCollectionRestartNotifications = async () => {
 			const {
 				email,
 				resend,
-				discord,
+				guilderia,
 				telegram,
 				slack,
 				gotify,
@@ -60,13 +60,13 @@ export const sendAstronCollectionRestartNotifications = async () => {
 			try {
 				if (email || resend) {
 					const template = await render(
-						AstronCollectionRestartEmail({ date: date.toLocaleString() }),
+						GuilderiaRestartEmail({ date: date.toLocaleString() }),
 					).catch();
 
 					if (email) {
 						await sendEmailNotification(
 							email,
-							"Astron Collection Server Restarted",
+							"Guilderia Server Restarted",
 							template,
 						);
 					}
@@ -74,18 +74,18 @@ export const sendAstronCollectionRestartNotifications = async () => {
 					if (resend) {
 						await sendResendNotification(
 							resend,
-							"Astron Collection Server Restarted",
+							"Guilderia Server Restarted",
 							template,
 						);
 					}
 				}
 
-				if (discord) {
+				if (guilderia) {
 					const decorate = (decoration: string, text: string) =>
-						`${discord.decoration ? decoration : ""} ${text}`.trim();
+						`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
-					await sendDiscordNotification(discord, {
-						title: decorate(">", "`✅` Astron Collection Server Restarted"),
+					await sendDiscordNotification(guilderia, {
+						title: decorate(">", "`✅` Guilderia Server Restarted"),
 						color: 0x57f287,
 						fields: [
 							{
@@ -106,7 +106,7 @@ export const sendAstronCollectionRestartNotifications = async () => {
 						],
 						timestamp: date.toISOString(),
 						footer: {
-							text: "Astron Collection Restart Notification",
+							text: "Guilderia Restart Notification",
 						},
 					});
 				}
@@ -116,7 +116,7 @@ export const sendAstronCollectionRestartNotifications = async () => {
 						`${gotify.decoration ? decoration : ""} ${text}\n`;
 					await sendGotifyNotification(
 						gotify,
-						decorate("✅", "Astron Collection Server Restarted"),
+						decorate("✅", "Guilderia Server Restarted"),
 						`${decorate("🕒", `Date: ${date.toLocaleString()}`)}`,
 					);
 				}
@@ -124,7 +124,7 @@ export const sendAstronCollectionRestartNotifications = async () => {
 				if (ntfy) {
 					await sendNtfyNotification(
 						ntfy,
-						"Astron Collection Server Restarted",
+						"Guilderia Server Restarted",
 						"white_check_mark",
 						"",
 						`🕒Date: ${date.toLocaleString()}`,
@@ -134,7 +134,7 @@ export const sendAstronCollectionRestartNotifications = async () => {
 				if (telegram) {
 					await sendTelegramNotification(
 						telegram,
-						`<b>✅ Astron Collection Server Restarted</b>\n\n<b>Date:</b> ${format(
+						`<b>✅ Guilderia Server Restarted</b>\n\n<b>Date:</b> ${format(
 							date,
 							"PP",
 						)}\n<b>Time:</b> ${format(date, "pp")}`,
@@ -148,7 +148,7 @@ export const sendAstronCollectionRestartNotifications = async () => {
 						attachments: [
 							{
 								color: "#00FF00",
-								pretext: ":white_check_mark: *Astron Collection Server Restarted*",
+								pretext: ":white_check_mark: *Guilderia Server Restarted*",
 								fields: [
 									{
 										title: "Time",
@@ -163,21 +163,21 @@ export const sendAstronCollectionRestartNotifications = async () => {
 
 				if (mattermost) {
 					await sendMattermostNotification(mattermost, {
-						text: `**✅ Astron Collection Server Restarted**\n\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}`,
+						text: `**✅ Guilderia Server Restarted**\n\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}`,
 						channel: mattermost.channel,
-						username: mattermost.username || "Astron Collection",
+						username: mattermost.username || "Guilderia",
 					});
 				}
 
 				if (custom) {
 					try {
 						await sendCustomNotification(custom, {
-							title: "Astron Collection Server Restarted",
-							message: "Astron Collection server has been restarted successfully",
+							title: "Guilderia Server Restarted",
+							message: "Guilderia server has been restarted successfully",
 							timestamp: date.toISOString(),
 							date: date.toLocaleString(),
 							status: "success",
-							type: "astron-collection-restart",
+							type: "guilderia-restart",
 						});
 					} catch (error) {
 						console.log(error);
@@ -204,7 +204,7 @@ export const sendAstronCollectionRestartNotifications = async () => {
 							header: {
 								title: {
 									tag: "plain_text",
-									content: "✅ Astron Collection Server Restarted",
+									content: "✅ Guilderia Server Restarted",
 								},
 								subtitle: {
 									tag: "plain_text",
@@ -262,14 +262,14 @@ export const sendAstronCollectionRestartNotifications = async () => {
 				if (pushover) {
 					await sendPushoverNotification(
 						pushover,
-						"Astron Collection Server Restarted",
+						"Guilderia Server Restarted",
 						`Date: ${date.toLocaleString()}`,
 					);
 				}
 
 				if (teams) {
 					await sendTeamsNotification(teams, {
-						title: "✅ Astron Collection Server Restarted",
+						title: "✅ Guilderia Server Restarted",
 						facts: [
 							{ name: "Status", value: "Successful" },
 							{ name: "Restart Time", value: format(date, "PP pp") },
@@ -281,6 +281,6 @@ export const sendAstronCollectionRestartNotifications = async () => {
 			}
 		}
 	} catch (error) {
-		console.error("[Astron Collection] Restart notifications failed:", error);
+		console.error("[Guilderia] Restart notifications failed:", error);
 	}
 };

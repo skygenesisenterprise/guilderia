@@ -3,28 +3,28 @@ import {
 	isExternalJobsEnabled,
 	removeScheduleJob,
 	scheduleJob,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
-import { deployments } from "@astron-collection/server/db/schema/deployment";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
+import { deployments } from "@guilderia/server/db/schema/deployment";
 import {
 	createScheduleSchema,
 	schedules,
 	updateScheduleSchema,
-} from "@astron-collection/server/db/schema/schedule";
-import { runCommand } from "@astron-collection/server/index";
+} from "@guilderia/server/db/schema/schedule";
+import { runCommand } from "@guilderia/server/index";
 import {
 	checkPermission,
 	checkServicePermissionAndAccess,
 	findMemberByUserId,
-} from "@astron-collection/server/services/permission";
+} from "@guilderia/server/services/permission";
 import {
 	assertHostScheduleAccess,
 	createSchedule,
 	deleteSchedule,
 	findScheduleById,
 	updateSchedule,
-} from "@astron-collection/server/services/schedule";
-import { findServerById } from "@astron-collection/server/services/server";
+} from "@guilderia/server/services/schedule";
+import { findServerById } from "@guilderia/server/services/server";
 import { TRPCError } from "@trpc/server";
 import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -64,7 +64,7 @@ export const scheduleRouter = createTRPCRouter({
 			}
 			const newSchedule = await createSchedule({
 				...input,
-				...(input.scheduleType === "astron-collection-server" && {
+				...(input.scheduleType === "guilderia-server" && {
 					organizationId: ctx.session.activeOrganizationId,
 				}),
 			});
@@ -213,7 +213,7 @@ export const scheduleRouter = createTRPCRouter({
 					"application",
 					"compose",
 					"server",
-					"astron-collection-server",
+					"guilderia-server",
 				]),
 			}),
 		)
@@ -240,7 +240,7 @@ export const scheduleRouter = createTRPCRouter({
 					}
 				}
 
-				if (input.scheduleType === "astron-collection-server") {
+				if (input.scheduleType === "guilderia-server") {
 					const member = await findMemberByUserId(
 						ctx.user.id,
 						ctx.session.activeOrganizationId,
@@ -257,7 +257,7 @@ export const scheduleRouter = createTRPCRouter({
 				application: eq(schedules.applicationId, input.id),
 				compose: eq(schedules.composeId, input.id),
 				server: eq(schedules.serverId, input.id),
-				"astron-collection-server": eq(
+				"guilderia-server": eq(
 					schedules.organizationId,
 					ctx.session.activeOrganizationId,
 				),

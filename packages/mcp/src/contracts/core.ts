@@ -9,10 +9,10 @@
 export const ENVIRONMENTS = ["self", "cloud", "console"] as const;
 
 /**
- * The Astron Collection product an MCP server talks to.
+ * The Guilderia product an MCP server talks to.
  *
  * The environment is resolved from server-side configuration
- * (`ASTRON_COLLECTION_MCP_ENVIRONMENT`) and is never accepted from a tool argument.
+ * (`GUILDERIA_MCP_ENVIRONMENT`) and is never accepted from a tool argument.
  */
 export type Environment = (typeof ENVIRONMENTS)[number];
 

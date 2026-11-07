@@ -3,7 +3,7 @@ import {
 	getWebServerSettings,
 	IS_CLOUD,
 	updateWebServerSettings,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { TRPCError } from "@trpc/server";
 import { apiUpdateWhitelabeling } from "@/server/db/schema";
 import {

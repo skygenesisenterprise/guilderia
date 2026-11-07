@@ -1,6 +1,6 @@
-import { findUserById, updateUser } from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
-import { member, projects, server, user } from "@astron-collection/server/db/schema";
+import { findUserById, updateUser } from "@guilderia/server";
+import { db } from "@guilderia/server/db";
+import { member, projects, server, user } from "@guilderia/server/db/schema";
 import { eq } from "drizzle-orm";
 
 /**

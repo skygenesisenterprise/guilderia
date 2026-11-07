@@ -23,10 +23,10 @@ import {
 	setupMonitoring,
 	updateServerById,
 	verifySshKeyConnection,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
-import { findMemberByUserId } from "@astron-collection/server/services/permission";
-import { getWebServerSettings } from "@astron-collection/server/services/web-server-settings";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
+import { findMemberByUserId } from "@guilderia/server/services/permission";
+import { getWebServerSettings } from "@guilderia/server/services/web-server-settings";
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { and, desc, eq, getTableColumns, isNotNull, sql } from "drizzle-orm";
@@ -131,8 +131,8 @@ const toServerOnboardingError = (
 		code: "BAD_REQUEST",
 		message:
 			phase === "provision"
-				? "Could not connect to the server or install Astron Collection's SSH key. Check the address, port, credentials, and that this account has root or passwordless sudo access."
-				: "Astron Collection's SSH key was installed but could not be verified. Ensure public key authentication is enabled for this account.",
+				? "Could not connect to the server or install Guilderia's SSH key. Check the address, port, credentials, and that this account has root or passwordless sudo access."
+				: "Guilderia's SSH key was installed but could not be verified. Ensure public key authentication is enabled for this account.",
 		cause: error,
 	});
 };
@@ -220,7 +220,7 @@ export const serverRouter = createTRPCRouter({
 				}
 			};
 
-			// 1. Reach the server, authenticate, and install Astron Collection's public key.
+			// 1. Reach the server, authenticate, and install Guilderia's public key.
 			// Connectivity, authentication, authorization and host-key failures are
 			// distinguished so the error shown to the user is actionable.
 			try {
@@ -546,8 +546,8 @@ export const serverRouter = createTRPCRouter({
 				const webServerSettings = await getWebServerSettings();
 				if (webServerSettings) {
 					metricTargets.unshift({
-						serverId: "astron-collection-instance",
-						name: "Astron Collection instance",
+						serverId: "guilderia-instance",
+						name: "Guilderia instance",
 						ipAddress: webServerSettings.serverIp ?? "",
 						metricsConfig: webServerSettings.metricsConfig,
 					});

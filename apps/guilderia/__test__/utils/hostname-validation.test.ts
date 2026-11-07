@@ -1,4 +1,4 @@
-import { VALID_HOSTNAME_REGEX } from "@astron-collection/server";
+import { VALID_HOSTNAME_REGEX } from "@guilderia/server";
 import { describe, expect, it } from "vitest";
 
 describe("VALID_HOSTNAME_REGEX", () => {
@@ -10,12 +10,12 @@ describe("VALID_HOSTNAME_REGEX", () => {
 		"xn--80ak6aa92e.com",
 		"123.example.com",
 		"example",
-		"astron-collection-server",
+		"guilderia-server",
 		"localhost",
 		"app.localhost",
 		"api.lan",
 		"app.local",
-		"gitlab.astron-collection.local",
+		"gitlab.guilderia.local",
 		"server-01.lan",
 		"service.internal.example",
 		"app.home.arpa",

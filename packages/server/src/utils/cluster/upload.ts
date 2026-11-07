@@ -1,12 +1,12 @@
-import { findAllDeploymentsByApplicationId } from "@astron-collection/server/services/deployment";
+import { findAllDeploymentsByApplicationId } from "@guilderia/server/services/deployment";
 import {
 	findRegistryByIdWithCredentials,
 	type Registry,
 	resolveRegistryCredentials,
 	safeDockerLoginCommand,
-} from "@astron-collection/server/services/registry";
-import { createRollback } from "@astron-collection/server/services/rollbacks";
-import { registryProviderLabels } from "@astron-collection/server/utils/registry";
+} from "@guilderia/server/services/registry";
+import { createRollback } from "@guilderia/server/services/rollbacks";
+import { registryProviderLabels } from "@guilderia/server/utils/registry";
 import { quote } from "shell-quote";
 import type { ApplicationNested } from "../builders";
 

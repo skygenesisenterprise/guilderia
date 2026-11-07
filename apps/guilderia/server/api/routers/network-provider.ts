@@ -10,7 +10,7 @@ import {
 	removeNetworkProvider,
 	testNetworkProviderConnection,
 	updateNetworkProvider,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { TRPCError } from "@trpc/server";
 import { audit } from "@/server/api/utils/audit";
 import {

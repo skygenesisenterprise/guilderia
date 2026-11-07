@@ -1,8 +1,8 @@
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	organization,
 	organizationRole,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
 /**

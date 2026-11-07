@@ -9,8 +9,8 @@ import {
 	registryProviderDescriptors,
 	removeRegistry,
 	updateRegistry,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { audit } from "@/server/api/utils/audit";

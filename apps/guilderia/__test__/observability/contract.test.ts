@@ -3,11 +3,11 @@ import {
 	isAllowedObservabilityLabelKey,
 	isFreshSample,
 	toObservabilityLabels,
-} from "@astron-collection/server/services/observability/types";
+} from "@guilderia/server/services/observability/types";
 import {
 	ObservabilityBackendError,
 	validateObservabilityBackendUrl,
-} from "@astron-collection/server/services/observability/backend-validation";
+} from "@guilderia/server/services/observability/backend-validation";
 
 describe("observability labels", () => {
 	it("maps resource refs to mastered label keys only", () => {

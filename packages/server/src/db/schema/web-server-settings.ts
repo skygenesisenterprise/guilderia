@@ -33,7 +33,7 @@ export const webServerSettings = pgTable("webServerSettings", {
 	metricsConfig: jsonb("metricsConfig")
 		.$type<{
 			server: {
-				type: "Astron Collection" | "Remote";
+				type: "Guilderia" | "Remote";
 				refreshRate: number;
 				port: number;
 				token: string;
@@ -56,7 +56,7 @@ export const webServerSettings = pgTable("webServerSettings", {
 		.notNull()
 		.default({
 			server: {
-				type: "Astron Collection",
+				type: "Guilderia",
 				refreshRate: 60,
 				port: 4500,
 				token: "",
@@ -148,7 +148,7 @@ export const apiUpdateWebServerSettings = createSchema.partial().extend({
 	metricsConfig: z
 		.object({
 			server: z.object({
-				type: z.enum(["Astron Collection", "Remote"]),
+				type: z.enum(["Guilderia", "Remote"]),
 				refreshRate: z.number(),
 				port: z.number(),
 				token: z.string(),

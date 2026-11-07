@@ -1,4 +1,4 @@
-import type { ApplicationNested, Domain } from "@astron-collection/server";
+import type { ApplicationNested, Domain } from "@guilderia/server";
 import {
 	buildForwardAuthEnv,
 	createRouterConfig,
@@ -6,7 +6,7 @@ import {
 	deriveCookieSecret,
 	forwardAuthCallbackUrl,
 	forwardAuthMiddlewareName,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { beforeAll, describe, expect, test } from "vitest";
 
 const app = {

@@ -22,15 +22,15 @@ import {
 	stopService,
 	stopServiceRemote,
 	updateMySqlById,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import {
 	addNewService,
 	checkServiceAccess,
 	checkServicePermissionAndAccess,
 	findMemberByUserId,
-} from "@astron-collection/server/services/permission";
-import { assertServiceMoveAllowed } from "@astron-collection/server/services/service-move";
+} from "@guilderia/server/services/permission";
+import { assertServiceMoveAllowed } from "@guilderia/server/services/service-move";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { z } from "zod";

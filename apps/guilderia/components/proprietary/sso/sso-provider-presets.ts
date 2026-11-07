@@ -1,7 +1,7 @@
 /**
  * Vendor presets for Identity & Access providers.
  *
- * Astron Collection still configures providers by protocol (OIDC, SAML 2.0, LDAP, Active
+ * Guilderia still configures providers by protocol (OIDC, SAML 2.0, LDAP, Active
  * Directory) — the preset only pre-fills the issuer, scopes and claim mapping a
  * given vendor is known to use. Anything not listed here stays reachable through
  * the generic entry of its protocol, so the catalog never becomes a whitelist.

@@ -7,7 +7,7 @@ import {
 	getThresholdsForMetric,
 	getUsagePercentage,
 	normalizeThresholds,
-} from "@astron-collection/server/monitoring/status";
+} from "@guilderia/server/monitoring/status";
 import { describe, expect, test } from "vitest";
 
 describe("getMetricStatus", () => {

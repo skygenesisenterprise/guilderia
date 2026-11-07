@@ -20,26 +20,26 @@ import { CheckCircle2 } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Deploy AI Apps Securely with Notploy",
+	title: "Deploy AI Apps Securely with guilderia",
 	description:
 		"Empower your team to deploy AI-built apps in a secure, isolated sandbox, with SSO, multitenancy, audit logs, and one-click deploys.",
 	alternates: {
-		canonical: "https://notploy.com/deploy-ai",
+		canonical: "https://guilderia.com/deploy-ai",
 	},
 };
 
 const coreFeatures = [
 	{
 		icon: Bot,
-		title: "Connect AI agents directly to Notploy",
+		title: "Connect AI agents directly to guilderia",
 		description:
-			"Notploy's MCP server enables AI agents to interact with your deployment environment through the Model Context Protocol. An AI tool can trigger deployments, query application state, and manage services—without needing a custom integration.",
+			"guilderia's MCP server enables AI agents to interact with your deployment environment through the Model Context Protocol. An AI tool can trigger deployments, query application state, and manage services—without needing a custom integration.",
 	},
 	{
 		icon: Boxes,
 		title: "Deploy any app, from any source",
 		description:
-			"Whether it's a Git repo, a Docker image, or a Docker Compose file, Notploy handles it. Non-technical users can go from AI-generated code to a running application without a DevOps team in the loop.",
+			"Whether it's a Git repo, a Docker image, or a Docker Compose file, guilderia handles it. Non-technical users can go from AI-generated code to a running application without a DevOps team in the loop.",
 	},
 	{
 		icon: Activity,
@@ -54,7 +54,7 @@ const guardrailFeatures = [
 		icon: Users,
 		title: "Separate every team's environment",
 		description:
-			"Notploy's multitenancy keeps projects and data isolated at the team level. One team can't see, access, or interfere with another's applications, so AI experimentation stays contained without needing a separate instance per team.",
+			"guilderia's multitenancy keeps projects and data isolated at the team level. One team can't see, access, or interfere with another's applications, so AI experimentation stays contained without needing a separate instance per team.",
 	},
 	{
 		icon: MousePointerClick,
@@ -72,7 +72,7 @@ const guardrailFeatures = [
 		icon: KeyRound,
 		title: "Sign in with the identity provider you already use",
 		description:
-			"Notploy supports SSO via Okta, Azure AD, Auth0, and more, with SCIM provisioning and deprovisioning. When someone joins a team, they get access. When they leave, it's revoked automatically—no manual cleanup, no lingering credentials.",
+			"guilderia supports SSO via Okta, Azure AD, Auth0, and more, with SCIM provisioning and deprovisioning. When someone joins a team, they get access. When they leave, it's revoked automatically—no manual cleanup, no lingering credentials.",
 		link: {
 			href: "/features/single-sign-on",
 			label: "Learn more about SSO",
@@ -83,7 +83,7 @@ const guardrailFeatures = [
 const testFreelyPoints = [
 	"Deploy AI-built apps without touching production infrastructure",
 	"Keep all environments fully isolated from live data and services",
-	"Audit logs record every action across your Notploy environment",
+	"Audit logs record every action across your guilderia environment",
 	"Roll back any deployment in seconds if something goes wrong",
 	"Run experiments that never reach customers until you're ready",
 ];
@@ -103,12 +103,12 @@ export default function DeployAIPage() {
 			badgeDetail="Sandboxes & guardrails"
 			title="Deploy AI apps"
 			highlight="without the risk"
-			description="Your teams are building with AI. Notploy gives them a safe, governed environment to ship those tools without touching production infrastructure or waiting on an engineer."
+			description="Your teams are building with AI. guilderia gives them a safe, governed environment to ship those tools without touching production infrastructure or waiting on an engineer."
 			actions={
 				<>
 					<Button className="rounded-full" asChild>
 						<Link
-							href="https://app.notploy.com/register"
+							href="https://app.guilderia.com/register"
 							target="_blank"
 							rel="noreferrer"
 						>
@@ -130,7 +130,7 @@ export default function DeployAIPage() {
 					id: "ai-deployment-essentials",
 					title: "Everything you need to deploy AI today",
 					description:
-						"Notploy is built to take an app from an AI coding tool to a live, internal URL in minutes.",
+						"guilderia is built to take an app from an AI coding tool to a live, internal URL in minutes.",
 					items: coreFeatures,
 					columns: 3,
 				},
@@ -138,14 +138,14 @@ export default function DeployAIPage() {
 					id: "guardrails-not-gatekeepers",
 					title: "Guardrails, not gatekeepers",
 					description:
-						"AI-generated code moves fast. Notploy's enterprise features make sure that speed doesn't come at the cost of security or control.",
+						"AI-generated code moves fast. guilderia's enterprise features make sure that speed doesn't come at the cost of security or control.",
 					items: guardrailFeatures,
 					columns: 2,
 					callout: {
 						title: "Bring AI deployment to the whole company",
 						description:
 							"SSO, audit logs, fine-grained RBAC and priority support, deployed on your infrastructure.",
-						cta: "Discover Notploy Enterprise",
+						cta: "Discover guilderia Enterprise",
 						href: "/enterprise",
 					},
 				},
@@ -153,9 +153,9 @@ export default function DeployAIPage() {
 			finalCta={{
 				title: "Unlock your deployment potential",
 				description:
-					"Say goodbye to infrastructure hassles. Notploy Cloud handles deployments, containers and traffic so your team can focus on building.",
+					"Say goodbye to infrastructure hassles. guilderia Cloud handles deployments, containers and traffic so your team can focus on building.",
 				cta: "Create an account",
-				href: "https://app.notploy.com/register",
+				href: "https://app.guilderia.com/register",
 				external: true,
 			}}
 		>
@@ -229,14 +229,14 @@ export default function DeployAIPage() {
 							</h2>
 							<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
 								Openclaw is an open-source AI coding assistant you can
-								self-host on Notploy with a single template deploy. Your team
+								self-host on guilderia with a single template deploy. Your team
 								gets a private, internal AI environment, and no data leaves
 								your infrastructure.
 							</p>
 							<div className="mt-7">
 								<Button variant="outline" className="rounded-full" asChild>
 									<Link
-										href="https://docs.notploy.com/docs/templates/openclaw"
+										href="https://docs.guilderia.com/docs/templates/openclaw"
 										target="_blank"
 										rel="noreferrer"
 									>

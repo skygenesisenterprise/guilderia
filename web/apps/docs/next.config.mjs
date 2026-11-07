@@ -47,7 +47,7 @@ const config = {
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "templates.notploy.com",
+				hostname: "templates.guilderia.com",
 			},
 		],
 	},

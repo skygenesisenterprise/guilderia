@@ -1,4 +1,4 @@
-import type { PublicMaintenanceDto } from "@astron-collection/status";
+import type { PublicMaintenanceDto } from "@guilderia/status";
 import { cn } from "@/lib/utils";
 import { formatDateTime, maintenanceStateLabel } from "@/lib/view-model";
 import { RelativeTime } from "./relative-time";

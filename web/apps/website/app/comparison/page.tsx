@@ -12,74 +12,74 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Notploy Vs. and PaaS Comparison Pages | Notploy",
+	title: "guilderia Vs. and PaaS Comparison Pages | guilderia",
 	description:
-		'How does Notploy compare to other application deployment, database management, and PaaS solutions? Learn on our "Notploy vs." alternative comparison pages.',
+		'How does guilderia compare to other application deployment, database management, and PaaS solutions? Learn on our "guilderia vs." alternative comparison pages.',
 };
 
 const competitors = [
 	{
 		name: "Coolify",
-		href: "/notploy-vs-coolify",
+		href: "/guilderia-vs-coolify",
 		description:
-			"See how Notploy's polished UI, monitoring, and automation compare to Coolify's indie-dev approach.",
+			"See how guilderia's polished UI, monitoring, and automation compare to Coolify's indie-dev approach.",
 	},
 	{
 		name: "Portainer",
-		href: "/notploy-vs-portainer",
+		href: "/guilderia-vs-portainer",
 		description:
-			"Compare Notploy's full deployment platform against Portainer's container management focus.",
+			"Compare guilderia's full deployment platform against Portainer's container management focus.",
 	},
 	{
 		name: "CapRover",
-		href: "/notploy-vs-caprover",
+		href: "/guilderia-vs-caprover",
 		description:
-			"Discover why teams choose Notploy over CapRover for monitoring, backups, and team collaboration.",
+			"Discover why teams choose guilderia over CapRover for monitoring, backups, and team collaboration.",
 	},
 	{
 		name: "Dokku",
-		href: "/notploy-vs-dokku",
+		href: "/guilderia-vs-dokku",
 		description:
-			"See how Notploy's visual dashboard and built-in tooling compare to Dokku's CLI-first workflow.",
+			"See how guilderia's visual dashboard and built-in tooling compare to Dokku's CLI-first workflow.",
 	},
 	{
 		name: "Render",
-		href: "/notploy-vs-render",
+		href: "/guilderia-vs-render",
 		description:
-			"Compare Notploy's self-hosted infrastructure ownership to Render's fully managed, per-service PaaS.",
+			"Compare guilderia's self-hosted infrastructure ownership to Render's fully managed, per-service PaaS.",
 	},
 	{
 		name: "Vercel",
-		href: "/notploy-vs-vercel",
+		href: "/guilderia-vs-vercel",
 		description:
-			"See how Notploy's Docker-native, full-stack deployment compares to Vercel's serverless, frontend-first platform.",
+			"See how guilderia's Docker-native, full-stack deployment compares to Vercel's serverless, frontend-first platform.",
 	},
 ];
 
-const whyNotploy = [
+const whyguilderia = [
 	{
 		icon: GitBranch,
 		title: "Deploy straight from your repo",
 		description:
-			"Notploy is built for actual application deployment, not just container management. You connect your repo, push code, and Notploy handles builds, containers, routing, and SSL without the extra scripts or side tools you end up stitching together elsewhere.",
+			"guilderia is built for actual application deployment, not just container management. You connect your repo, push code, and guilderia handles builds, containers, routing, and SSL without the extra scripts or side tools you end up stitching together elsewhere.",
 	},
 	{
 		icon: Activity,
 		title: "Monitor and back up by default",
 		description:
-			"Notploy gives you real-time metrics, alerts, and scheduled S3-compatible backups in the same product from day one. That means less setup, fewer moving parts, and a much shorter path from learning that something's wrong to fixing the problem.",
+			"guilderia gives you real-time metrics, alerts, and scheduled S3-compatible backups in the same product from day one. That means less setup, fewer moving parts, and a much shorter path from learning that something's wrong to fixing the problem.",
 	},
 	{
 		icon: Users,
 		title: "Scale across teams and servers",
 		description:
-			"Notploy fits the way teams actually work once a project stops being a solo side build. With multi-user support, RBAC, project grouping, and multi-server deployments, it gives you room to grow without forcing a platform switch later.",
+			"guilderia fits the way teams actually work once a project stops being a solo side build. With multi-user support, RBAC, project grouping, and multi-server deployments, it gives you room to grow without forcing a platform switch later.",
 	},
 	{
 		icon: Gauge,
 		title: "Move faster in a polished UI",
 		description:
-			"Notploy keeps the workflow clean, responsive, and predictable, which has a big impact when you're deploying often. It also combines lightweight resource usage with a more refined interface, so you get less friction in the day-to-day and less overhead on the server side.",
+			"guilderia keeps the workflow clean, responsive, and predictable, which has a big impact when you're deploying often. It also combines lightweight resource usage with a more refined interface, so you get less friction in the day-to-day and less overhead on the server side.",
 	},
 ];
 
@@ -89,13 +89,13 @@ export default function ComparisonPage() {
 			<PageIntro
 				badge="Comparisons"
 				badgeDetail="Open source · Self-hosted"
-				title="Notploy"
+				title="guilderia"
 				highlight="vs. the alternatives"
-				description="Read the comparison pages to see how Notploy differs from the tools it is often measured against — on deployment, monitoring, backups, team access and who owns the infrastructure."
+				description="Read the comparison pages to see how guilderia differs from the tools it is often measured against — on deployment, monitoring, backups, team access and who owns the infrastructure."
 				actions={
 					<>
 						<Button className="w-full rounded-full px-6 sm:w-auto" asChild>
-							<Link href="https://app.notploy.com/register" target="_blank">
+							<Link href="https://app.guilderia.com/register" target="_blank">
 								Get started
 								<ArrowUpRight className="ml-2 h-4 w-4" aria-hidden="true" />
 							</Link>
@@ -106,7 +106,7 @@ export default function ComparisonPage() {
 							asChild
 						>
 							<Link href="/self">
-								Explore Notploy Self
+								Explore guilderia Self
 								<ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
 							</Link>
 						</Button>
@@ -116,7 +116,7 @@ export default function ComparisonPage() {
 					{ href: "/platform", label: "Platform capabilities" },
 					{ href: "/pricing", label: "Pricing" },
 					{
-						href: "https://github.com/skygenesisenterprise/notploy",
+						href: "https://github.com/skygenesisenterprise/guilderia",
 						label: "GitHub",
 						external: true,
 					},
@@ -155,10 +155,10 @@ export default function ComparisonPage() {
 			</section>
 
 			<SplitFeatureList
-				id="why-notploy-best-paas"
-				title="Why teams pick Notploy"
+				id="why-guilderia-best-paas"
+				title="Why teams pick guilderia"
 				description="The advantages that matter once a project has real users, real data and more than one person deploying."
-				items={whyNotploy}
+				items={whyguilderia}
 				aside={
 					<Link
 						href="/platform"

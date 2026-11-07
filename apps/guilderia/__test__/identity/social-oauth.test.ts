@@ -5,7 +5,7 @@ import {
 	fetchSocialUser,
 	parseOauthConfig,
 	testSocialConnection,
-} from "@astron-collection/server/utils/identity/oauth";
+} from "@guilderia/server/utils/identity/oauth";
 
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;

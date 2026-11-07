@@ -11,7 +11,7 @@ import {
 	recreateNetwork,
 	removeNetwork,
 	resyncNetwork,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { z } from "zod";

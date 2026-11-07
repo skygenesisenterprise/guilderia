@@ -12,8 +12,8 @@ import {
 	readPatchRepoDirectory,
 	readPatchRepoFile,
 	updatePatch,
-} from "@astron-collection/server";
-import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
+} from "@guilderia/server";
+import { checkServicePermissionAndAccess } from "@guilderia/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {

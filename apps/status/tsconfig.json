@@ -23,12 +23,12 @@
 		"incremental": true,
 		"paths": {
 			"@/*": ["./*"],
-			"@astron-collection/status": ["../../packages/status/src/index.ts"],
-			"@astron-collection/status/api": ["../../packages/status/src/api/index.ts"],
-			"@astron-collection/status/client": [
+			"@guilderia/status": ["../../packages/status/src/index.ts"],
+			"@guilderia/status/api": ["../../packages/status/src/api/index.ts"],
+			"@guilderia/status/client": [
 				"../../packages/status/src/integration/client.ts"
 			],
-			"@astron-collection/status/*": ["../../packages/status/src/*"]
+			"@guilderia/status/*": ["../../packages/status/src/*"]
 		}
 	},
 	"include": [

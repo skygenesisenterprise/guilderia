@@ -1,4 +1,4 @@
-import { getSubnetCapacity } from "@astron-collection/server/services/server-health";
+import { getSubnetCapacity } from "@guilderia/server/services/server-health";
 import { describe, expect, test } from "vitest";
 
 describe("getSubnetCapacity", () => {

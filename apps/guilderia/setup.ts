@@ -4,19 +4,19 @@ import { promisify } from "node:util";
 
 const execAsync = promisify(exec);
 
-import { setupDirectories } from "@astron-collection/server/setup/config-paths";
-import { initializePostgres } from "@astron-collection/server/setup/postgres-setup";
+import { setupDirectories } from "@guilderia/server/setup/config-paths";
+import { initializePostgres } from "@guilderia/server/setup/postgres-setup";
 import {
 	initializeNetwork,
 	initializeSwarm,
-} from "@astron-collection/server/setup/setup";
+} from "@guilderia/server/setup/setup";
 import {
 	createDefaultMiddlewares,
 	createDefaultServerTraefikConfig,
 	createDefaultTraefikConfig,
 	initializeStandaloneTraefik,
 	TRAEFIK_VERSION,
-} from "@astron-collection/server/setup/traefik-setup";
+} from "@guilderia/server/setup/traefik-setup";
 
 (async () => {
 	try {
@@ -29,9 +29,9 @@ import {
 		await execAsync(`docker pull traefik:v${TRAEFIK_VERSION}`);
 		await initializeStandaloneTraefik();
 		await initializePostgres();
-		console.log("Astron Collection setup completed");
+		console.log("Guilderia setup completed");
 		exit(0);
 	} catch (e) {
-		console.error("Error in astron-collection setup", e);
+		console.error("Error in guilderia setup", e);
 	}
 })();

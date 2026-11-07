@@ -1,8 +1,8 @@
-import type { ComposeSpecification } from "@astron-collection/server";
+import type { ComposeSpecification } from "@guilderia/server";
 import {
 	addSuffixToServiceNetworks,
 	generateRandomHash,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 
@@ -192,10 +192,10 @@ services:
   web:
     image: nginx:latest
     networks:
-      - astron-collection-network
+      - guilderia-network
 `;
 
-test("It shouldn't add suffix to astron-collection-network in services", () => {
+test("It shouldn't add suffix to guilderia-network in services", () => {
 	const composeData = parse(composeFile7) as ComposeSpecification;
 
 	const suffix = generateRandomHash();
@@ -207,7 +207,7 @@ test("It shouldn't add suffix to astron-collection-network in services", () => {
 	const service = networks.web;
 
 	expect(service).toBeDefined();
-	expect(service?.networks).toContain("astron-collection-network");
+	expect(service?.networks).toContain("guilderia-network");
 });
 
 const composeFile8 = `
@@ -219,7 +219,7 @@ services:
     networks:
       - frontend
       - backend
-      - astron-collection-network
+      - guilderia-network
 
 
   api:
@@ -228,23 +228,23 @@ services:
       frontend:
         aliases:
           - api
-      astron-collection-network:
+      guilderia-network:
         aliases:
           - api
   redis:
     image: redis:alpine
     networks:
-      astron-collection-network:
+      guilderia-network:
   db:
     image: myapi:latest
     networks:
-      astron-collection-network:
+      guilderia-network:
         aliases:
           - apid
 
 `;
 
-test("It shouldn't add suffix to astron-collection-network in services multiples cases", () => {
+test("It shouldn't add suffix to guilderia-network in services multiples cases", () => {
 	const composeData = parse(composeFile8) as ComposeSpecification;
 
 	const suffix = generateRandomHash();
@@ -267,9 +267,9 @@ test("It shouldn't add suffix to astron-collection-network in services multiples
 	};
 
 	expect(service).toBeDefined();
-	expect(service?.networks).toContain("astron-collection-network");
+	expect(service?.networks).toContain("guilderia-network");
 
-	expect(redis?.networks).toHaveProperty("astron-collection-network");
-	expect(dbNetworks["astron-collection-network"]).toBeDefined();
-	expect(apiNetworks["astron-collection-network"]).toBeDefined();
+	expect(redis?.networks).toHaveProperty("guilderia-network");
+	expect(dbNetworks["guilderia-network"]).toBeDefined();
+	expect(apiNetworks["guilderia-network"]).toBeDefined();
 });

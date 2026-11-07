@@ -1,7 +1,7 @@
-import { db } from "@astron-collection/server/db";
-import { notifications } from "@astron-collection/server/db/schema";
-import BuildFailedEmail from "@astron-collection/server/emails/emails/build-failed";
-import { redactSecrets } from "@astron-collection/server/utils/security/redact";
+import { db } from "@guilderia/server/db";
+import { notifications } from "@guilderia/server/db/schema";
+import BuildFailedEmail from "@guilderia/server/emails/emails/build-failed";
+import { redactSecrets } from "@guilderia/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -50,7 +50,7 @@ export const sendBuildErrorNotifications = async ({
 		),
 		with: {
 			email: true,
-			discord: true,
+			guilderia: true,
 			telegram: true,
 			slack: true,
 			resend: true,
@@ -68,7 +68,7 @@ export const sendBuildErrorNotifications = async ({
 		const {
 			email,
 			resend,
-			discord,
+			guilderia,
 			telegram,
 			slack,
 			gotify,
@@ -95,7 +95,7 @@ export const sendBuildErrorNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Build failed for astron-collection",
+						"Build failed for guilderia",
 						template,
 					);
 				}
@@ -103,19 +103,19 @@ export const sendBuildErrorNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Build failed for astron-collection",
+						"Build failed for guilderia",
 						template,
 					);
 				}
 			}
 
-			if (discord) {
+			if (guilderia) {
 				const decorate = (decoration: string, text: string) =>
-					`${discord.decoration ? decoration : ""} ${text}`.trim();
+					`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
 				const limitCharacter = 800;
 				const truncatedErrorMessage = errorMessage.substring(0, limitCharacter);
-				await sendDiscordNotification(discord, {
+				await sendDiscordNotification(guilderia, {
 					title: decorate(">", "`⚠️` Build Failed"),
 					color: 0xed4245,
 					fields: [
@@ -160,7 +160,7 @@ export const sendBuildErrorNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Astron Collection Build Notification",
+						text: "Guilderia Build Notification",
 					},
 				});
 			}
@@ -273,7 +273,7 @@ ${errorMessage}
 
 [View Build Details](${buildLink})`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Astron Collection Bot",
+					username: mattermost.username || "Guilderia Bot",
 				});
 			}
 

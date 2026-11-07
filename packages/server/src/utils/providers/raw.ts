@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import type { Compose } from "@astron-collection/server/services/compose";
+import { paths } from "@guilderia/server/constants";
+import type { Compose } from "@guilderia/server/services/compose";
 import { encodeBase64 } from "../docker/utils";
 
 export const getCreateComposeFileCommand = (compose: Compose) => {

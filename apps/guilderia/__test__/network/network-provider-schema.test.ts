@@ -1,7 +1,7 @@
 import {
 	apiCreateNetworkProvider,
 	apiUpdateNetworkProvider,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { describe, expect, it } from "vitest";
 
 const wireguardConfig = {

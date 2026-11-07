@@ -1,5 +1,5 @@
-import type { ComposeSpecification } from "@astron-collection/server";
-import { addSuffixToNetworksRoot, generateRandomHash } from "@astron-collection/server";
+import type { ComposeSpecification } from "@guilderia/server";
+import { addSuffixToNetworksRoot, generateRandomHash } from "@guilderia/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 
@@ -286,13 +286,13 @@ services:
   web:
     image: nginx:latest
     networks:
-      - astron-collection-network
+      - guilderia-network
 
 networks:
-  astron-collection-network:
+  guilderia-network:
 `;
 
-test("It shouldn't add suffix to astron-collection-network", () => {
+test("It shouldn't add suffix to guilderia-network", () => {
 	const composeData = parse(composeFile7) as ComposeSpecification;
 
 	const suffix = generateRandomHash();
@@ -304,6 +304,6 @@ test("It shouldn't add suffix to astron-collection-network", () => {
 
 	expect(networks).toBeDefined();
 	for (const networkKey of Object.keys(networks)) {
-		expect(networkKey).toContain("astron-collection-network");
+		expect(networkKey).toContain("guilderia-network");
 	}
 });

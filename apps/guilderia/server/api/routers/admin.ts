@@ -3,7 +3,7 @@ import {
 	isManagedCloud,
 	setupWebMonitoring,
 	updateWebServerSettings,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { TRPCError } from "@trpc/server";
 import { apiUpdateWebServerMonitoring } from "@/server/db/schema";
 import { adminProcedure, createTRPCRouter } from "../trpc";
@@ -23,7 +23,7 @@ export const adminRouter = createTRPCRouter({
 				await updateWebServerSettings({
 					metricsConfig: {
 						server: {
-							type: "Astron Collection",
+							type: "Guilderia",
 							refreshRate: input.metricsConfig.server.refreshRate,
 							port: input.metricsConfig.server.port,
 							token: input.metricsConfig.server.token,

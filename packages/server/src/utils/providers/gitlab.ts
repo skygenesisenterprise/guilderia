@@ -1,12 +1,12 @@
 import { join } from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import type { apiGitlabTestConnection } from "@astron-collection/server/db/schema";
+import { paths } from "@guilderia/server/constants";
+import type { apiGitlabTestConnection } from "@guilderia/server/db/schema";
 import {
 	findGitlabById,
 	type Gitlab,
 	updateGitlab,
-} from "@astron-collection/server/services/gitlab";
-import type { InferResultType } from "@astron-collection/server/types/with";
+} from "@guilderia/server/services/gitlab";
+import type { InferResultType } from "@guilderia/server/types/with";
 import { TRPCError } from "@trpc/server";
 import { quote } from "shell-quote";
 import type { z } from "zod";
@@ -29,7 +29,7 @@ export const refreshGitlabToken = async (gitlabProviderId: string) => {
 		return;
 	}
 
-	// Use internal URL for token refresh when GitLab is on same instance as Astron Collection
+	// Use internal URL for token refresh when GitLab is on same instance as Guilderia
 	const baseUrl = gitlabProvider.gitlabInternalUrl || gitlabProvider.gitlabUrl;
 	const response = await fetch(`${baseUrl}/oauth/token`, {
 		method: "POST",
@@ -352,7 +352,7 @@ export const validateGitlabProvider = async (gitlabProvider: Gitlab) => {
  * Shared request helper for the GitLab adapter.
  *
  * The internal URL is preferred when present: for a self-hosted GitLab running
- * next to Astron Collection it avoids a round trip through the public hostname, and it is
+ * next to Guilderia it avoids a round trip through the public hostname, and it is
  * what token refresh already uses.
  */
 const gitlabApiBase = (gitlabProvider: Gitlab) =>

@@ -1,10 +1,10 @@
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	environments,
 	member,
 	organization,
 	schedules,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { getCurrentPlan, getCurrentPlanForUser } from "@/server/utils/billing";

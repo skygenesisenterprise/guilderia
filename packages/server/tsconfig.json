@@ -22,7 +22,7 @@
 		"outDir": "./dist",
 		/* Path Aliases */
 		"paths": {
-			"@astron-collection/server/*": ["./src/*"]
+			"@guilderia/server/*": ["./src/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "./src/**/*.ts"],
@@ -30,7 +30,7 @@
 	"exclude": [
 		"tsup.ts",
 		"node_modules",
-		"astron-collection",
+		"guilderia",
 		"config",
 		"dist",
 		".next",

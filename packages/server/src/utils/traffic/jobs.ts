@@ -1,7 +1,7 @@
 import {
 	ingestTraefikAccessLog,
 	runTrafficRetention,
-} from "@astron-collection/server/services/traffic";
+} from "@guilderia/server/services/traffic";
 import { scheduledJobs, scheduleJob } from "node-schedule";
 
 /**

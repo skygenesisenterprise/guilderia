@@ -14,7 +14,7 @@ import {
 	runMySqlBackup,
 	runPostgresBackup,
 	runVolumeBackup,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import {
 	and,
 	backups,
@@ -23,7 +23,7 @@ import {
 	schedules,
 	server,
 	volumeBackups,
-} from "@astron-collection/server/db";
+} from "@guilderia/server/db";
 import { logger } from "./logger.js";
 import { scheduleJob } from "./queue.js";
 import type { QueueJob } from "./schema.js";

@@ -1,6 +1,6 @@
-import type { Compose } from "@astron-collection/server/services/compose";
-import type { Domain } from "@astron-collection/server/services/domain";
-import { addDomainToCompose } from "@astron-collection/server/utils/docker/domain";
+import type { Compose } from "@guilderia/server/services/compose";
+import type { Domain } from "@guilderia/server/services/domain";
+import { addDomainToCompose } from "@guilderia/server/utils/docker/domain";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // With sourceType "raw", addDomainToCompose parses compose.composeFile
@@ -277,7 +277,7 @@ describe("addDomainToCompose enabled filtering", () => {
 			expect(labels).toMatchObject({
 				"custom.label": "preserved",
 				"traefik.enable": "true",
-				[networkLabel]: "astron-collection-network",
+				[networkLabel]: "guilderia-network",
 				"traefik.http.routers.test-app-1-web.rule":
 					"Host(`frigate.example.com`)",
 				"traefik.http.services.test-app-1-web.loadbalancer.server.port": "8971",

@@ -15,9 +15,9 @@
  * - every significant operation is auditable without sensitive data.
  */
 
-export type MigrationDirection = "dokploy-to-astron-collection" | "astron-collection-to-dokploy";
+export type MigrationDirection = "dokploy-to-guilderia" | "guilderia-to-dokploy";
 
-export type InstallationProduct = "dokploy" | "astron-collection" | "unknown";
+export type InstallationProduct = "dokploy" | "guilderia" | "unknown";
 
 export type InstallationType = "swarm" | "compose" | "docker" | "unknown";
 

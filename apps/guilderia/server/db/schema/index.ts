@@ -1,1 +1,1 @@
-export * from "@astron-collection/server/db/schema";
+export * from "@guilderia/server/db/schema";

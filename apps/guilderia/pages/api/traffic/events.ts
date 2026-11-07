@@ -7,7 +7,7 @@ import {
 	ingestAudienceEvents,
 	MAX_AUDIENCE_PAYLOAD_BYTES,
 	TrafficServiceError,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 /**

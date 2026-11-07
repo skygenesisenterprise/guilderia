@@ -1,5 +1,5 @@
-import { dbUrl } from "@astron-collection/server/db/constants";
-import * as schema from "@astron-collection/server/db/schema";
+import { dbUrl } from "@guilderia/server/db/constants";
+import * as schema from "@guilderia/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres from "postgres";

@@ -28,7 +28,7 @@ const mockMemberData = (
 let memberToReturn: ReturnType<typeof mockMemberData> =
 	mockMemberData("member");
 
-vi.mock("@astron-collection/server/db", () => ({
+vi.mock("@guilderia/server/db", () => ({
 	db: {
 		query: {
 			member: {
@@ -44,9 +44,9 @@ vi.mock("@astron-collection/server/db", () => ({
 }));
 
 const { resolvePermissions } = await import(
-	"@astron-collection/server/services/permission"
+	"@guilderia/server/services/permission"
 );
-const { statements } = await import("@astron-collection/server/lib/access-control");
+const { statements } = await import("@guilderia/server/lib/access-control");
 
 const ctx = {
 	user: { id: "user-1" },

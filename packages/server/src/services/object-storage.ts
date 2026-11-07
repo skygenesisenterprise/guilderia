@@ -1,7 +1,7 @@
 import { constants as fsConstants } from "node:fs";
 import { access, mkdir } from "node:fs/promises";
 import path from "node:path";
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateObjectStorageProvider,
 	destinations,
@@ -10,7 +10,7 @@ import {
 	type ObjectStorageProviderType,
 	objectStorageBucket,
 	objectStorageProvider,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq } from "drizzle-orm";
 import { quote } from "shell-quote";
@@ -203,15 +203,15 @@ export const OBJECT_STORAGE_PROVIDER_META: Record<
 		pathStyle: true,
 		rcloneProvider: "Other",
 	},
-	"astron-collection-internal": {
-		providerType: "astron-collection-internal",
+	"guilderia-internal": {
+		providerType: "guilderia-internal",
 		category: "internal",
-		label: "Astron Collection Internal Storage",
+		label: "Guilderia Internal Storage",
 		endpointTemplate: "",
-		defaultRegion: "astron-collection",
+		defaultRegion: "guilderia",
 		pathStyle: false,
 		// The internal provider does not speak S3: it stores buckets as
-		// directories under Astron Collection's own storage root.
+		// directories under Guilderia's own storage root.
 		rcloneProvider: "local",
 	},
 };
@@ -328,7 +328,7 @@ export const findInternalObjectStorageProvider = async (
 	db.query.objectStorageProvider.findFirst({
 		where: and(
 			eq(objectStorageProvider.organizationId, organizationId),
-			eq(objectStorageProvider.providerType, "astron-collection-internal"),
+			eq(objectStorageProvider.providerType, "guilderia-internal"),
 		),
 	});
 
@@ -590,7 +590,7 @@ const buildRcloneFlags = ({
  */
 /**
  * Root directory backing the first-party internal provider. Providers may
- * override it, otherwise it lives under the Astron Collection config path so it survives
+ * override it, otherwise it lives under the Guilderia config path so it survives
  * restarts and can itself be backed up.
  */
 export const internalObjectStorageRoot = (rootPath?: string) =>
@@ -620,9 +620,9 @@ export const testObjectStorageConnection = async ({
 	bucket,
 	serverId,
 }: RcloneConnectionInput) => {
-	// The internal provider is Astron Collection's own storage root, so a connection test
+	// The internal provider is Guilderia's own storage root, so a connection test
 	// just proves the directory exists and is writable.
-	if (providerType === "astron-collection-internal") {
+	if (providerType === "guilderia-internal") {
 		try {
 			await ensureInternalStorageRoot(config.rootPath);
 			if (bucket) {
@@ -756,7 +756,7 @@ export const resolveObjectStorageConnection = async (
 		organizationId,
 	);
 
-	if (provider.providerType === "astron-collection-internal") {
+	if (provider.providerType === "guilderia-internal") {
 		const root = internalObjectStorageRoot(provider.config.rootPath);
 		return {
 			backend: "local" as const,
@@ -764,7 +764,7 @@ export const resolveObjectStorageConnection = async (
 			bucket: bucket.bucket,
 			rootPath: root,
 			path: path.join(root, sanitizeBucketPath(bucket.bucket)),
-			region: bucket.region || provider.config.region || "astron-collection",
+			region: bucket.region || provider.config.region || "guilderia",
 			endpoint: "",
 			providerType: provider.providerType,
 			pathStyle: false,

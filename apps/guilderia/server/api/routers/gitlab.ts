@@ -10,8 +10,8 @@ import {
 	testGitlabConnection,
 	updateGitlab,
 	updateGitProvider,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import { TRPCError } from "@trpc/server";
 import {
 	createTRPCRouter,

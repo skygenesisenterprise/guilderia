@@ -41,11 +41,11 @@ export const ServerThresholdEmail = ({
 						<Section className="mt-[32px]">
 							<Img
 								src={
-									"https://raw.githubusercontent.com/skygenesisenterprise/astron-collection/refs/heads/master/apps/astron-collection/logo.png"
+									"https://raw.githubusercontent.com/skygenesisenterprise/guilderia/refs/heads/master/apps/guilderia/logo.png"
 								}
 								width="100"
 								height="50"
-								alt="Astron Collection"
+								alt="Guilderia"
 								className="my-0 mx-auto"
 							/>
 						</Section>

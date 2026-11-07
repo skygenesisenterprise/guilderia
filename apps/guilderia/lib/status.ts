@@ -1,9 +1,9 @@
 /**
- * Bridge between the Astron Collection Console and a Astron Collection Status instance.
+ * Bridge between the Guilderia Console and a Guilderia Status instance.
  *
  * The console never touches the status database: it talks to the status
  * application over HTTP through the official integration client
- * (`StatusPublisher` from `@astron-collection/status/client`) with a scoped bearer
+ * (`StatusPublisher` from `@guilderia/status/client`) with a scoped bearer
  * token, exactly like any other machine-to-machine consumer. That means an
  * incident introduced from this console, from the status admin UI or by the
  * monitoring agent all lands in the same platform — so the Incidents page
@@ -21,8 +21,8 @@ import type {
 	AdminIncidentDto,
 	AdminMaintenanceDto,
 	AdminPageDto,
-} from "@astron-collection/status";
-import { StatusPublisher, StatusPublisherError } from "@astron-collection/status";
+} from "@guilderia/status";
+import { StatusPublisher, StatusPublisherError } from "@guilderia/status";
 
 export type {
 	AdminComponentDto,
@@ -32,7 +32,7 @@ export type {
 	IncidentSeverity,
 	IncidentState,
 	MaintenanceState,
-} from "@astron-collection/status";
+} from "@guilderia/status";
 
 /** Everything the console knows about one status page. */
 export interface StatusPageOverview {

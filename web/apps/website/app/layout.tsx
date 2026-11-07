@@ -5,37 +5,37 @@ import type { ReactNode } from "react";
 import "@/styles/tailwind.css";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { NotployTraffic } from "@/components/NotployTraffic";
+import { guilderiaTraffic } from "@/components/guilderiaTraffic";
 
 type Props = {
 	children: ReactNode;
 };
 
 export const metadata: Metadata = {
-	metadataBase: new URL("https://notploy.com"),
+	metadataBase: new URL("https://guilderia.com"),
 	title: {
 		default:
-			"Notploy - The open-source infrastructure platform for deploying and operating applications",
-		template: "%s | Notploy",
+			"guilderia - The open-source infrastructure platform for deploying and operating applications",
+		template: "%s | guilderia",
 	},
 	description:
-		"Notploy is an open-source infrastructure platform. Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with Notploy Self or managed with Notploy Cloud.",
+		"guilderia is an open-source infrastructure platform. Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with guilderia Self or managed with guilderia Cloud.",
 	icons: {
 		icon: "/icon.svg",
 		apple: "/apple-touch-icon.png",
 	},
 	openGraph: {
-		title: "Notploy - The open-source infrastructure platform",
+		title: "guilderia - The open-source infrastructure platform",
 		description:
-			"Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with Notploy Self or managed with Notploy Cloud.",
+			"Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with guilderia Self or managed with guilderia Cloud.",
 		images: "/og.png",
 		type: "website",
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Notploy - The open-source infrastructure platform",
+		title: "guilderia - The open-source infrastructure platform",
 		description:
-			"Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with Notploy Self or managed with Notploy Cloud.",
+			"Deploy applications, databases and Compose projects, manage servers and clusters, and handle routing, certificates and backups — self-hosted with guilderia Self or managed with guilderia Cloud.",
 		images: ["/og.png"],
 	},
 };
@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 		>
 			<body>
 				{/* Traffic Manager instrumentation (no-op without the env vars). */}
-				<NotployTraffic />
+				<guilderiaTraffic />
 				<a
 					href="#main-content"
 					className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"

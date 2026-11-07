@@ -60,7 +60,7 @@ function stripUnsupportedRegexPatterns(value) {
  * built-in Zod converter emits draft-07, so tool listing is served from
  * pre-converted schemas with a custom list handler.
  *
- * See https://github.com/skygenesisenterprise/notploy/issues/32
+ * See https://github.com/skygenesisenterprise/guilderia/issues/32
  */
 export function toDraft2020_12JsonSchema(schema) {
     const result = zodToJsonSchema(schema, {
@@ -101,15 +101,15 @@ export function toToolListEntry(capability) {
         outputSchema: capabilityOutputSchema(capability),
         annotations: capability.annotations,
         _meta: {
-            "notploy/mode": capability.mode,
-            "notploy/source": capability.source,
-            "notploy/risk": risk,
-            "notploy/environments": [...capability.environments],
-            "notploy/permissions": capability.permissions.map(describePermission),
-            "notploy/version": capability.version,
-            "notploy/status": capability.status,
-            "notploy/effects": capability.effects,
-            "notploy/approvalRequired": risk >= 2,
+            "guilderia/mode": capability.mode,
+            "guilderia/source": capability.source,
+            "guilderia/risk": risk,
+            "guilderia/environments": [...capability.environments],
+            "guilderia/permissions": capability.permissions.map(describePermission),
+            "guilderia/version": capability.version,
+            "guilderia/status": capability.status,
+            "guilderia/effects": capability.effects,
+            "guilderia/approvalRequired": risk >= 2,
         },
     };
 }

@@ -7,11 +7,11 @@ const appMocks = vi.hoisted(() => ({
 	removeDomain: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/services/application", () => ({
+vi.mock("@guilderia/server/services/application", () => ({
 	findApplicationById: appMocks.findApplicationById,
 }));
 
-vi.mock("@astron-collection/server/utils/traefik/domain", () => ({
+vi.mock("@guilderia/server/utils/traefik/domain", () => ({
 	manageDomain: appMocks.manageDomain,
 	removeDomain: appMocks.removeDomain,
 }));
@@ -36,7 +36,7 @@ const mocks = vi.hoisted(() => {
 	return { db, findFirst, insert, insertReturning, update, updateReturning };
 });
 
-vi.mock("@astron-collection/server/db", () => ({
+vi.mock("@guilderia/server/db", () => ({
 	db: mocks.db,
 	dbUrl: "postgres://mock:mock@localhost:5432/mock",
 }));
@@ -50,11 +50,11 @@ import {
 	releaseCloudDomain,
 	toCloudDomainLabel,
 	toCloudDomainView,
-} from "@astron-collection/server/services/cloud-domain";
+} from "@guilderia/server/services/cloud-domain";
 
 const reserved = {
 	cloudDomainId: "cloud-1",
-	hostname: "my-app.astron-collection.app",
+	hostname: "my-app.guilderia.app",
 	label: "my-app",
 	organizationId: "org-1",
 	projectId: "project-1",
@@ -93,27 +93,27 @@ describe("toCloudDomainLabel", () => {
 
 describe("cloudHostnameCandidates", () => {
 	it("is deterministic and collision-suffixed", () => {
-		expect(cloudHostnameCandidates("My App", "astron-collection.app", 3)).toEqual([
-			"my-app.astron-collection.app",
-			"my-app-2.astron-collection.app",
-			"my-app-3.astron-collection.app",
+		expect(cloudHostnameCandidates("My App", "guilderia.app", 3)).toEqual([
+			"my-app.guilderia.app",
+			"my-app-2.guilderia.app",
+			"my-app-3.guilderia.app",
 		]);
 	});
 
 	it("never produces duplicates", () => {
-		const candidates = cloudHostnameCandidates("Shop", "astron-collection.app", 20);
+		const candidates = cloudHostnameCandidates("Shop", "guilderia.app", 20);
 		expect(new Set(candidates).size).toBe(candidates.length);
 	});
 });
 
 describe("getCloudDomainBase / normalizeCloudDomainBase", () => {
 	it("normalizes a valid wildcard zone", () => {
-		expect(normalizeCloudDomainBase(".astron-collection.App.")).toBe("astron-collection.app");
+		expect(normalizeCloudDomainBase(".guilderia.App.")).toBe("guilderia.app");
 	});
 
 	it("rejects invalid zones", () => {
-		expect(normalizeCloudDomainBase("astron-collection")).toBeNull();
-		expect(normalizeCloudDomainBase("*.astron-collection.app")).toBeNull();
+		expect(normalizeCloudDomainBase("guilderia")).toBeNull();
+		expect(normalizeCloudDomainBase("*.guilderia.app")).toBeNull();
 		expect(normalizeCloudDomainBase("")).toBeNull();
 	});
 
@@ -121,15 +121,15 @@ describe("getCloudDomainBase / normalizeCloudDomainBase", () => {
 		expect(getCloudDomainBase({}, false)).toBeNull();
 	});
 
-	it("defaults to astron-collection.app on managed cloud and honors the override", () => {
-		expect(getCloudDomainBase({}, true)).toBe("astron-collection.app");
+	it("defaults to guilderia.app on managed cloud and honors the override", () => {
+		expect(getCloudDomainBase({}, true)).toBe("guilderia.app");
 		expect(
-			getCloudDomainBase({ ASTRON_COLLECTION_CLOUD_DOMAIN: "apps.example.com" }, true),
+			getCloudDomainBase({ GUILDERIA_CLOUD_DOMAIN: "apps.example.com" }, true),
 		).toBe("apps.example.com");
 	});
 
 	it("can be disabled explicitly on managed cloud", () => {
-		expect(getCloudDomainBase({ ASTRON_COLLECTION_CLOUD_DOMAIN: "" }, true)).toBeNull();
+		expect(getCloudDomainBase({ GUILDERIA_CLOUD_DOMAIN: "" }, true)).toBeNull();
 	});
 });
 
@@ -141,7 +141,7 @@ describe("allocateCloudDomain", () => {
 		environmentId: "env-1",
 		appName: "My App",
 		port: 8080,
-		base: "astron-collection.app",
+		base: "guilderia.app",
 	};
 
 	it("returns the existing reservation without inserting a second one", async () => {
@@ -155,7 +155,7 @@ describe("allocateCloudDomain", () => {
 		const second = {
 			...reserved,
 			cloudDomainId: "cloud-2",
-			hostname: "my-app-2.astron-collection.app",
+			hostname: "my-app-2.guilderia.app",
 		};
 		mocks.insertReturning
 			.mockResolvedValueOnce([])
@@ -166,7 +166,7 @@ describe("allocateCloudDomain", () => {
 	});
 
 	it("returns the hostname reserved by a concurrent deploy of the same app", async () => {
-		const raced = { ...reserved, hostname: "my-app-3.astron-collection.app" };
+		const raced = { ...reserved, hostname: "my-app-3.guilderia.app" };
 		mocks.insertReturning.mockResolvedValueOnce([]);
 		mocks.findFirst
 			.mockResolvedValueOnce(undefined) // initial check
@@ -179,7 +179,7 @@ describe("allocateCloudDomain", () => {
 		mocks.insertReturning.mockResolvedValue([]);
 
 		await expect(
-			allocateCloudDomain({ ...input, base: "astron-collection.app" }),
+			allocateCloudDomain({ ...input, base: "guilderia.app" }),
 		).rejects.toMatchObject({ code: "CONFLICT" } satisfies Partial<TRPCError>);
 		expect(mocks.insertReturning).toHaveBeenCalledTimes(20);
 	});
@@ -195,8 +195,8 @@ describe("allocateCloudDomain", () => {
 describe("toCloudDomainView", () => {
 	it("exposes an HTTPS URL and the provisioning status", () => {
 		expect(toCloudDomainView(reserved)).toMatchObject({
-			hostname: "my-app.astron-collection.app",
-			url: "https://my-app.astron-collection.app",
+			hostname: "my-app.guilderia.app",
+			url: "https://my-app.guilderia.app",
 			status: "pending",
 			port: 3000,
 		});
@@ -235,7 +235,7 @@ describe("releaseCloudDomain", () => {
 		const released = await releaseCloudDomain("app-1");
 
 		expect(released?.status).toBe("released");
-		expect(released?.hostname).toBe("my-app.astron-collection.app");
+		expect(released?.hostname).toBe("my-app.guilderia.app");
 		expect(mocks.update).toHaveBeenCalledTimes(1);
 	});
 

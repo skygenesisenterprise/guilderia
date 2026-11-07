@@ -1,8 +1,8 @@
 import path from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { findComposeById } from "@astron-collection/server/services/compose";
-import { findDestinationById } from "@astron-collection/server/services/destination";
-import type { findVolumeBackupById } from "@astron-collection/server/services/volume-backups";
+import { paths } from "@guilderia/server/constants";
+import { findComposeById } from "@guilderia/server/services/compose";
+import { findDestinationById } from "@guilderia/server/services/destination";
+import type { findVolumeBackupById } from "@guilderia/server/services/volume-backups";
 import {
 	getBackupTimestamp,
 	getS3Credentials,
@@ -27,21 +27,21 @@ export const createRestartSafeBackupCommand = ({
 	(
 		${backupCommand}
 	)
-	ASTRON_COLLECTION_VOLUME_BACKUP_STATUS=$?
+	GUILDERIA_VOLUME_BACKUP_STATUS=$?
 	(
 		set -e
 		${startCommand}
 	)
-	ASTRON_COLLECTION_VOLUME_RESTART_STATUS=$?
+	GUILDERIA_VOLUME_RESTART_STATUS=$?
 	set -e
-	if [ "$ASTRON_COLLECTION_VOLUME_BACKUP_STATUS" -ne 0 ]; then
-		if [ "$ASTRON_COLLECTION_VOLUME_RESTART_STATUS" -ne 0 ]; then
-			echo "Service restart also failed with exit code $ASTRON_COLLECTION_VOLUME_RESTART_STATUS"
+	if [ "$GUILDERIA_VOLUME_BACKUP_STATUS" -ne 0 ]; then
+		if [ "$GUILDERIA_VOLUME_RESTART_STATUS" -ne 0 ]; then
+			echo "Service restart also failed with exit code $GUILDERIA_VOLUME_RESTART_STATUS"
 		fi
-		exit "$ASTRON_COLLECTION_VOLUME_BACKUP_STATUS"
+		exit "$GUILDERIA_VOLUME_BACKUP_STATUS"
 	fi
-	if [ "$ASTRON_COLLECTION_VOLUME_RESTART_STATUS" -ne 0 ]; then
-		exit "$ASTRON_COLLECTION_VOLUME_RESTART_STATUS"
+	if [ "$GUILDERIA_VOLUME_RESTART_STATUS" -ne 0 ]; then
+		exit "$GUILDERIA_VOLUME_RESTART_STATUS"
 	fi
 	${uploadCommand}
 `;

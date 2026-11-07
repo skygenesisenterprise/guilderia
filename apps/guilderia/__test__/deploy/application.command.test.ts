@@ -1,14 +1,14 @@
-import * as adminService from "@astron-collection/server/services/admin";
-import * as applicationService from "@astron-collection/server/services/application";
-import { deployApplication } from "@astron-collection/server/services/application";
-import * as deploymentService from "@astron-collection/server/services/deployment";
-import * as builders from "@astron-collection/server/utils/builders";
-import * as notifications from "@astron-collection/server/utils/notifications/build-success";
-import * as execProcess from "@astron-collection/server/utils/process/execAsync";
-import * as gitProvider from "@astron-collection/server/utils/providers/git";
+import * as adminService from "@guilderia/server/services/admin";
+import * as applicationService from "@guilderia/server/services/application";
+import { deployApplication } from "@guilderia/server/services/application";
+import * as deploymentService from "@guilderia/server/services/deployment";
+import * as builders from "@guilderia/server/utils/builders";
+import * as notifications from "@guilderia/server/utils/notifications/build-success";
+import * as execProcess from "@guilderia/server/utils/process/execAsync";
+import * as gitProvider from "@guilderia/server/utils/providers/git";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@astron-collection/server/db", () => {
+vi.mock("@guilderia/server/db", () => {
 	const createChainableMock = (): any => {
 		const chain = {
 			set: vi.fn(() => chain),
@@ -44,10 +44,10 @@ vi.mock("@astron-collection/server/db", () => {
 	};
 });
 
-vi.mock("@astron-collection/server/services/application", async () => {
+vi.mock("@guilderia/server/services/application", async () => {
 	const actual = await vi.importActual<
-		typeof import("@astron-collection/server/services/application")
-	>("@astron-collection/server/services/application");
+		typeof import("@guilderia/server/services/application")
+	>("@guilderia/server/services/application");
 	return {
 		...actual,
 		findApplicationById: vi.fn(),
@@ -55,35 +55,35 @@ vi.mock("@astron-collection/server/services/application", async () => {
 	};
 });
 
-vi.mock("@astron-collection/server/services/admin", () => ({
+vi.mock("@guilderia/server/services/admin", () => ({
 	getAstronCollectionUrl: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/services/deployment", () => ({
+vi.mock("@guilderia/server/services/deployment", () => ({
 	createDeployment: vi.fn(),
 	updateDeploymentStatus: vi.fn(),
 	updateDeployment: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/utils/providers/git", async () => {
+vi.mock("@guilderia/server/utils/providers/git", async () => {
 	const actual = await vi.importActual<
-		typeof import("@astron-collection/server/utils/providers/git")
-	>("@astron-collection/server/utils/providers/git");
+		typeof import("@guilderia/server/utils/providers/git")
+	>("@guilderia/server/utils/providers/git");
 	return {
 		...actual,
 		getGitCommitInfo: vi.fn(),
 	};
 });
 
-vi.mock("@astron-collection/server/utils/process/execAsync", () => ({
+vi.mock("@guilderia/server/utils/process/execAsync", () => ({
 	execAsync: vi.fn(),
 	ExecError: class ExecError extends Error {},
 }));
 
-vi.mock("@astron-collection/server/utils/builders", async () => {
+vi.mock("@guilderia/server/utils/builders", async () => {
 	const actual = await vi.importActual<
-		typeof import("@astron-collection/server/utils/builders")
-	>("@astron-collection/server/utils/builders");
+		typeof import("@guilderia/server/utils/builders")
+	>("@guilderia/server/utils/builders");
 	return {
 		...actual,
 		mechanizeDockerContainer: vi.fn(),
@@ -91,27 +91,27 @@ vi.mock("@astron-collection/server/utils/builders", async () => {
 	};
 });
 
-vi.mock("@astron-collection/server/utils/notifications/build-success", () => ({
+vi.mock("@guilderia/server/utils/notifications/build-success", () => ({
 	sendBuildSuccessNotifications: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/utils/notifications/build-error", () => ({
+vi.mock("@guilderia/server/utils/notifications/build-error", () => ({
 	sendBuildErrorNotifications: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/services/rollbacks", () => ({
+vi.mock("@guilderia/server/services/rollbacks", () => ({
 	createRollback: vi.fn(),
 }));
 
-import { db } from "@astron-collection/server/db";
-import { cloneGitRepository } from "@astron-collection/server/utils/providers/git";
+import { db } from "@guilderia/server/db";
+import { cloneGitRepository } from "@guilderia/server/utils/providers/git";
 
 const createMockApplication = (overrides = {}) => ({
 	applicationId: "test-app-id",
 	name: "Test App",
 	appName: "test-app",
 	sourceType: "git" as const,
-	customGitUrl: "https://github.com/skygenesisenterprise/astron-collection.git",
+	customGitUrl: "https://github.com/skygenesisenterprise/guilderia.git",
 	customGitBranch: "main",
 	customGitSSHKeyId: null,
 	buildType: "nixpacks" as const,
@@ -183,7 +183,7 @@ describe("deployApplication - Command Generation Tests", () => {
 		const command = await cloneGitRepository(app);
 		console.log(command);
 
-		expect(command).toContain("https://github.com/skygenesisenterprise/astron-collection.git");
+		expect(command).toContain("https://github.com/skygenesisenterprise/guilderia.git");
 		expect(command).not.toContain("--recurse-submodules");
 		expect(command).toContain("--branch main");
 		expect(command).toContain("--depth 1");
@@ -195,7 +195,7 @@ describe("deployApplication - Command Generation Tests", () => {
 		const command = await cloneGitRepository(app);
 
 		expect(command).toContain("--recurse-submodules");
-		expect(command).toContain("https://github.com/skygenesisenterprise/astron-collection.git");
+		expect(command).toContain("https://github.com/skygenesisenterprise/guilderia.git");
 	});
 
 	it("should verify nixpacks command is called with correct app", async () => {
@@ -211,7 +211,7 @@ describe("deployApplication - Command Generation Tests", () => {
 		expect(builders.getBuildCommand).toHaveBeenCalledWith(
 			expect.objectContaining({
 				buildType: "nixpacks",
-				customGitUrl: "https://github.com/skygenesisenterprise/astron-collection.git",
+				customGitUrl: "https://github.com/skygenesisenterprise/guilderia.git",
 				buildPath: "/astro",
 			}),
 		);

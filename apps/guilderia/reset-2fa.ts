@@ -1,12 +1,12 @@
-import { findOwner } from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+import { findOwner } from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import {
 	securityKey,
 	securityKeyBackupCode,
 	securityKeyLoginRequest,
 	twoFactor,
 	user,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { eq } from "drizzle-orm";
 
 /**

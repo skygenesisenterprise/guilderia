@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import path, { join } from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import type { Application } from "@astron-collection/server/services/application";
-import { findServerById } from "@astron-collection/server/services/server";
-import { readValidDirectory } from "@astron-collection/server/wss/utils";
+import { paths } from "@guilderia/server/constants";
+import type { Application } from "@guilderia/server/services/application";
+import { findServerById } from "@guilderia/server/services/server";
+import { readValidDirectory } from "@guilderia/server/wss/utils";
 import AdmZip from "adm-zip";
 import { Client, type SFTPWrapper } from "ssh2";
 import {

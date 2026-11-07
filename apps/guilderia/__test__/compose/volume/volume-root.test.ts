@@ -1,5 +1,5 @@
-import type { ComposeSpecification } from "@astron-collection/server";
-import { addSuffixToVolumesRoot, generateRandomHash } from "@astron-collection/server";
+import type { ComposeSpecification } from "@guilderia/server";
+import { addSuffixToVolumesRoot, generateRandomHash } from "@guilderia/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 

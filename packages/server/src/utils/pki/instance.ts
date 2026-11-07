@@ -32,14 +32,14 @@ import {
 /**
  * Local instance identity store (issue #75 §1, §3).
  *
- * Everything lives under `identityDir` (default `/etc/astron-collection/identity`):
+ * Everything lives under `identityDir` (default `/etc/guilderia/identity`):
  *
  *   instance.key  — private key, mode 0600, never leaves the instance
  *   instance.crt  — signed instance certificate
  *   ca.crt        — trust anchor to validate the identity chain
  *   ca.key        — local CA signing key (self-hosted only), mode 0600
  *   identity.json — non-secret identity metadata
- *   entitlement.token — optional Astron Collection-signed entitlement (cloud/console)
+ *   entitlement.token — optional Guilderia-signed entitlement (cloud/console)
  *
  * Private keys are never returned by a public API and never included in the
  * secret-free `InstanceIdentity` projection.
@@ -116,7 +116,7 @@ export interface GeneratedInstanceIdentity {
 /**
  * Bootstraps a self-hosted instance identity entirely locally: generates the key
  * pair, creates a local trust anchor and signs the instance certificate. No
- * network access is required and no Astron Collection account is involved.
+ * network access is required and no Guilderia account is involved.
  */
 export const generateLocalInstanceIdentity = (
 	options: GenerateIdentityOptions,
@@ -135,7 +135,7 @@ export const generateLocalInstanceIdentity = (
 
 	const keyPair = generateInstanceKeyPair(options.keySize ?? DEFAULT_KEY_SIZE);
 	const trustAnchor = createRootCertificateAuthority({
-		commonName: "Astron Collection Local Instance Root CA",
+		commonName: "Guilderia Local Instance Root CA",
 		now,
 	});
 	const issued = issueInstanceCertificate({
@@ -238,7 +238,7 @@ export const readRawIdentityFiles = (identityDir: string): RawIdentityFiles => {
 
 export interface InstanceIdentityLoadResult {
 	identity: InstanceIdentity | null;
-	/** Raw Astron Collection-signed token, still to be verified by the caller. */
+	/** Raw Guilderia-signed token, still to be verified by the caller. */
 	entitlementToken: string | null;
 	diagnostics: IdentityDiagnostic[];
 	files: IdentityFiles;
@@ -299,7 +299,7 @@ export const loadInstanceIdentity = (
 			severity: "error",
 			message:
 				chain.errors[0] ??
-				"The instance certificate carries no Astron Collection identity document",
+				"The instance certificate carries no Guilderia identity document",
 			remediation:
 				"Re-bootstrap the instance identity; the certificate cannot be parsed.",
 		});
@@ -394,7 +394,7 @@ export const loadInstanceIdentity = (
 	};
 };
 
-/** Persists a Astron Collection-signed entitlement token, mode 0600. */
+/** Persists a Guilderia-signed entitlement token, mode 0600. */
 export const writeEntitlementToken = (
 	identityDir: string,
 	token: string,

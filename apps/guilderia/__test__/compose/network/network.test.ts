@@ -1,10 +1,10 @@
-import type { ComposeSpecification } from "@astron-collection/server";
+import type { ComposeSpecification } from "@guilderia/server";
 import {
 	addSuffixToAllNetworks,
 	addSuffixToNetworksRoot,
 	addSuffixToServiceNetworks,
 	generateRandomHash,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { expect, test } from "vitest";
 import { parse } from "yaml";
 
@@ -266,13 +266,13 @@ services:
         aliases:
           - app
       backend:
-      astron-collection-network:
+      guilderia-network:
 
   worker:
     image: worker:latest
     networks:
       - backend
-      - astron-collection-network
+      - guilderia-network
 
 networks:
   frontend:
@@ -284,7 +284,7 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: "true"
 
-  astron-collection-network:
+  guilderia-network:
     driver: bridge
 
 `;
@@ -300,13 +300,13 @@ services:
         aliases:
           - app
       backend-testhash:
-      astron-collection-network:
+      guilderia-network:
 
   worker:
     image: worker:latest
     networks:
       - backend-testhash
-      - astron-collection-network
+      - guilderia-network
 
 networks:
   frontend-testhash:
@@ -318,14 +318,14 @@ networks:
     driver_opts:
       com.docker.network.bridge.enable_icc: "true"
   
-  astron-collection-network:
+  guilderia-network:
     driver: bridge
 
 
   
 `);
 
-test("Expect don't add suffix to astron-collection-network in compose file with multiple services and complex network configurations", () => {
+test("Expect don't add suffix to guilderia-network in compose file with multiple services and complex network configurations", () => {
 	const composeData = parse(composeFile4) as ComposeSpecification;
 
 	const suffix = "testhash";

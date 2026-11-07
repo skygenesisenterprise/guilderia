@@ -66,7 +66,7 @@ export function formatContactDataForHubSpot(
 			},
 		],
 		context: {
-			pageUri: "https://app.astron-collection.com/register",
+			pageUri: "https://app.guilderia.com/register",
 			pageName: "Sign Up",
 		},
 	};

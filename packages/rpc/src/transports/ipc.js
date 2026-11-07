@@ -15,11 +15,11 @@ const OPCodes = {
 
 function getIPCPath(id) {
   if (process.platform === 'win32') {
-    return `\\\\?\\pipe\\discord-ipc-${id}`;
+    return `\\\\?\\pipe\\guilderia-ipc-${id}`;
   }
   const { env: { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } } = process;
   const prefix = XDG_RUNTIME_DIR || TMPDIR || TMP || TEMP || '/tmp';
-  return `${prefix.replace(/\/$/, '')}/discord-ipc-${id}`;
+  return `${prefix.replace(/\/$/, '')}/guilderia-ipc-${id}`;
 }
 
 function getIPC(id = 0) {

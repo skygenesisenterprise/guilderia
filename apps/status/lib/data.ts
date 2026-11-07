@@ -20,7 +20,7 @@ import {
 	type PublicIncidentDto,
 	type PublicMaintenanceDto,
 	type PublicPageDto,
-} from "@astron-collection/status";
+} from "@guilderia/status";
 import { getPlatform } from "./engine";
 
 export interface PageSummary {

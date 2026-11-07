@@ -54,9 +54,9 @@ const notificationBaseSchema = z.object({
 	appDeploy: z.boolean().default(false),
 	appBuildError: z.boolean().default(false),
 	databaseBackup: z.boolean().default(false),
-	notployBackup: z.boolean().default(false),
+	guilderiaBackup: z.boolean().default(false),
 	volumeBackup: z.boolean().default(false),
-	notployRestart: z.boolean().default(false),
+	guilderiaRestart: z.boolean().default(false),
 	dockerCleanup: z.boolean().default(false),
 	serverThreshold: z.boolean().default(false),
 });
@@ -79,7 +79,7 @@ export const notificationSchema = z.discriminatedUnion("type", [
 		.merge(notificationBaseSchema),
 	z
 		.object({
-			type: z.literal("discord"),
+			type: z.literal("guilderia"),
 			webhookUrl: z.string().min(1, { message: "Webhook URL is required" }),
 			decoration: z.boolean().default(true),
 		})
@@ -192,7 +192,7 @@ export const notificationsMap = {
 		icon: <TelegramIcon />,
 		label: "Telegram",
 	},
-	discord: {
+	guilderia: {
 		icon: <DiscordIcon />,
 		label: "Discord",
 	},
@@ -354,9 +354,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					dockerCleanup: notification.dockerCleanup,
 					webhookUrl: notification.slack?.webhookUrl,
@@ -369,9 +369,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					botToken: notification.telegram?.botToken,
 					messageThreadId: notification.telegram?.messageThreadId || "",
@@ -381,17 +381,17 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 					dockerCleanup: notification.dockerCleanup,
 					serverThreshold: notification.serverThreshold,
 				});
-			} else if (notification.notificationType === "discord") {
+			} else if (notification.notificationType === "guilderia") {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
-					webhookUrl: notification.discord?.webhookUrl,
-					decoration: notification.discord?.decoration ?? undefined,
+					webhookUrl: notification.guilderia?.webhookUrl,
+					decoration: notification.guilderia?.decoration ?? undefined,
 					name: notification.name,
 					dockerCleanup: notification.dockerCleanup,
 					serverThreshold: notification.serverThreshold,
@@ -400,9 +400,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
 					smtpServer: notification.email?.smtpServer,
@@ -419,9 +419,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
 					apiKey: notification.resend?.apiKey,
@@ -435,9 +435,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
 					appToken: notification.gotify?.appToken,
@@ -452,9 +452,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
 					accessToken: notification.ntfy?.accessToken || "",
@@ -469,9 +469,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
 					webhookUrl: notification.mattermost?.webhookUrl,
@@ -485,9 +485,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					type: notification.notificationType,
 					webhookUrl: notification.lark?.webhookUrl,
 					name: notification.name,
@@ -499,9 +499,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
 					webhookUrl: notification.teams?.webhookUrl,
@@ -513,9 +513,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					type: notification.notificationType,
 					endpoint: notification.custom?.endpoint || "",
 					headers: notification.custom?.headers
@@ -535,9 +535,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				form.reset({
 					appBuildError: notification.appBuildError,
 					appDeploy: notification.appDeploy,
-					notployRestart: notification.notployRestart,
+					guilderiaRestart: notification.guilderiaRestart,
 					databaseBackup: notification.databaseBackup,
-					notployBackup: notification.notployBackup,
+					guilderiaBackup: notification.guilderiaBackup,
 					volumeBackup: notification.volumeBackup,
 					type: notification.notificationType,
 					userKey: notification.pushover?.userKey,
@@ -558,7 +558,7 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 	const activeMutation = {
 		slack: slackMutation,
 		telegram: telegramMutation,
-		discord: discordMutation,
+		guilderia: discordMutation,
 		email: emailMutation,
 		resend: resendMutation,
 		gotify: gotifyMutation,
@@ -574,9 +574,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 		const {
 			appBuildError,
 			appDeploy,
-			notployRestart,
+			guilderiaRestart,
 			databaseBackup,
-			notployBackup,
+			guilderiaBackup,
 			volumeBackup,
 			dockerCleanup,
 			serverThreshold,
@@ -586,9 +586,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = slackMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				webhookUrl: data.webhookUrl,
 				channel: data.channel,
@@ -602,9 +602,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = telegramMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				botToken: data.botToken,
 				messageThreadId: data.messageThreadId || "",
@@ -615,13 +615,13 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 				telegramId: notification?.telegramId || "",
 				serverThreshold: serverThreshold,
 			});
-		} else if (data.type === "discord") {
+		} else if (data.type === "guilderia") {
 			promise = discordMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				webhookUrl: data.webhookUrl,
 				decoration: data.decoration,
@@ -635,9 +635,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = emailMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				smtpServer: data.smtpServer,
 				smtpPort: data.smtpPort,
@@ -655,9 +655,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = resendMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				apiKey: data.apiKey,
 				fromAddress: data.fromAddress,
@@ -672,9 +672,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = gotifyMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				serverUrl: data.serverUrl,
 				appToken: data.appToken,
@@ -690,9 +690,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = ntfyMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				serverUrl: data.serverUrl,
 				accessToken: data.accessToken || "",
@@ -708,9 +708,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = mattermostMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				webhookUrl: data.webhookUrl,
 				channel: data.channel || undefined,
@@ -725,9 +725,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = larkMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				webhookUrl: data.webhookUrl,
 				name: data.name,
@@ -740,9 +740,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = teamsMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				webhookUrl: data.webhookUrl,
 				name: data.name,
@@ -767,9 +767,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = customMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				endpoint: data.endpoint,
 				headers: headersRecord,
@@ -787,9 +787,9 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 			promise = pushoverMutation.mutateAsync({
 				appBuildError: appBuildError,
 				appDeploy: appDeploy,
-				notployRestart: notployRestart,
+				guilderiaRestart: guilderiaRestart,
 				databaseBackup: databaseBackup,
-				notployBackup: notployBackup,
+				guilderiaBackup: guilderiaBackup,
 				volumeBackup: volumeBackup,
 				userKey: data.userKey,
 				apiToken: data.apiToken,
@@ -1029,7 +1029,7 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 									</>
 								)}
 
-								{type === "discord" && (
+								{type === "guilderia" && (
 									<>
 										<FormField
 											control={form.control}
@@ -1039,7 +1039,7 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 													<FormLabel>Webhook URL</FormLabel>
 													<FormControl>
 														<Input
-															placeholder="https://discord.com/api/webhooks/123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+															placeholder="https://guilderia.com/api/webhooks/123456789/ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 															{...field}
 														/>
 													</FormControl>
@@ -1529,7 +1529,7 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 												<FormItem>
 													<FormLabel>Username</FormLabel>
 													<FormControl>
-														<Input placeholder="Notploy" {...field} />
+														<Input placeholder="guilderia" {...field} />
 													</FormControl>
 													<FormDescription>
 														Optional. Display name for the webhook.
@@ -1883,13 +1883,13 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 
 								<FormField
 									control={form.control}
-									name="notployBackup"
+									name="guilderiaBackup"
 									render={({ field }) => (
 										<FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs gap-2">
 											<div className="space-y-0.5">
-												<FormLabel>Notploy Backup</FormLabel>
+												<FormLabel>guilderia Backup</FormLabel>
 												<FormDescription>
-													Trigger the action when a Notploy backup is created.
+													Trigger the action when a guilderia backup is created.
 												</FormDescription>
 											</div>
 											<FormControl>
@@ -1947,13 +1947,13 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 								{!isCloud && (
 									<FormField
 										control={form.control}
-										name="notployRestart"
+										name="guilderiaRestart"
 										render={({ field }) => (
 											<FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs gap-2">
 												<div className="space-y-0.5">
-													<FormLabel>Notploy Restart</FormLabel>
+													<FormLabel>guilderia Restart</FormLabel>
 													<FormDescription>
-														Trigger the action when Notploy is restarted.
+														Trigger the action when guilderia is restarted.
 													</FormDescription>
 												</div>
 												<FormControl>
@@ -2030,7 +2030,7 @@ export const HandleNotifications = ({ notificationId }: Props) => {
 											chatId: data.chatId,
 											messageThreadId: data.messageThreadId || "",
 										});
-									} else if (data.type === "discord") {
+									} else if (data.type === "guilderia") {
 										await testDiscordConnection({
 											webhookUrl: data.webhookUrl,
 											decoration: data.decoration,

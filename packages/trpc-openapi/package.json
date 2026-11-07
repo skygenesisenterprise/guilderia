@@ -1,5 +1,5 @@
 {
-  "name": "@astron-collection/trpc-openapi",
+  "name": "@guilderia/trpc-openapi",
   "version": "1.0.0",
   "description": "tRPC OpenAPI",
   "author": "Sky Genesis Enterprise",
@@ -10,13 +10,13 @@
     "openapi",
     "swagger"
   ],
-  "homepage": "https://github.com/skygenesisenterprise/astron-collection/tree/master/packages/trpc-openapi",
+  "homepage": "https://github.com/skygenesisenterprise/guilderia/tree/master/packages/trpc-openapi",
   "repository": {
     "type": "git",
-    "url": "https://github.com/skygenesisenterprise/astron-collection.git",
+    "url": "https://github.com/skygenesisenterprise/guilderia.git",
     "directory": "packages/trpc-openapi"
   },
-  "bugs": "https://github.com/skygenesisenterprise/astron-collection/issues",
+  "bugs": "https://github.com/skygenesisenterprise/guilderia/issues",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.mjs",
   "typings": "dist/cjs/index.d.ts",

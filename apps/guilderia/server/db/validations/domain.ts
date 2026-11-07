@@ -1,7 +1,7 @@
 import {
 	INVALID_HOSTNAME_MESSAGE,
 	VALID_HOSTNAME_REGEX,
-} from "@astron-collection/server/utils/hostname-validation";
+} from "@guilderia/server/utils/hostname-validation";
 import { z } from "zod";
 
 export const domain = z

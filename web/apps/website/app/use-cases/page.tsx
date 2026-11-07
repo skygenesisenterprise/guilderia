@@ -10,8 +10,8 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
 	title: "Use cases",
 	description:
-		"Personal applications, homelab services, developer tools, team applications and specialised workloads — what Notploy takes care of and what stays your responsibility.",
-	alternates: { canonical: "https://notploy.com/use-cases" },
+		"Personal applications, homelab services, developer tools, team applications and specialised workloads — what guilderia takes care of and what stays your responsibility.",
+	alternates: { canonical: "https://guilderia.com/use-cases" },
 };
 
 const useCases = [
@@ -42,7 +42,7 @@ const useCases = [
 		prerequisites:
 			"Hardware you can reach, Docker, and a plan for DNS and inbound access.",
 		limits:
-			"Power, network and disk are yours. Notploy does not make consumer hardware highly available.",
+			"Power, network and disk are yours. guilderia does not make consumer hardware highly available.",
 	},
 	{
 		id: "developers",
@@ -71,7 +71,7 @@ const useCases = [
 		prerequisites:
 			"An identity provider if you enable SSO, and a backup destination you control.",
 		limits:
-			"Compliance obligations stay with your organisation. Notploy provides controls, not certification.",
+			"Compliance obligations stay with your organisation. guilderia provides controls, not certification.",
 	},
 	{
 		id: "specialised",
@@ -94,7 +94,7 @@ const faqs = [
 	{
 		question: "Are these separate products?",
 		answer:
-			"No. They are examples of workloads the same platform can host. Nothing in Notploy is hard-coded per industry or per use case.",
+			"No. They are examples of workloads the same platform can host. Nothing in guilderia is hard-coded per industry or per use case.",
 	},
 	{
 		question: "Can I mix several of these on one installation?",
@@ -196,14 +196,14 @@ export default function UseCasesPage() {
 							href="/self"
 							className="inline-flex items-center gap-1 font-medium text-foreground underline underline-offset-4 hover:text-primary"
 						>
-							Start with Notploy Self
+							Start with guilderia Self
 							<ArrowRight className="h-4 w-4" aria-hidden="true" />
 						</Link>
 						<Link
 							href="/enterprise"
 							className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
 						>
-							Notploy for teams
+							guilderia for teams
 						</Link>
 					</div>
 				</Container>

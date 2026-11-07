@@ -1,4 +1,4 @@
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateCustom,
 	type apiCreateDiscord,
@@ -25,7 +25,7 @@ import {
 	type apiUpdateTeams,
 	type apiUpdateTelegram,
 	custom,
-	discord,
+	guilderia,
 	email,
 	gotify,
 	lark,
@@ -37,7 +37,7 @@ import {
 	slack,
 	teams,
 	telegram,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
@@ -240,7 +240,7 @@ export const createDiscordNotification = async (
 ) => {
 	await db.transaction(async (tx) => {
 		const newDiscord = await tx
-			.insert(discord)
+			.insert(guilderia)
 			.values({
 				webhookUrl: input.webhookUrl,
 				decoration: input.decoration,
@@ -251,7 +251,7 @@ export const createDiscordNotification = async (
 		if (!newDiscord) {
 			throw new TRPCError({
 				code: "BAD_REQUEST",
-				message: "Error input: Inserting discord",
+				message: "Error input: Inserting guilderia",
 			});
 		}
 
@@ -267,7 +267,7 @@ export const createDiscordNotification = async (
 				volumeBackup: input.volumeBackup,
 				astronCollectionRestart: input.astronCollectionRestart,
 				dockerCleanup: input.dockerCleanup,
-				notificationType: "discord",
+				notificationType: "guilderia",
 				organizationId: organizationId,
 				serverThreshold: input.serverThreshold,
 			})
@@ -315,12 +315,12 @@ export const updateDiscordNotification = async (
 		}
 
 		await tx
-			.update(discord)
+			.update(guilderia)
 			.set({
 				webhookUrl: input.webhookUrl,
 				decoration: input.decoration,
 			})
-			.where(eq(discord.discordId, input.discordId))
+			.where(eq(guilderia.discordId, input.discordId))
 			.returning()
 			.then((value) => value[0]);
 
@@ -816,7 +816,7 @@ export const findNotificationById = async (notificationId: string) => {
 		with: {
 			slack: true,
 			telegram: true,
-			discord: true,
+			guilderia: true,
 			email: true,
 			resend: true,
 			gotify: true,

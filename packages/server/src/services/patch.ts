@@ -1,7 +1,7 @@
 import { join } from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
-import { type apiCreatePatch, patch } from "@astron-collection/server/db/schema";
+import { paths } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
+import { type apiCreatePatch, patch } from "@guilderia/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import type { z } from "zod";

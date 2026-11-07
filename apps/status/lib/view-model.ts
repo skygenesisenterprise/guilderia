@@ -10,7 +10,7 @@ import type {
 	IncidentSeverity,
 	IncidentState,
 	MaintenanceState,
-} from "@astron-collection/status";
+} from "@guilderia/status";
 
 export type Tone = "green" | "amber" | "orange" | "red" | "blue" | "neutral";
 

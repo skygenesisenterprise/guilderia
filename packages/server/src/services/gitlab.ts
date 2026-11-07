@@ -1,9 +1,9 @@
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateGitlab,
 	gitlab,
 	gitProvider,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";

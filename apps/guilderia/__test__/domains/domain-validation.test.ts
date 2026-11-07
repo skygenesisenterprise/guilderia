@@ -2,7 +2,7 @@ import os from "node:os";
 import {
 	getServerIpCandidates,
 	validateDomain,
-} from "@astron-collection/server/services/domain";
+} from "@guilderia/server/services/domain";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -21,19 +21,19 @@ vi.mock("node:dns", () => ({
 	},
 }));
 
-vi.mock("@astron-collection/server/utils/process/execAsync", () => ({
+vi.mock("@guilderia/server/utils/process/execAsync", () => ({
 	execAsyncRemote: mocks.execAsyncRemote,
 }));
 
-vi.mock("@astron-collection/server/services/server", () => ({
+vi.mock("@guilderia/server/services/server", () => ({
 	findServerById: mocks.findServerById,
 }));
 
-vi.mock("@astron-collection/server/services/web-server-settings", () => ({
+vi.mock("@guilderia/server/services/web-server-settings", () => ({
 	getWebServerSettings: mocks.getWebServerSettings,
 }));
 
-vi.mock("@astron-collection/server/wss/utils", () => ({
+vi.mock("@guilderia/server/wss/utils", () => ({
 	getPublicIpWithFallback: mocks.getPublicIpWithFallback,
 }));
 
@@ -67,7 +67,7 @@ describe("getServerIpCandidates", () => {
 		);
 	});
 
-	it("includes every address assigned to the local Astron Collection host", async () => {
+	it("includes every address assigned to the local Guilderia host", async () => {
 		mocks.getWebServerSettings.mockResolvedValue({
 			serverIp: "10.0.0.10",
 		});
@@ -158,7 +158,7 @@ describe("validateDomain", () => {
 			reason: expect.stringContaining("local DNS"),
 		});
 		await expect(
-			validateDomain("gitlab.astron-collection.local"),
+			validateDomain("gitlab.guilderia.local"),
 		).resolves.toMatchObject({
 			isValid: true,
 			skipped: true,

@@ -8,7 +8,7 @@
 		"build": "pnpm -r run build",
 		"build:app": "pnpm --filter=@guilderia/app run build",
 		"test": "pnpm --filter=@guilderia/app run test",
-		"test:bots": "node --test packages/discord-framework/test/*.test.js",
+		"test:bots": "node --test packages/guilderia-bot/test/*.test.js",
 		"check:bots": "node scripts/check-bots.mjs",
 		"start:main": "pnpm --filter=@guilderia/main run start",
 		"dev:main": "pnpm --filter=@guilderia/main run dev",

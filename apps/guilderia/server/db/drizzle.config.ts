@@ -1,4 +1,4 @@
-import { dbUrl } from "@astron-collection/server/db";
+import { dbUrl } from "@guilderia/server/db";
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({

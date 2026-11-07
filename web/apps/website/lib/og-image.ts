@@ -8,7 +8,7 @@ interface GenerateOGImageOptions {
 	label?: string;
 }
 
-const NOTPLOY_WORDMARK = {
+const GUILDERIA_WORDMARK = {
 	type: "div",
 	props: {
 		style: { fontSize: "140px", fontWeight: 700, color: "#ffffff", opacity: 0.12 },
@@ -76,7 +76,7 @@ export async function generateOGImage({
 							transform: "rotate(-10deg)",
 							color: "#ffffff",
 						},
-						children: NOTPLOY_WORDMARK,
+						children: GUILDERIA_WORDMARK,
 					},
 				},
 				{

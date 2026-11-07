@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/discord.js",
+	"name": "@discordjs/guilderia.js",
 	"version": "0.0.0",
 	"private": true,
 	"description": "A powerful library for interacting with the Discord API",
@@ -8,13 +8,13 @@
 		"api",
 		"bot",
 		"client",
-		"discord",
+		"guilderia",
 		"discordapp",
 		"node"
 	],
-	"homepage": "https://discord.js.org",
+	"homepage": "https://guilderia.js.org",
 	"bugs": {
-		"url": "https://github.com/discordjs/discord.js/issues"
+		"url": "https://github.com/discordjs/guilderia.js/issues"
 	},
 	"contributors": [
 		"Crawl <icrawltogo@gmail.com>",
@@ -25,9 +25,9 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git"
+		"url": "https://github.com/discordjs/guilderia.js.git"
 	},
-	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"funding": "https://github.com/discordjs/guilderia.js?sponsor",
 	"type": "module",
 	"scripts": {
 		"build": "turbo run build --concurrency=4",

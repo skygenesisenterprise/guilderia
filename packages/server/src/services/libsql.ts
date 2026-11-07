@@ -1,17 +1,17 @@
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateLibsql,
 	backups,
 	buildAppName,
 	libsql,
-} from "@astron-collection/server/db/schema";
-import { generatePassword } from "@astron-collection/server/templates";
-import { buildLibsql } from "@astron-collection/server/utils/databases/libsql";
+} from "@guilderia/server/db/schema";
+import { generatePassword } from "@guilderia/server/templates";
+import { buildLibsql } from "@guilderia/server/utils/databases/libsql";
 import {
 	pullImage,
 	waitForSwarmServiceConvergence,
-} from "@astron-collection/server/utils/docker/utils";
-import { execAsyncRemote } from "@astron-collection/server/utils/process/execAsync";
+} from "@guilderia/server/utils/docker/utils";
+import { execAsyncRemote } from "@guilderia/server/utils/process/execAsync";
 import { TRPCError } from "@trpc/server";
 import { eq, getTableColumns } from "drizzle-orm";
 import { quote } from "shell-quote";

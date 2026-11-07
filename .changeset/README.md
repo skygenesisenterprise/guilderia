@@ -28,16 +28,16 @@ version and publish the packages in the pnpm workspace.
 
 Published to npmjs (public):
 
-- `@notploy/cli`
-- `@notploy/sdk`
-- `@notploy/trpc-openapi`
+- `@guilderia/cli`
+- `@guilderia/sdk`
+- `@guilderia/trpc-openapi`
 
 Other workspace packages are not published by this workflow. Some may be
 versioned by Changesets or shipped as containers:
 
-- `@notploy/app` (the dashboard/server, shipped as a Docker image)
-- `@notploy/docs`, `@notploy/website` (deployed to GitHub Pages and Docker)
-- `@notploy/api`, `@notploy/schedules` (internal services, ignored by changesets)
+- `@guilderia/app` (the dashboard/server, shipped as a Docker image)
+- `@guilderia/docs`, `@guilderia/website` (deployed to GitHub Pages and Docker)
+- `@guilderia/api`, `@guilderia/schedules` (internal services, ignored by changesets)
 
 ## Common commands
 

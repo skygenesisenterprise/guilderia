@@ -11,9 +11,9 @@ const repositoryRoot = path.resolve(
 );
 const npmjsRegistry = "https://registry.npmjs.org/";
 const packages = [
-  { name: "@notploy/cli", directory: "packages/cli" },
-  { name: "@notploy/sdk", directory: "packages/sdk" },
-  { name: "@notploy/trpc-openapi", directory: "packages/trpc-openapi" },
+  { name: "@guilderia/cli", directory: "packages/cli" },
+  { name: "@guilderia/sdk", directory: "packages/sdk" },
+  { name: "@guilderia/trpc-openapi", directory: "packages/trpc-openapi" },
 ];
 
 function run(command, args, options = {}) {
@@ -158,7 +158,7 @@ async function main() {
   }
 
   const tempDirectory = await mkdtemp(
-    path.join(os.tmpdir(), "notploy-node-release-"),
+    path.join(os.tmpdir(), "guilderia-node-release-"),
   );
   const npmConfig = path.join(tempDirectory, "npmrc");
   const completedPackages = [];

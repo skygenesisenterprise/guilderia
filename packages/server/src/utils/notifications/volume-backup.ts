@@ -1,7 +1,7 @@
-import { db } from "@astron-collection/server/db";
-import { notifications } from "@astron-collection/server/db/schema";
-import { VolumeBackupEmail } from "@astron-collection/server/emails/emails/volume-backup";
-import { redactSecrets } from "@astron-collection/server/utils/security/redact";
+import { db } from "@guilderia/server/db";
+import { notifications } from "@guilderia/server/db/schema";
+import { VolumeBackupEmail } from "@guilderia/server/emails/emails/volume-backup";
+import { redactSecrets } from "@guilderia/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -59,7 +59,7 @@ export const sendVolumeBackupNotifications = async ({
 		),
 		with: {
 			email: true,
-			discord: true,
+			guilderia: true,
 			telegram: true,
 			slack: true,
 			resend: true,
@@ -77,7 +77,7 @@ export const sendVolumeBackupNotifications = async ({
 		const {
 			email,
 			resend,
-			discord,
+			guilderia,
 			telegram,
 			slack,
 			gotify,
@@ -112,11 +112,11 @@ export const sendVolumeBackupNotifications = async ({
 				}
 			}
 
-			if (discord) {
+			if (guilderia) {
 				const decorate = (decoration: string, text: string) =>
-					`${discord.decoration ? decoration : ""} ${text}`.trim();
+					`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
-				await sendDiscordNotification(discord, {
+				await sendDiscordNotification(guilderia, {
 					title:
 						type === "success"
 							? decorate(">", "`✅` Volume Backup Successful")
@@ -180,7 +180,7 @@ export const sendVolumeBackupNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Astron Collection Volume Backup Notification",
+						text: "Guilderia Volume Backup Notification",
 					},
 				});
 			}
@@ -321,7 +321,7 @@ export const sendVolumeBackupNotifications = async ({
 				await sendMattermostNotification(mattermost, {
 					text: `**${statusEmoji} Volume Backup ${typeStatus}**\n\n**Project:** ${projectName}\n**Application:** ${applicationName}\n**Volume Name:** ${volumeName}\n**Service Type:** ${serviceType}${sizeInfo}\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}${errorMsg}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Astron Collection",
+					username: mattermost.username || "Guilderia",
 				});
 			}
 

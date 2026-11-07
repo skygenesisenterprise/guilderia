@@ -1,11 +1,11 @@
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	member,
 	organization,
 	organizationRole,
 	user,
-} from "@astron-collection/server/db/schema";
-import { statements } from "@astron-collection/server/lib/access-control";
+} from "@guilderia/server/db/schema";
+import { statements } from "@guilderia/server/lib/access-control";
 import { TRPCError } from "@trpc/server";
 import { and, count, eq } from "drizzle-orm";
 import { z } from "zod";

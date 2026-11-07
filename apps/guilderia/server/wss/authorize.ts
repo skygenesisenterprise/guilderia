@@ -1,9 +1,9 @@
-import { getAccessibleServerIds } from "@astron-collection/server";
+import { getAccessibleServerIds } from "@guilderia/server";
 import {
 	checkServiceAccess,
 	findMemberByUserId,
 	hasPermission,
-} from "@astron-collection/server/services/permission";
+} from "@guilderia/server/services/permission";
 
 type WssUser = { id: string } | null | undefined;
 type WssSession = { activeOrganizationId?: string | null } | null | undefined;
@@ -30,7 +30,7 @@ export const canAccessDockerOverWss = async (
 
 	const ctx = buildCtx(user, session.activeOrganizationId);
 
-	// When the container belongs to a specific Astron Collection service (opened from a
+	// When the container belongs to a specific Guilderia service (opened from a
 	// service page, so serviceId is present), access to that service is the
 	// authoritative gate — matching the service tRPC endpoints (e.g.
 	// application.readLogs, which check service access only). A member granted

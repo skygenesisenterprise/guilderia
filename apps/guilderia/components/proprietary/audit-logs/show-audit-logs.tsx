@@ -89,7 +89,7 @@ function AuditLogsContent() {
 							Audit Logs
 						</h1>
 						<p className="text-sm text-muted-foreground">
-							Track user and administrative actions across your Astron Collection
+							Track user and administrative actions across your Guilderia
 							organization.
 						</p>
 					</div>

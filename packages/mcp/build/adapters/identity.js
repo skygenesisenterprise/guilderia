@@ -1,4 +1,4 @@
-import { ApiError } from "./notployApi.js";
+import { ApiError } from "./guilderiaApi.js";
 const DEFAULT_TTL_MS = 30_000;
 function asRecord(value) {
     if (value === null || typeof value !== "object" || Array.isArray(value))
@@ -63,14 +63,14 @@ export class IdentityResolver {
         const organizationId = session?.session?.activeOrganizationId;
         if (typeof userId !== "string" || userId === "" || typeof organizationId !== "string") {
             throw new ApiError({
-                message: "The configured Notploy API key is not valid or has no active organization. Check NOTPLOY_API_KEY.",
+                message: "The configured guilderia API key is not valid or has no active organization. Check guilderia_API_KEY.",
                 code: "unauthenticated",
             });
         }
         const permissions = parsePermissions(await this.api.request({ ...common, path: "/user.getPermissions" }));
         if (!permissions) {
             throw new ApiError({
-                message: "The Notploy API returned an unexpected permission set; refusing to execute",
+                message: "The guilderia API returned an unexpected permission set; refusing to execute",
                 code: "internal_error",
             });
         }

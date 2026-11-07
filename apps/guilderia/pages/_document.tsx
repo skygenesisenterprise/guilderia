@@ -1,7 +1,7 @@
 import {
 	getConfiguredProduct,
 	getPublicWhitelabelingConfig,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import NextDocument, {
 	type DocumentContext,
 	type DocumentInitialProps,
@@ -29,7 +29,7 @@ export default function Document({
 	customCss,
 	baseUrl,
 }: WhitelabelingDocumentProps) {
-	// Brand the product on first paint: Astron Collection, Astron Collection Cloud or Astron Collection
+	// Brand the product on first paint: Guilderia, Guilderia Cloud or Guilderia
 	// Console. A whitelabel app name overrides the product name.
 	const title = appName || productBrandName(getConfiguredProduct());
 	const description =
@@ -45,7 +45,7 @@ export default function Document({
 			<Head>
 				{/* Rendered on the server so the correct branding is present on first
 				    paint (and for social scrapers), avoiding a flash of / fallback to
-				    the default Astron Collection branding. */}
+				    the default Guilderia branding. */}
 				{/* `data-react-helmet` is Next's opt-out for titles rendered by a
 				    head manager: the fallback title lives here (it renders after
 				    next/head's titles, so pages that set their own title win) and

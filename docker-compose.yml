@@ -1,6 +1,6 @@
-# Astron Collection — root Docker Compose stack.
+# Guilderia — root Docker Compose stack.
 #
-# This is the single entry point for running Astron Collection from the repository root.
+# This is the single entry point for running Guilderia from the repository root.
 # It builds the root `Dockerfile` and exposes the dashboard in the browser.
 #
 # Exactly four services:
@@ -18,7 +18,7 @@
 # Profiles and environments
 # ---------------------------------------------------------------------------
 #   prod   docker compose --profile prod up -d --build    (default, COMPOSE_PROFILES)
-#   dev    ASTRON_COLLECTION_MODE=development ASTRON_COLLECTION_BUILD_TARGET=dev \
+#   dev    GUILDERIA_MODE=development GUILDERIA_BUILD_TARGET=dev \
 #          NODE_ENV=development docker compose --profile dev up --build --watch
 #
 # `make docker-up [self|cloud|console]` and `make docker-dev [self|cloud|console]` set that whole
@@ -27,11 +27,11 @@
 #
 # Each service belongs to both profiles and reads its mode from the environment:
 #
-#   ASTRON_COLLECTION_MODE          production | development (entrypoint behaviour)
-#   ASTRON_COLLECTION_BUILD_TARGET  api | client (prod) or dev (hot reload)
+#   GUILDERIA_MODE          production | development (entrypoint behaviour)
+#   GUILDERIA_BUILD_TARGET  api | client (prod) or dev (hot reload)
 #   NODE_ENV                        production | development
 #
-# `ASTRON_COLLECTION_BUILD_TARGET` therefore has a different default per service:
+# `GUILDERIA_BUILD_TARGET` therefore has a different default per service:
 # unset means "build this service's production target", `dev` means "build the
 # development stage", which ships the sources and dependencies the dev servers need.
 #
@@ -52,9 +52,9 @@
 # NEXT_PUBLIC_API_URL (baked into the browser bundle at build time).
 #
 # Only these two ports are published. PostgreSQL and Redis are reachable exclusively on
-# the `astron-collection-internal` network.
+# the `guilderia-internal` network.
 
-name: astron-collection
+name: guilderia
 
 # Shared backend configuration: the `api` service owns the credentials and the
 # migrations, in both modes.
@@ -63,7 +63,7 @@ x-api-environment: &api-environment
   TZ: ${TZ:-UTC}
   # --- PostgreSQL ----------------------------------------------------------
   # `postgres` is the internal service name — never localhost from inside a container.
-  DATABASE_URL: postgres://${POSTGRES_USER:-astron-collection}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required — see .env.example}@postgres:5432/${POSTGRES_DB:-astron-collection}
+  DATABASE_URL: postgres://${POSTGRES_USER:-guilderia}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required — see .env.example}@postgres:5432/${POSTGRES_DB:-guilderia}
   POSTGRES_HOST: postgres
   POSTGRES_PORT: "5432"
   # --- Redis ---------------------------------------------------------------
@@ -76,14 +76,14 @@ x-api-environment: &api-environment
   BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
   BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
   # --- Environment (self | cloud | console) --------------------------------
-  # `self` is the self-hosted platform, `cloud` is Astron Collection Cloud and
-  # `console` is Astron Collection Console (the cloud-side fleet manager). All three
+  # `self` is the self-hosted platform, `cloud` is Guilderia Cloud and
+  # `console` is Guilderia Console (the cloud-side fleet manager). All three
   # run the exact same images and services: the environment only changes runtime
-  # behaviour (IS_CLOUD and ASTRON_COLLECTION_PRODUCT), never the container
+  # behaviour (IS_CLOUD and GUILDERIA_PRODUCT), never the container
   # topology. Selected by the Makefile:
   #   make docker-up self | make docker-up cloud | make docker-up console
-  ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
-  ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
+  GUILDERIA_FLAVOR: ${GUILDERIA_FLAVOR:-selfhosted}
+  GUILDERIA_PRODUCT: ${GUILDERIA_PRODUCT:-self}
   IS_CLOUD: ${IS_CLOUD:-false}
   # Browser-facing origin of the API, used for the WebSocket connection.
   NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
@@ -100,21 +100,21 @@ services:
   # GROUP 1 — DATABASE
   #
   # PostgreSQL 16, official image. No host port is published: only the services
-  # attached to `astron-collection-internal` can reach it.
+  # attached to `guilderia-internal` can reach it.
   # -------------------------------------------------------------------------
   postgres:
     profiles: ["prod", "dev"]
     image: postgres:16-alpine
-    container_name: astron-collection-postgres
+    container_name: guilderia-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-astron-collection}
+      POSTGRES_USER: ${POSTGRES_USER:-guilderia}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required — see .env.example}
-      POSTGRES_DB: ${POSTGRES_DB:-astron-collection}
+      POSTGRES_DB: ${POSTGRES_DB:-guilderia}
       # Deterministic encoding, independent from the host locale.
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:---encoding=UTF8}
     volumes:
-      - astron-collection-postgres-data:/var/lib/postgresql/data
+      - guilderia-postgres-data:/var/lib/postgresql/data
     healthcheck:
       test:
         [
@@ -126,7 +126,7 @@ services:
       retries: 10
       start_period: 15s
     networks:
-      - astron-collection
+      - guilderia
 
   # -------------------------------------------------------------------------
   # GROUP 2 — CACHE / QUEUE
@@ -138,7 +138,7 @@ services:
   redis:
     profiles: ["prod", "dev"]
     image: redis:7-alpine
-    container_name: astron-collection-redis
+    container_name: guilderia-redis
     restart: unless-stopped
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required — see .env.example}
@@ -147,7 +147,7 @@ services:
       - -c
       - exec redis-server --appendonly yes --appendfsync everysec --requirepass "$${REDIS_PASSWORD}"
     volumes:
-      - astron-collection-redis-data:/data
+      - guilderia-redis-data:/data
     healthcheck:
       test:
         [
@@ -159,7 +159,7 @@ services:
       retries: 10
       start_period: 10s
     networks:
-      - astron-collection
+      - guilderia
 
   # -------------------------------------------------------------------------
   # GROUP 3 — FRONTEND
@@ -167,7 +167,7 @@ services:
   # Next.js dashboard. `next start` in production, `next dev` in development. Both
   # are the same platform image: `platform` is the production target, `dev` ships
   # the sources and dependencies the dev server watches. The target comes from
-  # ASTRON_COLLECTION_BUILD_TARGET, the mode from ASTRON_COLLECTION_MODE.
+  # GUILDERIA_BUILD_TARGET, the mode from GUILDERIA_MODE.
   #
   # Deliberately without DATABASE_URL or REDIS_URL — even a mistakenly reached API
   # route cannot run backend work in this container.
@@ -177,21 +177,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${ASTRON_COLLECTION_BUILD_TARGET:-platform}
+      target: ${GUILDERIA_BUILD_TARGET:-platform}
       args:
         # Baked into the browser bundle: origin used for the WebSocket connection.
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
-        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-latest}
+        GUILDERIA_VERSION: ${GUILDERIA_VERSION:-latest}
     # The same image as `api`: the edition (self | cloud | console) picks the tag,
     # the role decides what the container runs.
-    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}
-    container_name: astron-collection-client
+    image: ${GUILDERIA_IMAGE:-ghcr.io/skygenesisenterprise/guilderia}:${GUILDERIA_VERSION:-latest}
+    container_name: guilderia-client
     restart: unless-stopped
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       # Selects the frontend role in the shared entrypoint.
-      ASTRON_COLLECTION_ROLE: client
-      ASTRON_COLLECTION_MODE: ${ASTRON_COLLECTION_MODE:-production}
+      GUILDERIA_ROLE: client
+      GUILDERIA_MODE: ${GUILDERIA_MODE:-production}
       PORT: 3000
       HOST: 0.0.0.0
       TZ: ${TZ:-UTC}
@@ -205,7 +205,7 @@ services:
       WATCHPACK_POLLING: ${DEV_POLLING:-false}
     ports:
       # Host port is configurable; the container always listens on 3000.
-      - "${ASTRON_COLLECTION_PORT:-3000}:3000"
+      - "${GUILDERIA_PORT:-3000}:3000"
     depends_on:
       api:
         condition: service_healthy
@@ -232,19 +232,19 @@ services:
         - action: rebuild
           path: pnpm-lock.yaml
     networks:
-      - astron-collection
+      - guilderia
 
   # -------------------------------------------------------------------------
   # GROUP 4 — BACKEND
   #
   # Node server: tRPC and OpenAPI routes, better-auth, WebSockets, BullMQ workers
   # and cron jobs. It owns both dependency connections and closes them on SIGTERM.
-  # Same image as `client` (`ASTRON_COLLECTION_IMAGE`), role `api`: `node
+  # Same image as `client` (`GUILDERIA_IMAGE`), role `api`: `node
   # dist/server.mjs` in production, `tsx server/server.ts` in development, chosen
-  # by ASTRON_COLLECTION_BUILD_TARGET.
+  # by GUILDERIA_BUILD_TARGET.
   #
   # It is the only service with PostgreSQL and Redis credentials, and the only one
-  # that applies migrations: once at startup (ASTRON_COLLECTION_RUN_MIGRATIONS=1,
+  # that applies migrations: once at startup (GUILDERIA_RUN_MIGRATIONS=1,
   # the default) so a deployment never starts against a stale schema. Scaling the
   # API horizontally means setting that to 0 and running `make migrate` once.
   # -------------------------------------------------------------------------
@@ -253,21 +253,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${ASTRON_COLLECTION_BUILD_TARGET:-platform}
+      target: ${GUILDERIA_BUILD_TARGET:-platform}
       args:
-        ASTRON_COLLECTION_VERSION: ${ASTRON_COLLECTION_VERSION:-latest}
-        ASTRON_COLLECTION_FLAVOR: ${ASTRON_COLLECTION_FLAVOR:-selfhosted}
-        ASTRON_COLLECTION_PRODUCT: ${ASTRON_COLLECTION_PRODUCT:-self}
-    image: ${ASTRON_COLLECTION_IMAGE:-ghcr.io/skygenesisenterprise/astron-collection}:${ASTRON_COLLECTION_VERSION:-latest}
-    container_name: astron-collection-api
+        GUILDERIA_VERSION: ${GUILDERIA_VERSION:-latest}
+        GUILDERIA_FLAVOR: ${GUILDERIA_FLAVOR:-selfhosted}
+        GUILDERIA_PRODUCT: ${GUILDERIA_PRODUCT:-self}
+    image: ${GUILDERIA_IMAGE:-ghcr.io/skygenesisenterprise/guilderia}:${GUILDERIA_VERSION:-latest}
+    container_name: guilderia-api
     restart: unless-stopped
     environment:
       <<: *api-environment
       # Selects the backend role in the shared entrypoint.
-      ASTRON_COLLECTION_ROLE: api
-      ASTRON_COLLECTION_MODE: ${ASTRON_COLLECTION_MODE:-production}
+      GUILDERIA_ROLE: api
+      GUILDERIA_MODE: ${GUILDERIA_MODE:-production}
       # Single API instance: it owns the migrations of this deployment.
-      ASTRON_COLLECTION_RUN_MIGRATIONS: ${ASTRON_COLLECTION_RUN_MIGRATIONS:-1}
+      GUILDERIA_RUN_MIGRATIONS: ${GUILDERIA_RUN_MIGRATIONS:-1}
       PORT: 4000
       HOST: 0.0.0.0
       NEXT_TELEMETRY_DISABLED: "1"
@@ -275,7 +275,7 @@ services:
       WATCHPACK_POLLING: ${DEV_POLLING:-false}
     ports:
       # Published so the browser can open the WebSocket connection (and for API clients).
-      - "${ASTRON_COLLECTION_API_PORT:-4000}:4000"
+      - "${GUILDERIA_API_PORT:-4000}:4000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -300,20 +300,20 @@ services:
         - action: rebuild
           path: pnpm-lock.yaml
     networks:
-      - astron-collection
+      - guilderia
 
 volumes:
   # Application data. Deleting these volumes destroys the database and the queued
   # jobs; `docker compose down` alone preserves them.
-  astron-collection-postgres-data:
-    name: astron-collection-postgres-data
-  astron-collection-redis-data:
-    name: astron-collection-redis-data
+  guilderia-postgres-data:
+    name: guilderia-postgres-data
+  guilderia-redis-data:
+    name: guilderia-redis-data
 
 networks:
   # Single internal bridge network. PostgreSQL and Redis are reachable only through
   # it; it is not `internal: true` because the API needs outbound access (git
   # providers, OAuth, AI providers, notifications).
-  astron-collection:
-    name: astron-collection-internal
+  guilderia:
+    name: guilderia-internal
     driver: bridge

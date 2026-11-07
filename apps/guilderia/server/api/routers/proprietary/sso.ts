@@ -2,21 +2,21 @@ import {
 	getIdentityProviderHealth,
 	listIdentityProviderDescriptors,
 	normalizeTrustedOrigin,
-} from "@astron-collection/server";
-import { IS_CLOUD } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
-import { ssoProvider, user } from "@astron-collection/server/db/schema";
-import { ssoProviderBodySchema } from "@astron-collection/server/db/schema/sso";
+} from "@guilderia/server";
+import { IS_CLOUD } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
+import { ssoProvider, user } from "@guilderia/server/db/schema";
+import { ssoProviderBodySchema } from "@guilderia/server/db/schema/sso";
 import {
 	getOrganizationOwnerId,
 	requestToHeaders,
-} from "@astron-collection/server/index";
-import { auth } from "@astron-collection/server/lib/auth";
-import { invalidateTrustedOriginsCache } from "@astron-collection/server/services/admin";
+} from "@guilderia/server/index";
+import { auth } from "@guilderia/server/lib/auth";
+import { invalidateTrustedOriginsCache } from "@guilderia/server/services/admin";
 import {
 	getWebServerSettings,
 	updateWebServerSettings,
-} from "@astron-collection/server/services/web-server-settings";
+} from "@guilderia/server/services/web-server-settings";
 import { TRPCError } from "@trpc/server";
 import { and, asc, eq, isNotNull } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -114,7 +114,7 @@ function preserveStoredSsoConfig<T>(stored: string | null, updated: T): T {
 export const ssoRouter = createTRPCRouter({
 	/**
 	 * Whether the instance offers SSO sign-in. SSO is available on both
-	 * Astron Collection Cloud and self-hosted Astron Collection, so this is always true. Kept as an
+	 * Guilderia Cloud and self-hosted Guilderia, so this is always true. Kept as an
 	 * endpoint because the public API/SDK/CLI/MCP surface references it.
 	 */
 	showSignInWithSSO: publicProcedure.query(() => true),

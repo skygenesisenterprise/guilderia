@@ -1,4 +1,4 @@
-import { validateRequest } from "@astron-collection/server";
+import { validateRequest } from "@guilderia/server";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createPost } from "@/lib/ghost-admin";
 

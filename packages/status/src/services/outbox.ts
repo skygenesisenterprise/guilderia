@@ -119,12 +119,12 @@ const deliverWebhook = async (
 				method: "POST",
 				headers: {
 					"content-type": "application/json",
-					"x-astron-collection-status-delivery": row.id,
-					"x-astron-collection-status-event": String(
+					"x-guilderia-status-delivery": row.id,
+					"x-guilderia-status-event": String(
 						(JSON.parse(payload) as { event?: string }).event ?? "",
 					),
-					"x-astron-collection-status-timestamp": timestamp,
-					"x-astron-collection-status-signature": `sha256=${signature}`,
+					"x-guilderia-status-timestamp": timestamp,
+					"x-guilderia-status-signature": `sha256=${signature}`,
 				},
 				body: payload,
 				signal: AbortSignal.timeout(10_000),

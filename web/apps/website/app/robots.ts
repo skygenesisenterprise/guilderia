@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
 			userAgent: "*",
 			allow: "/",
 		},
-		sitemap: ["https://notploy.com/sitemap.xml", "https://notploy.com/llms.txt"],
+		sitemap: ["https://guilderia.com/sitemap.xml", "https://guilderia.com/llms.txt"],
 	};
 }

@@ -13,7 +13,7 @@ const nextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-	transpilePackages: ["@astron-collection/server", "@astron-collection/status"],
+	transpilePackages: ["@guilderia/server", "@guilderia/status"],
 	/**
 	 * The client container only serves the frontend: every `/api/*` call is proxied
 	 * to the API service (GROUP 4), which owns authentication, tRPC/OpenAPI, the
@@ -40,11 +40,11 @@ const nextConfig = {
 	},
 	webpack: (config) => {
 		// Resolve monorepo packages for transpilation
-		config.resolve.alias["@astron-collection/status"] = path.resolve(
+		config.resolve.alias["@guilderia/status"] = path.resolve(
 			__dirname,
 			"../../packages/status/src"
 		);
-		config.resolve.alias["@astron-collection/server"] = path.resolve(
+		config.resolve.alias["@guilderia/server"] = path.resolve(
 			__dirname,
 			"../../packages/server/src"
 		);

@@ -10,5 +10,5 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     docker compose down --remove-orphans
     echo "Application removed. Data volumes preserved."
-    echo "To remove data volumes, run: docker volume rm astron-collection-postgres-data astron-collection-config astron-collection-docker"
+    echo "To remove data volumes, run: docker volume rm guilderia-postgres-data guilderia-config guilderia-docker"
 fi

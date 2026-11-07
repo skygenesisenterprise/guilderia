@@ -1,4 +1,4 @@
-import type { GlobalStatus, IncidentSeverity } from "@astron-collection/status";
+import type { GlobalStatus, IncidentSeverity } from "@guilderia/status";
 import { cn } from "@/lib/utils";
 import {
 	componentStatusLabel,

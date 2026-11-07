@@ -6,13 +6,13 @@ import {
 	getMongoBackupCommand,
 	getMysqlBackupCommand,
 	getPostgresBackupCommand,
-} from "@astron-collection/server/utils/backups/utils";
+} from "@guilderia/server/utils/backups/utils";
 import {
 	getMariadbRestoreCommand,
 	getMongoRestoreCommand,
 	getMysqlRestoreCommand,
 	getPostgresRestoreCommand,
-} from "@astron-collection/server/utils/restore/utils";
+} from "@guilderia/server/utils/restore/utils";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 // A stub replacing the real `docker` binary. It ignores exec/-i/$CONTAINER_ID,

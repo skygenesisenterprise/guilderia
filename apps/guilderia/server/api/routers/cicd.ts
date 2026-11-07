@@ -8,8 +8,8 @@ import {
 	readDeploymentLogs,
 	resolveCicdTarget,
 	toGithubDeploymentStatus,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import {
 	apiCicdDeploy,
 	apiCicdDeploymentId,
@@ -23,7 +23,7 @@ import {
 	deployments,
 	environments,
 	projects,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import {
 	assertCicdTarget,
 	buildCicdApiKeyMetadata,
@@ -31,16 +31,16 @@ import {
 	type CicdTokenScope,
 	parseCicdTokenScope,
 	resolveCicdActions,
-} from "@astron-collection/server/lib/cicd-scope";
-import { findApplicationById } from "@astron-collection/server/services/application";
-import { findDeploymentById } from "@astron-collection/server/services/deployment";
+} from "@guilderia/server/lib/cicd-scope";
+import { findApplicationById } from "@guilderia/server/services/application";
+import { findDeploymentById } from "@guilderia/server/services/deployment";
 import {
 	checkPermission,
 	checkServicePermissionAndAccess,
 	findMemberByUserId,
 	type PermissionCtx,
-} from "@astron-collection/server/services/permission";
-import { createApiKey } from "@astron-collection/server/services/user";
+} from "@guilderia/server/services/permission";
+import { createApiKey } from "@guilderia/server/services/user";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, inArray, like } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -69,7 +69,7 @@ import { createTRPCRouter, protectedProcedure, withCicdAction } from "../trpc";
  * 3. `assertCicdTarget` → the target is inside the token's project (and inside
  *    its environment/application/repository restrictions when set).
  * 4. `checkServicePermissionAndAccess` → the token's user still has the
- *    underlying Astron Collection permission, so revoking a member's access immediately
+ *    underlying Guilderia permission, so revoking a member's access immediately
  *    stops their workflows from deploying.
  */
 
@@ -290,7 +290,7 @@ export const cicdRouter = createTRPCRouter({
 				tags: ["cicd"],
 				summary: "Deploy a commit",
 				description:
-					"Queues a deployment for an exact commit sha and returns the Astron Collection deployment id, which can be polled with the status endpoint.",
+					"Queues a deployment for an exact commit sha and returns the Guilderia deployment id, which can be polled with the status endpoint.",
 			},
 		})
 		.mutation(async ({ ctx, input }) => {
@@ -376,7 +376,7 @@ export const cicdRouter = createTRPCRouter({
 					deploymentUrl: target.dashboardUrl,
 					applicationUrl: target.dashboardUrl,
 					environmentUrl: target.environmentUrl,
-					message: "Astron Collection could not start the deployment",
+					message: "Guilderia could not start the deployment",
 				};
 			}
 
@@ -442,7 +442,7 @@ export const cicdRouter = createTRPCRouter({
 				tags: ["cicd"],
 				summary: "Get a deployment status",
 				description:
-					"Returns the Astron Collection status, the GitHub Deployments state to publish, and the links to the deployment and its logs.",
+					"Returns the Guilderia status, the GitHub Deployments state to publish, and the links to the deployment and its logs.",
 			},
 		})
 		.query(async ({ ctx, input }) => {
@@ -460,7 +460,7 @@ export const cicdRouter = createTRPCRouter({
 				tags: ["cicd"],
 				summary: "Read deployment logs",
 				description:
-					"Returns the last lines of the build log, so a workflow can surface a failing build without asking the user to open Astron Collection.",
+					"Returns the last lines of the build log, so a workflow can surface a failing build without asking the user to open Guilderia.",
 			},
 		})
 		.query(async ({ ctx, input }) => {
@@ -584,7 +584,7 @@ export const cicdRouter = createTRPCRouter({
 			if (!deploymentId) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
-					message: "Astron Collection could not start the redeployment",
+					message: "Guilderia could not start the redeployment",
 				});
 			}
 

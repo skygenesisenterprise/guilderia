@@ -7,7 +7,7 @@ import {
 	isManagedCloud,
 	recordAdvancedStats,
 	validateRequest,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { quote } from "shell-quote";
 import { WebSocketServer } from "ws";
 import { canAccessDockerOverWss } from "./authorize";
@@ -146,8 +146,8 @@ export const setupDockerStatsMonitoringSocketServer = (
 			}
 			inFlight = true;
 			try {
-				// Special case: when monitoring "astron-collection", get host system stats instead of container stats
-				if (appName === "astron-collection") {
+				// Special case: when monitoring "guilderia", get host system stats instead of container stats
+				if (appName === "guilderia") {
 					const stat = await getHostSystemStats();
 					if (closed) {
 						return;

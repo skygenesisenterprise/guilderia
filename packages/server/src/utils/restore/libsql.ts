@@ -1,6 +1,6 @@
-import type { apiRestoreBackup } from "@astron-collection/server/db/schema";
-import type { Destination } from "@astron-collection/server/services/destination";
-import type { Libsql } from "@astron-collection/server/services/libsql";
+import type { apiRestoreBackup } from "@guilderia/server/db/schema";
+import type { Destination } from "@guilderia/server/services/destination";
+import type { Libsql } from "@guilderia/server/services/libsql";
 import { quote } from "shell-quote";
 import type { z } from "zod";
 import { getS3Credentials, getServiceContainerCommand } from "../backups/utils";

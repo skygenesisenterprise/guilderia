@@ -56,8 +56,8 @@ type PermissionsOutput =
 /**
  * Deployment environments a navigation node can target.
  *
- * - `self`    self-hosted Astron Collection
- * - `cloud`   managed Astron Collection Cloud
+ * - `self`    self-hosted Guilderia
+ * - `cloud`   managed Guilderia Cloud
  * - `console` platform operator console
  */
 export type NavigationEnvironment = "self" | "cloud" | "console";
@@ -732,12 +732,12 @@ type ExternalNavigationDestination = {
 const EXTERNAL_DESTINATIONS = {
 	documentation: {
 		label: "Documentation",
-		href: "https://docs.astron-collection.com/docs/core",
+		href: "https://docs.guilderia.com/docs/core",
 		icon: BookIcon,
 	},
 	support: {
 		label: "Support",
-		href: "https://discord.gg/GUkDugVh34",
+		href: "https://guilderia.com/community",
 		icon: CircleHelp,
 	},
 } satisfies Record<string, ExternalNavigationDestination>;

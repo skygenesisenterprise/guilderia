@@ -26,11 +26,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Notploy Self — Open-source, self-hosted infrastructure platform",
+	title: "guilderia Self — Open-source, self-hosted infrastructure platform",
 	description:
-		"Run Notploy on infrastructure you control: your own servers, VPS, bare metal or hosting provider. Free, open source (Apache-2.0), with full control over data, updates and network boundaries.",
+		"Run guilderia on infrastructure you control: your own servers, VPS, bare metal or hosting provider. Free, open source (Apache-2.0), with full control over data, updates and network boundaries.",
 	alternates: {
-		canonical: "https://notploy.com/self",
+		canonical: "https://guilderia.com/self",
 	},
 };
 
@@ -39,19 +39,19 @@ const infrastructureTargets = [
 		icon: IconServer2,
 		title: "Your own servers and VPS",
 		description:
-			"Any Linux machine — from a small VPS to a rack of bare metal — can run Notploy. Docker is the only prerequisite.",
+			"Any Linux machine — from a small VPS to a rack of bare metal — can run guilderia. Docker is the only prerequisite.",
 	},
 	{
 		icon: IconCpu,
 		title: "Homelabs",
 		description:
-			"Notploy runs comfortably on modest hardware, making it a natural fit for homelab and personal infrastructure.",
+			"guilderia runs comfortably on modest hardware, making it a natural fit for homelab and personal infrastructure.",
 	},
 	{
 		icon: IconCloudComputing,
 		title: "Any hosting provider",
 		description:
-			"No preferred cloud: use AWS, Hetzner, OVH, Scaleway or your regional provider. Nothing ties Notploy to one vendor.",
+			"No preferred cloud: use AWS, Hetzner, OVH, Scaleway or your regional provider. Nothing ties guilderia to one vendor.",
 	},
 	{
 		icon: IconWorld,
@@ -110,7 +110,7 @@ const quickStart = [
 	{
 		title: "Run the installer",
 		description:
-			"One command sets up Docker and the Notploy stack on the host.",
+			"One command sets up Docker and the guilderia stack on the host.",
 		label: "One command",
 	},
 	{
@@ -129,14 +129,14 @@ const quickStart = [
 
 const selfFaqs = [
 	{
-		question: "What do I need to run Notploy Self?",
+		question: "What do I need to run guilderia Self?",
 		answer:
 			"A Linux server with Docker installed. The installer sets up the rest of the stack; afterwards you manage everything from the web interface. A single small VPS is enough to get started.",
 	},
 	{
-		question: "Is Notploy Self really free?",
+		question: "Is guilderia Self really free?",
 		answer:
-			"Yes. Notploy Self is open source under the Apache-2.0 license: no platform fees, no per-seat charges, no usage-based billing. You pay only for the infrastructure you already run.",
+			"Yes. guilderia Self is open source under the Apache-2.0 license: no platform fees, no per-seat charges, no usage-based billing. You pay only for the infrastructure you already run.",
 	},
 	{
 		question: "How are updates delivered?",
@@ -149,9 +149,9 @@ const selfFaqs = [
 			"Yes. Both editions run the same platform capabilities, so the way you model applications, environments and teams stays the same if you change operating model.",
 	},
 	{
-		question: "What happens if the Notploy project disappears?",
+		question: "What happens if the guilderia project disappears?",
 		answer:
-			"Your running instance does not depend on any Notploy-hosted service. The source code and your data remain fully under your control, which is the point of self-hosting.",
+			"Your running instance does not depend on any guilderia-hosted service. The source code and your data remain fully under your control, which is the point of self-hosting.",
 	},
 ];
 
@@ -159,17 +159,17 @@ export default function SelfPage() {
 	return (
 		<div className="min-h-screen bg-background">
 			<PageIntro
-				badge="Notploy Self"
+				badge="guilderia Self"
 				badgeDetail="Open source · Apache-2.0"
-				badgeHref="https://github.com/skygenesisenterprise/notploy"
+				badgeHref="https://github.com/skygenesisenterprise/guilderia"
 				title="The platform"
 				highlight="you run yourself"
-				description="Notploy Self is the free, Apache-2.0 licensed edition of Notploy. Install it on infrastructure you control — your servers, your VPS, your hosting provider — and deploy applications and databases without handing ownership of your stack to anyone."
+				description="guilderia Self is the free, Apache-2.0 licensed edition of guilderia. Install it on infrastructure you control — your servers, your VPS, your hosting provider — and deploy applications and databases without handing ownership of your stack to anyone."
 				actions={
 					<>
 						<Button className="w-full rounded-full px-6 sm:w-auto" asChild>
 							<Link
-								href="https://docs.notploy.com/docs/core/installation"
+								href="https://docs.guilderia.com/docs/core/installation"
 								target="_blank"
 							>
 								Installation guide
@@ -182,7 +182,7 @@ export default function SelfPage() {
 							asChild
 						>
 							<Link
-								href="https://github.com/skygenesisenterprise/notploy"
+								href="https://github.com/skygenesisenterprise/guilderia"
 								target="_blank"
 							>
 								View on GitHub
@@ -201,7 +201,7 @@ export default function SelfPage() {
 			<Container className="pb-20 sm:pb-28">
 				<ProductFrame
 					src="/dashboard.png"
-					alt="Notploy dashboard listing applications and their deployments"
+					alt="guilderia dashboard listing applications and their deployments"
 					path="your-server/dashboard"
 					caption="The full control plane, running on a machine you own."
 				/>
@@ -210,7 +210,7 @@ export default function SelfPage() {
 			<CellGrid
 				id="runs-on-infrastructure-you-choose"
 				title="Runs on infrastructure you choose"
-				description="Notploy does not require a specific provider or data center. If it runs Linux and Docker, it can run Notploy."
+				description="guilderia does not require a specific provider or data center. If it runs Linux and Docker, it can run guilderia."
 				items={infrastructureTargets}
 				columns={2}
 			/>
@@ -222,7 +222,7 @@ export default function SelfPage() {
 				items={controlPrinciples}
 				aside={
 					<Link
-						href="https://docs.notploy.com/docs/core/architecture"
+						href="https://docs.guilderia.com/docs/core/architecture"
 						target="_blank"
 						className="mt-6 inline-flex items-center gap-1 text-base font-medium text-foreground underline underline-offset-4 hover:text-primary"
 					>
@@ -235,13 +235,13 @@ export default function SelfPage() {
 			<ProcessRail
 				id="from-a-blank-server-to-your-first-deployment"
 				title="From a blank server to your first deployment"
-				description="Notploy is designed to be operational in minutes, not in a sprint."
+				description="guilderia is designed to be operational in minutes, not in a sprint."
 				steps={quickStart}
 			/>
 
 			<PageFaq
-				id="notploy-self-faqs"
-				title="Notploy Self FAQs"
+				id="guilderia-self-faqs"
+				title="guilderia Self FAQs"
 				description="The practical questions that come up before the first install."
 				faqs={selfFaqs}
 			/>

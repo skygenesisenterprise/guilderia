@@ -1,6 +1,6 @@
 "use client";
 
-import type { AdminPageDto } from "@astron-collection/status";
+import type { AdminPageDto } from "@guilderia/status";
 import Link from "next/link";
 import * as React from "react";
 import { adminRequest } from "@/lib/admin-client";
@@ -94,7 +94,7 @@ export const PagesAdmin = () => {
 								onChange={(event) =>
 									setForm({ ...form, slug: event.target.value })
 								}
-								placeholder="astron-collection"
+								placeholder="guilderia"
 								pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
 								required
 							/>
@@ -105,7 +105,7 @@ export const PagesAdmin = () => {
 								onChange={(event) =>
 									setForm({ ...form, name: event.target.value })
 								}
-								placeholder="Astron Collection Status"
+								placeholder="Guilderia Status"
 								required
 							/>
 						</Field>

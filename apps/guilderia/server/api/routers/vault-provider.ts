@@ -17,8 +17,8 @@ import {
 	updateVaultProvider,
 	updateVaultSecret,
 	type VaultSecretRecord,
-} from "@astron-collection/server";
-import { findMemberByUserId } from "@astron-collection/server/services/permission";
+} from "@guilderia/server";
+import { findMemberByUserId } from "@guilderia/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { audit } from "@/server/api/utils/audit";
 import {
@@ -191,7 +191,7 @@ export const vaultProviderRouter = createTRPCRouter({
 
 	/**
 	 * Secret records (name, source and resolvability) for a connected provider,
-	 * combining the provider adapter's secrets with the ones Astron Collection manages.
+	 * combining the provider adapter's secrets with the ones Guilderia manages.
 	 * Values are never returned, and the read is auditable.
 	 */
 	listSecrets: withPermission("vaultProvider", "read")
@@ -207,13 +207,13 @@ export const vaultProviderRouter = createTRPCRouter({
 			const managedRecords: VaultSecretRecord[] = managed.map((secret) => ({
 				id: secret.vaultSecretId,
 				name: secret.name,
-				source: "Astron Collection",
+				source: "Guilderia",
 				resolvable: true,
 				managed: true,
 				...(secret.description ? { detail: secret.description } : {}),
 			}));
 
-			// A broken adapter must not hide the secrets Astron Collection stores itself.
+			// A broken adapter must not hide the secrets Guilderia stores itself.
 			let external: VaultSecretRecord[] = [];
 			try {
 				external = await listVaultProviderSecretRecords(provider.config);
@@ -242,7 +242,7 @@ export const vaultProviderRouter = createTRPCRouter({
 			};
 		}),
 
-	/** Stores a secret in Astron Collection, encrypted at rest. */
+	/** Stores a secret in Guilderia, encrypted at rest. */
 	createSecret: withPermission("vaultProvider", "create")
 		.input(apiCreateVaultSecret)
 		.mutation(async ({ ctx, input }) => {

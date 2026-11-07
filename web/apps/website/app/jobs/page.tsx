@@ -10,9 +10,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Notploy Jobs & Open Positions",
+	title: "guilderia Jobs & Open Positions",
 	description:
-		"Join Notploy and help developers and teams ship faster with open-source and scalable deployment tools built for the modern web.",
+		"Join guilderia and help developers and teams ship faster with open-source and scalable deployment tools built for the modern web.",
 };
 
 export default async function JobsPage() {
@@ -38,7 +38,7 @@ export default async function JobsPage() {
 					</Button>
 				}
 				links={[
-					{ href: "https://github.com/skygenesisenterprise/notploy", label: "GitHub" },
+					{ href: "https://github.com/skygenesisenterprise/guilderia", label: "GitHub" },
 					{ href: "/community", label: "Community" },
 				]}
 			/>
@@ -93,10 +93,10 @@ export default async function JobsPage() {
 								No open positions at the moment. Check back soon, or introduce
 								yourself at{" "}
 								<a
-									href="mailto:careers@notploy.com"
+									href="mailto:careers@guilderia.com"
 									className="text-primary hover:underline"
 								>
-									careers@notploy.com
+									careers@guilderia.com
 								</a>
 								.
 							</p>

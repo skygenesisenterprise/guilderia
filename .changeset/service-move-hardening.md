@@ -1,6 +1,6 @@
 ---
-"@notploy/server": patch
-"@notploy/app": patch
+"@guilderia/server": patch
+"@guilderia/app": patch
 ---
 
 Harden logical service moves: refuse cross-organization targets, require

@@ -1,7 +1,7 @@
-import { db } from "@astron-collection/server/db";
-import { notifications } from "@astron-collection/server/db/schema";
-import BuildSuccessEmail from "@astron-collection/server/emails/emails/build-success";
-import type { Domain } from "@astron-collection/server/services/domain";
+import { db } from "@guilderia/server/db";
+import { notifications } from "@guilderia/server/db/schema";
+import BuildSuccessEmail from "@guilderia/server/emails/emails/build-success";
+import type { Domain } from "@guilderia/server/services/domain";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -48,7 +48,7 @@ export const sendBuildSuccessNotifications = async ({
 		),
 		with: {
 			email: true,
-			discord: true,
+			guilderia: true,
 			telegram: true,
 			slack: true,
 			resend: true,
@@ -66,7 +66,7 @@ export const sendBuildSuccessNotifications = async ({
 		const {
 			email,
 			resend,
-			discord,
+			guilderia,
 			telegram,
 			slack,
 			gotify,
@@ -93,7 +93,7 @@ export const sendBuildSuccessNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Build success for astron-collection",
+						"Build success for guilderia",
 						template,
 					);
 				}
@@ -101,17 +101,17 @@ export const sendBuildSuccessNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Build success for astron-collection",
+						"Build success for guilderia",
 						template,
 					);
 				}
 			}
 
-			if (discord) {
+			if (guilderia) {
 				const decorate = (decoration: string, text: string) =>
-					`${discord.decoration ? decoration : ""} ${text}`.trim();
+					`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
-				await sendDiscordNotification(discord, {
+				await sendDiscordNotification(guilderia, {
 					title: decorate(">", "`✅` Build Successes"),
 					color: 0x57f287,
 					fields: [
@@ -157,7 +157,7 @@ export const sendBuildSuccessNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Astron Collection Build Notification",
+						text: "Guilderia Build Notification",
 					},
 				});
 			}
@@ -272,7 +272,7 @@ export const sendBuildSuccessNotifications = async ({
 				await sendMattermostNotification(mattermost, {
 					text: `**✅ Build Success**\n\n**Project:** ${projectName}\n**Application:** ${applicationName}\n**Type:** ${applicationType}\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}\n\n[View Build Details](${buildLink})`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Astron Collection",
+					username: mattermost.username || "Guilderia",
 				});
 			}
 

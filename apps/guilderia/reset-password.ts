@@ -1,6 +1,6 @@
-import { findOwner, generateRandomPassword } from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
-import { account, user } from "@astron-collection/server/db/schema";
+import { findOwner, generateRandomPassword } from "@guilderia/server";
+import { db } from "@guilderia/server/db";
+import { account, user } from "@guilderia/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
 (async () => {

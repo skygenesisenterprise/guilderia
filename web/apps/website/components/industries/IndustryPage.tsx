@@ -39,7 +39,7 @@ export interface IndustryPageData {
 		heading: string;
 		description: string;
 		without: { title: string; items: string[] };
-		withNotploy: { title: string; items: string[] };
+		withguilderia: { title: string; items: string[] };
 	};
 	workflow: {
 		heading: string;
@@ -71,7 +71,7 @@ export function IndustryPage({ data }: { data: IndustryPageData }) {
 					<>
 						<Button className="w-full rounded-full px-6 sm:w-auto" asChild>
 							<Link
-								href="https://app.notploy.com/register"
+								href="https://app.guilderia.com/register"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
@@ -89,7 +89,7 @@ export function IndustryPage({ data }: { data: IndustryPageData }) {
 					</>
 				}
 				links={[
-					{ href: "/self", label: "Self-host Notploy" },
+					{ href: "/self", label: "Self-host guilderia" },
 					{ href: "/platform", label: "Platform capabilities" },
 					{ href: "/industries", label: "All industries" },
 				]}
@@ -139,10 +139,10 @@ export function IndustryPage({ data }: { data: IndustryPageData }) {
 						<Reveal delay={0.08}>
 							<div className="flex h-full flex-col rounded-2xl border border-primary bg-primary p-8 text-primary-foreground">
 								<h3 className="font-display text-2xl tracking-tight">
-									{data.comparison.withNotploy.title}
+									{data.comparison.withguilderia.title}
 								</h3>
 								<ul className="mt-6 flex-1 space-y-4">
-									{data.comparison.withNotploy.items.map((item) => (
+									{data.comparison.withguilderia.items.map((item) => (
 										<li key={item} className="flex items-start gap-3">
 											<CheckCircle2
 												className="mt-1 h-5 w-5 shrink-0 text-primary-foreground"
@@ -210,12 +210,12 @@ export function IndustryPage({ data }: { data: IndustryPageData }) {
 										aria-hidden="true"
 									/>
 									<span className="ml-3 truncate text-[13px] text-muted-foreground">
-										notploy/environments
+										guilderia/environments
 									</span>
 								</div>
 								<div className="relative aspect-video w-full bg-secondary">
 									<Image
-										src="/images/notploy-environments.png"
+										src="/images/guilderia-environments.png"
 										alt={data.builtFor.screenshotAlt}
 										fill
 										className="object-cover object-top"
@@ -245,7 +245,7 @@ export function IndustryPage({ data }: { data: IndustryPageData }) {
 											Area
 										</th>
 										<th className="px-6 py-4 text-base font-semibold text-foreground">
-											What Notploy supports
+											What guilderia supports
 										</th>
 									</tr>
 								</thead>

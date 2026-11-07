@@ -1,10 +1,10 @@
-import { db } from "@astron-collection/server/db";
+import { db } from "@guilderia/server/db";
 import {
 	type DnsRecordType,
 	type astronCollectionInternalDnsConfigSchema,
 	dnsRecord,
 	dnsZone,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import type { z } from "zod";
@@ -14,7 +14,7 @@ type InternalConfig = z.infer<typeof astronCollectionInternalDnsConfigSchema>;
 
 /**
  * The first-party adapter is scoped to a single provider row: zones and records
- * are stored by Astron Collection itself, so the provider id has to travel with the
+ * are stored by Guilderia itself, so the provider id has to travel with the
  * config. It is attached by the service layer before the client is called.
  */
 export interface InternalConfigWithProvider extends InternalConfig {

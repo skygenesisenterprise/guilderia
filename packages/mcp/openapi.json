@@ -1,21 +1,21 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Astron Collection API",
-    "description": "Complete API documentation for Astron Collection - Deploy applications, manage databases, and orchestrate your infrastructure. This API allows you to programmatically manage all aspects of your Astron Collection instance.",
+    "title": "Guilderia API",
+    "description": "Complete API documentation for Guilderia - Deploy applications, manage databases, and orchestrate your infrastructure. This API allows you to programmatically manage all aspects of your Guilderia instance.",
     "version": "1.0.0",
     "contact": {
-      "name": "Astron Collection Team",
-      "url": "https://astron-collection.com"
+      "name": "Guilderia Team",
+      "url": "https://guilderia.com"
     },
     "license": {
       "name": "Apache 2.0",
-      "url": "https://github.com/skygenesisenterprise/astron-collection/blob/master/LICENSE"
+      "url": "https://github.com/skygenesisenterprise/guilderia/blob/master/LICENSE"
     }
   },
   "servers": [
     {
-      "url": "https://your-astron-collection-instance.com/api"
+      "url": "https://your-guilderia-instance.com/api"
     }
   ],
   "tags": [
@@ -214,7 +214,7 @@
   ],
   "externalDocs": {
     "description": "Full documentation",
-    "url": "https://docs.astron-collection.com"
+    "url": "https://docs.guilderia.com"
   },
   "paths": {
     "/admin.setupMonitoring": {
@@ -9871,7 +9871,7 @@
       "post": {
         "operationId": "cicd-deploy",
         "summary": "Deploy a commit",
-        "description": "Queues a deployment for an exact commit sha and returns the Astron Collection deployment id, which can be polled with the status endpoint.",
+        "description": "Queues a deployment for an exact commit sha and returns the Guilderia deployment id, which can be polled with the status endpoint.",
         "tags": [
           "cicd"
         ],
@@ -10043,7 +10043,7 @@
       "get": {
         "operationId": "cicd-status",
         "summary": "Get a deployment status",
-        "description": "Returns the Astron Collection status, the GitHub Deployments state to publish, and the links to the deployment and its logs.",
+        "description": "Returns the Guilderia status, the GitHub Deployments state to publish, and the links to the deployment and its logs.",
         "tags": [
           "cicd"
         ],
@@ -10133,7 +10133,7 @@
       "get": {
         "operationId": "cicd-logs",
         "summary": "Read deployment logs",
-        "description": "Returns the last lines of the build log, so a workflow can surface a failing build without asking the user to open Astron Collection.",
+        "description": "Returns the last lines of the build log, so a workflow can surface a failing build without asking the user to open Guilderia.",
         "tags": [
           "cicd"
         ],
@@ -17779,7 +17779,7 @@
                         "properties": {
                           "providerType": {
                             "type": "string",
-                            "const": "astron-collection-internal"
+                            "const": "guilderia-internal"
                           },
                           "defaultTtl": {
                             "default": 300,
@@ -18448,7 +18448,7 @@
                         "properties": {
                           "providerType": {
                             "type": "string",
-                            "const": "astron-collection-internal"
+                            "const": "guilderia-internal"
                           },
                           "defaultTtl": {
                             "default": 300,
@@ -19364,7 +19364,7 @@
                         "properties": {
                           "providerType": {
                             "type": "string",
-                            "const": "astron-collection-internal"
+                            "const": "guilderia-internal"
                           },
                           "defaultTtl": {
                             "default": 300,
@@ -38101,10 +38101,10 @@
                 "type": "object",
                 "properties": {
                   "ServerType": {
-                    "default": "Astron Collection",
+                    "default": "Guilderia",
                     "type": "string",
                     "enum": [
-                      "Astron Collection",
+                      "Guilderia",
                       "Remote"
                     ]
                   },
@@ -40878,7 +40878,7 @@
                       "seaweedfs",
                       "garage",
                       "s3-compatible",
-                      "astron-collection-internal"
+                      "guilderia-internal"
                     ]
                   },
                   "category": {
@@ -41043,7 +41043,7 @@
                       "seaweedfs",
                       "garage",
                       "s3-compatible",
-                      "astron-collection-internal"
+                      "guilderia-internal"
                     ]
                   },
                   "category": {
@@ -41628,7 +41628,7 @@
                       "seaweedfs",
                       "garage",
                       "s3-compatible",
-                      "astron-collection-internal"
+                      "guilderia-internal"
                     ]
                   },
                   "category": {
@@ -74125,7 +74125,7 @@
                       "application",
                       "compose",
                       "server",
-                      "astron-collection-server"
+                      "guilderia-server"
                     ]
                   },
                   "command": {
@@ -74296,7 +74296,7 @@
                       "application",
                       "compose",
                       "server",
-                      "astron-collection-server"
+                      "guilderia-server"
                     ]
                   },
                   "command": {
@@ -74526,7 +74526,7 @@
                 "application",
                 "compose",
                 "server",
-                "astron-collection-server"
+                "guilderia-server"
               ]
             },
             "required": true
@@ -79983,7 +79983,7 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-api-key",
-        "description": "API key authentication. Generate an API key from your Astron Collection dashboard under Settings > API Keys."
+        "description": "API key authentication. Generate an API key from your Guilderia dashboard under Settings > API Keys."
       }
     }
   },

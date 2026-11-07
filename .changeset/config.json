@@ -2,7 +2,7 @@
 	"$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
 	"changelog": [
 		"@changesets/changelog-github",
-		{ "repo": "skygenesisenterprise/notploy" }
+		{ "repo": "skygenesisenterprise/guilderia" }
 	],
 	"commit": false,
 	"fixed": [],
@@ -11,8 +11,8 @@
 	"baseBranch": "master",
 	"updateInternalDependencies": "patch",
 	"ignore": [
-		"@notploy/api",
-		"@notploy/schedules"
+		"@guilderia/api",
+		"@guilderia/schedules"
 	],
 	"privatePackages": {
 		"version": true,

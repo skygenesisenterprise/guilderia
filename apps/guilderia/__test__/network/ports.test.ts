@@ -2,7 +2,7 @@ import {
 	findPortConflict,
 	isValidPortNumber,
 	normalizePortMappings,
-} from "@astron-collection/server/utils/network/ports";
+} from "@guilderia/server/utils/network/ports";
 import { describe, expect, it } from "vitest";
 
 describe("isValidPortNumber", () => {

@@ -11,7 +11,7 @@ import {
 	getCapabilityWarnings,
 	getModelCapabilities,
 	resolveAiProviderId,
-} from "@notploy/server/utils/ai/contracts";
+} from "@guilderia/server/utils/ai/contracts";
 import {
 	aiProviderIconKey,
 	aiProviderIcons,

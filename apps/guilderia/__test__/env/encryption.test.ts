@@ -4,13 +4,13 @@ import {
 	createHmac,
 	randomBytes,
 } from "node:crypto";
-import { betterAuthSecret } from "@astron-collection/server/lib/auth-secret";
+import { betterAuthSecret } from "@guilderia/server/lib/auth-secret";
 import {
 	decryptValue,
 	encryptValue,
 	exportEncryptionKeys,
 	isEncrypted,
-} from "@astron-collection/server/lib/encryption";
+} from "@guilderia/server/lib/encryption";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 describe("encryptValue / decryptValue", () => {
@@ -65,7 +65,7 @@ describe("dedicated ENCRYPTION_KEY", () => {
 	const loadWithEncryptionKey = async (key: string) => {
 		vi.stubEnv("ENCRYPTION_KEY", key);
 		vi.resetModules();
-		return await import("@astron-collection/server/lib/encryption");
+		return await import("@guilderia/server/lib/encryption");
 	};
 
 	it("encrypts with the dedicated key when set", async () => {
@@ -152,7 +152,7 @@ describe("Dokploy-encrypted values (migration compatibility)", () => {
 		expect(decryptValue(fromDokploy)).toBe(value);
 	});
 
-	it("re-encrypts migrated values under the Astron Collection key on write", () => {
+	it("re-encrypts migrated values under the Guilderia key on write", () => {
 		const value = "KEY=migrated";
 		const fromDokploy = sealWithTag(
 			"dokploy:db-encryption:v1",
@@ -163,7 +163,7 @@ describe("Dokploy-encrypted values (migration compatibility)", () => {
 
 		expect(reEncrypted).not.toBe(fromDokploy);
 		expect(
-			openWithTag("astron-collection:db-encryption:v1", betterAuthSecret, reEncrypted),
+			openWithTag("guilderia:db-encryption:v1", betterAuthSecret, reEncrypted),
 		).toBe(value);
 	});
 
@@ -175,7 +175,7 @@ describe("Dokploy-encrypted values (migration compatibility)", () => {
 		);
 		vi.stubEnv("ENCRYPTION_KEY", "my-dedicated-key");
 		vi.resetModules();
-		const withKey = await import("@astron-collection/server/lib/encryption");
+		const withKey = await import("@guilderia/server/lib/encryption");
 
 		expect(withKey.decryptValue(fromDokploy)).toBe("KEY=value");
 	});

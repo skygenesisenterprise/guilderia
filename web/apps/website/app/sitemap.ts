@@ -5,7 +5,7 @@ import type { MetadataRoute } from "next";
 // Required for `output: "export"` (GitHub Pages).
 export const dynamic = "force-static";
 
-const BASE_URL = "https://notploy.com";
+const BASE_URL = "https://guilderia.com";
 
 const featurePages = [
 	"/features/application-deployment-platform",
@@ -20,12 +20,12 @@ const featurePages = [
 
 const comparisonPages = [
 	"/comparison",
-	"/notploy-vs-coolify",
-	"/notploy-vs-portainer",
-	"/notploy-vs-caprover",
-	"/notploy-vs-dokku",
-	"/notploy-vs-render",
-	"/notploy-vs-vercel",
+	"/guilderia-vs-coolify",
+	"/guilderia-vs-portainer",
+	"/guilderia-vs-caprover",
+	"/guilderia-vs-dokku",
+	"/guilderia-vs-render",
+	"/guilderia-vs-vercel",
 ];
 
 const industryPages = [

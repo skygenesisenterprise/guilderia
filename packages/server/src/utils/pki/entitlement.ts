@@ -13,20 +13,20 @@ import {
  *
  * An entitlement answers "what is this instance authorized to use?" and is
  * deliberately *not* part of the certificate: identity and licensing must stay
- * separate. It is produced by Astron Collection's entitlement authority and verified
- * locally against Astron Collection's public key, so a `cloud`/`console` install cannot be
+ * separate. It is produced by Guilderia's entitlement authority and verified
+ * locally against Guilderia's public key, so a `cloud`/`console` install cannot be
  * unlocked by an environment variable alone.
  *
  * Token format (compact, shell-verifiable with `openssl dgst -verify`):
  *
- *   astron-collection-entitlement-v1.<base64url(payload)>.<base64url(signature)>
+ *   guilderia-entitlement-v1.<base64url(payload)>.<base64url(signature)>
  *
  * The signature is RSASSA-PKCS1-v1_5 over the SHA-256 digest of the exact
  * payload bytes, so any canonicalisation drift invalidates verification rather
  * than silently changing the granted capabilities.
  */
 
-export const ENTITLEMENT_TOKEN_PREFIX = "astron-collection-entitlement-v1";
+export const ENTITLEMENT_TOKEN_PREFIX = "guilderia-entitlement-v1";
 
 const utf8 = (value: string) => Buffer.from(value, "utf8");
 
@@ -150,13 +150,13 @@ export const parseEntitlementPayload = (
 			subjectKeyFingerprint: raw.subjectKeyFingerprint,
 			issuedAt: raw.issuedAt,
 			expiresAt: raw.expiresAt as string | null,
-			issuer: typeof raw.issuer === "string" ? raw.issuer : "Astron Collection",
+			issuer: typeof raw.issuer === "string" ? raw.issuer : "Guilderia",
 		},
 	};
 };
 
 /**
- * Signs an entitlement payload with an RS256 private key. Used by Astron Collection's
+ * Signs an entitlement payload with an RS256 private key. Used by Guilderia's
  * entitlement authority and by tests/tooling; never called by a self-hosted
  * instance.
  */
@@ -173,7 +173,7 @@ export const signEntitlement = (
 };
 
 /**
- * Verifies an entitlement token against Astron Collection's public key. Never throws: the
+ * Verifies an entitlement token against Guilderia's public key. Never throws: the
  * reason is returned so the runtime can emit a precise diagnostic.
  */
 export const verifyEntitlementToken = (
@@ -214,7 +214,7 @@ export const verifyEntitlementToken = (
 	} catch {
 		return {
 			valid: false,
-			reason: "The Astron Collection entitlement public key is invalid",
+			reason: "The Guilderia entitlement public key is invalid",
 		};
 	}
 

@@ -17,7 +17,7 @@ build({
 	format: "esm",
 	plugins: [
 		alias({
-			"@astron-collection/server": path.resolve(__dirname, "src"),
+			"@guilderia/server": path.resolve(__dirname, "src"),
 		}),
 	],
 	packages: "external",

@@ -1,4 +1,4 @@
-import { createMetricUsage } from "@notploy/server/monitoring/status";
+import { createMetricUsage } from "@guilderia/server/monitoring/status";
 import {
 	Check,
 	ChevronDown,
@@ -415,8 +415,8 @@ export function MonitoringOverview() {
 				)}
 
 				{workspace.type === "global" && (
-					<section aria-label="Default Notploy instance monitoring">
-						<ContainerFreeMonitoring appName="notploy" />
+					<section aria-label="Default guilderia instance monitoring">
+						<ContainerFreeMonitoring appName="guilderia" />
 					</section>
 				)}
 

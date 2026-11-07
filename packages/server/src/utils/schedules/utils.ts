@@ -1,14 +1,14 @@
 import { createWriteStream } from "node:fs";
 import path from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { isManagedCloud } from "@astron-collection/server/services/instance-identity";
-import type { Schedule } from "@astron-collection/server/db/schema/schedule";
+import { paths } from "@guilderia/server/constants";
+import { isManagedCloud } from "@guilderia/server/services/instance-identity";
+import type { Schedule } from "@guilderia/server/db/schema/schedule";
 import {
 	createDeploymentSchedule,
 	updateDeployment,
 	updateDeploymentStatus,
-} from "@astron-collection/server/services/deployment";
-import { findScheduleById } from "@astron-collection/server/services/schedule";
+} from "@guilderia/server/services/deployment";
+import { findScheduleById } from "@guilderia/server/services/schedule";
 import { scheduledJobs, scheduleJob as scheduleJobNode } from "node-schedule";
 import { quote } from "shell-quote";
 import { getComposeContainer, getServiceContainer } from "../docker/utils";
@@ -146,7 +146,7 @@ export const runCommand = async (scheduleId: string) => {
 					throw error;
 				}
 			}
-		} else if (scheduleType === "astron-collection-server") {
+		} else if (scheduleType === "guilderia-server") {
 			const writeStream = createWriteStream(deployment.logPath, { flags: "a" });
 			const { SCHEDULES_PATH } = paths();
 			const fullPath = path.join(SCHEDULES_PATH, appName || "");

@@ -196,12 +196,12 @@ export const CustomDnsIcon = ({ className }: Props) => (
 );
 
 /**
- * First-party Astron Collection Internal DNS. Uses the Astron Collection brand mark published in
- * `public/astron-collection.png`.
+ * First-party Guilderia Internal DNS. Uses the Guilderia brand mark published in
+ * `public/guilderia.png`.
  */
 export const AstronCollectionInternalIcon = ({ className }: Props) => (
 	<Image
-		src="/astron-collection.png"
+		src="/guilderia.png"
 		alt=""
 		aria-hidden="true"
 		width={1254}
@@ -233,7 +233,7 @@ export const dnsProviderIcons = {
 	coredns: CorednsIcon,
 	unbound: UnboundIcon,
 	custom: CustomDnsIcon,
-	"astron-collection-internal": AstronCollectionInternalIcon,
+	"guilderia-internal": AstronCollectionInternalIcon,
 } as const;
 
 export type DnsProviderIconKey = keyof typeof dnsProviderIcons;

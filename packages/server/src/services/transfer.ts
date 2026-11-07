@@ -1,37 +1,37 @@
 import path from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
+import { paths } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
 import {
 	type apiTransferService,
 	deployments,
 	network,
 	type ServiceType,
-} from "@astron-collection/server/db/schema";
-import { removeService } from "@astron-collection/server/utils/docker/utils";
+} from "@guilderia/server/db/schema";
+import { removeService } from "@guilderia/server/utils/docker/utils";
 import {
 	removeDirectoryCode,
 	removeMonitoringDirectory,
-} from "@astron-collection/server/utils/filesystem/directory";
+} from "@guilderia/server/utils/filesystem/directory";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@astron-collection/server/utils/process/execAsync";
-import { pipeBetweenServers } from "@astron-collection/server/utils/process/remoteStream";
+} from "@guilderia/server/utils/process/execAsync";
+import { pipeBetweenServers } from "@guilderia/server/utils/process/remoteStream";
 import {
 	readConfig,
 	readRemoteConfig,
 	removeTraefikConfig,
 	writeConfig,
 	writeConfigRemote,
-} from "@astron-collection/server/utils/traefik/application";
-import { manageDomain } from "@astron-collection/server/utils/traefik/domain";
-import { removeForwardAuthMiddleware } from "@astron-collection/server/utils/traefik/forward-auth";
+} from "@guilderia/server/utils/traefik/application";
+import { manageDomain } from "@guilderia/server/utils/traefik/domain";
+import { removeForwardAuthMiddleware } from "@guilderia/server/utils/traefik/forward-auth";
 import {
 	deleteAllMiddlewares,
 	removePathMiddlewares,
-} from "@astron-collection/server/utils/traefik/middleware";
-import { createRedirectMiddleware } from "@astron-collection/server/utils/traefik/redirect";
-import { createSecurityMiddleware } from "@astron-collection/server/utils/traefik/security";
+} from "@guilderia/server/utils/traefik/middleware";
+import { createRedirectMiddleware } from "@guilderia/server/utils/traefik/redirect";
+import { createSecurityMiddleware } from "@guilderia/server/utils/traefik/security";
 import { TRPCError } from "@trpc/server";
 import { eq, inArray, sql } from "drizzle-orm";
 import { quote } from "shell-quote";
@@ -487,8 +487,8 @@ export const transferService = async (
 		}
 	}
 
-	const sourceName = service.server?.name ?? "Astron Collection Server";
-	const targetName = targetServer?.name ?? "Astron Collection Server";
+	const sourceName = service.server?.name ?? "Guilderia Server";
+	const targetName = targetServer?.name ?? "Guilderia Server";
 	const originalNetworkIds =
 		"networkIds" in service ? service.networkIds : undefined;
 	let switched = false;

@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createGrafanaClient } from "@astron-collection/server/services/observability/grafana-client";
+import { createGrafanaClient } from "@guilderia/server/services/observability/grafana-client";
 import {
 	createPrometheusClient,
 	PROMETHEUS_STALE_THRESHOLD_SECONDS,
-} from "@astron-collection/server/services/observability/prometheus-client";
-import { isFreshSample } from "@astron-collection/server/services/observability/types";
+} from "@guilderia/server/services/observability/prometheus-client";
+import { isFreshSample } from "@guilderia/server/services/observability/types";
 
 const jsonResponse = (body: unknown, status = 200) =>
 	new Response(JSON.stringify(body), {
@@ -131,7 +131,7 @@ describe("grafana client", () => {
 			token: "glsa_secret",
 		});
 		await expect(client.health()).resolves.toBe(true);
-		const imported = await client.importDashboard({ title: "Astron Collection" });
+		const imported = await client.importDashboard({ title: "Guilderia" });
 		expect(imported.uid).toBe("abc");
 		expect(seen).toHaveLength(1);
 		expect(JSON.parse(seen[0]?.body ?? "{}").overwrite).toBe(false);

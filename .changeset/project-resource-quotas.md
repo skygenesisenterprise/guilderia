@@ -1,6 +1,6 @@
 ---
-"@notploy/server": minor
-"@notploy/app": minor
+"@guilderia/server": minor
+"@guilderia/app": minor
 ---
 
 Add logical CPU/memory quotas per project. Service limit updates, quota

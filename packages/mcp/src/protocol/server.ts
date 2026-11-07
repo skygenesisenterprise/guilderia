@@ -108,10 +108,10 @@ export async function createServerParts(options: CreateRuntimeOptions = {}): Pro
 /** Creates an MCP protocol server bound to shared parts (one per transport). */
 export function buildMcpServer(parts: ServerParts): McpServer {
   const server = new McpServer(
-    { name: "astron-collection", version: MCP_SERVER_VERSION },
+    { name: "guilderia", version: MCP_SERVER_VERSION },
     {
       instructions:
-        "Astron Collection automation server. Start with the discovery capabilities, use read-only diagnostics before mutating anything, and poll get_operation_status after long-running actions.",
+        "Guilderia automation server. Start with the discovery capabilities, use read-only diagnostics before mutating anything, and poll get_operation_status after long-running actions.",
     },
   );
 

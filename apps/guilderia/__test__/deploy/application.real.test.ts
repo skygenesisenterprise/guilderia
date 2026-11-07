@@ -1,15 +1,15 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
-import type { ApplicationNested } from "@astron-collection/server";
-import { paths } from "@astron-collection/server/constants";
-import { execAsync } from "@astron-collection/server/utils/process/execAsync";
+import type { ApplicationNested } from "@guilderia/server";
+import { paths } from "@guilderia/server/constants";
+import { execAsync } from "@guilderia/server/utils/process/execAsync";
 import { format } from "date-fns";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const REAL_TEST_TIMEOUT = 180000; // 3 minutes
 
 // Mock ONLY database and notifications
-vi.mock("@astron-collection/server/db", () => {
+vi.mock("@guilderia/server/db", () => {
 	const createChainableMock = (): any => {
 		const chain: any = {
 			set: vi.fn(() => chain),
@@ -45,10 +45,10 @@ vi.mock("@astron-collection/server/db", () => {
 	};
 });
 
-vi.mock("@astron-collection/server/services/application", async () => {
+vi.mock("@guilderia/server/services/application", async () => {
 	const actual = await vi.importActual<
-		typeof import("@astron-collection/server/services/application")
-	>("@astron-collection/server/services/application");
+		typeof import("@guilderia/server/services/application")
+	>("@guilderia/server/services/application");
 	return {
 		...actual,
 		findApplicationById: vi.fn(),
@@ -56,25 +56,25 @@ vi.mock("@astron-collection/server/services/application", async () => {
 	};
 });
 
-vi.mock("@astron-collection/server/services/admin", () => ({
+vi.mock("@guilderia/server/services/admin", () => ({
 	getAstronCollectionUrl: vi.fn().mockResolvedValue("http://localhost:3000"),
 }));
 
-vi.mock("@astron-collection/server/services/deployment", () => ({
+vi.mock("@guilderia/server/services/deployment", () => ({
 	createDeployment: vi.fn(),
 	updateDeploymentStatus: vi.fn(),
 	updateDeployment: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/utils/notifications/build-success", () => ({
+vi.mock("@guilderia/server/utils/notifications/build-success", () => ({
 	sendBuildSuccessNotifications: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/utils/notifications/build-error", () => ({
+vi.mock("@guilderia/server/utils/notifications/build-error", () => ({
 	sendBuildErrorNotifications: vi.fn(),
 }));
 
-vi.mock("@astron-collection/server/services/rollbacks", () => ({
+vi.mock("@guilderia/server/services/rollbacks", () => ({
 	createRollback: vi.fn(),
 }));
 
@@ -84,11 +84,11 @@ vi.mock("@astron-collection/server/services/rollbacks", () => ({
 // - getBuildCommand
 // - mechanizeDockerContainer (requires Docker Swarm)
 
-import { db } from "@astron-collection/server/db";
-import * as adminService from "@astron-collection/server/services/admin";
-import * as applicationService from "@astron-collection/server/services/application";
-import { deployApplication } from "@astron-collection/server/services/application";
-import * as deploymentService from "@astron-collection/server/services/deployment";
+import { db } from "@guilderia/server/db";
+import * as adminService from "@guilderia/server/services/admin";
+import * as applicationService from "@guilderia/server/services/application";
+import { deployApplication } from "@guilderia/server/services/application";
+import * as deploymentService from "@guilderia/server/services/deployment";
 
 const createMockApplication = (
 	overrides: Partial<ApplicationNested> = {},
@@ -98,7 +98,7 @@ const createMockApplication = (
 		name: "Real Test App",
 		appName: `real-test-${Date.now()}`,
 		sourceType: "git" as const,
-		customGitUrl: "https://github.com/skygenesisenterprise/astron-collection.git",
+		customGitUrl: "https://github.com/skygenesisenterprise/guilderia.git",
 		customGitBranch: "main",
 		customGitSSHKeyId: null,
 		customGitBuildPath: "/astro",

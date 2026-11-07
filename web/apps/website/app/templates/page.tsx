@@ -6,16 +6,16 @@ import { TemplateExplorer } from "./components/TemplateExplorer";
 export const metadata: Metadata = {
 	title: "Open Source Templates - One-Click Self-Hosted Deployments",
 	description:
-		"Browse 500+ open source templates ready to deploy on Notploy with one click. Self-host databases, CMS, analytics, AI tools, and more with Docker Compose.",
+		"Browse 500+ open source templates ready to deploy on guilderia with one click. Self-host databases, CMS, analytics, AI tools, and more with Docker Compose.",
 	alternates: {
-		canonical: "https://notploy.com/templates",
+		canonical: "https://guilderia.com/templates",
 	},
 	openGraph: {
-		title: "Notploy Open Source Templates",
+		title: "guilderia Open Source Templates",
 		description:
-			"Browse 500+ open source templates ready to deploy on Notploy with one click.",
+			"Browse 500+ open source templates ready to deploy on guilderia with one click.",
 		type: "website",
-		url: "https://notploy.com/templates",
+		url: "https://guilderia.com/templates",
 	},
 };
 

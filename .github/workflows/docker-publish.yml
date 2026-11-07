@@ -5,11 +5,11 @@ name: Docker Publish
 #   GitHub Actions -> Buildx -> GHCR -> cosign (keyless)
 #
 # Publishing is tag-only. Each package has its own `v<major>.<minor>.<patch>`
-# tag suffix (for example, `v1.2.3-cloud` publishes only `notploy-cloud`).
+# tag suffix (for example, `v1.2.3-cloud` publishes only `guilderia-cloud`).
 #
-# Every suffix also publishes a GitHub Release, titled `Notploy {Suffix}
-# v{major}.{minor}.{patch}` (`Notploy App v1.2.3`, `Notploy Cloud v1.2.3`,
-# `Notploy Console v1.2.3`, `Notploy Status v1.2.3`, `Notploy MCP v1.2.3`, ...),
+# Every suffix also publishes a GitHub Release, titled `guilderia {Suffix}
+# v{major}.{minor}.{patch}` (`guilderia App v1.2.3`, `guilderia Cloud v1.2.3`,
+# `guilderia Console v1.2.3`, `guilderia Status v1.2.3`, `guilderia MCP v1.2.3`, ...),
 # so a release always reads the same way whatever image it advertises. The
 # suffix label and the assets a release carries come from the catalog in
 # `select`, which is the single place to add an image.
@@ -60,7 +60,7 @@ env:
 
 jobs:
   # The pushed tag selects exactly one image (`v1.0.2-app` publishes only
-  # `notploy`). The matrix is filtered here rather than letting every job
+  # `guilderia`). The matrix is filtered here rather than letting every job
   # disable itself, so a tag push shows a single job in the run instead of
   # seven, six of them no-ops.
   select:
@@ -94,87 +94,87 @@ jobs:
           # and adding its suffix to the tag filters above.
           #
           # `release_name` is the label the GitHub Release is titled with
-          # (`Notploy {release_name} {version}`) and `release_assets` says
+          # (`guilderia {release_name} {version}`) and `release_assets` says
           # whether that release carries the install scripts.
           #
           # `platforms` defaults to linux/amd64,linux/arm64 when omitted.
           read -r -d '' CATALOG <<'JSON' || true
           [
             {
-              "image": "notploy",
+              "image": "guilderia",
               "file": "./Dockerfile",
               "target": "selfhosted",
               "platforms": "linux/amd64",
               "tag_suffix": "-app",
-              "description": "Notploy self-hosted (dashboard, server and build tooling)",
+              "description": "guilderia self-hosted (dashboard, server and build tooling)",
               "release_name": "App",
               "release_assets": true
             },
             {
-              "image": "notploy-cloud",
+              "image": "guilderia-cloud",
               "file": "./Dockerfile",
               "target": "cloud",
               "tag_suffix": "-cloud",
-              "description": "Notploy Cloud (dashboard + server)",
+              "description": "guilderia Cloud (dashboard + server)",
               "release_name": "Cloud",
               "release_assets": true
             },
             {
-              "image": "notploy-console",
+              "image": "guilderia-console",
               "file": "./Dockerfile",
               "target": "console",
               "tag_suffix": "-console",
-              "description": "Notploy Console (instance and fleet management)",
+              "description": "guilderia Console (instance and fleet management)",
               "release_name": "Console",
               "release_assets": true
             },
             {
-              "image": "notploy-status",
+              "image": "guilderia-status",
               "file": "./Dockerfile",
               "target": "status",
               "tag_suffix": "-status",
-              "description": "Notploy Status (status page, incidents and uptime history)",
+              "description": "guilderia Status (status page, incidents and uptime history)",
               "release_name": "Status",
               "release_assets": false
             },
             {
-              "image": "notploy-mcp",
+              "image": "guilderia-mcp",
               "file": "./packages/mcp/Dockerfile",
               "tag_suffix": "-mcp",
-              "description": "Notploy MCP server",
+              "description": "guilderia MCP server",
               "release_name": "MCP",
               "release_assets": false
             },
             {
-              "image": "notploy-github",
+              "image": "guilderia-github",
               "file": "./packages/github/Dockerfile",
               "tag_suffix": "-github",
-              "description": "Notploy GitHub integration",
+              "description": "guilderia GitHub integration",
               "release_name": "GitHub",
               "release_assets": false
             },
             {
-              "image": "notploy-website",
+              "image": "guilderia-website",
               "file": "./web/Dockerfile.website",
               "platforms": "linux/amd64",
               "tag_suffix": "-website",
-              "description": "Notploy official website",
+              "description": "guilderia official website",
               "release_name": "Website",
               "release_assets": false
             },
             {
-              "image": "notploy-docs",
+              "image": "guilderia-docs",
               "file": "./web/Dockerfile.docs",
               "tag_suffix": "-docs",
-              "description": "Notploy documentation",
+              "description": "guilderia documentation",
               "release_name": "Docs",
               "release_assets": false
             },
             {
-              "image": "notploy-templates",
+              "image": "guilderia-templates",
               "file": "./templates/Dockerfile",
               "tag_suffix": "-templates",
-              "description": "Notploy templates gallery",
+              "description": "guilderia templates gallery",
               "release_name": "Templates",
               "release_assets": false
             }
@@ -198,7 +198,7 @@ jobs:
           # The release fields are for the `release` job only: the build matrix
           # does not need them.
           echo "matrix=$(jq -c 'map(del(.release_name, .release_assets))' <<< "$selected")" >> "$GITHUB_OUTPUT"
-          echo "release_title=Notploy $release_name $version" >> "$GITHUB_OUTPUT"
+          echo "release_title=guilderia $release_name $version" >> "$GITHUB_OUTPUT"
           echo "release_assets=$(jq -r '.[0].release_assets' <<< "$selected")" >> "$GITHUB_OUTPUT"
 
           # The self-hosted release is the one a running server and install.sh
@@ -357,8 +357,8 @@ jobs:
             exit 0
           fi
 
-          cp install.sh install-notploy.sh
-          chmod +x install.sh install-notploy.sh install.ps1
+          cp install.sh install-guilderia.sh
+          chmod +x install.sh install-guilderia.sh install.ps1
           echo "enabled=true" >> "$GITHUB_OUTPUT"
 
       # Idempotent: re-running the workflow updates the existing release instead
@@ -378,5 +378,5 @@ jobs:
           # publishes no file instead of failing on an unmatched glob.
           files: |
             ${{ steps.assets.outputs.enabled == 'true' && 'install.sh' || '' }}
-            ${{ steps.assets.outputs.enabled == 'true' && 'install-notploy.sh' || '' }}
+            ${{ steps.assets.outputs.enabled == 'true' && 'install-guilderia.sh' || '' }}
             ${{ steps.assets.outputs.enabled == 'true' && 'install.ps1' || '' }}

@@ -54,7 +54,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 const DEFAULT_CSS_TEMPLATE = `/* ============================================
-   Astron Collection Default Theme - CSS Variables
+   Guilderia Default Theme - CSS Variables
    Modify these values to customize your instance.
 
    Theme colors use the oklch() color format
@@ -296,10 +296,10 @@ export function WhitelabelingSettings() {
 									<FormItem>
 										<FormLabel>Application Name</FormLabel>
 										<FormControl>
-											<Input placeholder="Astron Collection" {...field} />
+											<Input placeholder="Guilderia" {...field} />
 										</FormControl>
 										<FormDescription>
-											Replaces "Astron Collection" across the entire interface.
+											Replaces "Guilderia" across the entire interface.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -320,7 +320,7 @@ export function WhitelabelingSettings() {
 										</FormControl>
 										<FormDescription>
 											Tagline shown on the login/onboarding pages. Defaults to
-											the standard Astron Collection description if empty.
+											the standard Guilderia description if empty.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>

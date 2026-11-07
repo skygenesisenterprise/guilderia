@@ -1,7 +1,7 @@
 import {
 	ADDITIONAL_FLAG_ERROR,
 	ADDITIONAL_FLAG_REGEX,
-} from "@notploy/server/db/validations/destination";
+} from "@guilderia/server/db/validations/destination";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import { PenBoxIcon, PlusIcon, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -351,7 +351,7 @@ export const HandleDestinations = ({ destinationId }: Props) => {
 										<FormLabel>Bucket</FormLabel>
 									</div>
 									<FormControl>
-										<Input placeholder={"notploy-bucket"} {...field} />
+										<Input placeholder={"guilderia-bucket"} {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

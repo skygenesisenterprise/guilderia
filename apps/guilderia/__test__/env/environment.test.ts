@@ -1,7 +1,7 @@
 import {
 	prepareEnvironmentVariables,
 	prepareEnvironmentVariablesForShell,
-} from "@astron-collection/server/index";
+} from "@guilderia/server/index";
 import { describe, expect, it } from "vitest";
 
 const projectEnv = `

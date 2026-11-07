@@ -24,20 +24,20 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Notploy Cloud — The managed Notploy service",
+	title: "guilderia Cloud — The managed guilderia service",
 	description:
-		"Notploy Cloud is the managed Notploy service operated by Notploy: control plane hosting, upgrades, availability and support handled for you, while your applications keep running on your own infrastructure.",
+		"guilderia Cloud is the managed guilderia service operated by guilderia: control plane hosting, upgrades, availability and support handled for you, while your applications keep running on your own infrastructure.",
 	alternates: {
-		canonical: "https://notploy.com/cloud",
+		canonical: "https://guilderia.com/cloud",
 	},
 };
 
-const notployResponsibilities = [
+const guilderiaResponsibilities = [
 	{
 		icon: IconSettings,
 		title: "Control plane operations",
 		description:
-			"The Notploy dashboard, its database and its supporting services are hosted, monitored and upgraded by the Notploy team.",
+			"The guilderia dashboard, its database and its supporting services are hosted, monitored and upgraded by the guilderia team.",
 	},
 	{
 		icon: IconRefresh,
@@ -79,38 +79,38 @@ const cloudCapabilities = [
 		icon: IconRocket,
 		title: "No infrastructure to provision",
 		description:
-			"Skip the installation step entirely. Create your organization and start deploying — the Notploy control plane is already running.",
+			"Skip the installation step entirely. Create your organization and start deploying — the guilderia control plane is already running.",
 	},
 	{
 		icon: IconRefresh,
 		title: "Always up to date",
 		description:
-			"Feature releases, security patches and upgrades are rolled out by the Notploy team without downtime planning on your side.",
+			"Feature releases, security patches and upgrades are rolled out by the guilderia team without downtime planning on your side.",
 	},
 	{
 		icon: IconCloud,
-		title: "Operated by Notploy",
+		title: "Operated by guilderia",
 		description:
-			"Notploy Cloud is run by Notploy (Sky Genesis Enterprise) — the same people who build the product — not by an anonymous reseller.",
+			"guilderia Cloud is run by guilderia (Sky Genesis Enterprise) — the same people who build the product — not by an anonymous reseller.",
 	},
 	{
 		icon: IconGauge,
 		title: "A fast path to production",
 		description:
-			"Ideal for teams that want the Notploy deployment experience immediately, without an initial hosting and setup phase.",
+			"Ideal for teams that want the guilderia deployment experience immediately, without an initial hosting and setup phase.",
 	},
 ];
 
 const cloudFaqs = [
 	{
-		question: "Is Notploy Cloud just Self hosted by you?",
+		question: "Is guilderia Cloud just Self hosted by you?",
 		answer:
-			"No. Notploy Cloud is a managed service: the control plane is operated, monitored and upgraded by Notploy, with support and availability commitments. Self is the edition you run and operate yourself. The platform capabilities are shared; the operating models are different.",
+			"No. guilderia Cloud is a managed service: the control plane is operated, monitored and upgraded by guilderia, with support and availability commitments. Self is the edition you run and operate yourself. The platform capabilities are shared; the operating models are different.",
 	},
 	{
 		question: "Where do my applications run?",
 		answer:
-			"Your applications run on the servers you connect — your own servers or infrastructure, depending on your setup. Notploy manages the control plane, not a hidden multi-tenant runtime you cannot see.",
+			"Your applications run on the servers you connect — your own servers or infrastructure, depending on your setup. guilderia manages the control plane, not a hidden multi-tenant runtime you cannot see.",
 	},
 	{
 		question: "Can I switch between Self and Cloud?",
@@ -120,12 +120,12 @@ const cloudFaqs = [
 	{
 		question: "Who is Cloud for?",
 		answer:
-			"Teams that want Notploy without operating it: small teams without a dedicated ops function, organizations that prefer a managed service, and anyone evaluating Notploy who wants to start without provisioning a server first.",
+			"Teams that want guilderia without operating it: small teams without a dedicated ops function, organizations that prefer a managed service, and anyone evaluating guilderia who wants to start without provisioning a server first.",
 	},
 	{
 		question: "How is Cloud priced?",
 		answer:
-			"Cloud is a paid managed service with plans based on the infrastructure you connect. Notploy Self remains free and open source. See the pricing page for current plans.",
+			"Cloud is a paid managed service with plans based on the infrastructure you connect. guilderia Self remains free and open source. See the pricing page for current plans.",
 	},
 ];
 
@@ -133,15 +133,15 @@ export default function CloudPage() {
 	return (
 		<div className="min-h-screen bg-background">
 			<PageIntro
-				badge="Notploy Cloud"
-				badgeDetail="Managed by Notploy"
-				title="Notploy,"
+				badge="guilderia Cloud"
+				badgeDetail="Managed by guilderia"
+				title="guilderia,"
 				highlight="operated for you"
-				description="Notploy Cloud is the managed Notploy service operated by Notploy. The control plane is hosted, upgraded and supported by the team that builds the product — so you get the platform without taking on its operations."
+				description="guilderia Cloud is the managed guilderia service operated by guilderia. The control plane is hosted, upgraded and supported by the team that builds the product — so you get the platform without taking on its operations."
 				actions={
 					<>
 						<Button className="w-full rounded-full px-6 sm:w-auto" asChild>
-							<Link href="https://app.notploy.com/register" target="_blank">
+							<Link href="https://app.guilderia.com/register" target="_blank">
 								Get started with Cloud
 								<ArrowUpRight className="ml-2 h-4 w-4" aria-hidden="true" />
 							</Link>
@@ -162,7 +162,7 @@ export default function CloudPage() {
 					{ href: "/self", label: "Compare with Self" },
 					{ href: "/platform", label: "Explore the platform" },
 					{
-						href: "https://docs.notploy.com/docs/core/differences",
+						href: "https://docs.guilderia.com/docs/core/differences",
 						label: "Cloud vs Self docs",
 						external: true,
 					},
@@ -170,7 +170,7 @@ export default function CloudPage() {
 			>
 				<div className="mx-auto grid max-w-2xl grid-cols-1 gap-px overflow-hidden rounded-xl border border-border/60 bg-border/60 sm:grid-cols-3">
 					{[
-						{ label: "Control plane", value: "Operated by Notploy" },
+						{ label: "Control plane", value: "Operated by guilderia" },
 						{ label: "Your workloads", value: "Your servers" },
 						{ label: "Support", value: "Included" },
 					].map((item) => (
@@ -192,21 +192,21 @@ export default function CloudPage() {
 					<SectionHeading
 						id="a-managed-service-not-a-hosted-copy"
 						title="A managed service, not a hosted copy"
-						description="Running Notploy yourself and using Notploy Cloud are different operating models. Here is precisely who is responsible for what."
+						description="Running guilderia yourself and using guilderia Cloud are different operating models. Here is precisely who is responsible for what."
 					/>
 
 					<div className="mx-auto mt-12 grid max-w-6xl gap-4 lg:grid-cols-[1.15fr_0.85fr]">
 						<div className="rounded-2xl border border-primary bg-primary p-8 text-primary-foreground">
 							<div className="flex flex-wrap items-center justify-between gap-3">
 								<h3 className="font-display text-2xl tracking-tight">
-									Notploy operates
+									guilderia operates
 								</h3>
 								<span className="rounded-full bg-primary-foreground/15 px-3 py-1 text-sm font-medium">
 									Managed
 								</span>
 							</div>
 							<ul className="mt-8 space-y-6">
-								{notployResponsibilities.map((item) => (
+								{guilderiaResponsibilities.map((item) => (
 									<li key={item.title} className="flex gap-4">
 										<item.icon
 											className="mt-0.5 h-6 w-6 shrink-0 text-primary-foreground"
@@ -258,7 +258,7 @@ export default function CloudPage() {
 									/>
 									<p className="text-base leading-relaxed text-muted-foreground">
 										Nothing about your applications, data or credentials moves
-										to Notploy. The service runs the control plane; the
+										to guilderia. The service runs the control plane; the
 										workloads stay yours.
 									</p>
 								</li>
@@ -282,7 +282,7 @@ export default function CloudPage() {
 				description="Both editions share the same platform capabilities. The choice is about who operates the control plane."
 				panels={[
 					{
-						name: "Notploy Self",
+						name: "guilderia Self",
 						tagline: "You operate the platform",
 						description:
 							"The open-source edition. Install it on infrastructure you own and keep full control over updates, data and network boundaries.",
@@ -296,18 +296,18 @@ export default function CloudPage() {
 						href: "/self",
 					},
 					{
-						name: "Notploy Cloud",
-						tagline: "Notploy operates it for you",
+						name: "guilderia Cloud",
+						tagline: "guilderia operates it for you",
 						description:
-							"The managed service operated by Notploy. The control plane is run and upgraded for you, with support and availability commitments.",
+							"The managed service operated by guilderia. The control plane is run and upgraded for you, with support and availability commitments.",
 						bullets: [
-							"Managed service operated by Notploy",
+							"Managed service operated by guilderia",
 							"Control plane hosted, monitored and upgraded for you",
 							"Support and availability commitments",
-							"Best for teams that want Notploy without operating it",
+							"Best for teams that want guilderia without operating it",
 						],
 						cta: "Get started",
-						href: "https://app.notploy.com/register",
+						href: "https://app.guilderia.com/register",
 						external: true,
 						highlighted: true,
 					},
@@ -315,8 +315,8 @@ export default function CloudPage() {
 			/>
 
 			<PageFaq
-				id="notploy-cloud-faqs"
-				title="Notploy Cloud FAQs"
+				id="guilderia-cloud-faqs"
+				title="guilderia Cloud FAQs"
 				description="What the managed service covers, and what stays on your side."
 				faqs={cloudFaqs}
 			/>

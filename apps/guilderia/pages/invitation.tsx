@@ -1,4 +1,4 @@
-import { getUserByToken, IS_CLOUD } from "@astron-collection/server";
+import { getUserByToken, IS_CLOUD } from "@guilderia/server";
 import { standardSchemaResolver as zodResolver } from "@hookform/resolvers/standard-schema";
 import { generateServerSideHelper } from "@/utils/create-server-helpers";
 import type { GetServerSidePropsContext } from "next";
@@ -127,7 +127,7 @@ const Invitation = ({
 				lastName: values.lastName,
 				fetchOptions: {
 					headers: {
-						"x-astron-collection-token": token,
+						"x-guilderia-token": token,
 					},
 				},
 			});

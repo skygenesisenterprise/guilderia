@@ -1,4 +1,4 @@
-import type { NetworkProviderConfig } from "@astron-collection/server/db/schema";
+import type { NetworkProviderConfig } from "@guilderia/server/db/schema";
 import {
 	type NetworkCapabilityMatrix,
 	networkProviderCategory,

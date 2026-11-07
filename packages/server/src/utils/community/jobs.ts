@@ -1,4 +1,4 @@
-import { syncOrganizationCommunity } from "@astron-collection/server/services/community";
+import { syncOrganizationCommunity } from "@guilderia/server/services/community";
 import { scheduleJob, scheduledJobs } from "node-schedule";
 
 /**

@@ -1,4 +1,4 @@
-import type { linodeDnsConfigSchema } from "@astron-collection/server/db/schema";
+import type { linodeDnsConfigSchema } from "@guilderia/server/db/schema";
 import type { z } from "zod";
 import {
 	createDnsHttp,

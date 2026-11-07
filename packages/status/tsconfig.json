@@ -20,8 +20,8 @@
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"paths": {
-			"@astron-collection/status": ["./src/index.ts"],
-			"@astron-collection/status/*": ["./src/*"]
+			"@guilderia/status": ["./src/index.ts"],
+			"@guilderia/status/*": ["./src/*"]
 		}
 	},
 	"include": ["src/**/*.ts", "scripts/**/*.ts", "esbuild.config.ts"],

@@ -1,15 +1,15 @@
 import { execSync } from "node:child_process";
-import { docker } from "@astron-collection/server/constants";
-import { setupMonitoring } from "@astron-collection/server/setup/monitoring-setup";
+import { docker } from "@guilderia/server/constants";
+import { setupMonitoring } from "@guilderia/server/setup/monitoring-setup";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const REAL_TEST_TIMEOUT = 120000;
-const SERVICE_NAME = "astron-collection-monitoring";
+const SERVICE_NAME = "guilderia-monitoring";
 const TEST_IMAGE = "busybox:latest";
 
 // Mock ONLY db-backed lookups and remote I/O. Dockerode stays real and talks to
 // the local daemon, so the legacy-container cleanup is exercised for real.
-vi.mock("@astron-collection/server/services/server", () => ({
+vi.mock("@guilderia/server/services/server", () => ({
 	findServerById: vi.fn().mockResolvedValue({
 		serverId: "test-server",
 		serverType: "deploy",
@@ -30,16 +30,16 @@ vi.mock("@astron-collection/server/services/server", () => ({
 	}),
 }));
 
-vi.mock("@astron-collection/server/services/settings", () => ({
+vi.mock("@guilderia/server/services/settings", () => ({
 	getAstronCollectionImageTag: vi.fn(() => "latest"),
 }));
 
-vi.mock("@astron-collection/server/utils/docker/utils", () => ({
+vi.mock("@guilderia/server/utils/docker/utils", () => ({
 	pullImage: vi.fn().mockResolvedValue(undefined),
 	pullRemoteImage: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock("@astron-collection/server/utils/process/execAsync", () => ({
+vi.mock("@guilderia/server/utils/process/execAsync", () => ({
 	execAsync: vi.fn().mockResolvedValue({ stdout: "", stderr: "" }),
 	execAsyncRemote: vi.fn().mockResolvedValue({ stdout: "", stderr: "" }),
 }));
@@ -132,7 +132,7 @@ const pullTestImage = async () => {
 };
 
 // The code under test hardcodes the production name, so this suite cannot
-// namespace its fixtures. Skip rather than wipe a real agent on a Astron Collection host.
+// namespace its fixtures. Skip rather than wipe a real agent on a Guilderia host.
 const hasRealMonitoring = () => {
 	const query = (cmd: string) => {
 		try {
@@ -190,7 +190,7 @@ describe.skipIf(!hasDocker() || hasRealMonitoring() || !process.env.CI)(
 		);
 
 		it(
-			"removes the legacy container without touching swarm tasks, which are named astron-collection-monitoring.<slot>.<id>",
+			"removes the legacy container without touching swarm tasks, which are named guilderia-monitoring.<slot>.<id>",
 			async () => {
 				const taskName = `${SERVICE_NAME}.1.qh3ldvg2h9x0test`;
 				const task = await docker.createContainer({
@@ -241,7 +241,7 @@ describe.skipIf(!hasDocker() || hasRealMonitoring() || !process.env.CI)(
 				};
 
 				const remoteDocker = await import(
-					"@astron-collection/server/utils/servers/remote-docker"
+					"@guilderia/server/utils/servers/remote-docker"
 				);
 				const spy = vi
 					.spyOn(remoteDocker, "getRemoteDocker")

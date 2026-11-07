@@ -1,4 +1,4 @@
-import { prepareEnvironmentVariables } from "@astron-collection/server/index";
+import { prepareEnvironmentVariables } from "@guilderia/server/index";
 import { describe, expect, it } from "vitest";
 
 const projectEnv = `

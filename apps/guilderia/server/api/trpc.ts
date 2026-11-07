@@ -8,17 +8,17 @@
  */
 
 // import { getServerAuthSession } from "@/server/auth";
-import { db } from "@astron-collection/server/db";
-import type { statements } from "@astron-collection/server/lib/access-control";
+import { db } from "@guilderia/server/db";
+import type { statements } from "@guilderia/server/lib/access-control";
 import {
 	type CicdAction,
 	type CicdTokenScope,
 	cicdScopeAllows,
 	parseCicdTokenScope,
-} from "@astron-collection/server/lib/cicd-scope";
-import { validateRequest, type RequestApiKey } from "@astron-collection/server/lib/auth";
-import { checkPermission } from "@astron-collection/server/services/permission";
-import type { OpenApiMeta } from "@astron-collection/trpc-openapi";
+} from "@guilderia/server/lib/cicd-scope";
+import { validateRequest, type RequestApiKey } from "@guilderia/server/lib/auth";
+import { checkPermission } from "@guilderia/server/services/permission";
+import type { OpenApiMeta } from "@guilderia/trpc-openapi";
 import { initTRPC, TRPCError } from "@trpc/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { Session, User } from "better-auth";
@@ -272,7 +272,7 @@ export const cicdProcedure = t.procedure.use(({ ctx, next }) => {
 		throw new TRPCError({
 			code: "UNAUTHORIZED",
 			message:
-				"This endpoint requires a Astron Collection CI/CD API token. Send it as `x-api-key` or `Authorization: Bearer <token>`.",
+				"This endpoint requires a Guilderia CI/CD API token. Send it as `x-api-key` or `Authorization: Bearer <token>`.",
 		});
 	}
 

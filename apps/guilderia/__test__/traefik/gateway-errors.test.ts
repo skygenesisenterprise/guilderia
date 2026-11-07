@@ -5,7 +5,7 @@ import {
 	createRouterConfig,
 	type ApplicationNested,
 	type Domain,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { describe, expect, test } from "vitest";
 
 const app = {
@@ -46,28 +46,28 @@ describe("buildGatewayErrorsConfig", () => {
 		expect(http?.middlewares?.[GATEWAY_ERRORS_MIDDLEWARE_NAME]).toEqual({
 			errors: {
 				status: ["500-599"],
-				service: "astron-collection-gateway-errors",
+				service: "guilderia-gateway-errors",
 				query: "/__astron_collectionerror?status={status}",
 			},
 		});
-		expect(http?.services?.["astron-collection-gateway-errors"]).toEqual({
+		expect(http?.services?.["guilderia-gateway-errors"]).toEqual({
 			loadBalancer: {
-				servers: [{ url: "http://astron-collection-gateway-errors:8080" }],
+				servers: [{ url: "http://guilderia-gateway-errors:8080" }],
 				passHostHeader: true,
 			},
 		});
-		expect(http?.routers?.["astron-collection-gateway-errors-web"]).toMatchObject({
+		expect(http?.routers?.["guilderia-gateway-errors-web"]).toMatchObject({
 			rule: "PathPrefix(`/`)",
 			priority: 1,
-			service: "astron-collection-gateway-errors",
+			service: "guilderia-gateway-errors",
 			entryPoints: ["web"],
 		});
 		expect(
-			http?.routers?.["astron-collection-gateway-errors-websecure"],
+			http?.routers?.["guilderia-gateway-errors-websecure"],
 		).toMatchObject({
 			rule: "PathPrefix(`/`)",
 			priority: 1,
-			service: "astron-collection-gateway-errors",
+			service: "guilderia-gateway-errors",
 			entryPoints: ["websecure"],
 		});
 	});

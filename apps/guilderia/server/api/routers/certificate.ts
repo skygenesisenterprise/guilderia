@@ -11,7 +11,7 @@ import {
 	toPublicCertificate,
 	updateCertificate,
 	validateCertificate,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, withPermission } from "@/server/api/trpc";
@@ -179,7 +179,7 @@ export const certificateRouter = createTRPCRouter({
 		}),
 
 	/**
-	 * Per-certificate detail for a bundled chain: Astron Collection parses the PEM
+	 * Per-certificate detail for a bundled chain: Guilderia parses the PEM
 	 * server side so the browser never has to hand-roll X.509 parsing on
 	 * attacker-supplied input.
 	 */

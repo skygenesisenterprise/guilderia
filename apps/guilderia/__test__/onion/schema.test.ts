@@ -6,7 +6,7 @@ import {
 	apiUpdateOnionService,
 	onionServiceStatus,
 	onionServices,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import { describe, expect, it } from "vitest";
 
 const validInput = {

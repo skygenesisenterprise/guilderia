@@ -80,8 +80,8 @@ export function normalizeApiError(error: unknown): ApiError {
     const serverMessage = extractServerMessage(axiosError.response.data);
     const message =
       status >= 500
-        ? `Astron Collection API returned HTTP ${status}`
-        : (serverMessage ?? `Astron Collection API returned HTTP ${status}`);
+        ? `Guilderia API returned HTTP ${status}`
+        : (serverMessage ?? `Guilderia API returned HTTP ${status}`);
 
     return new ApiError({
       message: redactKnownSecrets(message, getRegisteredSecrets()),
@@ -93,14 +93,14 @@ export function normalizeApiError(error: unknown): ApiError {
 
   if (axiosError.code === "ECONNABORTED" || axiosError.code === "ETIMEDOUT") {
     return new ApiError({
-      message: "The Astron Collection API did not respond before the timeout",
+      message: "The Guilderia API did not respond before the timeout",
       code: "timeout",
       retryable: true,
     });
   }
 
   return new ApiError({
-    message: "Could not reach the Astron Collection API",
+    message: "Could not reach the Guilderia API",
     code: "network_error",
     retryable: true,
   });
@@ -148,7 +148,7 @@ export class AstronCollectionApi implements ApiPort {
           "Content-Type": "application/json",
           Accept: "application/json",
           "x-api-key": config.apiKey,
-          "User-Agent": `astron-collection-mcp/${PACKAGE_VERSION}`,
+          "User-Agent": `guilderia-mcp/${PACKAGE_VERSION}`,
           ...config.customHeaders,
         },
       });

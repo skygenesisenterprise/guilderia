@@ -122,17 +122,17 @@ Message:
 ${body.message}
 
 ---
-Sent from Notploy website contact form
+Sent from guilderia website contact form
 		`.trim();
 
-		// Send email to the Notploy team
+		// Send email to the guilderia team
 		const recipients =
 			body.inquiryType === "sales"
-				? ["sales@notploy.com", "contact@notploy.com"]
-				: ["support@notploy.com"];
+				? ["sales@guilderia.com", "contact@guilderia.com"]
+				: ["support@guilderia.com"];
 
 		await resend.emails.send({
-			from: "Notploy Team <hello@notifications.notploy.com>",
+			from: "guilderia Team <hello@notifications.guilderia.com>",
 			to: recipients,
 			subject: emailSubject,
 			text: emailBody,
@@ -141,7 +141,7 @@ Sent from Notploy website contact form
 
 		// Send confirmation email to the user
 		const confirmationSubject =
-			"Thank you for contacting Notploy - We received your message";
+			"Thank you for contacting guilderia - We received your message";
 		const confirmationBody = `
 Hello ${body.firstName} ${body.lastName},
 
@@ -156,15 +156,15 @@ Message: ${body.message}
 We typically respond within 24-48 hours during business days. If your inquiry is urgent, please don't hesitate to reach out to us directly.
 
 Best regards,
-The Notploy Team
+The guilderia Team
 
 ---
 This is an automated confirmation email. Please do not reply to this email.
-If you need immediate assistance, contact us at contact@notploy.com
+If you need immediate assistance, contact us at contact@guilderia.com
 		`.trim();
 
 		await resend.emails.send({
-			from: "Notploy Team <hello@notifications.notploy.com>",
+			from: "guilderia Team <hello@notifications.guilderia.com>",
 			to: [body.email],
 			subject: confirmationSubject,
 			text: confirmationBody,

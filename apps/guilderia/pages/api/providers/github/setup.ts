@@ -3,9 +3,9 @@ import {
 	deriveGithubApiUrl,
 	parseGithubBaseUrl,
 	validateRequest,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
-import { hasPermission } from "@astron-collection/server/services/permission";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
+import { hasPermission } from "@guilderia/server/services/permission";
 import { eq } from "drizzle-orm";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Octokit } from "octokit";

@@ -1,5 +1,5 @@
 // Generates the CLI reference under content/docs/cli/ from the CLI itself, so
-// the documentation always mirrors the surface that `notploy` ships. Every
+// the documentation always mirrors the surface that `guilderia` ships. Every
 // command group is a page of the CLI section — siblings of "Introduction" and
 // "Authentication" — so a group can be read on its own, without a nested
 // reference folder.
@@ -452,7 +452,7 @@ function usageLine(group, command) {
 		// `[boolean]`), so the usage line matches `--help`.
 		.map((option) => option.flag.replace(/ \[boolean\]$/, ""));
 	const hasOptional = command.options.some((option) => !option.required);
-	const parts = [`notploy ${group} ${command.action}`, ...required];
+	const parts = [`guilderia ${group} ${command.action}`, ...required];
 	if (hasOptional) parts.push("[options]");
 	return parts.join(" ");
 }
@@ -479,7 +479,7 @@ ${rows}`;
 }
 
 function renderCommand(group, command) {
-	const heading = `### ${code(`notploy ${group} ${command.action}`)}`;
+	const heading = `### ${code(`guilderia ${group} ${command.action}`)}`;
 	const api = command.endpoint
 		? `\nCalls ${code(`${command.method} /api/trpc/${command.endpoint}`)}.\n`
 		: "";
@@ -498,18 +498,18 @@ function renderGroupPage(group) {
 
 	return `---
 title: ${JSON.stringify(meta.title)}
-description: ${JSON.stringify(`${meta.blurb} Generated from the ${code("notploy")} command surface.`)}
+description: ${JSON.stringify(`${meta.blurb} Generated from the ${code("guilderia")} command surface.`)}
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 ${meta.blurb}
 
-${code(`notploy ${group.name}`)} exposes **${count} command${count === 1 ? "" : "s"}**. They map one-to-one onto the ${code(`${group.name}.*`)} API operations, so anything reachable from the dashboard is reachable from here.
+${code(`guilderia ${group.name}`)} exposes **${count} command${count === 1 ? "" : "s"}**. They map one-to-one onto the ${code(`${group.name}.*`)} API operations, so anything reachable from the dashboard is reachable from here.
 
 <Callout>
-	Run ${code(`notploy ${group.name} --help`)} to list these commands in your terminal, or
-	${code(`notploy ${group.name} <command> --help`)} for a single command.
+	Run ${code(`guilderia ${group.name} --help`)} to list these commands in your terminal, or
+	${code(`guilderia ${group.name} <command> --help`)} for a single command.
 </Callout>
 
 ## Commands
@@ -528,7 +528,7 @@ function renderReferenceIndex(groups) {
 				.map(
 					(group) =>
 						`| [${GROUPS[group.name].title}](/docs/cli/${group.name}) | ${code(
-							`notploy ${group.name}`,
+							`guilderia ${group.name}`,
 						)} | ${group.commands.length} | ${GROUPS[group.name].blurb} |`,
 				)
 				.join("\n");
@@ -548,7 +548,7 @@ description: ${JSON.stringify(
 ---
 
 This reference is generated from the CLI source (${code("packages/cli")}), so it lists exactly what
-${code(`notploy ${CLI_PACKAGE.version}`)} registers with its command parser — no more, no less.
+${code(`guilderia ${CLI_PACKAGE.version}`)} registers with its command parser — no more, no less.
 
 **${groups.length} groups · ${total} commands.**
 
@@ -557,7 +557,7 @@ their flags, required inputs and allowed values.
 
 <Callout>
 	Every command accepts ${code("--json")} to print the raw API response, and
-	${code("notploy auth")} — the one command that is not part of the generated groups — is covered in
+	${code("guilderia auth")} — the one command that is not part of the generated groups — is covered in
 	[Authentication](/docs/cli/authentication).
 </Callout>
 
@@ -567,7 +567,7 @@ ${bySection}
 
 ## Naming
 
-Groups are the first argument and commands the second: ${code("notploy <group> <command>")}. Both are
+Groups are the first argument and commands the second: ${code("guilderia <group> <command>")}. Both are
 lowercase and hyphenated, matching the API namespace they call (${code("docker-disk-usage")} →
 ${code("dockerDiskUsage.*")}).
 
@@ -577,7 +577,7 @@ when it is missing, so it always has to be provided; the others are omitted from
 leave them out, which lets the server apply its defaults.
 
 Flag names, required flags and allowed values are read from the CLI itself, so this page cannot drift
-from what ${code("notploy --help")} reports.
+from what ${code("guilderia --help")} reports.
 `;
 }
 
@@ -635,7 +635,7 @@ if (check) {
 			`CLI documentation is out of date (${problems.length} file(s)):`,
 		);
 		for (const problem of problems) console.error(`  ${problem}`);
-		console.error("Run 'pnpm --filter @notploy/docs run generate:cli' and commit the result.");
+		console.error("Run 'pnpm --filter @guilderia/docs run generate:cli' and commit the result.");
 		process.exitCode = 1;
 	} else {
 		const total = groups.reduce((sum, group) => sum + group.commands.length, 0);

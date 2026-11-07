@@ -1,7 +1,7 @@
 import {
 	getBackupOverviewIcon,
 	getServiceOverviewIcon,
-} from "@astron-collection/server/services/overview";
+} from "@guilderia/server/services/overview";
 import { describe, expect, test } from "vitest";
 
 describe("getServiceOverviewIcon", () => {

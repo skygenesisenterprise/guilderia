@@ -10,7 +10,7 @@ import {
 	initSchedules,
 	initializeSwarm,
 	initVolumeBackupsCronJobs,
-	sendAstronCollectionRestartNotifications,
+	sendGuilderiaRestartNotifications,
 	setupDirectories,
 	setupGatewayErrors,
 	startCommunitySync,
@@ -18,7 +18,7 @@ import {
 	startTrafficCollector,
 	validateInstallation,
 	writeGatewayErrorsConfig,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { config } from "dotenv";
 import next from "next";
 import packageInfo from "../package.json";
@@ -37,7 +37,7 @@ const dev = process.env.NODE_ENV !== "production";
 // Initialize critical directories and Traefik config BEFORE Next.js starts.
 // This prevents race conditions with the install script and, in development,
 // makes sure the Compose-managed Traefik service has a config file to read from
-// the shared config path (ASTRON_COLLECTION_CONFIG_PATH).
+// the shared config path (GUILDERIA_CONFIG_PATH).
 if (!IS_CLOUD) {
 	setupDirectories();
 	createDefaultTraefikConfig();
@@ -48,7 +48,7 @@ if (!IS_CLOUD) {
 
 /**
  * Deployments attach their services (and Traefik) to the shared
- * `astron-collection-network`, so it must exist before the first deploy. Production calls
+ * `guilderia-network`, so it must exist before the first deploy. Production calls
  * this from the bootstrap block below; development needs it too because the
  * Compose dev stack starts the app without running `pnpm setup`.
  */
@@ -57,7 +57,7 @@ const ensureAstronCollectionNetwork = async () => {
 		await initializeSwarm();
 		await initializeNetwork();
 	} catch (error) {
-		console.error("Failed to initialize astron-collection-network", error);
+		console.error("Failed to initialize guilderia-network", error);
 	}
 };
 
@@ -147,8 +147,8 @@ void app.prepare().then(async () => {
 		server.listen(PORT, HOST);
 		console.log(`Server Started on: http://${HOST}:${PORT}`);
 
-		// Serves the Astron Collection Internal DNS zones to the local network and forwards
-		// everything else upstream. Disabled with ASTRON_COLLECTION_DNS_SERVER=false.
+		// Serves the Guilderia Internal DNS zones to the local network and forwards
+		// everything else upstream. Disabled with GUILDERIA_DNS_SERVER=false.
 		startInternalDnsServer();
 		// Community Console: refresh the cached GitHub activity of the followed
 		// repositories. Registered in every environment so the console is never
@@ -169,7 +169,7 @@ void app.prepare().then(async () => {
 			// Traffic Manager: incremental Traefik access-log collection plus the
 			// retention job of the traffic aggregates.
 			await startTrafficCollector();
-			await sendAstronCollectionRestartNotifications();
+			await sendGuilderiaRestartNotifications();
 		}
 
 		// Same condition as the queue backend: the local worker must run

@@ -1,5 +1,5 @@
-import type { Domain } from "@astron-collection/server";
-import { createDomainLabels } from "@astron-collection/server";
+import type { Domain } from "@guilderia/server";
+import { createDomainLabels } from "@guilderia/server";
 import { describe, expect, it } from "vitest";
 
 describe("createDomainLabels", () => {

@@ -938,8 +938,8 @@ describe("external navigation", () => {
 			"support",
 		]);
 		expect(navigation.external.map((item) => item.href)).toEqual([
-			"https://docs.astron-collection.com/docs/core",
-			"https://discord.gg/GUkDugVh34",
+			"https://docs.guilderia.com/docs/core",
+			"https://guilderia.com/community",
 		]);
 	});
 

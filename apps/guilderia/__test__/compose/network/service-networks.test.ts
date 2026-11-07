@@ -1,18 +1,18 @@
-import type { Compose, ComposeSpecification } from "@astron-collection/server";
+import type { Compose, ComposeSpecification } from "@guilderia/server";
 import {
 	applyServiceNetworks,
 	declareUsedNetworksInRoot,
 	isolatedNetworkName,
 	resolveServiceNetworks,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
-import { getRemoteDocker } from "@astron-collection/server/utils/servers/remote-docker";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
+import { getRemoteDocker } from "@guilderia/server/utils/servers/remote-docker";
 import { beforeEach, expect, test, vi } from "vitest";
 import { parse } from "yaml";
 
 // `resolveServiceNetworks` reaches the daemon to make sure a service's dedicated
 // network exists, so the Docker client is stubbed for the isolation cases.
-vi.mock("@astron-collection/server/utils/servers/remote-docker", () => ({
+vi.mock("@guilderia/server/utils/servers/remote-docker", () => ({
 	getRemoteDocker: vi.fn(),
 }));
 
@@ -72,13 +72,13 @@ services:
 	expect(result.services?.web?.networks).toContain("shared-net");
 });
 
-test("applyServiceNetworks: detach removes astron-collection-network and default", async () => {
+test("applyServiceNetworks: detach removes guilderia-network and default", async () => {
 	const result = parse(`
 services:
   db:
     image: postgres
     networks:
-      - astron-collection-network
+      - guilderia-network
       - default
 `) as ComposeSpecification;
 
@@ -90,7 +90,7 @@ services:
 	);
 
 	expect(injected.size).toBe(0);
-	expect(result.services?.db?.networks).not.toContain("astron-collection-network");
+	expect(result.services?.db?.networks).not.toContain("guilderia-network");
 	expect(result.services?.db?.networks).not.toContain("default");
 });
 
@@ -141,16 +141,16 @@ services:
 	expect(result.services?.web?.networks).toBeUndefined();
 });
 
-test("declareUsedNetworksInRoot: declares astron-collection-network only when used", () => {
+test("declareUsedNetworksInRoot: declares guilderia-network only when used", () => {
 	const used = parse(`
 services:
   web:
     image: nginx
     networks:
-      - astron-collection-network
+      - guilderia-network
 `) as ComposeSpecification;
 	declareUsedNetworksInRoot(used, new Set());
-	expect(used.networks).toHaveProperty("astron-collection-network");
+	expect(used.networks).toHaveProperty("guilderia-network");
 
 	const unused = parse(`
 services:
@@ -160,7 +160,7 @@ services:
       - default
 `) as ComposeSpecification;
 	declareUsedNetworksInRoot(unused, new Set());
-	expect(unused.networks ?? {}).not.toHaveProperty("astron-collection-network");
+	expect(unused.networks ?? {}).not.toHaveProperty("guilderia-network");
 });
 
 test("declareUsedNetworksInRoot: declares injected networks that are used", () => {
@@ -178,13 +178,13 @@ services:
 	expect(result.networks ?? {}).not.toHaveProperty("unused-net");
 });
 
-test("resolveServiceNetworks: returns astron-collection-network by default", async () => {
+test("resolveServiceNetworks: returns guilderia-network by default", async () => {
 	const resolved = await resolveServiceNetworks({});
-	expect(resolved).toEqual([{ Target: "astron-collection-network" }]);
+	expect(resolved).toEqual([{ Target: "guilderia-network" }]);
 	expect(findManyMock).not.toHaveBeenCalled();
 });
 
-test("resolveServiceNetworks: omits astron-collection-network when detached", async () => {
+test("resolveServiceNetworks: omits guilderia-network when detached", async () => {
 	const resolved = await resolveServiceNetworks({ detachAstronCollectionNetwork: true });
 	expect(resolved).toEqual([]);
 });
@@ -195,7 +195,7 @@ test("resolveServiceNetworks: appends overlay networks by networkId", async () =
 	const resolved = await resolveServiceNetworks({ networkIds: ["net-a"] });
 
 	expect(resolved).toEqual([
-		{ Target: "astron-collection-network" },
+		{ Target: "guilderia-network" },
 		{ Target: "overlay-a" },
 	]);
 });
@@ -209,7 +209,7 @@ test("resolveServiceNetworks: networkSwarm override takes precedence", async () 
 });
 
 test("isolatedNetworkName: prefixes the app name to avoid reserved networks", () => {
-	expect(isolatedNetworkName("gitea")).toBe("astron-collection-iso-gitea");
+	expect(isolatedNetworkName("gitea")).toBe("guilderia-iso-gitea");
 });
 
 test("resolveServiceNetworks: attaches a dedicated isolated network", async () => {
@@ -225,10 +225,10 @@ test("resolveServiceNetworks: attaches a dedicated isolated network", async () =
 		appName: "myapp",
 	});
 
-	// It stays on astron-collection-network so Traefik keeps serving the domain.
+	// It stays on guilderia-network so Traefik keeps serving the domain.
 	expect(resolved).toEqual([
-		{ Target: "astron-collection-network" },
-		{ Target: "astron-collection-iso-myapp" },
+		{ Target: "guilderia-network" },
+		{ Target: "guilderia-iso-myapp" },
 	]);
 	expect(createNetwork).not.toHaveBeenCalled();
 });
@@ -251,12 +251,12 @@ test("resolveServiceNetworks: creates the isolated network when missing", async 
 	});
 
 	expect(resolved).toEqual([
-		{ Target: "astron-collection-network" },
-		{ Target: "astron-collection-iso-myapp" },
+		{ Target: "guilderia-network" },
+		{ Target: "guilderia-iso-myapp" },
 	]);
 	expect(createNetwork).toHaveBeenCalledWith(
 		expect.objectContaining({
-			Name: "astron-collection-iso-myapp",
+			Name: "guilderia-iso-myapp",
 			Driver: "overlay",
 			Attachable: true,
 		}),
@@ -267,6 +267,6 @@ test("resolveServiceNetworks: no dedicated network when isolation is off", async
 	getRemoteDockerMock.mockReset();
 	const resolved = await resolveServiceNetworks({ appName: "myapp" });
 
-	expect(resolved).toEqual([{ Target: "astron-collection-network" }]);
+	expect(resolved).toEqual([{ Target: "guilderia-network" }]);
 	expect(getRemoteDockerMock).not.toHaveBeenCalled();
 });

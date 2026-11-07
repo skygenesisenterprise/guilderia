@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-const STORAGE_KEY = "astron-collection.status.adminToken";
+const STORAGE_KEY = "guilderia.status.adminToken";
 
 interface AdminTokenContextValue {
 	token: string | null;

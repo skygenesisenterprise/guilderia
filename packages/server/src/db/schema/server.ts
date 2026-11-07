@@ -56,7 +56,7 @@ export const server = pgTable("server", {
 	metricsConfig: jsonb("metricsConfig")
 		.$type<{
 			server: {
-				type: "Astron Collection" | "Remote";
+				type: "Guilderia" | "Remote";
 				refreshRate: number;
 				port: number;
 				token: string;

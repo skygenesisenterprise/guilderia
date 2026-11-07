@@ -20,22 +20,22 @@ export function NavLinks() {
 	const links = [
 		{
 			text: "Login",
-			url: "https://app.notploy.com/",
+			url: "https://app.guilderia.com/",
 			icon: LogIn,
 		},
 		{
 			text: "Sign Up",
-			url: "https://app.notploy.com/register",
+			url: "https://app.guilderia.com/register",
 			icon: UserPlus,
 		},
 		{
 			text: "Website",
-			url: "https://notploy.com",
+			url: "https://guilderia.com",
 			icon: Globe,
 		},
 		{
 			text: "Templates",
-			url: "https://templates.notploy.com",
+			url: "https://templates.guilderia.com",
 			icon: LayoutGrid,
 		},
 		{
@@ -60,12 +60,12 @@ export function NavLinks() {
 		},
 		{
 			text: "Github",
-			url: "https://github.com/skygenesisenterprise/notploy",
+			url: "https://github.com/skygenesisenterprise/guilderia",
 			icon: Github,
 		},
 		{
 			text: "Blog",
-			url: "https://notploy.com/blog",
+			url: "https://guilderia.com/blog",
 			icon: Rss,
 		},
 	];

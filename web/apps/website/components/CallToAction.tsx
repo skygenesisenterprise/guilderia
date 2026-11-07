@@ -5,23 +5,23 @@ import { Button } from "./ui/button";
 const paths = [
 	{
 		href: "/self",
-		label: "Get started with Notploy Self",
+		label: "Get started with guilderia Self",
 		description: "Free, open source, on your servers",
 	},
 	{
-		href: "https://app.notploy.com/register",
-		label: "Explore Notploy Cloud",
-		description: "Managed by Notploy, ready in minutes",
+		href: "https://app.guilderia.com/register",
+		label: "Explore guilderia Cloud",
+		description: "Managed by guilderia, ready in minutes",
 		external: true,
 	},
 	{
-		href: "https://docs.notploy.com/docs/core",
+		href: "https://docs.guilderia.com/docs/core",
 		label: "Read the documentation",
 		description: "Guides, installation, architecture and reference",
 		external: true,
 	},
 	{
-		href: "https://github.com/skygenesisenterprise/notploy",
+		href: "https://github.com/skygenesisenterprise/guilderia",
 		label: "View GitHub",
 		description: "Source code, issues and releases",
 		external: true,
@@ -67,11 +67,11 @@ export function CallToAction() {
 			<Container className="relative z-30">
 				<div className="mx-auto max-w-2xl text-center">
 					<h2 className="font-display text-3xl tracking-tight text-foreground sm:text-4xl">
-						Start with Notploy today
+						Start with guilderia today
 					</h2>
 					<p className="mt-4 text-lg tracking-tight text-muted-foreground">
 						Deploy your first application on infrastructure you own — self-hosted
-						with Notploy Self, or managed with Notploy Cloud.
+						with guilderia Self, or managed with guilderia Cloud.
 					</p>
 
 					<div className="mx-auto mt-10 grid max-w-xl grid-cols-1 gap-4 sm:grid-cols-2">

@@ -29,7 +29,7 @@ const internalRequirements = (scope: DomainScope): DomainRequirements => ({
 
 /**
  * Number of trailing labels kept as the internal DNS zone, mirroring how
- * registrable domains work: `gitlab.astron-collection.lan` belongs to `astron-collection.lan`.
+ * registrable domains work: `gitlab.guilderia.lan` belongs to `guilderia.lan`.
  */
 const INTERNAL_ZONE_LABEL_COUNT = 2;
 

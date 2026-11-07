@@ -6,8 +6,8 @@ const nextConfig = {
 	// the whole pnpm store. Ignored by `next dev`.
 	output: "standalone",
 	// The status engine is consumed as workspace TypeScript sources, exactly
-	// like `@astron-collection/server` in the console app.
-	transpilePackages: ["@astron-collection/status"],
+	// like `@guilderia/server` in the console app.
+	transpilePackages: ["@guilderia/status"],
 	async headers() {
 		return [
 			{

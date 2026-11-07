@@ -1,5 +1,5 @@
 /**
- * Astron Collection Status bridge.
+ * Guilderia Status bridge.
  *
  * Every procedure is a thin pass-through to the status platform over HTTP
  * (`StatusPublisher`): the console never writes to the status database

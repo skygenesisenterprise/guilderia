@@ -1,37 +1,37 @@
 import { join } from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
+import { paths } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateCompose,
 	buildAppName,
 	cleanAppName,
 	compose,
-} from "@astron-collection/server/db/schema";
-import { getBuildComposeCommand } from "@astron-collection/server/utils/builders/compose";
-import { randomizeSpecificationFile } from "@astron-collection/server/utils/docker/compose";
+} from "@guilderia/server/db/schema";
+import { getBuildComposeCommand } from "@guilderia/server/utils/builders/compose";
+import { randomizeSpecificationFile } from "@guilderia/server/utils/docker/compose";
 import {
 	cloneCompose,
 	loadDockerCompose,
 	loadDockerComposeRemote,
-} from "@astron-collection/server/utils/docker/domain";
-import type { ComposeSpecification } from "@astron-collection/server/utils/docker/types";
-import { sendBuildErrorNotifications } from "@astron-collection/server/utils/notifications/build-error";
-import { sendBuildSuccessNotifications } from "@astron-collection/server/utils/notifications/build-success";
+} from "@guilderia/server/utils/docker/domain";
+import type { ComposeSpecification } from "@guilderia/server/utils/docker/types";
+import { sendBuildErrorNotifications } from "@guilderia/server/utils/notifications/build-error";
+import { sendBuildSuccessNotifications } from "@guilderia/server/utils/notifications/build-success";
 import {
 	ExecError,
 	execAsync,
 	execAsyncRemote,
-} from "@astron-collection/server/utils/process/execAsync";
-import { cloneBitbucketRepository } from "@astron-collection/server/utils/providers/bitbucket";
+} from "@guilderia/server/utils/process/execAsync";
+import { cloneBitbucketRepository } from "@guilderia/server/utils/providers/bitbucket";
 import {
 	cloneGitRepository,
 	getGitCommitInfo,
-} from "@astron-collection/server/utils/providers/git";
-import { cloneGiteaRepository } from "@astron-collection/server/utils/providers/gitea";
-import { cloneGithubRepository } from "@astron-collection/server/utils/providers/github";
-import { cloneGitlabRepository } from "@astron-collection/server/utils/providers/gitlab";
-import { getCreateComposeFileCommand } from "@astron-collection/server/utils/providers/raw";
-import { redactSecrets } from "@astron-collection/server/utils/security/redact";
+} from "@guilderia/server/utils/providers/git";
+import { cloneGiteaRepository } from "@guilderia/server/utils/providers/gitea";
+import { cloneGithubRepository } from "@guilderia/server/utils/providers/github";
+import { cloneGitlabRepository } from "@guilderia/server/utils/providers/gitlab";
+import { getCreateComposeFileCommand } from "@guilderia/server/utils/providers/raw";
+import { redactSecrets } from "@guilderia/server/utils/security/redact";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { quote } from "shell-quote";
@@ -474,7 +474,7 @@ export const removeCompose = async (
 
 		if (compose.composeType === "stack") {
 			const command = `
-			docker network disconnect ${compose.appName} astron-collection-traefik;
+			docker network disconnect ${compose.appName} guilderia-traefik;
 			docker stack rm ${compose.appName};
 			rm -rf ${projectPath}`;
 
@@ -485,7 +485,7 @@ export const removeCompose = async (
 			}
 		} else {
 			const command = `
-			docker network disconnect ${compose.appName} astron-collection-traefik;
+			docker network disconnect ${compose.appName} guilderia-traefik;
 			env -i PATH="$PATH" docker compose -p ${compose.appName} down ${
 				deleteVolumes ? "--volumes" : ""
 			};

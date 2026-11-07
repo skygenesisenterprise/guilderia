@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# Astron Collection container entrypoint — the single place that decides how a
+# Guilderia container entrypoint — the single place that decides how a
 # container starts. Every target of the root Dockerfile calls this script, and the
-# role is selected by ASTRON_COLLECTION_ROLE (or by the first argument, which is how
+# role is selected by GUILDERIA_ROLE (or by the first argument, which is how
 # the one-shot `migrate` job asks for the migrations):
 #
 #   api       backend: wait for PostgreSQL, optionally migrate, exec dist/server.mjs
@@ -20,17 +20,17 @@
 #   5. exec the server
 #
 # Escape hatches:
-#   ASTRON_COLLECTION_ROLE=api|client|migrate|status  select the role explicitly
-#   ASTRON_COLLECTION_ROLE=healthcheck                the Docker health probe
-#   ASTRON_COLLECTION_MODE=development                force dev mode
-#   ASTRON_COLLECTION_SKIP_DB_WAIT=1                  skip the wait-for-postgres step
-#   ASTRON_COLLECTION_SKIP_MIGRATIONS=1               skip migrations
-#   ASTRON_COLLECTION_RUN_MIGRATIONS=1                migrate before starting the API
-#   ASTRON_COLLECTION_COMMAND="<cmd>"                 run an arbitrary command instead
+#   GUILDERIA_ROLE=api|client|migrate|status  select the role explicitly
+#   GUILDERIA_ROLE=healthcheck                the Docker health probe
+#   GUILDERIA_MODE=development                force dev mode
+#   GUILDERIA_SKIP_DB_WAIT=1                  skip the wait-for-postgres step
+#   GUILDERIA_SKIP_MIGRATIONS=1               skip migrations
+#   GUILDERIA_RUN_MIGRATIONS=1                migrate before starting the API
+#   GUILDERIA_COMMAND="<cmd>"                 run an arbitrary command instead
 #   <entrypoint> shell                                drop into a bash shell
 set -euo pipefail
 
-ROLE="${1:-${ASTRON_COLLECTION_ROLE:-api}}"
+ROLE="${1:-${GUILDERIA_ROLE:-api}}"
 case "$ROLE" in
 api | client | migrate | status | healthcheck) ;;
 *)
@@ -38,7 +38,7 @@ api | client | migrate | status | healthcheck) ;;
 	;;
 esac
 
-MODE="${ASTRON_COLLECTION_MODE:-${NODE_ENV:-production}}"
+MODE="${GUILDERIA_MODE:-${NODE_ENV:-production}}"
 case "$MODE" in
 dev | development) MODE="development" ;;
 prod | production) MODE="production" ;;
@@ -47,14 +47,14 @@ prod | production) MODE="production" ;;
 	;;
 esac
 
-log() { printf '[astron-collection] %s\n' "$*"; }
+log() { printf '[guilderia] %s\n' "$*"; }
 
 # --- Healthcheck ------------------------------------------------------------
 # One image serves every role, so the Docker HEALTHCHECK cannot hard-code a
 # single path: it asks the entrypoint, which probes the *container* role
-# (ASTRON_COLLECTION_ROLE) on its own port. Exits 0 when the app answers.
+# (GUILDERIA_ROLE) on its own port. Exits 0 when the app answers.
 if [ "$ROLE" = "healthcheck" ]; then
-	probe_role="${ASTRON_COLLECTION_ROLE:-api}"
+	probe_role="${GUILDERIA_ROLE:-api}"
 	case "$probe_role" in
 	client)
 		probe="http://127.0.0.1:${PORT:-3000}/"
@@ -74,13 +74,13 @@ fi
 if [ "${2:-}" = "shell" ] || [ "${1:-}" = "shell" ]; then
 	exec bash
 fi
-if [ -n "${ASTRON_COLLECTION_COMMAND:-}" ]; then
-	log "running custom command: ${ASTRON_COLLECTION_COMMAND}"
-	exec bash -lc "${ASTRON_COLLECTION_COMMAND}"
+if [ -n "${GUILDERIA_COMMAND:-}" ]; then
+	log "running custom command: ${GUILDERIA_COMMAND}"
+	exec bash -lc "${GUILDERIA_COMMAND}"
 fi
 
 # --- Status page application -----------------------------------------------
-# `ASTRON_COLLECTION_ROLE=status` runs the standalone status page (apps/status)
+# `GUILDERIA_ROLE=status` runs the standalone status page (apps/status)
 # instead of the platform: no PostgreSQL, no Redis, no migrations. The engine keeps
 # its state in a SQLite file under STATUS_DATA_DIR.
 if [ "$ROLE" = "status" ]; then
@@ -103,7 +103,7 @@ if [ "$ROLE" = "client" ]; then
 	CLIENT_BIND_HOST="${HOST:-${HOSTNAME:-0.0.0.0}}"
 	if [ "$MODE" = "development" ]; then
 		log "role: client (development, port ${CLIENT_CONTAINER_PORT})"
-		[ -d ./apps/astron ] && cd apps/astron
+		[ -d ./apps/guilderia ] && cd apps/guilderia
 		exec pnpm exec next dev -p "${CLIENT_CONTAINER_PORT}" -H "${CLIENT_BIND_HOST}"
 	fi
 	log "role: client (production, port ${CLIENT_CONTAINER_PORT}, dir: $(pwd))"
@@ -111,11 +111,11 @@ if [ "$ROLE" = "client" ]; then
 fi
 
 # --- Locate the backend application ----------------------------------------
-if [ -n "${ASTRON_COLLECTION_APP_DIR:-}" ]; then
-	cd "${ASTRON_COLLECTION_APP_DIR}"
-elif [ ! -f "./dist/server.mjs" ] && [ -f "./apps/astron/package.json" ]; then
-	# Dev image: we are at the monorepo root, the app lives in apps/astron.
-	cd apps/astron
+if [ -n "${GUILDERIA_APP_DIR:-}" ]; then
+	cd "${GUILDERIA_APP_DIR}"
+elif [ ! -f "./dist/server.mjs" ] && [ -f "./apps/guilderia/package.json" ]; then
+	# Dev image: we are at the monorepo root, the app lives in apps/guilderia.
+	cd apps/guilderia
 fi
 
 if [ "$MODE" = "development" ]; then
@@ -133,7 +133,7 @@ else
 fi
 
 # --- Wait for PostgreSQL ---------------------------------------------------
-if [ "${ASTRON_COLLECTION_SKIP_DB_WAIT:-0}" != "1" ]; then
+if [ "${GUILDERIA_SKIP_DB_WAIT:-0}" != "1" ]; then
 	if [ -f "${SCRIPT_DIR}/wait-for-postgres.${SCRIPT_EXT}" ]; then
 		log "waiting for the database to accept connections..."
 		"${RUNNER[@]}" "${SCRIPT_DIR}/wait-for-postgres.${SCRIPT_EXT}"
@@ -141,18 +141,18 @@ if [ "${ASTRON_COLLECTION_SKIP_DB_WAIT:-0}" != "1" ]; then
 		log "wait-for-postgres script not found, skipping"
 	fi
 else
-	log "database wait disabled (ASTRON_COLLECTION_SKIP_DB_WAIT=1)"
+	log "database wait disabled (GUILDERIA_SKIP_DB_WAIT=1)"
 fi
 
 # --- Migrations ------------------------------------------------------------
 # Only the `migrate` job and an explicitly opted-in API run them: two API
 # replicas must never race on the same schema.
 RUN_MIGRATIONS="0"
-if [ "$ROLE" = "migrate" ] || [ "${ASTRON_COLLECTION_RUN_MIGRATIONS:-0}" = "1" ]; then
+if [ "$ROLE" = "migrate" ] || [ "${GUILDERIA_RUN_MIGRATIONS:-0}" = "1" ]; then
 	RUN_MIGRATIONS="1"
 fi
 
-if [ "$RUN_MIGRATIONS" = "1" ] && [ "${ASTRON_COLLECTION_SKIP_MIGRATIONS:-0}" != "1" ]; then
+if [ "$RUN_MIGRATIONS" = "1" ] && [ "${GUILDERIA_SKIP_MIGRATIONS:-0}" != "1" ]; then
 	if [ -f "${SCRIPT_DIR}/migration.${SCRIPT_EXT}" ]; then
 		log "applying database migrations..."
 		"${RUNNER[@]}" "${SCRIPT_DIR}/migration.${SCRIPT_EXT}"
@@ -168,5 +168,5 @@ if [ "$ROLE" = "migrate" ]; then
 fi
 
 # --- Start -----------------------------------------------------------------
-log "starting Astron Collection (${ROLE})..."
+log "starting Guilderia (${ROLE})..."
 exec "${SERVER_CMD[@]}"

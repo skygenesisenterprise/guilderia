@@ -21,9 +21,9 @@ import {
 	readContainerFile,
 	uploadFileToContainer,
 	writeContainerFile,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
-import { checkPermission } from "@astron-collection/server/services/permission";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
+import { checkPermission } from "@guilderia/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -135,7 +135,7 @@ export const dockerRouter = createTRPCRouter({
 		});
 		const targets = [
 			...(!IS_CLOUD
-				? [{ serverId: null, name: "Astron Collection instance", local: true }]
+				? [{ serverId: null, name: "Guilderia instance", local: true }]
 				: []),
 			...configuredServers
 				.filter((item) => accessibleIds.has(item.serverId) && item.sshKeyId)

@@ -41,7 +41,7 @@ updateChain.returning.mockResolvedValue([
 ]);
 const updateMock = vi.fn(() => updateChain);
 
-vi.mock("@astron-collection/server/db", () => ({
+vi.mock("@guilderia/server/db", () => ({
 	db: {
 		execute: vi.fn(() => Promise.resolve([usage])),
 		update: updateMock,
@@ -56,7 +56,7 @@ vi.mock("@astron-collection/server/db", () => ({
 	},
 }));
 
-const { db } = await import("@astron-collection/server/db");
+const { db } = await import("@guilderia/server/db");
 const {
 	assertProjectQuotaWithinUsage,
 	assertServiceQuotaChange,
@@ -65,11 +65,11 @@ const {
 	getProjectQuotaUsage,
 	parseQuotaValue,
 	ProjectQuotaExceededError,
-} = await import("@astron-collection/server/services/project-quota");
+} = await import("@guilderia/server/services/project-quota");
 const { updateApplication } = await import(
-	"@astron-collection/server/services/application"
+	"@guilderia/server/services/application"
 );
-const { updateProjectById } = await import("@astron-collection/server/services/project");
+const { updateProjectById } = await import("@guilderia/server/services/project");
 
 beforeEach(() => {		vi.clearAllMocks();
 	vi.mocked(db.execute).mockReset();

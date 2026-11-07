@@ -4,14 +4,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mockHasPermission = vi.hoisted(() => vi.fn());
 const mockFindMember = vi.hoisted(() => vi.fn());
 const mockCheckServiceAccess = vi.hoisted(() => vi.fn());
-vi.mock("@astron-collection/server/services/permission", () => ({
+vi.mock("@guilderia/server/services/permission", () => ({
 	hasPermission: mockHasPermission,
 	findMemberByUserId: mockFindMember,
 	checkServiceAccess: mockCheckServiceAccess,
 }));
 
 const mockGetAccessibleServerIds = vi.hoisted(() => vi.fn());
-vi.mock("@astron-collection/server", () => ({
+vi.mock("@guilderia/server", () => ({
 	getAccessibleServerIds: mockGetAccessibleServerIds,
 }));
 

@@ -1,5 +1,5 @@
-import { db } from "@astron-collection/server/db";
-import { organization } from "@astron-collection/server/db/schema";
+import { db } from "@guilderia/server/db";
+import { organization } from "@guilderia/server/db/schema";
 import { eq } from "drizzle-orm";
 
 export const getSSOProviders = async () => {

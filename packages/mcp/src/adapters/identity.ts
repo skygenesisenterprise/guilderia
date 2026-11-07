@@ -86,7 +86,7 @@ export class IdentityResolver {
     if (typeof userId !== "string" || userId === "" || typeof organizationId !== "string") {
       throw new ApiError({
         message:
-          "The configured Astron Collection API key is not valid or has no active organization. Check ASTRON_COLLECTION_API_KEY.",
+          "The configured Guilderia API key is not valid or has no active organization. Check GUILDERIA_API_KEY.",
         code: "unauthenticated",
       });
     }
@@ -96,7 +96,7 @@ export class IdentityResolver {
     );
     if (!permissions) {
       throw new ApiError({
-        message: "The Astron Collection API returned an unexpected permission set; refusing to execute",
+        message: "The Guilderia API returned an unexpected permission set; refusing to execute",
         code: "internal_error",
       });
     }

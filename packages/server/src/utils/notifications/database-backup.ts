@@ -1,7 +1,7 @@
-import { db } from "@astron-collection/server/db";
-import { notifications } from "@astron-collection/server/db/schema";
-import DatabaseBackupEmail from "@astron-collection/server/emails/emails/database-backup";
-import { redactSecrets } from "@astron-collection/server/utils/security/redact";
+import { db } from "@guilderia/server/db";
+import { notifications } from "@guilderia/server/db/schema";
+import DatabaseBackupEmail from "@guilderia/server/emails/emails/database-backup";
+import { redactSecrets } from "@guilderia/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -51,7 +51,7 @@ export const sendDatabaseBackupNotifications = async ({
 		),
 		with: {
 			email: true,
-			discord: true,
+			guilderia: true,
 			telegram: true,
 			slack: true,
 			resend: true,
@@ -69,7 +69,7 @@ export const sendDatabaseBackupNotifications = async ({
 		const {
 			email,
 			resend,
-			discord,
+			guilderia,
 			telegram,
 			slack,
 			gotify,
@@ -96,7 +96,7 @@ export const sendDatabaseBackupNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Database backup for astron-collection",
+						"Database backup for guilderia",
 						template,
 					);
 				}
@@ -104,17 +104,17 @@ export const sendDatabaseBackupNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Database backup for astron-collection",
+						"Database backup for guilderia",
 						template,
 					);
 				}
 			}
 
-			if (discord) {
+			if (guilderia) {
 				const decorate = (decoration: string, text: string) =>
-					`${discord.decoration ? decoration : ""} ${text}`.trim();
+					`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
-				await sendDiscordNotification(discord, {
+				await sendDiscordNotification(guilderia, {
 					title:
 						type === "success"
 							? decorate(">", "`✅` Database Backup Successful")
@@ -169,7 +169,7 @@ export const sendDatabaseBackupNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Astron Collection Database Backup Notification",
+						text: "Guilderia Database Backup Notification",
 					},
 				});
 			}
@@ -292,7 +292,7 @@ export const sendDatabaseBackupNotifications = async ({
 				await sendMattermostNotification(mattermost, {
 					text: `**${statusEmoji} Database Backup ${typeStatus}**\n\n**Project:** ${projectName}\n**Application:** ${applicationName}\n**Type:** ${databaseType}\n**Database Name:** ${databaseName}\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}${errorMsg}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Astron Collection",
+					username: mattermost.username || "Guilderia",
 				});
 			}
 

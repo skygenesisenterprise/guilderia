@@ -1,4 +1,4 @@
-import { findGiteaById } from "@astron-collection/server";
+import { findGiteaById } from "@guilderia/server";
 import type { NextApiResponse } from "next";
 
 export interface Gitea {

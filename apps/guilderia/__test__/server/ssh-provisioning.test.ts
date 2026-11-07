@@ -10,7 +10,7 @@ import {
 	connectSsh,
 	parsePrivilegeProbe,
 	verifyKeyBasedConnection,
-} from "@astron-collection/server/utils/ssh";
+} from "@guilderia/server/utils/ssh";
 
 interface FakeStream extends EventEmitter {
 	stderr: EventEmitter;
@@ -126,7 +126,7 @@ describe("privilege probe parsing", () => {
 });
 
 describe("authorized_keys command builders", () => {
-	const publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5 test astron-collection";
+	const publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5 test guilderia";
 
 	it("installs idempotently without leaking the raw key", () => {
 		const command = buildInstallPublicKeyCommand({
@@ -182,11 +182,11 @@ describe("connectSsh", () => {
 		fake.execHandler = (_command, callback) => {
 			const stream = createFakeStream();
 			callback(undefined, stream);
-			stream.emit("data", "astron-collection-ssh-ok\n");
+			stream.emit("data", "guilderia-ssh-ok\n");
 			stream.emit("close", 0);
 		};
-		const result = await session.exec("echo astron-collection-ssh-ok");
-		expect(result.stdout).toContain("astron-collection-ssh-ok");
+		const result = await session.exec("echo guilderia-ssh-ok");
+		expect(result.stdout).toContain("guilderia-ssh-ok");
 		expect(result.code).toBe(0);
 		session.end();
 		expect(fake.ended).toBe(true);
@@ -365,7 +365,7 @@ describe("verifyKeyBasedConnection", () => {
 		fake.execHandler = (_command, callback) => {
 			const stream = createFakeStream();
 			callback(undefined, stream);
-			stream.emit("data", "astron-collection-ssh-ok\n");
+			stream.emit("data", "guilderia-ssh-ok\n");
 			stream.emit("close", 0);
 		};
 

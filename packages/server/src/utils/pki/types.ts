@@ -1,14 +1,14 @@
 /**
- * Astron Collection Instance Identity & Certificate Authority — domain model.
+ * Guilderia Instance Identity & Certificate Authority — domain model.
  *
  * This module is intentionally separate from:
  *  - `utils/tls/certificate` (application TLS certificates served by Traefik), and
  *  - `utils/identity` (human/IdP identity providers: OIDC, SAML, LDAP).
  *
  * It answers the two distinct questions of issue #75:
- *  - **Identity** — *who is this Astron Collection instance?* → a locally generated key
+ *  - **Identity** — *who is this Guilderia instance?* → a locally generated key
  *    pair and its X.509 certificate.
- *  - **Entitlement** — *what is it authorized to use?* → a Astron Collection-signed token
+ *  - **Entitlement** — *what is it authorized to use?* → a Guilderia-signed token
  *    that grants a product and its capabilities.
  *
  * Identity is not licensing: a valid certificate never by itself grants a
@@ -16,19 +16,19 @@
  */
 
 /**
- * Astron Collection distribution/flavor running on the host.
+ * Guilderia distribution/flavor running on the host.
  *
  * `self` is free and autonomous: it bootstraps a local trust anchor and needs no
- * contact with Astron Collection services. `cloud` and `console` are protected products
- * that require a Astron Collection-signed entitlement.
+ * contact with Guilderia services. `cloud` and `console` are protected products
+ * that require a Guilderia-signed entitlement.
  */
 export const astronCollectionProducts = ["self", "cloud", "console"] as const;
 export type AstronCollectionProduct = (typeof astronCollectionProducts)[number];
 
 export const astronCollectionProductLabels: Record<AstronCollectionProduct, string> = {
 	self: "Self-hosted",
-	cloud: "Astron Collection Cloud",
-	console: "Astron Collection Console",
+	cloud: "Guilderia Cloud",
+	console: "Guilderia Console",
 };
 
 /**
@@ -67,7 +67,7 @@ export const productCapabilities: Record<
 };
 
 /**
- * Products that must present a Astron Collection-signed entitlement. `self` is deliberately
+ * Products that must present a Guilderia-signed entitlement. `self` is deliberately
  * absent: self-hosted must keep working with no online dependency.
  */
 export const protectedProducts: readonly AstronCollectionProduct[] = [
@@ -85,10 +85,10 @@ export const isAstronCollectionCapability = (
 
 /**
  * Private-extension OID carrying the instance identity document in the X.509
- * certificate. The pen is a placeholder until Astron Collection's IANA PEN is assigned;
+ * certificate. The pen is a placeholder until Guilderia's IANA PEN is assigned;
  * it only has to stay stable for the lifetime of issued certificates.
  */
-export const ASTRON_COLLECTION_IDENTITY_EXTENSION_OID = "1.3.6.1.4.1.99999.1.1";
+export const GUILDERIA_IDENTITY_EXTENSION_OID = "1.3.6.1.4.1.99999.1.1";
 
 /** Version of the instance identity extension payload. */
 export const INSTANCE_IDENTITY_EXTENSION_VERSION = 1;
@@ -96,14 +96,14 @@ export const INSTANCE_IDENTITY_EXTENSION_VERSION = 1;
 /**
  * Trust anchor a certificate chains to.
  *  - `local` — the instance's own self-signed CA (self-hosted).
- *  - `astron-collection` — a Astron Collection-issued CA (cloud/console, managed servers).
+ *  - `guilderia` — a Guilderia-issued CA (cloud/console, managed servers).
  */
-export type TrustAnchorKind = "local" | "astron-collection";
+export type TrustAnchorKind = "local" | "guilderia";
 
 /**
  * Payload embedded in the instance certificate extension. It is *self-asserted
  * identity metadata* (signed by the local CA), not an authorization: the
- * authoritative entitlement travels in a separate Astron Collection-signed token.
+ * authoritative entitlement travels in a separate Guilderia-signed token.
  */
 export interface InstanceIdentityDocument {
 	version: number;
@@ -195,7 +195,7 @@ export interface InstanceIdentity {
 
 /**
  * A signed authorization that answers "what are you authorized to use?".
- * Produced by Astron Collection's entitlement issuing authority and verified locally with
+ * Produced by Guilderia's entitlement issuing authority and verified locally with
  * its public key. It is bound to the instance public key so it cannot be copied
  * to another instance.
  */
@@ -219,7 +219,7 @@ export type EntitlementVerification =
 
 export const TRUST_ANCHOR_LABELS: Record<TrustAnchorKind, string> = {
 	local: "Local instance CA",
-	"astron-collection": "Astron Collection issuing CA",
+	"guilderia": "Guilderia issuing CA",
 };
 
 export const INSTANCE_IDENTITY_STATUS_LABELS: Record<

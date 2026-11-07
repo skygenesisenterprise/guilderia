@@ -1,5 +1,5 @@
-import type { BackupSchedule } from "@astron-collection/server/services/backup";
-import { getBackupCommand } from "@astron-collection/server/utils/backups/utils";
+import type { BackupSchedule } from "@guilderia/server/services/backup";
+import { getBackupCommand } from "@guilderia/server/utils/backups/utils";
 import { describe, expect, it } from "vitest";
 
 const buildBackup = (

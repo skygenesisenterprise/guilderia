@@ -5,15 +5,15 @@
 export type AppProduct = "self" | "cloud" | "console";
 
 /**
- * Branded names for the three Astron Collection environments:
- *   self    → "Astron Collection"
- *   cloud   → "Astron Collection Cloud"
- *   console → "Astron Collection Console"
+ * Branded names for the three Guilderia environments:
+ *   self    → "Guilderia"
+ *   cloud   → "Guilderia Cloud"
+ *   console → "Guilderia Console"
  */
 export const PRODUCT_BRAND_NAMES: Record<AppProduct, string> = {
-	self: "Astron Collection",
-	cloud: "Astron Collection Cloud",
-	console: "Astron Collection Console",
+	self: "Guilderia",
+	cloud: "Guilderia Cloud",
+	console: "Guilderia Console",
 };
 
 /** Brand name of a product; falls back to self-hosted while loading/unknown. */

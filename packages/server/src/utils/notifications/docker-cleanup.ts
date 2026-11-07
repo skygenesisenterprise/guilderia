@@ -1,6 +1,6 @@
-import { db } from "@astron-collection/server/db";
-import { notifications } from "@astron-collection/server/db/schema";
-import DockerCleanupEmail from "@astron-collection/server/emails/emails/docker-cleanup";
+import { db } from "@guilderia/server/db";
+import { notifications } from "@guilderia/server/db/schema";
+import DockerCleanupEmail from "@guilderia/server/emails/emails/docker-cleanup";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { and, eq } from "drizzle-orm";
@@ -21,7 +21,7 @@ import {
 
 export const sendDockerCleanupNotifications = async (
 	organizationId: string,
-	message = "Docker cleanup for astron-collection",
+	message = "Docker cleanup for guilderia",
 ) => {
 	const date = new Date();
 	const unixDate = ~~(Number(date) / 1000);
@@ -32,7 +32,7 @@ export const sendDockerCleanupNotifications = async (
 		),
 		with: {
 			email: true,
-			discord: true,
+			guilderia: true,
 			telegram: true,
 			slack: true,
 			resend: true,
@@ -50,7 +50,7 @@ export const sendDockerCleanupNotifications = async (
 		const {
 			email,
 			resend,
-			discord,
+			guilderia,
 			telegram,
 			slack,
 			gotify,
@@ -70,7 +70,7 @@ export const sendDockerCleanupNotifications = async (
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Docker cleanup for astron-collection",
+						"Docker cleanup for guilderia",
 						template,
 					);
 				}
@@ -78,17 +78,17 @@ export const sendDockerCleanupNotifications = async (
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Docker cleanup for astron-collection",
+						"Docker cleanup for guilderia",
 						template,
 					);
 				}
 			}
 
-			if (discord) {
+			if (guilderia) {
 				const decorate = (decoration: string, text: string) =>
-					`${discord.decoration ? decoration : ""} ${text}`.trim();
+					`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
-				await sendDiscordNotification(discord, {
+				await sendDiscordNotification(guilderia, {
 					title: decorate(">", "`✅` Docker Cleanup"),
 					color: 0x57f287,
 					fields: [
@@ -114,7 +114,7 @@ export const sendDockerCleanupNotifications = async (
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Astron Collection Docker Cleanup Notification",
+						text: "Guilderia Docker Cleanup Notification",
 					},
 				});
 			}
@@ -175,7 +175,7 @@ export const sendDockerCleanupNotifications = async (
 				await sendMattermostNotification(mattermost, {
 					text: `**✅ Docker Cleanup**\n\n**Message:** ${message}\n**Date:** ${format(date, "PP")}\n**Time:** ${format(date, "pp")}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Astron Collection",
+					username: mattermost.username || "Guilderia",
 				});
 			}
 

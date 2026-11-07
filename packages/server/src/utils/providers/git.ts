@@ -1,9 +1,9 @@
 import path, { join } from "node:path";
-import { paths } from "@astron-collection/server/constants";
+import { paths } from "@guilderia/server/constants";
 import {
 	findSSHKeyById,
 	updateSSHKeyById,
-} from "@astron-collection/server/services/ssh-key";
+} from "@guilderia/server/services/ssh-key";
 import { quote } from "shell-quote";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
 

@@ -1,5 +1,5 @@
 ---
-"@notploy/cli": patch
+"@guilderia/cli": patch
 ---
 
 cloud command support

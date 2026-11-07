@@ -1,9 +1,9 @@
-import { getRedis, IS_CLOUD, isRedisEnabled } from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+import { getRedis, IS_CLOUD, isRedisEnabled } from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@astron-collection/server/utils/process/execAsync";
+} from "@guilderia/server/utils/process/execAsync";
 import { BullMqQueue } from "./bullmq-queue";
 import { resolveBuildsConcurrency } from "./concurrency";
 import { processDeploymentJob } from "./deployments-queue";

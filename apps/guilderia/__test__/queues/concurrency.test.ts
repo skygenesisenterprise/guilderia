@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const getWebServerSettings = vi.fn();
 const findFirstServer = vi.fn();
 
-vi.mock("@astron-collection/server/db", () => ({
+vi.mock("@guilderia/server/db", () => ({
 	db: {
 		query: {
 			server: {
@@ -13,11 +13,11 @@ vi.mock("@astron-collection/server/db", () => ({
 	},
 }));
 
-vi.mock("@astron-collection/server/db/schema", () => ({
+vi.mock("@guilderia/server/db/schema", () => ({
 	server: {},
 }));
 
-vi.mock("@astron-collection/server/services/web-server-settings", () => ({
+vi.mock("@guilderia/server/services/web-server-settings", () => ({
 	getWebServerSettings: (...args: unknown[]) => getWebServerSettings(...args),
 }));
 

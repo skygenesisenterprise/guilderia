@@ -1,12 +1,12 @@
-import { redactBackupError } from "@astron-collection/server/utils/backups/redact";
-import { ExecError } from "@astron-collection/server/utils/process/ExecError";
+import { redactBackupError } from "@guilderia/server/utils/backups/redact";
+import { ExecError } from "@guilderia/server/utils/process/ExecError";
 import {
 	createRedactingLineBuffer,
 	redactObject,
 	redactSecrets,
 	redactSecretValues,
 	safeErrorMessage,
-} from "@astron-collection/server/utils/security/redact";
+} from "@guilderia/server/utils/security/redact";
 import { describe, expect, it } from "vitest";
 
 const SENTINELS = {

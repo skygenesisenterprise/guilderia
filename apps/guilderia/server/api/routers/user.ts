@@ -13,8 +13,8 @@ import {
 	sendEmailNotification,
 	sendResendNotification,
 	updateUser,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import {
 	account,
 	apiAssignPermissions,
@@ -25,11 +25,11 @@ import {
 	member,
 	session,
 	user,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import {
 	hasPermission,
 	resolvePermissions,
-} from "@astron-collection/server/services/permission";
+} from "@guilderia/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import * as bcrypt from "bcrypt";
 import { and, asc, desc, eq, gt, ne } from "drizzle-orm";
@@ -823,7 +823,7 @@ export const userRouter = createTRPCRouter({
 			try {
 				const toEmail = currentInvitation?.email || "";
 				const orgName = organization?.name || "organization";
-				const subject = `You've been invited to join ${orgName} on Astron Collection`;
+				const subject = `You've been invited to join ${orgName} on Guilderia`;
 				const html = await renderInvitationEmail({
 					email: toEmail,
 					inviteLink,

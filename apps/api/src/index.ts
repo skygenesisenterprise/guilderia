@@ -17,8 +17,8 @@ const app = new Hono();
 
 // Initialize Inngest client
 export const inngest = new Inngest({
-	id: "astron-collection-deployments",
-	name: "Astron Collection Deployment Service",
+	id: "guilderia-deployments",
+	name: "Guilderia Deployment Service",
 });
 
 export const deploymentFunction = inngest.createFunction(

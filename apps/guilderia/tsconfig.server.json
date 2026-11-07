@@ -9,7 +9,7 @@
 		"moduleResolution": "bundler",
 		"paths": {
 			"@/*": ["./*"],
-			"@astron-collection/server/*": ["../../packages/server/src/*"]
+			"@guilderia/server/*": ["../../packages/server/src/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "./server/**/*"]

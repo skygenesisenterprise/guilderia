@@ -83,7 +83,7 @@ export function formatContactDataForHubSpot(
 			},
 		],
 		context: {
-			pageUri: "https://notploy.com/contact",
+			pageUri: "https://guilderia.com/contact",
 			pageName: "Contact Us",
 		},
 	};

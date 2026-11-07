@@ -230,7 +230,7 @@ importers:
 
   apps/api:
     dependencies:
-      '@astron-collection/server':
+      '@guilderia/server':
         specifier: workspace:*
         version: link:../../packages/server
       '@hono/node-server':
@@ -309,13 +309,13 @@ importers:
       '@ai-sdk/openai-compatible':
         specifier: ^3.0.80
         version: 3.0.85(zod@4.6.7)
-      '@astron-collection/server':
+      '@guilderia/server':
         specifier: workspace:*
         version: link:../../packages/server
-      '@astron-collection/status':
+      '@guilderia/status':
         specifier: workspace:*
         version: link:../../packages/status
-      '@astron-collection/trpc-openapi':
+      '@guilderia/trpc-openapi':
         specifier: npm:@dokploy/trpc-openapi@0.0.18
         version: '@dokploy/trpc-openapi@0.0.18(@trpc/server@11.24.0(@types/aws-lambda@8.10.164)(@types/express@4.17.25)(@types/ws@8.5.10)(fastify@5.12.8)(next@16.3.4(@babel/core@7.29.13(supports-color@9.4.0))(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(typescript@7.0.2))(zod-openapi@5.4.6(zod@4.6.7))(zod@4.6.7)'
       '@aws-sdk/client-route-53':
@@ -736,7 +736,7 @@ importers:
 
   apps/schedules:
     dependencies:
-      '@astron-collection/server':
+      '@guilderia/server':
         specifier: workspace:*
         version: link:../../packages/server
       '@hono/node-server':
@@ -797,7 +797,7 @@ importers:
 
   apps/status:
     dependencies:
-      '@astron-collection/status':
+      '@guilderia/status':
         specifier: workspace:*
         version: link:../../packages/status
       clsx:

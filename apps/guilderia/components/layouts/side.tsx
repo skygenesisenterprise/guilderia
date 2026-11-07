@@ -830,9 +830,9 @@ export default function Page({ children, pageTitle }: Props) {
 
 	// Pages without a navigation entry still deserve a location in the header.
 	// `DashboardLayout` falls back to the generic app name for unknown routes,
-	// which we ignore so we never show a meaningless "Astron Collection" crumb.
+	// which we ignore so we never show a meaningless "Guilderia" crumb.
 	const standaloneTitle =
-		!activeNavigation && pageTitle && pageTitle !== "Astron Collection"
+		!activeNavigation && pageTitle && pageTitle !== "Guilderia"
 			? pageTitle
 			: undefined;
 
@@ -986,10 +986,10 @@ export default function Page({ children, pageTitle }: Props) {
 								<NotificationsButton />
 								<Button variant="ghost" size="icon" asChild>
 									<Link
-										href="https://github.com/skygenesisenterprise/astron-collection"
+										href="https://github.com/skygenesisenterprise/guilderia"
 										target="_blank"
 										rel="noopener noreferrer"
-										aria-label="Astron Collection on GitHub"
+										aria-label="Guilderia on GitHub"
 									>
 										<GithubIcon className="size-4" />
 									</Link>

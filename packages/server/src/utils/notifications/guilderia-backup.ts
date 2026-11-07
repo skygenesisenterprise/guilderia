@@ -1,7 +1,7 @@
-import { db } from "@astron-collection/server/db";
-import { notifications } from "@astron-collection/server/db/schema";
-import AstronCollectionBackupEmail from "@astron-collection/server/emails/emails/astron-collection-backup";
-import { redactSecrets } from "@astron-collection/server/utils/security/redact";
+import { db } from "@guilderia/server/db";
+import { notifications } from "@guilderia/server/db/schema";
+import GuilderiaBackupEmail from "@guilderia/server/emails/emails/guilderia-backup";
+import { redactSecrets } from "@guilderia/server/utils/security/redact";
 import { render } from "@react-email/components";
 import { format } from "date-fns";
 import { eq } from "drizzle-orm";
@@ -20,7 +20,7 @@ import {
 	sendTelegramNotification,
 } from "./utils";
 
-export const sendAstronCollectionBackupNotifications = async ({
+export const sendGuilderiaBackupNotifications = async ({
 	type,
 	errorMessage: rawErrorMessage,
 	backupSize,
@@ -35,10 +35,10 @@ export const sendAstronCollectionBackupNotifications = async ({
 	const date = new Date();
 	const unixDate = ~~(Number(date) / 1000);
 	const notificationList = await db.query.notifications.findMany({
-		where: eq(notifications.astronCollectionBackup, true),
+		where: eq(notifications.guilderiaBackup, true),
 		with: {
 			email: true,
-			discord: true,
+			guilderia: true,
 			telegram: true,
 			slack: true,
 			resend: true,
@@ -55,7 +55,7 @@ export const sendAstronCollectionBackupNotifications = async ({
 	for (const notification of notificationList) {
 		const {
 			email,
-			discord,
+			guilderia,
 			telegram,
 			slack,
 			resend,
@@ -71,7 +71,7 @@ export const sendAstronCollectionBackupNotifications = async ({
 		try {
 			if (email || resend) {
 				const template = await render(
-					AstronCollectionBackupEmail({
+					GuilderiaBackupEmail({
 						type,
 						errorMessage,
 						date: date.toLocaleString(),
@@ -82,7 +82,7 @@ export const sendAstronCollectionBackupNotifications = async ({
 				if (email) {
 					await sendEmailNotification(
 						email,
-						"Astron Collection instance backup",
+						"Guilderia instance backup",
 						template,
 					);
 				}
@@ -90,26 +90,26 @@ export const sendAstronCollectionBackupNotifications = async ({
 				if (resend) {
 					await sendResendNotification(
 						resend,
-						"Astron Collection instance backup",
+						"Guilderia instance backup",
 						template,
 					);
 				}
 			}
 
-			if (discord) {
+			if (guilderia) {
 				const decorate = (decoration: string, text: string) =>
-					`${discord.decoration ? decoration : ""} ${text}`.trim();
+					`${guilderia.decoration ? decoration : ""} ${text}`.trim();
 
-				await sendDiscordNotification(discord, {
+				await sendDiscordNotification(guilderia, {
 					title:
 						type === "success"
-							? decorate(">", "`✅` Astron Collection Backup Successful")
-							: decorate(">", "`❌` Astron Collection Backup Failed"),
+							? decorate(">", "`✅` Guilderia Backup Successful")
+							: decorate(">", "`❌` Guilderia Backup Failed"),
 					color: type === "success" ? 0x57f287 : 0xed4245,
 					fields: [
 						{
 							name: decorate("`📦`", "Backup Type"),
-							value: "Complete Astron Collection Instance",
+							value: "Complete Guilderia Instance",
 							inline: true,
 						},
 						...(backupSize
@@ -149,7 +149,7 @@ export const sendAstronCollectionBackupNotifications = async ({
 					],
 					timestamp: date.toISOString(),
 					footer: {
-						text: "Astron Collection Instance Backup Notification",
+						text: "Guilderia Instance Backup Notification",
 					},
 				});
 			}
@@ -162,9 +162,9 @@ export const sendAstronCollectionBackupNotifications = async ({
 					gotify,
 					decorate(
 						type === "success" ? "✅" : "❌",
-						`Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
+						`Guilderia Backup ${type === "success" ? "Successful" : "Failed"}`,
 					),
-					`${decorate("📦", "Backup Type: Complete Astron Collection Instance")}` +
+					`${decorate("📦", "Backup Type: Complete Guilderia Instance")}` +
 						`${backupSize ? decorate("💾", `Backup Size: ${backupSize}`) : ""}` +
 						`${decorate("🕒", `Date: ${date.toLocaleString()}`)}` +
 						`${type === "error" && errorMessage ? decorate("❌", `Error:\n${errorMessage}`) : ""}`,
@@ -174,10 +174,10 @@ export const sendAstronCollectionBackupNotifications = async ({
 			if (ntfy) {
 				await sendNtfyNotification(
 					ntfy,
-					`Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
+					`Guilderia Backup ${type === "success" ? "Successful" : "Failed"}`,
 					`${type === "success" ? "white_check_mark" : "x"}`,
 					"",
-					"📦Backup Type: Complete Astron Collection Instance\n" +
+					"📦Backup Type: Complete Guilderia Instance\n" +
 						`${backupSize ? `💾Backup Size: ${backupSize}\n` : ""}` +
 						`🕒Date: ${date.toLocaleString()}\n` +
 						`${type === "error" && errorMessage ? `❌Error:\n${errorMessage}` : ""}`,
@@ -196,7 +196,7 @@ export const sendAstronCollectionBackupNotifications = async ({
 					? `\n<b>Backup Size:</b> ${backupSize}`
 					: "";
 
-				const messageText = `<b>${statusEmoji} Astron Collection Backup ${typeStatus}</b>\n\n<b>Backup Type:</b> Complete Astron Collection Instance${sizeInfo}\n<b>Date:</b> ${format(date, "PP")}\n<b>Time:</b> ${format(date, "pp")}${isError ? errorMsg : ""}`;
+				const messageText = `<b>${statusEmoji} Guilderia Backup ${typeStatus}</b>\n\n<b>Backup Type:</b> Complete Guilderia Instance${sizeInfo}\n<b>Date:</b> ${format(date, "PP")}\n<b>Time:</b> ${format(date, "pp")}${isError ? errorMsg : ""}`;
 
 				await sendTelegramNotification(telegram, messageText);
 			}
@@ -210,8 +210,8 @@ export const sendAstronCollectionBackupNotifications = async ({
 							color: type === "success" ? "#00FF00" : "#FF0000",
 							pretext:
 								type === "success"
-									? ":white_check_mark: *Astron Collection Backup Successful*"
-									: ":x: *Astron Collection Backup Failed*",
+									? ":white_check_mark: *Guilderia Backup Successful*"
+									: ":x: *Guilderia Backup Failed*",
 							fields: [
 								...(type === "error" && errorMessage
 									? [
@@ -224,7 +224,7 @@ export const sendAstronCollectionBackupNotifications = async ({
 									: []),
 								{
 									title: "Backup Type",
-									value: "Complete Astron Collection Instance",
+									value: "Complete Guilderia Instance",
 									short: true,
 								},
 								...(backupSize
@@ -280,8 +280,8 @@ export const sendAstronCollectionBackupNotifications = async ({
 								tag: "plain_text",
 								content:
 									type === "success"
-										? "✅ Astron Collection Backup Successful"
-										: "❌ Astron Collection Backup Failed",
+										? "✅ Guilderia Backup Successful"
+										: "❌ Guilderia Backup Failed",
 							},
 							subtitle: {
 								tag: "plain_text",
@@ -304,7 +304,7 @@ export const sendAstronCollectionBackupNotifications = async ({
 												{
 													tag: "markdown",
 													content:
-														"**Backup Type:**\nComplete Astron Collection Instance",
+														"**Backup Type:**\nComplete Guilderia Instance",
 													text_align: "left",
 													text_size: "normal_v2",
 												},
@@ -364,43 +364,43 @@ export const sendAstronCollectionBackupNotifications = async ({
 				const statusEmoji = type === "success" ? ":white_check_mark:" : ":x:";
 				const typeStatus = type === "success" ? "Successful" : "Failed";
 				await sendMattermostNotification(mattermost, {
-					text: `${statusEmoji} **Astron Collection Backup ${typeStatus}**
+					text: `${statusEmoji} **Guilderia Backup ${typeStatus}**
 
-**Backup Type:** Complete Astron Collection Instance${backupSize ? `\n**Backup Size:** ${backupSize}` : ""}
+**Backup Type:** Complete Guilderia Instance${backupSize ? `\n**Backup Size:** ${backupSize}` : ""}
 **Date:** ${date.toLocaleString()}
 **Status:** ${typeStatus}${type === "error" && errorMessage ? `\n\n**Error:**\n\`\`\`\n${errorMessage}\n\`\`\`` : ""}`,
 					channel: mattermost.channel,
-					username: mattermost.username || "Astron Collection Bot",
+					username: mattermost.username || "Guilderia Bot",
 				});
 			}
 
 			if (custom) {
 				await sendCustomNotification(custom, {
-					title: `Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
-					message: `Astron Collection instance backup ${type === "success" ? "completed successfully" : "failed"}`,
-					backupType: "Complete Astron Collection Instance",
+					title: `Guilderia Backup ${type === "success" ? "Successful" : "Failed"}`,
+					message: `Guilderia instance backup ${type === "success" ? "completed successfully" : "failed"}`,
+					backupType: "Complete Guilderia Instance",
 					...(backupSize ? { backupSize } : {}),
 					...(type === "error" && errorMessage ? { errorMessage } : {}),
 					timestamp: date.toISOString(),
 					date: date.toLocaleString(),
 					status: type,
-					type: "astron-collection-backup",
+					type: "guilderia-backup",
 				});
 			}
 
 			if (pushover) {
 				await sendPushoverNotification(
 					pushover,
-					`Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
-					`Backup Type: Complete Astron Collection Instance${backupSize ? `\nBackup Size: ${backupSize}` : ""}\nDate: ${date.toLocaleString()}${type === "error" && errorMessage ? `\nError: ${errorMessage}` : ""}`,
+					`Guilderia Backup ${type === "success" ? "Successful" : "Failed"}`,
+					`Backup Type: Complete Guilderia Instance${backupSize ? `\nBackup Size: ${backupSize}` : ""}\nDate: ${date.toLocaleString()}${type === "error" && errorMessage ? `\nError: ${errorMessage}` : ""}`,
 				);
 			}
 
 			if (teams) {
 				await sendTeamsNotification(teams, {
-					title: `${type === "success" ? "✅" : "❌"} Astron Collection Backup ${type === "success" ? "Successful" : "Failed"}`,
+					title: `${type === "success" ? "✅" : "❌"} Guilderia Backup ${type === "success" ? "Successful" : "Failed"}`,
 					facts: [
-						{ name: "Backup Type", value: "Complete Astron Collection Instance" },
+						{ name: "Backup Type", value: "Complete Guilderia Instance" },
 						...(backupSize ? [{ name: "Backup Size", value: backupSize }] : []),
 						{ name: "Date", value: format(date, "PP pp") },
 						{

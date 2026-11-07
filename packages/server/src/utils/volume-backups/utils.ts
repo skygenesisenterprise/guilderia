@@ -1,15 +1,15 @@
 import path from "node:path";
-import { paths } from "@astron-collection/server/constants";
+import { paths } from "@guilderia/server/constants";
 import {
 	createDeploymentVolumeBackup,
 	updateDeploymentStatus,
-} from "@astron-collection/server/services/deployment";
-import { findDestinationById } from "@astron-collection/server/services/destination";
-import { findVolumeBackupById } from "@astron-collection/server/services/volume-backups";
+} from "@guilderia/server/services/deployment";
+import { findDestinationById } from "@guilderia/server/services/destination";
+import { findVolumeBackupById } from "@guilderia/server/services/volume-backups";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@astron-collection/server/utils/process/execAsync";
+} from "@guilderia/server/utils/process/execAsync";
 import { scheduledJobs, scheduleJob } from "node-schedule";
 import { getS3Credentials, normalizeS3Path } from "../backups/utils";
 import { sendVolumeBackupNotifications } from "../notifications/volume-backup";

@@ -1,21 +1,21 @@
 import path from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
+import { paths } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateMount,
 	mounts,
 	type ServiceType,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import {
 	createFile,
 	encodeBase64,
 	getCreateFileCommand,
-} from "@astron-collection/server/utils/docker/utils";
-import { removeFileOrDirectory } from "@astron-collection/server/utils/filesystem/directory";
+} from "@guilderia/server/utils/docker/utils";
+import { removeFileOrDirectory } from "@guilderia/server/utils/filesystem/directory";
 import {
 	execAsync,
 	execAsyncRemote,
-} from "@astron-collection/server/utils/process/execAsync";
+} from "@guilderia/server/utils/process/execAsync";
 import { TRPCError } from "@trpc/server";
 import { eq, type SQL, sql } from "drizzle-orm";
 import { quote } from "shell-quote";

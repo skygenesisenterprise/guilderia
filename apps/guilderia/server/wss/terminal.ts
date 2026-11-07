@@ -4,7 +4,7 @@ import {
 	findServerById,
 	isManagedCloud,
 	validateRequest,
-} from "@astron-collection/server";
+} from "@guilderia/server";
 import { publicIpv4, publicIpv6 } from "public-ip";
 import { Client, type ConnectConfig } from "ssh2";
 import { WebSocketServer } from "ws";
@@ -23,13 +23,13 @@ mkdir -p $HOME/.ssh && \\
 chmod 700 $HOME/.ssh && \\
 touch $HOME/.ssh/authorized_keys && \\
 chmod 600 $HOME/.ssh/authorized_keys && \\
-cat /etc/astron-collection/ssh/auto_generated-astron-collection-local.pub >> $HOME/.ssh/authorized_keys && \\
-echo "✓ Astron Collection SSH key added successfully. Reopen the terminal in Astron Collection to reconnect."
+cat /etc/guilderia/ssh/auto_generated-guilderia-local.pub >> $HOME/.ssh/authorized_keys && \\
+echo "✓ Guilderia SSH key added successfully. Reopen the terminal in Guilderia to reconnect."
 # ----------------------------------------`;
 
 const COMMAND_TO_GRANT_PERMISSION_ACCESS = `
 # ----------------------------------------
-sudo chown -R $USER:$USER /etc/astron-collection/ssh
+sudo chown -R $USER:$USER /etc/guilderia/ssh
 # ----------------------------------------
 `;
 

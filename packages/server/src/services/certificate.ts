@@ -1,16 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
+import { paths } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateCertificate,
 	certificates,
 	domains,
 	server,
-} from "@astron-collection/server/db/schema";
-import { removeDirectoryIfExistsContent } from "@astron-collection/server/utils/filesystem/directory";
-import type { ParsedCertificate } from "@astron-collection/server/utils/tls/certificate";
-import { parseCertificate } from "@astron-collection/server/utils/tls/certificate";
+} from "@guilderia/server/db/schema";
+import { removeDirectoryIfExistsContent } from "@guilderia/server/utils/filesystem/directory";
+import type { ParsedCertificate } from "@guilderia/server/utils/tls/certificate";
+import { parseCertificate } from "@guilderia/server/utils/tls/certificate";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import { quote } from "shell-quote";
@@ -41,7 +41,7 @@ export type CertificateInventoryItem = CertificatePublic & {
 };
 
 /**
- * Derives the lifecycle state Astron Collection displays. Mirrors the states of issue #59:
+ * Derives the lifecycle state Guilderia displays. Mirrors the states of issue #59:
  * a certificate without validity dates cannot be judged yet, so it stays
  * `pending` until its metadata has been extracted.
  */
@@ -73,7 +73,7 @@ export const toPublicCertificate = (
 };
 
 /**
- * Extracts the metadata Astron Collection persists alongside the PEM so the inventory can
+ * Extracts the metadata Guilderia persists alongside the PEM so the inventory can
  * show issuer, SANs and expiration without re-parsing on every read.
  */
 const certificateMetadata = (certificateData: string) => {
@@ -146,7 +146,7 @@ export const findResolverUsage = async (
 		settings?.certificateType === "custom" &&
 		settings.customCertResolver === resolver
 	) {
-		inUse.push({ domainId: "control-plane", host: "astron-collection dashboard" });
+		inUse.push({ domainId: "control-plane", host: "guilderia dashboard" });
 	}
 
 	return inUse;

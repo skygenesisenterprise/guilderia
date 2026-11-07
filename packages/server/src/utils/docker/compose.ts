@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { findComposeById } from "@astron-collection/server/services/compose";
+import { findComposeById } from "@guilderia/server/services/compose";
 import { parse, stringify } from "yaml";
 import { addSuffixToAllConfigs } from "./compose/configs";
 import { addSuffixToAllNetworks } from "./compose/network";

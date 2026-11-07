@@ -1,33 +1,33 @@
-import { docker } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
+import { docker } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
 import {
 	type apiCreateApplication,
 	applications,
 	buildAppName,
-} from "@astron-collection/server/db/schema";
-import { getAdvancedStats } from "@astron-collection/server/monitoring/utils";
+} from "@guilderia/server/db/schema";
+import { getAdvancedStats } from "@guilderia/server/monitoring/utils";
 import {
 	getBuildCommand,
 	mechanizeDockerContainer,
-} from "@astron-collection/server/utils/builders";
-import { sendBuildErrorNotifications } from "@astron-collection/server/utils/notifications/build-error";
-import { sendBuildSuccessNotifications } from "@astron-collection/server/utils/notifications/build-success";
+} from "@guilderia/server/utils/builders";
+import { sendBuildErrorNotifications } from "@guilderia/server/utils/notifications/build-error";
+import { sendBuildSuccessNotifications } from "@guilderia/server/utils/notifications/build-success";
 import {
 	ExecError,
 	execAsync,
 	execAsyncRemote,
-} from "@astron-collection/server/utils/process/execAsync";
-import { cloneBitbucketRepository } from "@astron-collection/server/utils/providers/bitbucket";
-import { buildRemoteDocker } from "@astron-collection/server/utils/providers/docker";
+} from "@guilderia/server/utils/process/execAsync";
+import { cloneBitbucketRepository } from "@guilderia/server/utils/providers/bitbucket";
+import { buildRemoteDocker } from "@guilderia/server/utils/providers/docker";
 import {
 	cloneGitRepository,
 	getGitCommitInfo,
-} from "@astron-collection/server/utils/providers/git";
-import { cloneGiteaRepository } from "@astron-collection/server/utils/providers/gitea";
-import { cloneGithubRepository } from "@astron-collection/server/utils/providers/github";
-import { cloneGitlabRepository } from "@astron-collection/server/utils/providers/gitlab";
-import { redactSecrets } from "@astron-collection/server/utils/security/redact";
-import { createTraefikConfig } from "@astron-collection/server/utils/traefik/application";
+} from "@guilderia/server/utils/providers/git";
+import { cloneGiteaRepository } from "@guilderia/server/utils/providers/gitea";
+import { cloneGithubRepository } from "@guilderia/server/utils/providers/github";
+import { cloneGitlabRepository } from "@guilderia/server/utils/providers/gitlab";
+import { redactSecrets } from "@guilderia/server/utils/security/redact";
+import { createTraefikConfig } from "@guilderia/server/utils/traefik/application";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
@@ -194,7 +194,7 @@ export const updateApplicationStatus = async (
 };
 
 /**
- * Astron Collection Cloud: assign and provision the generated *.astron-collection.app hostname
+ * Guilderia Cloud: assign and provision the generated *.guilderia.app hostname
  * once a deployment is live. Imported lazily because `cloud-domain` imports
  * this module; the cycle stays safe, and domain provisioning must never turn a
  * successful deployment into a failure (the ledger records the error instead).
@@ -477,12 +477,12 @@ export const deployPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Astron Collection Preview Deployment\n\n${buildingComment}`,
+			body: `### Guilderia Preview Deployment\n\n${buildingComment}`,
 		});
 		application.appName = previewDeployment.appName;
-		application.env = `${application.previewEnv}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildArgs = `${application.previewBuildArgs}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildSecrets = `${application.previewBuildSecrets}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.env = `${application.previewEnv}\nGUILDERIA_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildArgs = `${application.previewBuildArgs}\nGUILDERIA_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildSecrets = `${application.previewBuildSecrets}\nGUILDERIA_DEPLOY_URL=${previewDeployment?.domain?.host}`;
 		application.rollbackActive = false;
 		application.buildRegistry = null;
 		application.rollbackRegistry = null;
@@ -512,7 +512,7 @@ export const deployPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Astron Collection Preview Deployment\n\n${successComment}`,
+			body: `### Guilderia Preview Deployment\n\n${successComment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "done");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -522,7 +522,7 @@ export const deployPreviewApplication = async ({
 		const comment = getIssueComment(application.name, "error", previewDomain);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Astron Collection Preview Deployment\n\n${comment}`,
+			body: `### Guilderia Preview Deployment\n\n${comment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "error");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -594,14 +594,14 @@ export const rebuildPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Astron Collection Preview Deployment\n\n${buildingComment}`,
+			body: `### Guilderia Preview Deployment\n\n${buildingComment}`,
 		});
 
 		// Set application properties for preview deployment
 		application.appName = previewDeployment.appName;
-		application.env = `${application.previewEnv}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildArgs = `${application.previewBuildArgs}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
-		application.buildSecrets = `${application.previewBuildSecrets}\nASTRON_COLLECTION_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.env = `${application.previewEnv}\nGUILDERIA_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildArgs = `${application.previewBuildArgs}\nGUILDERIA_DEPLOY_URL=${previewDeployment?.domain?.host}`;
+		application.buildSecrets = `${application.previewBuildSecrets}\nGUILDERIA_DEPLOY_URL=${previewDeployment?.domain?.host}`;
 		application.rollbackActive = false;
 		application.buildRegistry = null;
 		application.rollbackRegistry = null;
@@ -626,7 +626,7 @@ export const rebuildPreviewApplication = async ({
 		);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Astron Collection Preview Deployment\n\n${successComment}`,
+			body: `### Guilderia Preview Deployment\n\n${successComment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "done");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -653,7 +653,7 @@ export const rebuildPreviewApplication = async ({
 		const comment = getIssueComment(application.name, "error", previewDomain);
 		await updateIssueComment({
 			...issueParams,
-			body: `### Astron Collection Preview Deployment\n\n${comment}`,
+			body: `### Guilderia Preview Deployment\n\n${comment}`,
 		});
 		await updateDeploymentStatus(deployment.deploymentId, "error");
 		await updatePreviewDeployment(previewDeploymentId, {
@@ -666,7 +666,7 @@ export const rebuildPreviewApplication = async ({
 };
 
 export const getApplicationStats = async (appName: string) => {
-	if (appName === "astron-collection") {
+	if (appName === "guilderia") {
 		return await getAdvancedStats(appName);
 	}
 	const filter = {

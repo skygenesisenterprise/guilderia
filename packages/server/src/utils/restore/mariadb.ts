@@ -1,6 +1,6 @@
-import type { apiRestoreBackup } from "@astron-collection/server/db/schema";
-import type { Destination } from "@astron-collection/server/services/destination";
-import type { Mariadb } from "@astron-collection/server/services/mariadb";
+import type { apiRestoreBackup } from "@guilderia/server/db/schema";
+import type { Destination } from "@guilderia/server/services/destination";
+import type { Mariadb } from "@guilderia/server/services/mariadb";
 import { quote } from "shell-quote";
 import type { z } from "zod";
 import { getS3Credentials } from "../backups/utils";

@@ -10,8 +10,8 @@ import {
 	startOnionService,
 	stopOnionService,
 	updateOnionServiceDefinition,
-} from "@astron-collection/server";
-import { checkServicePermissionAndAccess } from "@astron-collection/server/services/permission";
+} from "@guilderia/server";
+import { checkServicePermissionAndAccess } from "@guilderia/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { audit } from "@/server/api/utils/audit";

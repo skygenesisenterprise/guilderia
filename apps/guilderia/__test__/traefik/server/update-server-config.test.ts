@@ -5,13 +5,13 @@ vi.mock("node:fs", () => ({
 	default: fs,
 }));
 
-import type { FileConfig } from "@astron-collection/server";
+import type { FileConfig } from "@guilderia/server";
 import {
 	createDefaultServerTraefikConfig,
 	loadOrCreateConfig,
 	updateServerTraefik,
-} from "@astron-collection/server";
-import type { webServerSettings } from "@astron-collection/server/db/schema";
+} from "@guilderia/server";
+import type { webServerSettings } from "@guilderia/server/db/schema";
 import { beforeEach, expect, test, vi } from "vitest";
 
 type WebServerSettings = typeof webServerSettings.$inferSelect;
@@ -37,7 +37,7 @@ const baseSettings: WebServerSettings = {
 			},
 		},
 		server: {
-			type: "Astron Collection",
+			type: "Guilderia",
 			cronJob: "",
 			port: 4500,
 			refreshRate: 20,
@@ -79,9 +79,9 @@ beforeEach(() => {
 });
 
 test("Should read the configuration file", () => {
-	const config: FileConfig = loadOrCreateConfig("astron-collection");
-	expect(config.http?.routers?.["astron-collection-router-app"]?.service).toBe(
-		"astron-collection-service-app",
+	const config: FileConfig = loadOrCreateConfig("guilderia");
+	expect(config.http?.routers?.["guilderia-router-app"]?.service).toBe(
+		"guilderia-service-app",
 	);
 });
 
@@ -95,9 +95,9 @@ test("Should apply redirect-to-https", () => {
 		"example.com",
 	);
 
-	const config: FileConfig = loadOrCreateConfig("astron-collection");
+	const config: FileConfig = loadOrCreateConfig("guilderia");
 
-	expect(config.http?.routers?.["astron-collection-router-app"]?.middlewares).toContain(
+	expect(config.http?.routers?.["guilderia-router-app"]?.middlewares).toContain(
 		"redirect-to-https",
 	);
 });
@@ -105,17 +105,17 @@ test("Should apply redirect-to-https", () => {
 test("Should change only host when no certificate", () => {
 	updateServerTraefik(baseSettings, "example.com");
 
-	const config: FileConfig = loadOrCreateConfig("astron-collection");
+	const config: FileConfig = loadOrCreateConfig("guilderia");
 
-	expect(config.http?.routers?.["astron-collection-router-app-secure"]).toBeUndefined();
+	expect(config.http?.routers?.["guilderia-router-app-secure"]).toBeUndefined();
 });
 
 test("Should not touch config without host", () => {
-	const originalConfig: FileConfig = loadOrCreateConfig("astron-collection");
+	const originalConfig: FileConfig = loadOrCreateConfig("guilderia");
 
 	updateServerTraefik(baseSettings, null);
 
-	const config: FileConfig = loadOrCreateConfig("astron-collection");
+	const config: FileConfig = loadOrCreateConfig("guilderia");
 
 	expect(originalConfig).toEqual(config);
 });
@@ -131,10 +131,10 @@ test("Should remove websecure if https rollback to http", () => {
 		"example.com",
 	);
 
-	const config: FileConfig = loadOrCreateConfig("astron-collection");
+	const config: FileConfig = loadOrCreateConfig("guilderia");
 
-	expect(config.http?.routers?.["astron-collection-router-app-secure"]).toBeUndefined();
+	expect(config.http?.routers?.["guilderia-router-app-secure"]).toBeUndefined();
 	expect(
-		config.http?.routers?.["astron-collection-router-app"]?.middlewares,
+		config.http?.routers?.["guilderia-router-app"]?.middlewares,
 	).not.toContain("redirect-to-https");
 });

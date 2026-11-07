@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { paths } from "@astron-collection/server/constants";
-import { db } from "@astron-collection/server/db";
+import { paths } from "@guilderia/server/constants";
+import { db } from "@guilderia/server/db";
 import {
 	type NewTrafficHttpAggregate,
 	type TrafficSource,
@@ -17,17 +17,17 @@ import {
 	trafficSources,
 	type WebProperty,
 	webProperties,
-} from "@astron-collection/server/db/schema";
+} from "@guilderia/server/db/schema";
 import {
 	aggregateHttpEvents,
 	emptyLatencyHistogram,
 	type HttpAggregateRow,
 	LATENCY_BUCKET_COUNT,
-} from "@astron-collection/server/utils/traffic/aggregate";
+} from "@guilderia/server/utils/traffic/aggregate";
 import {
 	type AudienceIngestPayload,
 	normalizeAudienceEvents,
-} from "@astron-collection/server/utils/traffic/audience";
+} from "@guilderia/server/utils/traffic/audience";
 import {
 	bucketStartFor,
 	DEFAULT_BUCKET_SECONDS,
@@ -37,7 +37,7 @@ import {
 	parseTraefikAccessLog,
 	resolvePropertyId,
 	type TrafficHttpEvent,
-} from "@astron-collection/server/utils/traffic/parse";
+} from "@guilderia/server/utils/traffic/parse";
 import {
 	and,
 	asc,
@@ -474,16 +474,16 @@ export const upsertTrafficSource = async (
 };
 
 /**
- * The four web properties of an SGE instance, declared with the sources Astron Collection
+ * The four web properties of an SGE instance, declared with the sources Guilderia
  * knows how to feed. Declaring a property only says "we watch this domain":
  * every source starts in `not-configured`, and the dashboard keeps showing the
  * absence of data until a collector actually receives something.
  */
 export const RECOMMENDED_SGE_PROPERTIES = [
-	{ platform: "website", domain: "astron-collection.com", name: "Astron Collection Website" },
-	{ platform: "docs", domain: "docs.astron-collection.com", name: "Astron Collection Docs" },
-	{ platform: "app", domain: "app.astron-collection.com", name: "Astron Collection Cloud" },
-	{ platform: "api", domain: "api.astron-collection.com", name: "Astron Collection API" },
+	{ platform: "website", domain: "guilderia.com", name: "Guilderia Website" },
+	{ platform: "docs", domain: "docs.guilderia.com", name: "Guilderia Docs" },
+	{ platform: "app", domain: "app.guilderia.com", name: "Guilderia Cloud" },
+	{ platform: "api", domain: "api.guilderia.com", name: "Guilderia API" },
 ] as const;
 
 export const declareRecommendedProperties = async (

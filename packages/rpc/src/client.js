@@ -68,7 +68,7 @@ class RPCClient extends EventEmitter {
         return body;
       });
 
-    this.fetch.endpoint = 'https://discord.com/api';
+    this.fetch.endpoint = 'https://guilderia.com/api';
 
     /**
      * Raw transport userd
@@ -304,8 +304,8 @@ class RPCClient extends EventEmitter {
    */
 
   /**
-   * Tell discord which devices are certified
-   * @param {CertifiedDevice[]} devices Certified devices to send to discord
+   * Tell guilderia which devices are certified
+   * @param {CertifiedDevice[]} devices Certified devices to send to guilderia
    * @returns {Promise}
    */
   setCertifiedDevices(devices) {

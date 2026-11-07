@@ -1,10 +1,10 @@
-import { getBuildComposeCommand } from "@astron-collection/server/utils/builders/compose";
+import { getBuildComposeCommand } from "@guilderia/server/utils/builders/compose";
 import { describe, expect, it, vi } from "vitest";
 
 // Compose now has a `createEnvFile` toggle (default true), mirroring the
-// Application builder's flag: when disabled, Astron Collection never writes `.env`,
+// Application builder's flag: when disabled, Guilderia never writes `.env`,
 // so a repo-tracked file survives untouched.
-vi.mock("@astron-collection/server/utils/docker/domain", () => ({
+vi.mock("@guilderia/server/utils/docker/domain", () => ({
 	writeDomainsToCompose: vi.fn().mockResolvedValue(""),
 }));
 
@@ -34,7 +34,7 @@ describe("getBuildComposeCommand createEnvFile toggle", () => {
 		expect(command).not.toContain("base64 -d >");
 	});
 
-	it("createEnvFile: true (default) writes Astron Collection's vars", async () => {
+	it("createEnvFile: true (default) writes Guilderia's vars", async () => {
 		const command = await getBuildComposeCommand({
 			...baseCompose,
 			createEnvFile: true,

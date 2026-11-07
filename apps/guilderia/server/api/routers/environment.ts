@@ -7,8 +7,8 @@ import {
 	findEnvironmentsByProjectId,
 	isManagedCloud,
 	updateEnvironmentById,
-} from "@astron-collection/server";
-import { db } from "@astron-collection/server/db";
+} from "@guilderia/server";
+import { db } from "@guilderia/server/db";
 import {
 	addNewEnvironment,
 	checkEnvironmentAccess,
@@ -16,7 +16,7 @@ import {
 	checkEnvironmentDeletionPermission,
 	checkPermission,
 	findMemberByUserId,
-} from "@astron-collection/server/services/permission";
+} from "@guilderia/server/services/permission";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { z } from "zod";

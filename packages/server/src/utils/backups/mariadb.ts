@@ -1,12 +1,12 @@
-import type { BackupSchedule } from "@astron-collection/server/services/backup";
+import type { BackupSchedule } from "@guilderia/server/services/backup";
 import {
 	createDeploymentBackup,
 	updateDeploymentStatus,
-} from "@astron-collection/server/services/deployment";
-import { findDestinationById } from "@astron-collection/server/services/destination";
-import { findEnvironmentById } from "@astron-collection/server/services/environment";
-import type { Mariadb } from "@astron-collection/server/services/mariadb";
-import { findProjectById } from "@astron-collection/server/services/project";
+} from "@guilderia/server/services/deployment";
+import { findDestinationById } from "@guilderia/server/services/destination";
+import { findEnvironmentById } from "@guilderia/server/services/environment";
+import type { Mariadb } from "@guilderia/server/services/mariadb";
+import { findProjectById } from "@guilderia/server/services/project";
 import { sendDatabaseBackupNotifications } from "../notifications/database-backup";
 import { execAsync, execAsyncRemote } from "../process/execAsync";
 import { redactBackupError } from "./redact";
