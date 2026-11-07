@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"oxc.oxc-vscode",
+		"codezombiech.gitignore",
+		"christian-kohler.npm-intellisense",
+		"christian-kohler.path-intellisense"
+	]
+}

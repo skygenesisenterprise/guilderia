@@ -1,0 +1,77 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "create-discord-bot",
+	"version": "4.1.0",
+	"description": "A simple way to create a startup Discord bot.",
+	"keywords": [
+		"boilerplate",
+		"create-bot",
+		"discord",
+		"discord-api",
+		"discord.js",
+		"init-bot",
+		"init-discord"
+	],
+	"homepage": "https://discord.js.org",
+	"bugs": {
+		"url": "https://github.com/discordjs/discord.js/issues"
+	},
+	"license": "Apache-2.0",
+	"contributors": [
+		"Crawl <icrawltogo@gmail.com>",
+		"SpaceEEC <spaceeec@yahoo.com>",
+		"Vlad Frangu <me@vladfrangu.dev>",
+		"Aura Román <kyradiscord@gmail.com>",
+		"Jiralite <me@jiralite.dev>"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/discordjs/discord.js.git",
+		"directory": "packages/create-discord-bot"
+	},
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"bin": "./dist/index.js",
+	"directories": {
+		"lib": "src",
+		"bin": "bin"
+	},
+	"files": [
+		"dist",
+		"template"
+	],
+	"type": "module",
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"scripts": {
+		"build": "tsc --noEmit && tsup",
+		"lint": "oxfmt --check && oxlint --tsconfig=tsconfig.eslint.json src",
+		"format": "oxfmt && oxlint --tsconfig=tsconfig.eslint.json src --fix --fix-suggestions",
+		"prepack": "pnpm run build && pnpm run lint",
+		"changelog": "git cliff --prepend ./CHANGELOG.md -u -c ./cliff.toml -r ../../ --include-path 'packages/create-discord-bot/*'",
+		"release": "cliff-jumper",
+		"rename-to-app": "node scripts/rename-to-app.mjs"
+	},
+	"dependencies": {
+		"commander": "^15.0.0",
+		"prompts": "^2.4.2",
+		"validate-npm-package-name": "^8.0.0"
+	},
+	"devDependencies": {
+		"@discordjs/api-extractor": "workspace:^",
+		"@favware/cliff-jumper": "^6.1.0",
+		"@types/node": "^24.13.3",
+		"@types/prompts": "^2.4.9",
+		"@types/validate-npm-package-name": "^4.0.2",
+		"eslint-config-neon": "^0.5.4",
+		"oxfmt": "^0.74.0",
+		"oxlint": "^1.89.0",
+		"terser": "^5.51.2",
+		"tsup": "^8.5.1",
+		"typescript": "~5.9.3"
+	},
+	"engines": {
+		"node": ">=24.17.0"
+	}
+}

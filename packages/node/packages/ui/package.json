@@ -1,0 +1,93 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@discordjs/ui",
+	"version": "0.1.0",
+	"private": true,
+	"description": "",
+	"keywords": [],
+	"homepage": "https://discord.js.org",
+	"bugs": {
+		"url": "https://github.com/discordjs/discord.js/issues"
+	},
+	"license": "Apache-2.0",
+	"contributors": [
+		"Crawl <icrawltogo@gmail.com>",
+		"SpaceEEC <spaceeec@yahoo.com>",
+		"Vlad Frangu <me@vladfrangu.dev>",
+		"Aura Román <kyradiscord@gmail.com>"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/discordjs/discord.js.git",
+		"directory": "packages/ui"
+	},
+	"funding": "https://github.com/discordjs/discord.js?sponsor",
+	"directories": {
+		"lib": "src"
+	},
+	"files": [
+		"dist"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			}
+		}
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"scripts": {
+		"build": "tsc --noEmit && vite build",
+		"lint": "oxfmt --check && oxlint --tsconfig=tsconfig.eslint.json src",
+		"format": "oxfmt && oxlint --tsconfig=tsconfig.eslint.json src --fix --fix-suggestions",
+		"prepack": "pnpm run build && pnpm run lint",
+		"changelog": "git cliff --prepend ./CHANGELOG.md -u -c ./cliff.toml -r ../../ --include-path 'packages/ui/*'",
+		"release": "cliff-jumper",
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build",
+		"chromatic": "chromatic"
+	},
+	"dependencies": {
+		"@ariakit/react": "^0.4.39",
+		"@react-icons/all-files": "^4.1.0",
+		"react": "^19.2.8",
+		"react-dom": "^19.2.8"
+	},
+	"devDependencies": {
+		"@favware/cliff-jumper": "^6.1.0",
+		"@react-icons/all-files": "^4.1.0",
+		"@storybook/addon-docs": "^10.5.10",
+		"@storybook/addon-links": "^10.5.10",
+		"@storybook/addon-themes": "^10.5.10",
+		"@storybook/builder-vite": "^10.5.10",
+		"@storybook/react": "^10.5.10",
+		"@storybook/react-vite": "^10.5.10",
+		"@types/node": "^24.13.3",
+		"@types/react": "^19.2.18",
+		"@types/react-dom": "^19.2.5",
+		"@unocss/reset": "^66.9.2",
+		"@vitejs/plugin-react": "^6.1.1",
+		"chromatic": "^18.7.2",
+		"eslint-config-neon": "^0.5.4",
+		"oxfmt": "^0.74.0",
+		"oxlint": "^1.89.0",
+		"prop-types": "^15.8.1",
+		"storybook": "^10.5.10",
+		"turbo": "^2.10.12",
+		"typescript": "~5.9.3",
+		"unocss": "^66.9.2",
+		"vite": "^8.2.2",
+		"vite-plugin-dts": "^5.1.0"
+	},
+	"engines": {
+		"node": ">=24.17.0"
+	}
+}

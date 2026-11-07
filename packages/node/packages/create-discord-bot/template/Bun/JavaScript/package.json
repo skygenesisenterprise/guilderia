@@ -1,0 +1,23 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@discordjs/template-bun-javascript",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"lint": "oxfmt --check && oxlint src",
+		"deploy": "bun --env-file=.env src/util/deploy.js",
+		"format": "oxfmt && oxlint src --fix --fix-suggestions",
+		"start": "bun --env-file=.env src/index.js"
+	},
+	"dependencies": {
+		"@discordjs/core": "^2.6.0",
+		"discord.js": "^14.27.0"
+	},
+	"devDependencies": {
+		"eslint-config-neon": "^0.5.4",
+		"oxfmt": "^0.74.0",
+		"oxlint": "^1.89.0",
+		"zod": "^4.5.4"
+	}
+}
